@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react"
 import { loadYear, onTicketsRefresh, peekYear } from "@/lib/tibot/tibotApi"
 
 /**
- * Bu yılın Tibot sayıları (akışın `year` işlemi: kapattığım, bana atanan, açtığım, açtığımdan
- * kapanan) — Tibotlar sayfasının yıl kutusuyla aynı bellek (5 dk). Tek Yenile tazeler; hata
+ * Bu yılın Ticket sayıları (akışın `year` işlemi: kapattığım, bana atanan, açtığım, açtığımdan
+ * kapanan) — Ticket sayfasının yıl kutusuyla aynı bellek (5 dk). Tek Yenile tazeler; hata
  * olursa `retry` yeniden ister. Dönüş: `{ data, failed, retry }`.
  */
 export function useTibotYear(year) {

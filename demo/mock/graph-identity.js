@@ -1,5 +1,5 @@
 // Graph: kimlik, organizasyon, rehber, fotoğraf, varlık (presence), gelen kutusu dışı posta ayarları.
-import { COLLEAGUES, EVERYONE, ME, MANAGER, REPORTS, byId, byMail, graphUser } from "../org.js"
+import { EVERYONE, ME, MANAGER, REPORTS, byId, byMail, graphUser, managerOf, reportsOf } from "../org.js"
 import { json, graphError } from "./util.js"
 import { CTX, decode, fold, paged } from "./graph-util.js"
 
@@ -12,19 +12,6 @@ const EXTRA_ME = {
   accountEnabled: true,
   city: "İstanbul",
   country: "Türkiye",
-}
-
-export function managerOf(p) {
-  if (p.id === ME.id) return MANAGER
-  if (p.id === MANAGER.id) return null
-  if (REPORTS.some((r) => r.id === p.id)) return ME
-  return MANAGER
-}
-
-export function reportsOf(p) {
-  if (p.id === ME.id) return REPORTS
-  if (p.id === MANAGER.id) return [ME, COLLEAGUES[0], COLLEAGUES[2]]
-  return []
 }
 
 const asUser = (p, extra = {}) => ({
@@ -58,6 +45,7 @@ function withManager(p, url) {
 const findPerson = (key) => byId(key) ?? byMail(key) ?? null
 
 const availabilityOf = (p) => {
+  if (p.id === ME.id) return "Available"
   const set = ["Available", "Busy", "Available", "Away", "AvailableIdle", "Offline", "Busy"]
   return set[Math.abs([...p.mail].reduce((a, c) => a + c.charCodeAt(0), 0)) % set.length]
 }

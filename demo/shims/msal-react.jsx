@@ -1,6 +1,6 @@
-// @azure/msal-react'ın DEMO karşılığı: oturum her zaman açık.
+// @azure/msal-react'ın DEMO karşılığı: oturum durumu sahte MSAL örneğinden (demo/shims/msal-browser.js).
 import { createContext, useContext, useMemo } from "react"
-import { InteractionStatus } from "./msal-browser.js"
+import { InteractionStatus, isDemoSignedIn } from "./msal-browser.js"
 
 const MsalContext = createContext(null)
 
@@ -17,7 +17,7 @@ export function useMsal() {
 }
 
 export function useIsAuthenticated() {
-  return true
+  return isDemoSignedIn()
 }
 
 export function useAccount() {
@@ -26,11 +26,11 @@ export function useAccount() {
 }
 
 export function AuthenticatedTemplate({ children }) {
-  return children
+  return isDemoSignedIn() ? children : null
 }
 
-export function UnauthenticatedTemplate() {
-  return null
+export function UnauthenticatedTemplate({ children }) {
+  return isDemoSignedIn() ? null : children
 }
 
 export { MsalContext }

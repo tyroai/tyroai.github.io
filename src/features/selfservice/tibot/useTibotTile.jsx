@@ -10,7 +10,7 @@ import { TibotTileBody } from "./TibotTileBody"
 const TAB = Object.freeze({ id: "tibot", icon: Ticket01Icon })
 
 /**
- * Tibotlar sayfasının yıl kutusu (yalnız kitlede, `pageAccess.tibot`): seçili
+ * Ticket sayfasının yıl kutusu (yalnız kitlede, `pageAccess.tibot`): seçili
  * dönemde KAPATTIĞIN talepler (BT çalışanı) ya da kapattığın yoksa AÇTIĞINDAN KAPANAN (talep eden,
  * ör. satınalmacı). Alt satır atanan ve açtığın; ayrıntı kartı hepsini oranlarıyla verir
  * (`TibotTileBody`). Veri akışın `year` işlemi (5 dk bellek, sayfanın Yenile'si tazeler). `period`:

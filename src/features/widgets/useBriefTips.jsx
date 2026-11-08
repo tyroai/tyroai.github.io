@@ -21,13 +21,13 @@ const OPTS_TIME = { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }
 export function useBriefTips(data) {
   const { t, locale } = useLocale()
   const [preview, setPreview] = useState(null)
-  const [ticket, setTicket] = useState(null) // ipucundan açılan Tibot talebi
+  const [ticket, setTicket] = useState(null) // ipucundan açılan Ticket talebi
   const { invites, unreadMail, tasks, feedItems, todoOpen, todoSynced, tibot } = data
   const openWith = (close, kind) => (item) => {
     close()
     requestAnimationFrame(() => setPreview({ kind, item }))
   }
-  // Tibot ipucunun talepleri: ilk üçü, "+n daha"; talebe basınca pencere (ipucu önce kapanır).
+  // Ticket ipucunun talepleri: ilk üçü, "+n daha"; talebe basınca pencere (ipucu önce kapanır).
   const ticketList = (kind) => (close) => (
     <TicketTipListLazy
       kind={kind}
@@ -93,10 +93,10 @@ export function useBriefTips(data) {
       list: taskList(tasks.filter((x) => !x.done && !x.overdue)),
       action: todoAction,
     },
-    // Tibot (yalnız kitlede): sayılar listenin son okumasından; ayrıntı Self Servis › Tibot'ta.
+    // Ticket (yalnız kitlede): sayılar listenin son okumasından; ayrıntı Self Servis › Ticket'ta.
     tibot: {
       title: t("widgets.brief.item.tibot"),
-      kicker: "Tibot",
+      kicker: "Ticket",
       list: ticketList("onMe"),
       // Sıfır yan cümle yazılmaz ("0 tanesinin hedefi geçti" bilgi değil, gürültü).
       note: tibot?.late
@@ -106,7 +106,7 @@ export function useBriefTips(data) {
     },
     tibotWaiting: {
       title: t("widgets.brief.item.tibotWaiting"),
-      kicker: "Tibot",
+      kicker: "Ticket",
       list: ticketList("waiting"),
       note: tibot?.needsMe
         ? t("widgets.brief.tibotWaitingNote", { n: tibot.waiting, needs: tibot.needsMe })

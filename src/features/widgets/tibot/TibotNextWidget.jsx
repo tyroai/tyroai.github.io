@@ -153,7 +153,7 @@ function AllClear({ waiting, unclaimed }) {
  * gecikenler, yaklaşan hedefler, hedefsizler (`tibotDeck.deck`); 14 günden eski gecikenler sonda
  * tek kart. Başroldeki kart talebin kendisi (zaman · konu · numara); arkasında destenin kenarı
  * görünür. Oklar, ok tuşları ya da kaydırma sıradakine geçer (kendiliğinden dönmez). Genişte sağda
- * sıradaki iki kart. Hepsi tamamsa küre ve tek satır. Yalnız Tibot kitlesinde.
+ * sıradaki iki kart. Hepsi tamamsa küre ve tek satır. Yalnız Ticket kitlesinde.
  */
 export default function TibotNextWidget({ className }) {
   const { t } = useLocale()

@@ -36,7 +36,7 @@ const RING = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring
  * alttan çekmecede hepsinin ayrıntısı. Escape kartı/çekmeceyi kapatır, sohbet rıhtımını
  * kapatmaz. `bare`: gradyan kartın beyaz tepsisinde, kendi zemini olmadan. `summary`:
  * çekmecenin ve ayrıntının verisi (`period`, `off`, …). Self Servis (`SummaryTiles`) ve
- * Tibotlar (`TibotTray`) aynı tepsiyi kullanır.
+ * Ticket (`TibotTray`) aynı tepsiyi kullanır.
  */
 export function TileTray({
   tiles,

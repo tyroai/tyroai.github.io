@@ -51,7 +51,7 @@ const MySpacePage = lazy(ROUTE_CHUNKS["myspace"])
 // maskotun panosu, grafikler ve ayrıntı paneli yalnız sayfayı açana iniyor.
 const TodoPage = lazy(ROUTE_CHUNKS["todo"])
 const SelfServicePage = lazy(ROUTE_CHUNKS["selfservice"])
-// Tibotlar — Xurrent talepleri, salt okunur (kitle `lib/tibotPolicy`).
+// Ticket — Xurrent talepleri, salt okunur (kitle `lib/tibotPolicy`).
 const TibotPage = lazy(ROUTE_CHUNKS.tibot)
 // tyroRM bölümü (`/rm?view=…`): yetkisiz kişiye kendi kapısını gösterir.
 const RmSection = lazy(ROUTE_CHUNKS.rm)

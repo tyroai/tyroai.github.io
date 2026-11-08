@@ -173,7 +173,7 @@ function List({ views, pick, onOpen }) {
 
 /**
  * TIBOT TALEPLER · HALKA — kovalar iç içe halkalarda (dış bana atanan, orta tarafımdan açılanlar,
- * iç ekibim; renkler Tibotlar'ın çipleriyle aynı, `BUCKET_COLOR`). Halkanın dolu kısmı gecikmiş
+ * iç ekibim; renkler Ticket'ın çipleriyle aynı, `BUCKET_COLOR`). Halkanın dolu kısmı gecikmiş
  * payı; ortada seçili kovanın sayısı, satırında aynı pay yüzdeyle. Genişte halkanın altında kova seçimi,
  * sağda seçilenin talepleri (kart içinde kayar, üstüne gelince son not kartı); dar kartta lejant,
  * basınca talepler. Halkaya ya da ada basmak kovayı seçer; talebe basınca ayrıntı penceresi.

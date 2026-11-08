@@ -115,7 +115,7 @@ export function FocusCard({ focus, board = null, canOpenTodo = false, className 
     >
       <div className="flex min-h-0 flex-1 flex-col">
         <CardTitle action={todoArrow()}>
-          {/* Dar kartta (içerik < 16rem) kısa ad: sayaç ve okun yanında "Bugünün od…" kalıyordu. */}
+          {/* Dar kartta (içerik < 16rem) kısa ad: sayaç ve okun yanında "Bugünün gö…" kalıyordu. */}
           <span className="truncate @max-[16rem]/widget:hidden">{t("myspace.tasks.title")}</span>
           <span className="hidden truncate @max-[16rem]/widget:inline">
             {t("myspace.tasks.titleShort")}

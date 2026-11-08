@@ -1,7 +1,7 @@
 // Graph: posta (gelen kutusu, Keşfet akışı), takvim, OOF ve posta ipuçları.
 import { EVERYONE, ME } from "../org.js"
 import { addDays, startOfDay } from "../time.js"
-import { occurrences, toGraphEvent, toGraphMessage, wallClock } from "../state.js"
+import { attachmentMeta, occurrences, toGraphEvent, toGraphMessage, wallClock } from "../state.js"
 import { json, graphError, parseBody, uid } from "./util.js"
 import { CTX, decode, mailClause, matchesFilter, paged, preferTimeZone, zonedToDate } from "./graph-util.js"
 
@@ -34,7 +34,10 @@ function listMessages(url, gs, folder) {
   const order = url.searchParams.get("$orderby") ?? "receivedDateTime desc"
   if (/asc$/i.test(order)) rows = [...rows].sort((a, b) => a.received - b.received)
   const expandsAttachments = /attachments/i.test(url.searchParams.get("$expand") ?? "")
-  return paged(url, rows, (m) => ({ ...toGraphMessage(m), ...(expandsAttachments ? { attachments: [] } : {}) }))
+  return paged(url, rows, (m) => ({
+    ...toGraphMessage(m),
+    ...(expandsAttachments ? { attachments: m.cover ? [attachmentMeta(m)] : [] } : {}),
+  }))
 }
 
 function handleMail({ url, method, body, path, gs }) {
@@ -47,8 +50,9 @@ function handleMail({ url, method, body, path, gs }) {
       const unread = gs.mails.filter((x) => x.unread).length
       return json({ id: folderId(name), displayName: name, unreadItemCount: name === "inbox" ? unread : 0, totalItemCount: name === "inbox" ? gs.mails.length : 0 })
     }
-    if ((m = path.match(/^\/me\/(?:mailFolders\/\w+\/)?messages\/([^/]+)\/attachments(?:\/.*)?$/))) {
-      return json({ "@odata.context": CTX, value: [] })
+    if ((m = path.match(/^\/me\/(?:mailFolders\/\w+\/)?messages\/([^/]+)\/attachments$/))) {
+      const msg = gs.mails.find((x) => x.id === decode(m[1]))
+      return json({ "@odata.context": CTX, value: msg?.cover ? [attachmentMeta(msg)] : [] })
     }
     if ((m = path.match(/^\/me\/(?:mailFolders\/\w+\/)?messages\/([^/]+)$/))) {
       const msg = gs.mails.find((x) => x.id === decode(m[1]))

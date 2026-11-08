@@ -9,7 +9,7 @@ const OWN_TITLE = {
   "tool:presence": "control.presence.title",
   "tool:oof": "control.oof.title",
   "tool:shortcuts": "control.sc.title",
-  // Kartın adı ("Tibot Talepler · Halka") kutucuğa uzun: kısa adı.
+  // Kartın adı ("Ticket Talepler · Halka") kutucuğa uzun: kısa adı.
   "tibot-rings": "control.tile.tibot",
 }
 

@@ -55,7 +55,7 @@ const navMain = [
   },
   // Self Servis: izin, masraf ve iş avansı kayıtları (ERP) — Anasayfa'nın hemen altında.
   { id: "selfservice", labelKey: "nav.selfService", icon: UserAccountIcon, ready: true },
-  // Tibotlar: Xurrent talepleri, salt okunur; yalnız Tibot kitlesinde çizilir (`visibleNav`).
+  // Ticket: Xurrent talepleri, salt okunur; yalnız Ticket kitlesinde çizilir (`visibleNav`).
   { id: "tibot", labelKey: "nav.tibot", icon: Ticket01Icon, ready: true },
   // Keşfet — Chat'ten ÖNCE (istek üzerine, 2026-09-20: önce "Chat'in altına",
   // aynı gün "Chat'ten önce gelsin"). Sıra bir niyet ifadesi: uygulamaya giren

@@ -6,7 +6,7 @@ import { TileDetail } from "./TileDetail"
 /** Kutunun ayrıntısı; okunamayan bölümde sıfırlar değil, nedeni. */
 export function TileBody({ tile, off, balance, accrual, facts, period }) {
   const { t } = useLocale()
-  // Kendi ayrıntısını taşıyan kutu (Tibot).
+  // Kendi ayrıntısını taşıyan kutu (Ticket).
   if (tile.body) return tile.body
   if (off[tile.tab.id])
     return <p className="text-[0.8125rem] text-muted-foreground">{t(off[tile.tab.id])}</p>

@@ -9,15 +9,15 @@ import "./lookTone.css"
 /**
  * Görünümün tonu — kartın içi hangi temanın token'larıyla çizilir: "Koyu" açık temada da koyu
  * ada (`dark`), "Açık" koyu temada da açık ada (`look-light`; tema varyantı adanın içinde
- * `dark:` sınıflarını işletmez). "Renkli" paletin degradesi: mürekkep beyazsa koyu ada, koyuysa
- * (açık paletler) açık ada. Renkliyi kendisi çizen widget'lar (`ownPalette`: radyo, Karşılama)
- * tona girmez. Saf: testli.
+ * `dark:` sınıflarını işletmez). "Renkli" paletin beyaz yazılı ana renginde düz dolgu: her palette
+ * koyu ada, yazı beyaz (`lookTone.css`). Renkliyi kendisi çizen widget'lar (`ownPalette`: radyo,
+ * Karşılama) tona girmez. Saf: testli.
  */
-export function lookTone(id, look, ink) {
+export function lookTone(id, look) {
   const base = baseLook(look)
   if (base === "dark") return "dark"
   if (base === "light") return "light"
-  if (base === "palette" && !CATALOG[id]?.ownPalette) return ink === "dark" ? "light" : "dark"
+  if (base === "palette" && !CATALOG[id]?.ownPalette) return "dark"
   return null
 }
 
@@ -43,8 +43,8 @@ const loadOwnLook = () =>
 /**
  * Kart kabuğunun öznitelikleri (`data-widget-look`, ton sınıfı, palet) ve kartın mürekkebi.
  * Koyu ada paletin koyu temadaki mürekkebini de alsın diye `data-palette` taşır
- * (`.dark[data-palette=…]`). Renkli'de beyaz yazının altındaki gölgenin gücü `--look-veil`;
- * düz renk paletinde (`data-palette-kind="solid"`) Renkli düz dolgudur.
+ * (`.dark[data-palette=…]`). Renkli düz dolgudur: paletin beyaz yazılı ana rengi, düz renk paletinde
+ * (`data-palette-kind="solid"`) koyu dolgusu.
  * Widget kendi rengini seçtiyse (`<görünüm>:<palet>`) o paletin kartın kipindeki token'ları
  * kabuğa yazılır (camda renk payı `--look-tint`), mürekkep o paletten ölçülür ve döner (`ink`:
  * içerideki `useBrandInk` için, `CardInkContext`). Renk seçilmediyse uygulamanın paleti.
@@ -59,8 +59,8 @@ export function useLookProps(id, look, className) {
     const light = own ? paletteTokens(own) : null
     return light ? inkOfColors(light["--brand-from"], light["--brand-via"]) : null
   }, [own])
-  const { ink, veil, light } = ownInk ?? global
-  const tone = lookTone(id, base, ink)
+  const { light } = ownInk ?? global
+  const tone = lookTone(id, base)
   const mode = lookMode(base, tone, theme)
   // Renk seçilmediyse açık ada uygulamanın paletinin açık hâlini taşır: koyu temada kökteki koyu
   // mürekkep (ya da adanın derin tonu) açık paletlerde AA'nın altında kalıyordu.
@@ -71,7 +71,6 @@ export function useLookProps(id, look, className) {
   )
   const style = {
     ...tokens,
-    ...(base === "palette" ? { "--look-veil": veil } : {}),
     ...(base === "glass" && own ? { "--look-tint": glassTint(light) } : {}),
   }
   const solid = base === "palette" && paletteKind(own ?? palette) === "solid"

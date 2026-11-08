@@ -2,7 +2,7 @@ import type { TicketList, TicketRow } from "./tibotApi"
 import { buckets, isOverdue, statusKey } from "./tibotModel"
 
 /**
- * Tibot widget'larının özet sayıları (saf, testli) — listenin TEK okumasından:
+ * Ticket widget'larının özet sayıları (saf, testli) — listenin TEK okumasından:
  * - `onMe`: bende bekleyen (bana atanan açık), gecikenler önce;
  * - `waiting`: beklediğim (açtığım ya da adıma açılan açık); `needsMe` aralarından benden yanıt
  *   bekleyenler;

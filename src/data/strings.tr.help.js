@@ -200,9 +200,9 @@ export const strings = {
   "help.fn.home.ask.title": "Asistana soru sorma",
   "help.fn.home.ask.body":
     "Soru kutusuna yaz (Enter gönderir, Shift+Enter yeni satır) ya da hazır istemlerden birine bas. Günün özeti, Haftalık özet ve İzin bakiyem metni kutuya doldurur; İzin talebi, Masraf girişi ve İş avansı tarih, tür ve tutarı cümlenin içinden seçtirir. Soru yan sohbet panelinde cevaplanır; sayfan yerinde kalır.",
-  "help.fn.home.focus.title": "Bugünün odağı",
+  "help.fn.home.focus.title": "Bugünün görevleri",
   "help.fn.home.focus.body":
-    "Bugünün odağı Microsoft To Do görevlerinden gelir: alana yaz, Enter ile bugüne ekle (birden çok satır yapıştırırsan her satır ayrı iş olur). To-Do'da aç tam sayfaya götürür. Kart varsayılanda yok; Anasayfayı düzenle ile eklenir.",
+    "Bugünün görevleri Microsoft To Do'dan gelir: alana yaz, Enter ile bugüne ekle (birden çok satır yapıştırırsan her satır ayrı iş olur). To-Do'da aç tam sayfaya götürür. Kart varsayılanda yok; Anasayfayı düzenle ile eklenir.",
   "help.fn.home.apps.title": "Uygulamalar ve favoriler",
   "help.fn.home.apps.body":
     "Bugün neyle başlayalım? bölümü AI Asistanlar, AI Çözümler ve İş Uygulamaları'nı gösterir. Kartın kalbine basarak favorilerine ekle; Favorilerim düğmesi yalnız favori kartları gösterir, favoriler kenar çubuğunda da durur.",
@@ -214,7 +214,7 @@ export const strings = {
     "Sağ alttaki cam düğmeyle düzenleme açılır: kartları sürükle, Widget ekle ile katalogdan yeni kart seç, istemediğini kaldır, Geri al ya da Varsayılana dön. Bitti ile bitir; düzenin bu tarayıcıda kalır.",
   "help.faq.q22": "Anasayfadaki kartların yerini ve görünürlüğünü nasıl değiştiririm?",
   "help.faq.a22":
-    "Sağ alttaki cam düğmeye (Anasayfayı düzenle) bas. Kartları sürükleyip bırak; Widget ekle ile Bugünün odağı gibi eksik kartları kataloğdan getir, istemediğini kaldır, yanlışı Geri al ile düzelt ya da Varsayılana dön. Düzenin yalnız bu tarayıcıda saklanır.",
+    "Sağ alttaki cam düğmeye (Anasayfayı düzenle) bas. Kartları sürükleyip bırak; Widget ekle ile Bugünün görevleri gibi eksik kartları kataloğdan getir, istemediğini kaldır, yanlışı Geri al ile düzelt ya da Varsayılana dön. Düzenin yalnız bu tarayıcıda saklanır.",
   "help.faq.q23": "Erişim talebimin durumunu nereden görürüm?",
   "help.faq.a23":
     "Kilitli kartta İnceleniyor yazar. Kartın Erişim talebin ayrıntısı talep tarihini, kendi notunu, durumu ve yönetici cevapladığında yönetici notunu gösterir. Aynı konunun genel durumu Profilim › Erişim'de.",
@@ -294,7 +294,7 @@ export const strings = {
     "Evet. Toplantı doğrudan Outlook takvimine yazılır ve davetler gider; Teams açıksa katılım bağlantısı da eklenir. İlk seferde Microsoft bir kez takvim izni isteyebilir.",
   "help.pages.todo.title": "To-Do",
   "help.pages.todo.what":
-    "Microsoft To Do görevlerini TYRO'dan çıkmadan ekler, tamamlar, planlar ve ayrıntılandırırsın; Bugün görünümü Anasayfa'daki Bugünün odağıyla aynı görevleri gösterir.",
+    "Microsoft To Do görevlerini TYRO'dan çıkmadan ekler, tamamlar, planlar ve ayrıntılandırırsın; Bugün görünümü Anasayfa'daki Bugünün görevleriyle aynı görevleri gösterir.",
   "help.pages.todo.open": "To-Do'yu aç",
   "help.fn.todo.add.title": "Görev ekleme",
   "help.fn.todo.add.body":

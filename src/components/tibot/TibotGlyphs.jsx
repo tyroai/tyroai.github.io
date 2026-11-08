@@ -14,7 +14,7 @@ import { tibotStats } from "@/lib/tibot/tibotStats"
 import { cn } from "@/lib/utils"
 
 /**
- * Tibot kartlarının header yüzleri (tembel modül; `TrayGlyph` ve `LiveLabel` çağırır). 20 px'lik
+ * Ticket kartlarının header yüzleri (tembel modül; `TrayGlyph` ve `LiveLabel` çağırır). 20 px'lik
  * renkli SVG'ler kartın kendisini küçültür: halkalar (Talepler, Halka), deste (Sıra sende), nokta
  * sütunları (Pist), ilerleme halkası (Tempo). Renkler token'lardan; liste ve yıl sayıları kartlarla
  * aynı bellekten (5 dk, yoklama yok).

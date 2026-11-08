@@ -145,6 +145,162 @@ export const FEED_SENDERS = {
 }
 export const FEED_ADDRESSES = Object.values(FEED_SENDERS).map((s) => s.address)
 
+// Keşfet gönderilerinin kapak görselleri: konuya uygun, telifsiz stok fotoğraflar
+// (`public/images/posts/<anahtar>.jpg`; kaynaklar `CREDITS.md`'de). Yalnız Keşfet kaynaklarına konur
+// (`ik` hariç); her dört gönderiden üçü resimli olur. Görsel gönderi başlığına göre seçilir
+// (aşağıdaki kurallar, ilk eşleşen kazanır); kural birden çok seçenek veriyorsa veri setinde en az
+// kullanılanı alınır, böylece akışta aynı fotoğraf arka arkaya görünmez.
+const COVER_SIZE = {
+  "aerial-field": 306170, "ai-chip": 139948, analytics: 85612, battery: 60362, blood: 88818,
+  books: 104143, bottling: 107155, cameras: 75435, chess: 39430, "classic-car": 201040,
+  "cold-truck": 115334, combine: 133487, cooking: 187260, "customer-support": 62014,
+  cybersecurity: 109746, "data-center": 89195, donation: 196049, electronics: 254195,
+  factory: 157576, "food-lab": 104117, football: 126973, hackathon: 106913, handshake: 60281,
+  hiking: 254485, kitchen: 89900, "laundry-room": 95652, mechanic: 82607, "medical-lab": 68137,
+  "office-building": 122197, "office-meeting": 127236, parking: 94892, pasta: 118788,
+  pharma: 68445, podcast: 87467, port: 236935, presentation: 163087, running: 105949,
+  safety: 242601, sale: 86300, seedlings: 194647, silo: 116668, "snack-bar": 68993,
+  "snow-road": 136815, solar: 125472, team: 104064, "test-tubes": 101747, tires: 96895,
+  tractor: 170718, "training-room": 133289, truck: 58292, volunteers: 62477, warehouse: 127185,
+  washers: 119546, wheat: 129961,
+}
+
+// [kalıp (başlık, Türkçe karakterleri sadeleştirilmiş küçük harf), görsel(ler), yalnız bu veri seti]
+const COVER_RULES = [
+  // Kulüpler ve etkinlikler
+  [/satranc/, "chess"],
+  [/hack night|hackathon/, "hackathon"],
+  [/\bkosu\b|kosusu|\b5 km\b|\b10 km\b/, "running"],
+  [/kitap kulubu/, "books"],
+  [/hali saha|futbol/, "football"],
+  [/fotograf yuruyusu|fotograf kulubu|fotografciligi/, "cameras"],
+  [/kan bagisi/, "blood"],
+  [/kislik giysi|battaniye/, "donation"],
+  [/eski cihaz|geri donusum/, "electronics"],
+  [/gida bankasi|koli hazirligi|gonulluluk|okullarda trafik|dizustu bagis/, "volunteers"],
+  [/klasik arac/, "classic-car"],
+  [/mutfak kulubu|mutfak atolyesi|makarna atolyesi/, ["cooking", "pasta"]],
+  [/podcast|sahadan satis/, "podcast"],
+  [/yuruyus|saglikli yasam|belgrad/, "hiking"],
+  [/fide ve tohum takas/, "seedlings"],
+  // Kampanyalar (sektöre özel)
+  [/kis sezonu kampanyasi/, "snow-road", "otomotiv"],
+  [/kis sezonu kampanyasi/, "pharma", "saglik"],
+  [/kislik ekim|on siparis/, "seedlings", "tarim"],
+  [/yilbasi kampanyasi/, "sale"],
+  // Anlaşmalar ve ortaklık
+  [/cok yilli sozlesme|sozlesme imzalandi|anlasmasi imzalandi|cerceve sozlesme|is ortagi programi|lisans yenileme gorusmeleri/, "handshake"],
+  [/muzakere|satis becerileri/, ["handshake", "office-meeting"]],
+  // Otomotiv
+  [/kis surusu|surucu guvenligi/, "snow-road"],
+  [/saha araclari/, ["tractor", "tires"]],
+  [/lastigi ve aku/, ["battery", "tires"]],
+  [/\blastik|\blastigi/, "tires"],
+  [/\baku\b/, "battery"],
+  [/parca eslestirme|arac uyumlulugu|yedek parca/, "mechanic"],
+  // Müşteri ve servis
+  [/servis agi portali|\brma\b|garanti|servis hatti|servis ekibi|servis sozlesme|cihaz servis|musteri basari|bayi memnuniyet/, "customer-support"],
+  // Yapay zekâ ve tahmin modelleri (fiyat/analiz kuralından önce)
+  [/sertifika program|ilk grubu/, "training-room"],
+  [/yapay zeka|tyroforecast|forecast|ai platform|tyro ai/, "ai-chip"],
+  [/ucuncu ceyrek|ceyrek sonuc/, ["presentation", "analytics"]],
+  // Güvenlik ve altyapı
+  [/planli bakim/, "data-center"],
+  [/sertifikasyon/, ["cybersecurity", "training-room"]],
+  [/\bsoc\b|yonetilen guvenlik|vpn|siber|oltalama|dogrulama|kisisel veri|guvenlik uyarisi|lisans yenileme e-posta/, "cybersecurity"],
+  // Finans, fiyat ve analiz
+  [/kurak/, "wheat"],
+  [/novacool|buzdolabi|plus modelleri|ankastre|konut|otel projeleri/, "kitchen"],
+  [/filo sozlesmelerinde fiyat|fiyat|fatura|irsaliye|masraf|vade|tahsilat|\bkredi|maliyet|ciro prim|excel|promosyon|iskonto|teklif|sablon|\bsku\b|barkod|talep tahmini|sell-?out|\bcrm\b|rakip analizi|pazar arastirmasi|bt butceleri|bayi portali|siparis (kesim|portali|ekrani)/, "analytics"],
+  [/ihale|sartname|teminat|kamu/, ["analytics", "office-meeting"]],
+  [/filo/, ["handshake", "truck"]],
+  // Ürünler ve üretim
+  [/kurutma|termodry/, "laundry-room"],
+  [/enerji etiketi|enerji sinif/, "washers"],
+  [/enerji|surdurulebilirlik/, ["solar", "factory"]],
+  [/icecek dolum|dolum hatti/, "bottling"],
+  [/makarna|bugday|kuruyemis|bar serisi/, ["pasta", "snack-bar"]],
+  [/soguk zincir|iyi dagitim|veri kaydedici/, ["cold-truck", "warehouse"]],
+  [/hizli test|test kiti/, "test-tubes"],
+  [/\blot\b|skt|fefo|urun kayit|eczane/, "pharma"],
+  [/gida guvenligi|etiket mevzuati|ilac kalinti|akreditasyon|laboratuvar|kagitsiz kabul/, "food-lab"],
+  // Tarım
+  [/silo/, "silo"],
+  [/hasat/, ["combine", "wheat"]],
+  [/tohum|cesit|fide|sertifikali/, "seedlings"],
+  [/gubre|uydu|uzaktan algilama|verim tahmini|hassas|bitki koruma|\bdoz\b/, "aerial-field"],
+  // Lojistik, dış ticaret ve altyapı
+  [/ihracat|balkan|\bfob\b|teslim sekilleri/, "port"],
+  [/\botif\b|sevkiyat performansi/, "truck"],
+  [/sunucu teslim|teslim sureleri/, ["data-center", "truck"]],
+  [/sunucu|bulut|\btco\b/, "data-center"],
+  [/\bisg\b|is sagligi|yangin|tahliye|tatbikat|ziyaretci/, "safety"],
+  [/otopark/, "parking"],
+  [/giris karti|bolge ofisi/, "office-building"],
+  [/envanter|stok|sayim|depo|raf sistemi|raf plani|planogram|cross-dock|dagitim merkezi|bolge deposu/, "warehouse"],
+  [/trakya ambalaj|uretim planlama|fabrika|tesis/, "factory"],
+  // Eğitim ve sunum
+  [/sunum|hikaye anlatimi|webinar|konumlandirma|anlatim/, ["presentation", "training-room"]],
+  [/liderlik/, "team"],
+  [/\bpoc\b|basari olcutu/, ["hackathon", "team"]],
+  [/bayi/, ["team", "handshake"]],
+  [/indirim|kampanya/, "sale"],
+]
+
+// Hiçbir kural tutmazsa kaynağa göre genel görseller.
+const COVER_FALLBACK = {
+  haberler: ["office-building", "team", "handshake", "presentation"],
+  duyuru: ["office-meeting", "office-building", "analytics"],
+  egitim: ["training-room", "presentation", "team", "office-meeting"],
+  akademi: ["analytics", "training-room", "ai-chip", "office-meeting"],
+  kulup: ["team", "football", "hiking", "books"],
+}
+
+const fold = (text) =>
+  String(text)
+    .toLocaleLowerCase("tr")
+    .replace(/ç/g, "c").replace(/ğ/g, "g").replace(/ı/g, "i").replace(/ö/g, "o").replace(/ş/g, "s").replace(/ü/g, "u")
+    .replace(/â/g, "a").replace(/[’']/g, "")
+
+const slugOf = (text) =>
+  fold(text)
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 44)
+
+function pickCover(subject, tag, sector, used) {
+  const text = fold(subject)
+  let keys = null
+  for (const [re, k, only] of COVER_RULES) {
+    if (only && only !== sector) continue
+    if (re.test(text)) {
+      keys = k
+      break
+    }
+  }
+  const list = [].concat(keys ?? COVER_FALLBACK[tag])
+  let best = list[0]
+  for (const k of list) if ((used[k] ?? 0) < (used[best] ?? 0)) best = k
+  used[best] = (used[best] ?? 0) + 1
+  return best
+}
+
+function coverFor(m, index, seen, sector, used) {
+  if (m.image === false) return null
+  let key = m.image
+  if (!key) {
+    if (!COVER_FALLBACK[m.feed]) return null
+    const n = (seen[m.feed] = (seen[m.feed] ?? -1) + 1)
+    if (n % 4 === 3) return null
+    key = pickCover(m.subject, m.feed, sector, used)
+  }
+  return {
+    id: `AAMkADdemoAtt${String(index).padStart(4, "0")}`,
+    name: `${slugOf(m.subject) || "kapak"}.jpg`,
+    file: `images/posts/${key}.jpg`,
+    type: "image/jpeg",
+    size: COVER_SIZE[key] ?? 90000,
+  }
+}
+
 function mailBody(m, from) {
   const paras = Array.isArray(m.body) ? m.body : m.body ? [m.body] : [m.preview ?? ""]
   const html = paras.map((p) => (/^\s*</.test(p) ? p : `<p style="margin:0 0 12px">${p}</p>`)).join("")
@@ -156,8 +312,10 @@ function mailBody(m, from) {
 
 const stripTags = (h) => h.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()
 
-export function buildMails(items = [], now = new Date()) {
+export function buildMails(items = [], now = new Date(), sector = "") {
   const base = backAnchor(now)
+  const seenCover = {}
+  const usedCover = {}
   const mails = items.map((m, i) => {
     const from = m.feed ? FEED_SENDERS[m.feed] : resolvePerson(m.from)
     const at = m.at ?? { days: 0, time: "09:00" }
@@ -169,6 +327,7 @@ export function buildMails(items = [], now = new Date()) {
     const body = mailBody(m, from)
     const to = (m.to ?? ["Ömer Gümüş"]).map(resolvePerson)
     const id = `AAMkADdemoMsg${String(i).padStart(4, "0")}`
+    const cover = coverFor(m, i, seenCover, sector, usedCover)
     return {
       id,
       internetMessageId: `<demo-${i}@tyrotech.example>`,
@@ -182,7 +341,8 @@ export function buildMails(items = [], now = new Date()) {
       flagged: Boolean(m.flagged),
       preview: m.preview ?? stripTags(body).slice(0, 200),
       body,
-      hasAttachments: false,
+      hasAttachments: Boolean(cover),
+      cover,
       feed: m.feed ?? null,
       webLink: `https://outlook.office.com/mail/id/${encodeURIComponent(id)}`,
     }
@@ -392,10 +552,22 @@ export function buildState(ds, now = new Date()) {
     now,
     templates: meetingTemplates(ds.meetings),
     created: [], // kullanıcının oluşturduğu etkinlikler (bellekte)
-    mails: buildMails(ds.mail, now),
+    mails: buildMails(ds.mail, now, ds.id),
     lists: buildTodo(ds.todo, now),
     files: buildFiles(ds.files, now),
     notes: buildNotes(ds.notes, now),
     sent: [],
+  }
+}
+
+/** Posta ekinin Graph üst verisi (kapak görseli). */
+export function attachmentMeta(m) {
+  return {
+    "@odata.type": "#microsoft.graph.fileAttachment",
+    id: m.cover.id,
+    name: m.cover.name,
+    contentType: m.cover.type ?? "image/jpeg",
+    size: m.cover.size,
+    isInline: false,
   }
 }

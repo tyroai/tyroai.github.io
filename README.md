@@ -58,6 +58,16 @@ npm run scan    # sızıntı denetimi (gerçek kurum verisi var mı)
 Veri seti eklemek ya da düzenlemek için `demo/datasets/sets/ana.js` örnek alınır;
 `node scripts/check-dataset.mjs <kimlik>` şemayı denetler.
 
+## Görseller
+
+- **Keşfet gönderi görselleri** (`demo/overlay/public/images/posts/`) telifsiz
+  [Unsplash](https://unsplash.com/license) fotoğraflarıdır; kaynak kimlikleri
+  `CREDITS.md` içindedir. Hangi gönderiye hangi fotoğrafın geleceği başlığa göre
+  `demo/state.js` içindeki `COVER_RULES` ile seçilir; tek bir gönderiyi sabitlemek için
+  veri setinde `image: "<anahtar>"` (ya da `image: false`) verilir.
+- **Kişi fotoğrafları:** yalnız Ömer'in fotoğrafı vardır. Kadrodan birine gerçek yüz koymak için
+  `demo/overlay/public/images/people/<ad-soyad>.jpg` (örn. `selin-aydin.jpg`) eklenir; yoksa baş harfler çizilir.
+
 ## Lisans
 
 MIT, bkz. [LICENSE](LICENSE).

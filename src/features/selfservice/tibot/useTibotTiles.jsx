@@ -13,7 +13,7 @@ import { MineBody, OnMeBody, TeamBody } from "./TibotTileBodies"
 import { useTibotTile } from "./useTibotTile"
 
 /**
- * Tibotlar sayfasının dört kutusu (`TileTray`): bende bekleyen · ekibimde · açtığım (listenin
+ * Ticket sayfasının dört kutusu (`TileTray`): bende bekleyen · ekibimde · açtığım (listenin
  * okumasından, şu an) ve seçili dönemde kapanan (akışın `year` işlemi). Her kutunun ayrıntısı
  * kendi gövdesi (`tile.body`). `list`: `useTibotTickets` sonucu, `period`: dönemin adı.
  */

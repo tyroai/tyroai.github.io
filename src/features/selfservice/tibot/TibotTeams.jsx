@@ -13,7 +13,7 @@ const PILL =
 const MAX = 3
 
 /**
- * Tibotlar sayfasında kişi kartının alt şeridi: Xurrent'te üyesi olduğun ekipler (akışın `list`
+ * Ticket sayfasında kişi kartının alt şeridi: Xurrent'te üyesi olduğun ekipler (akışın `list`
  * cevabı, `teams`) cam haplar hâlinde — yöneticin yerine, bu sayfada önemli olan hangi ekiplerin
  * taleplerini gördüğün. Aynı öneki paylaşanlar tek hapta ("Kurumsal Sistemler · GNL · SCM");
  * ilk üç hap, fazlası "+n" (adlar ipucunda). `compact` (dar kart: telefon, tablet, dar pencere):

@@ -64,7 +64,7 @@ export function SelfServicePage() {
   const ss = useSelfService()
   const [params, setParams] = useSearchParams()
   const navigate = useNavigate()
-  // Eski bağlantı (Tibot eskiden burada bir sekmeydi): Tibotlar sayfasına.
+  // Eski bağlantı (Ticket eskiden burada bir sekmeydi): Ticket sayfasına.
   useEffect(() => {
     if (params.get("tab") === "tickets") navigate(TIBOT_PATH, { replace: true })
   }, [params, navigate])

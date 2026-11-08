@@ -94,7 +94,7 @@ function WidgetButton({ id, look, chip, face, mobile }) {
     </TrayOverlay>
   )
   if (id === "radio") return <RadioCapsule mobile={mobile}>{overlay}</RadioCapsule>
-  // Tibot'un yüzü listeyi bir kez okur (sayı rozeti); görünür kapsül yok.
+  // Ticket'un yüzü listeyi bir kez okur (sayı rozeti); görünür kapsül yok.
   if (id === "tibot-rings")
     return (
       <LiveCapsule id={id} bare>

@@ -52,7 +52,7 @@ function useSlotButton(id, delay) {
       indicator={id}
       face={face}
       icon={trayIcon(id)}
-      // Yapışkan notlar ve Tibot çentikte ikonuyla (deste ve rozet yalnız header'da; sayı çentiğin
+      // Yapışkan notlar ve Ticket çentikte ikonuyla (deste ve rozet yalnız header'da; sayı çentiğin
       // kendi göstergesinde).
       glyph={
         id === "sticky" || id === "tibot-rings" ? undefined : <TrayGlyph id={id} face={face} />
@@ -85,7 +85,7 @@ function WidgetSlot({ id, side, mobile, delay }) {
       <WidgetPanel id={id} look={look} />
     </TrayOverlay>
   )
-  // Yapışkan notların destesi ve Tibot'un sayısı canlı: veri okunur (görünür bir şey eklenmez).
+  // Yapışkan notların destesi ve Ticket'un sayısı canlı: veri okunur (görünür bir şey eklenmez).
   return id === "sticky" || id === "tibot-rings" ? (
     <LiveCapsule id={id} bare>
       {overlay}

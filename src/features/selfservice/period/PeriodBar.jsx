@@ -11,7 +11,7 @@ import { updatedText } from "./updatedText"
 /**
  * DÖNEM ÇUBUĞU — sayfanın seçili dönemi (yıllar + Tümü; sade, altı çizili metin seçimi, oklarla
  * gezilir), son okuma saati, Yenile ve Dışa aktar (süzülmüş listenin CSV'si; ikon düğmeler;
- * `onExport` yoksa düğme yok — Tibotlar).
+ * `onExport` yoksa düğme yok — Ticket).
  * Özetin üst şeridi: özet, sekme sayıları, rapor ve liste bu dönemi izler. Eylemler çerçevesiz:
  * şerit sessiz kalır. Yıl çok olursa seçim kendi içinde kayar, eylemler sabit.
  */

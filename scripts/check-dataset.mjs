@@ -56,13 +56,15 @@ for (const c of cat) {
   if ((c.description ?? "").length > 200) err(`katalog "${c.name}": açıklama 200 karakteri aşıyor`)
 }
 const aiApps = cat.filter((c) => c.type === "ai").length
-if (aiApps < 4) err(`en az 4 AI uygulaması (apps[type:"ai"]) gerekli, ${aiApps} var`)
+if (aiApps < 6) err(`en az 6 AI uygulaması (apps[type:"ai"]) gerekli, ${aiApps} var`)
+const bizApps = cat.filter((c) => c.type === "business" && !["Outlook", "Teams"].includes(c.name)).length
+if (bizApps < 3) err(`Outlook/Teams dışında en az 3 iş uygulaması (apps[type:"business"]) gerekli, ${bizApps} var`)
 
 // ───── takvim ─────
 const meetings = ds.meetings ?? []
-if (meetings.length < 12) err(`en az 12 toplantı gerekli, ${meetings.length} var`)
+if (meetings.length < 34) err(`en az 34 toplantı gerekli, ${meetings.length} var`)
 const recurring = meetings.filter((m) => m.recur).length
-if (recurring < 3) err(`en az 3 tekrarlı toplantı (recur) gerekli, ${recurring} var`)
+if (recurring < 5) err(`en az 5 tekrarlı toplantı (recur) gerekli, ${recurring} var`)
 if (!meetings.some((m) => m.status === "notResponded")) warn("yanıt bekleyen davet (status:\"notResponded\") yok")
 if (!meetings.some((m) => m.allDay)) warn("tüm gün etkinliği yok")
 if (!meetings.some((m) => (m.day ?? 0) < 0 && !m.recur)) err("geçmiş (day < 0) tek seferlik toplantı yok")
@@ -82,23 +84,23 @@ const st = buildState(ds, now)
 const from = new Date(now.getTime() - 20 * 86400000)
 const to = new Date(now.getTime() + 30 * 86400000)
 const occ = occurrences(st.templates, from, to, now)
-if (occ.length < 25) warn(`±30 günde yalnız ${occ.length} etkinlik oluşuyor (25+ olmalı)`)
+if (occ.length < 80) warn(`±30 günde yalnız ${occ.length} etkinlik oluşuyor (80+ olmalı)`)
 
 // ───── posta ─────
 const mail = ds.mail ?? []
 const plain = mail.filter((m) => !m.feed)
 const feed = mail.filter((m) => m.feed)
-if (plain.length < 14) err(`en az 14 normal posta gerekli, ${plain.length} var`)
+if (plain.length < 32) err(`en az 32 normal posta gerekli, ${plain.length} var`)
 for (const tag of FEED) {
   const n = feed.filter((m) => m.feed === tag).length
-  if (n < 1) err(`Keşfet kaynağı "${tag}" için posta yok`)
+  if (n < 4) err(`Keşfet kaynağı "${tag}" için en az 4 posta gerekli, ${n} var`)
 }
-if (feed.length < 14) err(`en az 14 Keşfet postası gerekli, ${feed.length} var`)
+if (feed.length < 30) err(`en az 30 Keşfet postası gerekli, ${feed.length} var`)
 if (!feed.some((m) => m.feed === "ik" && /aramıza katıl/i.test(`${m.subject} ${(Array.isArray(m.body) ? m.body.join(" ") : m.body) ?? ""}`)))
   err('İK kaynağında "aramıza katılan" yeni çalışan postası yok')
 if (!feed.some((m) => m.feed === "ik" && /doğum günü|iyi ki doğdun|nice yıllara/i.test(`${m.subject} ${(Array.isArray(m.body) ? m.body.join(" ") : m.body) ?? ""}`)))
   err("İK kaynağında doğum günü postası yok")
-if (plain.filter((m) => m.unread).length < 3) err("en az 3 okunmamış normal posta gerekli")
+if (plain.filter((m) => m.unread).length < 6) err("en az 6 okunmamış normal posta gerekli")
 if (!plain.some((m) => m.flagged)) warn("bayraklı posta yok")
 if (!mail.some((m) => m.important)) warn("önemli (important) posta yok")
 mail.forEach((m, i) => {
@@ -116,20 +118,20 @@ mail.forEach((m, i) => {
 // ───── görevler ─────
 const lists = ds.todo?.lists ?? []
 const tasks = lists.flatMap((l) => l.tasks ?? [])
-if (lists.length < 3) err(`en az 3 görev listesi gerekli, ${lists.length} var`)
-if (tasks.length < 18) err(`en az 18 görev gerekli, ${tasks.length} var`)
-if (tasks.filter((t) => t.steps?.length).length < 3) err("en az 3 görevde adımlar (steps) olmalı")
+if (lists.length < 4) err(`en az 4 görev listesi gerekli, ${lists.length} var`)
+if (tasks.length < 40) err(`en az 40 görev gerekli, ${tasks.length} var`)
+if (tasks.filter((t) => t.steps?.length).length < 6) err("en az 6 görevde adımlar (steps) olmalı")
 if (!tasks.some((t) => t.due != null && t.due < 0 && t.status !== "completed" && t.completedDaysAgo == null)) warn("gecikmiş (due < 0) açık görev yok")
 if (tasks.filter((t) => t.completedDaysAgo != null || t.status === "completed").length < 2) warn("tamamlanmış görev yok/az")
 if (tasks.filter((t) => t.due === 0).length < 1) warn("bugüne (due: 0) düşen görev yok")
 
 // ───── dosyalar ve notlar ─────
-if ((ds.files ?? []).length < 10) err(`en az 10 dosya gerekli, ${(ds.files ?? []).length} var`)
+if ((ds.files ?? []).length < 22) err(`en az 22 dosya gerekli, ${(ds.files ?? []).length} var`)
 for (const f of ds.files ?? []) {
   if (!/\.(xlsx|docx|pptx|pdf|csv)$/i.test(f.name)) err(`dosya "${f.name}": uzantı xlsx/docx/pptx/pdf/csv olmalı`)
   checkPerson(f.by ?? "Ömer Gümüş", `dosya "${f.name}" by`)
 }
-if ((ds.notes ?? []).length < 3) err(`en az 3 not gerekli, ${(ds.notes ?? []).length} var`)
+if ((ds.notes ?? []).length < 8) err(`en az 8 not gerekli, ${(ds.notes ?? []).length} var`)
 
 // ───── asistan ─────
 const a = ds.assistant ?? {}
@@ -137,7 +139,7 @@ if (!a.office?.greeting || !(a.office.chips?.length >= 3)) err("assistant.office
 if (!a.sales?.greeting || !(a.sales.chips?.length >= 3)) err("assistant.sales: karşılama ve en az 3 öneri gerekli")
 if (!a.fallback) err("assistant.fallback yok")
 const answers = a.answers ?? []
-if (answers.length < 9) err(`en az 9 asistan cevabı gerekli, ${answers.length} var`)
+if (answers.length < 16) err(`en az 16 asistan cevabı gerekli, ${answers.length} var`)
 answers.forEach((x, i) => {
   try {
     new RegExp(fold(x.match), "i")

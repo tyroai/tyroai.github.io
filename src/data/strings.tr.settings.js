@@ -127,7 +127,7 @@ export const strings = {
   "settings.general.storage.ssAlerts": "Self Servis'te kapattığın uyarılar",
   "settings.general.storage.homeLayout": "Anasayfa düzeni",
   "settings.general.storage.widgets": "Pano düzeni",
-  "settings.general.storage.focusTasks": "Bugünün odağı",
+  "settings.general.storage.focusTasks": "Bugünün görevleri",
   "settings.general.storage.chatSessions": "Sohbet oturumları",
   "settings.general.storage.feedReactions": "Keşfet beğeni ve kayıtların",
   "settings.general.storage.photo": "Profil fotoğrafı (önbellek)",

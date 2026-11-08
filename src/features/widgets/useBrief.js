@@ -39,7 +39,7 @@ export const plural = (t, key, n, params = {}) =>
  */
 export function useBrief(ctx) {
   const { cal, mail, focus, feedFresh, now, pageAccess } = ctx
-  // Tibot sayıları (yalnız kitlede): listenin son okumasından; okunmadıysa bir kez okunur — kod
+  // Ticket sayıları (yalnız kitlede): listenin son okumasından; okunmadıysa bir kez okunur — kod
   // ayrı parçada iner (Anasayfa paketine girmez).
   const peek = useTibotPeek()
   const tibot = pageAccess.tibot ? peek : null

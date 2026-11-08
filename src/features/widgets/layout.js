@@ -53,7 +53,7 @@ export const RENAMED = { "radio-list": "radio" }
  * Birleşen kartlar (sadeleştirme): katalogdan kalkan kimlik → içine katıldığı kart. Kayıtlı düzende
  * ve header'da yeni karta döner; o kart zaten duruyorsa eskisi düşer (bilgisi orada). Haftam,
  * Toplantı ritminin küçük hâli oldu; Bugüne al, Bugünün odağının öneri tepsisi; TYRO öneriyor,
- * yardım küresinin öneri yüzü (kürenin görünüm seçeneği yok: eski kartın görünümü düşer). Tibot
+ * yardım küresinin öneri yüzü (kürenin görünüm seçeneği yok: eski kartın görünümü düşer). Ticket
  * Talepler'in liste kartı halkalı sürümüne katıldı.
  */
 export const MERGED = { week: "rhythm", suggest: "focus", nudge: "help", tibot: "tibot-rings" }

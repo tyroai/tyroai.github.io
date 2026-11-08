@@ -11,7 +11,7 @@ import {
 const stateOf = (data) => (data ? { status: "ready", data, at: Date.now() } : { status: "loading" })
 
 /**
- * Tibot Talepler listesi (widget ve Self Servis sekmesi aynı belleği paylaşır): açılışta bir kez,
+ * Ticket Talepler listesi (widget ve Self Servis sekmesi aynı belleği paylaşır): açılışta bir kez,
  * taze ise (5 dk) bellekten; ortak "Yenile" (`refreshTickets` — Self Servis'in özet kartındaki
  * düğme) ekrandaki bütün listeleri tazeler. Arka planda yoklama yok.
  * Durum: `loading` · `ready` · `denied` (izin/oturum) · `error`.

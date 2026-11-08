@@ -19,7 +19,7 @@ export const CATALOG_GROUPS = [
     ids: ["pending-mail", "recent-files", "saved-search", "onenote", "sticky", "feed-picks"],
   },
   { id: "team", ids: ["team-today", "leave-balance", "requests", "rm-pulse"] },
-  // Tibot (Xurrent talepleri) kendi bölümünde; kitle dışında boş kalır, bölüm hiç çizilmez.
+  // Ticket (Xurrent talepleri) kendi bölümünde; kitle dışında boş kalır, bölüm hiç çizilmez.
   {
     id: "tibot",
     ids: ["tibot-rings", "tibot-summary", "tibot-rhythm", "tibot-intro"],

@@ -239,7 +239,7 @@ export function LauncherCatalog({ onOpenChat, onlyFavorites = false, id = "apps"
           </Section>
         )}
 
-        {/* ⚠️ İŞ UYGULAMALARI KİLİT KAPSAMINDA DEĞİL: D365, Power BI ve Tibot kendi kapılarını taşıyor —
+        {/* ⚠️ İŞ UYGULAMALARI KİLİT KAPSAMINDA DEĞİL: D365, Power BI ve Ticket kendi kapılarını taşıyor —
             Microsoft hesabı, lisans ve kendi yetki kontrolleri. Buraya kilit
             koymak hiçbir şey eklemiyordu: adresi bilen zaten tarayıcıdan
             giriyor, giremeyen de bizim kartımız yüzünden değil o sistemin

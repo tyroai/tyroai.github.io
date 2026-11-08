@@ -1,6 +1,6 @@
-// @azure/msal-browser'ın DEMO karşılığı: oturum her zaman açık, belirteçler uydurma.
-// Uygulamanın kullandığı yüzey kadarını uygular (PublicClientApplication, EventType, LogLevel,
-// InteractionStatus, InteractionRequiredAuthError). Hiçbir ağ isteği yapmaz.
+// @azure/msal-browser'ın DEMO karşılığı: gerçek Entra yok. İlk ziyarette oturum KAPALIdır ve giriş
+// sayfası açılır; "Bağlan" sahte oturumu açar (Ömer Gümüş), çıkış kapatır. Durum localStorage'da
+// `demo-signed-in` (veri seti değişse de korunur). Hiçbir ağ isteği yapmaz.
 import { ACCOUNT } from "../persona.js"
 
 export const LogLevel = { Error: 0, Warning: 1, Info: 2, Verbose: 3, Trace: 4 }
@@ -40,6 +40,34 @@ export class InteractionRequiredAuthError extends Error {
   }
 }
 
+const SIGNED_KEY = "demo-signed-in"
+const base = () => import.meta.env.BASE_URL
+
+/** Sahte oturum açık mı (localStorage). */
+export function isDemoSignedIn() {
+  try {
+    return window.localStorage.getItem(SIGNED_KEY) === "1"
+  } catch {
+    return false
+  }
+}
+
+function signIn() {
+  try {
+    window.localStorage.setItem(SIGNED_KEY, "1")
+  } catch {
+    /* depo yok: oturum bu sayfa ömrüyle sınırlı kalır */
+  }
+}
+
+function signOut() {
+  try {
+    window.localStorage.removeItem(SIGNED_KEY)
+  } catch {
+    /* yok */
+  }
+}
+
 const DEMO_TOKEN = "demo.access.token"
 
 function tokenResult(request) {
@@ -59,44 +87,57 @@ function tokenResult(request) {
   }
 }
 
+const needSignIn = () => new InteractionRequiredAuthError("no_account_error", "demo: oturum kapalı")
+
 export class PublicClientApplication {
   constructor(config) {
     this.config = config
   }
   async initialize() {}
   getAllAccounts() {
-    return [ACCOUNT]
+    return isDemoSignedIn() ? [ACCOUNT] : []
   }
   getActiveAccount() {
-    return ACCOUNT
+    return isDemoSignedIn() ? ACCOUNT : null
   }
   getAccount() {
-    return ACCOUNT
+    return isDemoSignedIn() ? ACCOUNT : null
   }
   setActiveAccount() {}
   async handleRedirectPromise() {
     return null
   }
   async acquireTokenSilent(request) {
+    if (!isDemoSignedIn()) throw needSignIn()
     return tokenResult(request)
   }
   async acquireTokenPopup(request) {
     return tokenResult(request)
   }
   async acquireTokenRedirect() {}
+  // Giriş sayfasındaki "Bağlan": oturumu aç ve Anasayfa'ya git. Sessiz deneme (prompt=none) reddedilir:
+  // ilk ziyaretçi giriş sayfasını görür.
+  async loginRedirect(request) {
+    if (request?.prompt === "none") throw new InteractionRequiredAuthError("login_required")
+    signIn()
+    window.location.assign(`${base()}myspace`)
+  }
   async loginPopup(request) {
+    signIn()
     return tokenResult(request)
   }
-  async loginRedirect() {}
   async ssoSilent(request) {
+    if (!isDemoSignedIn()) throw new InteractionRequiredAuthError("login_required")
     return tokenResult(request)
   }
-  // Demoda çıkış anlamsız (oturum hep açık): ana sayfaya dön.
+  // Çıkış: oturumu kapat ve giriş sayfasına dön.
   async logoutRedirect() {
-    window.location.assign("/")
+    signOut()
+    window.location.assign(`${base()}login`)
   }
   async logoutPopup() {
-    window.location.assign("/")
+    signOut()
+    window.location.assign(`${base()}login`)
   }
   async clearCache() {}
   addEventCallback() {

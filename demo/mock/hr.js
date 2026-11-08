@@ -21,20 +21,6 @@ export function workerRow(p = byMail(PERSONA.mail)) {
   }
 }
 
-const used = (p) => 4 + ((EVERYONE.indexOf(p) * 3) % 9)
-export function allowanceRow(p = byMail(PERSONA.mail)) {
-  const claim = 20
-  const usedDays = p.mail === PERSONA.mail ? 8 : used(p)
-  return {
-    mserp_networkalias: p.mail,
-    mserp_emplid: pnOf(p),
-    mserp_id: pnOf(p),
-    mserp_allowanceyearlyclaimday: claim,
-    mserp_allowanceyearlyusedday: usedDays,
-    mserp_allowanceyearlyremainday: claim - usedDays,
-  }
-}
-
 /** `d` gününden sonraki ilk `iso` hafta günü (1=Pzt). */
 function nextWeekday(d, iso) {
   let x = startOfDay(d)
@@ -75,31 +61,60 @@ function leaveRow(start, end, description, status = "completed", type = "TR01") 
   }
 }
 
-/** Ömer'in izin kayıtları (geçmiş, yaklaşan, bekleyen). */
+/** Ömer'in izin kayıtları: geçen yıl, bu yıl (kullanılan), yaklaşan ve bekleyen. */
 export function ownLeaves(now = new Date()) {
   const today = startOfDay(now)
-  const a = nextWeekday(addDays(today, -120), 1)
-  const b = nextWeekday(addDays(today, -55), 3)
-  const c = nextWeekday(addDays(today, 24), 2)
-  const d = nextWeekday(addDays(today, 52), 1)
-  return [
-    leaveRow(a, addDays(a, 4), "Yıllık izin"),
-    leaveRow(b, addDays(b, 2), "Aile ziyareti"),
-    leaveRow(c, addDays(c, 2), "Yıllık izin"),
-    leaveRow(d, addDays(d, 1), "Kısa tatil", "pending"),
+  const spans = [
+    // [kaç gün önce/sonra başlar, hafta günü, süre (gün sayısı - 1), açıklama, durum]
+    [-400, 1, 4, "Yıllık izin", "completed"],
+    [-330, 2, 2, "Yıl sonu tatili", "completed"],
+    [-200, 2, 1, "Kişisel işler", "completed"],
+    [-120, 1, 4, "Yıllık izin", "completed"],
+    [-55, 3, 2, "Aile ziyareti", "completed"],
+    [-20, 4, 0, "Doktor randevusu", "completed"],
+    [24, 2, 2, "Yıllık izin", "completed"],
+    [52, 1, 1, "Kısa tatil", "pending"],
+    [95, 1, 3, "Yaz hazırlığı için izin", "pending"],
   ]
+  return spans.map(([off, wd, len, text, status]) => {
+    const start = nextWeekday(addDays(today, off), wd)
+    return leaveRow(start, addDays(start, len), text, status)
+  })
 }
 
-/** Ekip üyelerinin bu aydaki izinleri (Ekibim zaman çizelgesi). */
+/** Bu yıl kullanılan (tamamlanmış ve geçmiş) izin günü. */
+function usedThisYear(now = new Date()) {
+  const today = startOfDay(now)
+  return ownLeaves(now)
+    .filter((r) => r.mserp_status === STATUS.completed.value)
+    .filter((r) => new Date(r.mserp_enddate) <= today && new Date(r.mserp_startdate).getFullYear() === today.getFullYear())
+    .reduce((n, r) => n + r.mserp_noofdays, 0)
+}
+
+const used = (p) => 4 + ((EVERYONE.indexOf(p) * 3) % 9)
+export function allowanceRow(p = byMail(PERSONA.mail)) {
+  const claim = 22
+  const usedDays = p.mail === PERSONA.mail ? usedThisYear() : used(p)
+  return {
+    mserp_networkalias: p.mail,
+    mserp_emplid: pnOf(p),
+    mserp_id: pnOf(p),
+    mserp_allowanceyearlyclaimday: claim,
+    mserp_allowanceyearlyusedday: usedDays,
+    mserp_allowanceyearlyremainday: claim - usedDays,
+  }
+}
+
+/** Ekip üyelerinin izinleri (Ekibim zaman çizelgesi): her kişide iki kayıt. */
 export function teamLeaves(now = new Date()) {
   const today = startOfDay(now)
   const rnd = seeded("team-leaves")
-  return REPORTS.flatMap((p, i) => {
-    const start = nextWeekday(addDays(today, 3 + i * 4 + Math.floor(rnd() * 3)), 1 + (i % 4))
-    const len = 1 + (i % 3)
-    const days = weekdaysBetween(start, addDays(start, len))
-    return [
-      {
+  return REPORTS.flatMap((p, i) =>
+    [3 + i * 4 + Math.floor(rnd() * 3), 22 + i * 3 + Math.floor(rnd() * 4)].map((off, k) => {
+      const start = nextWeekday(addDays(today, off), 1 + ((i + k) % 4))
+      const len = 1 + ((i + k) % 3)
+      const days = weekdaysBetween(start, addDays(start, len))
+      return {
         mserp_boraxoldemplid: pnOf(p),
         mserp_emplname: allCaps(p.displayName),
         mserp_allowancetypeid: "TR01",
@@ -109,12 +124,12 @@ export function teamLeaves(now = new Date()) {
         mserp_noofhours: days * 8,
         mserp_status: STATUS.completed.value,
         [`mserp_status${FV}`]: STATUS.completed.label,
-      },
-    ]
-  })
+      }
+    }),
+  )
 }
 
-/** Masraf satırları ve başlıkları (iki rapor). */
+/** Masraf satırları ve başlıkları (dört rapor). */
 export function expenses(now = new Date()) {
   const today = startOfDay(now)
   const lines = (no, d0, items) =>
@@ -129,58 +144,71 @@ export function expenses(now = new Date()) {
       mserp_referencedataareaid: "TYTC",
       mserp_companyname: PERSONA.companyName,
     }))
-  const a = "HRMS-062301"
-  const b = "HRMS-062344"
+  const header = (no, d0, status, label, text) => ({
+    mserp_expnumber: no,
+    mserp_workflowstatus: status,
+    [`mserp_workflowstatus${FV}`]: label,
+    mserp_transdate: dvDate(addDays(today, d0)),
+    mserp_explanation: text,
+    mserp_sourcecompanyid: "TYTC",
+    mserp_targetcompanyid: "TYTC",
+  })
   return {
     lines: [
-      ...lines(a, -34, [
+      ...lines("HRMS-062187", -96, [
+        ["y.dışı konaklama", 9420, "Dubai bayi toplantısı, 3 gece konaklama"],
+        ["y.dışı ulaşım", 3150, "Uçak bileti (İstanbul–Dubai)"],
+        ["y.dışı yemek", 1860, "Müşteri akşam yemekleri"],
+        ["y.dışı götürü giderler", 1200, "Yurtdışı harcırah"],
+      ]),
+      ...lines("HRMS-062256", -58, [
+        ["y.içi konaklama", 3300, "İzmir müşteri eğitimi, 2 gece"],
+        ["y.içi ulaşım", 780, "Havalimanı ve şehir içi ulaşım"],
+        ["y.içi yemek", 920, "Eğitim günü yemekleri"],
+      ]),
+      ...lines("HRMS-062301", -34, [
         ["y.içi konaklama", 2850, "Ankara bayi toplantısı, 1 gece konaklama"],
         ["y.içi ulaşım", 420, "Havalimanı transferi"],
         ["y.içi yemek", 640, "Müşteri öğle yemeği"],
       ]),
-      ...lines(b, -9, [
+      ...lines("HRMS-062318", -22, [
+        ["Ağırlama ve Konaklama Gid.", 2400, "Sektör fuarı müşteri ağırlama"],
+        ["Matbaa Giderleri", 1350, "Fuar broşür ve katalog baskısı"],
+        ["y.içi ulaşım", 560, "Fuar alanı ulaşım"],
+      ]),
+      ...lines("HRMS-062344", -9, [
         ["y.içi yemek", 1180, "Kanal ortağı çalışma yemeği"],
         ["Taşıt Akaryakıt Gid.", 760, "Müşteri ziyareti yakıt"],
       ]),
     ],
     headers: [
-      {
-        mserp_expnumber: a,
-        mserp_workflowstatus: 200000003,
-        [`mserp_workflowstatus${FV}`]: "Approved",
-        mserp_transdate: dvDate(addDays(today, -33)),
-        mserp_explanation: "Ankara bayi ziyareti",
-        mserp_sourcecompanyid: "TYTC",
-        mserp_targetcompanyid: "TYTC",
-      },
-      {
-        mserp_expnumber: b,
-        mserp_workflowstatus: 200000001,
-        [`mserp_workflowstatus${FV}`]: "Pending approval",
-        mserp_transdate: dvDate(addDays(today, -8)),
-        mserp_explanation: "Kanal ortağı görüşmeleri",
-        mserp_sourcecompanyid: "TYTC",
-        mserp_targetcompanyid: "TYTC",
-      },
+      header("HRMS-062187", -96, 200000003, "Approved", "Dubai bayi toplantısı"),
+      header("HRMS-062256", -58, 200000003, "Approved", "İzmir müşteri eğitimi"),
+      header("HRMS-062301", -33, 200000003, "Approved", "Ankara bayi ziyareti"),
+      header("HRMS-062318", -22, 200000004, "Processed for payment", "Sektör fuarı"),
+      header("HRMS-062344", -8, 200000001, "Pending approval", "Kanal ortağı görüşmeleri"),
     ],
   }
 }
 
 export function advances(now = new Date()) {
   const today = startOfDay(now)
+  const adv = (no, d0, purpose, loc, amount, note, status, label) => ({
+    mserp_cashadvancenumber: no,
+    mserp_requesteddate: dvDate(addDays(today, d0)),
+    mserp_purpose: purpose,
+    mserp_location: loc,
+    mserp_requestedamount: amount,
+    mserp_currency: "TRY",
+    mserp_note: note,
+    mserp_cashadvancestatus: status,
+    [`mserp_cashadvancestatus${FV}`]: label,
+    mserp_targetcompanyid: "TYTC",
+  })
   return [
-    {
-      mserp_cashadvancenumber: "AVN-000412",
-      mserp_requesteddate: dvDate(addDays(today, -41)),
-      mserp_purpose: "Müşteri Ziyareti",
-      mserp_location: "Ankara",
-      mserp_requestedamount: 5000,
-      mserp_currency: "TRY",
-      mserp_note: "Bayi toplantıları için harcırah avansı",
-      mserp_cashadvancestatus: 200000004,
-      [`mserp_cashadvancestatus${FV}`]: "Processed for payment",
-      mserp_targetcompanyid: "TYTC",
-    },
+    adv("AVN-000412", -41, "Müşteri Ziyareti", "Ankara", 5000, "Bayi toplantıları için harcırah avansı", 200000004, "Processed for payment"),
+    adv("AVN-000398", -75, "Fuar", "İzmir", 8000, "Sektör fuarı katılım avansı", 200000004, "Processed for payment"),
+    adv("AVN-000431", -6, "Müşteri Ziyareti", "Bursa", 3500, "Bölge ziyaretleri için avans", 200000001, "Pending approval"),
   ]
 }
 
@@ -191,6 +219,7 @@ export function advances(now = new Date()) {
 export function roster(now = new Date()) {
   const today = startOfDay(now)
   const year = today.getFullYear()
+  const cast = (name) => EVERYONE.find((p) => p.displayName === name)
   const spots = [
     // [kişi, doğum günü kaç gün sonra | null, kıdem günü: [kaç gün sonra, kaç yıl] | null]
     [REPORTS[0], 1, null],
@@ -202,6 +231,18 @@ export function roster(now = new Date()) {
     [REPORTS[4], 12, null],
     [COLLEAGUES[3], null, [2, 0]], // yeni katılan
     [MANAGER, null, [7, 9]],
+    [cast("Tuna Erdoğan"), 2, null],
+    [cast("Melis Sarıçam"), null, [5, 2]],
+    [cast("Pelin Kocabaş"), 5, null],
+    [cast("Barış Taşkın"), null, [8, 4]],
+    [cast("Seda Önal"), 8, null],
+    [cast("Cansu Bilgin"), null, [11, 1]],
+    [cast("Yiğit Kaplan"), 10, null],
+    [cast("Neslihan Duran"), 13, [12, 7]],
+    [cast("Alper Güler"), null, [6, 8]],
+    [cast("Tolga Ergin"), 4, null],
+    [cast("Cem Sönmez"), null, [1, 0]], // yeni katılan
+    [cast("Defne Aras"), 7, null],
   ]
   const rnd = seeded("roster")
   const rows = spots.map(([p, bd, sen]) => {
@@ -245,3 +286,4 @@ export function roster(now = new Date()) {
   })
   return rows
 }
+

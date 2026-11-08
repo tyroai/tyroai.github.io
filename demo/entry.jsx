@@ -8,7 +8,7 @@ const dataset = await loadDataset(id)
 window.__DEMO__ = { id, dataset }
 installMocks(dataset)
 
-// İlk açılış tohumları (yalnız yoksa): Keşfet rozeti için "en son görülen" damgası (aksi hâlde rozet
+// İlk açılış tohumları (yalnız yoksa): dil, Keşfet rozeti için "en son görülen" damgası (aksi hâlde rozet
 // hiç yanmaz) ve rehber turlarının kapalı başlaması (Yardım › Rehber turları yine açabilir).
 try {
   const ls = window.localStorage
@@ -16,6 +16,8 @@ try {
     ls.setItem("tyro-feed-seen-v1", new Date(Date.now() - 3 * 86400000).toISOString())
   }
   if (!ls.getItem("tyro-tours-v1")) ls.setItem("tyro-tours-v1", JSON.stringify({ off: true, seen: {} }))
+  // Dil: seçim yoksa Türkçe (kaynakta giriş sayfası İngilizce açılır; içerik Türkçe olduğu için tutarsız dururdu).
+  if (!ls.getItem("tyro-locale-v2")) ls.setItem("tyro-locale-v2", "tr")
 } catch {
   /* depo yok: rozet sıfır kalır, turlar zaten açılmaz */
 }

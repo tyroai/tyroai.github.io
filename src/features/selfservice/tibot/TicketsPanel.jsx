@@ -66,7 +66,7 @@ function MonthGroups({ rows, bucket, openId, onOpen }) {
 }
 
 /**
- * Tibotlar › Açık Talepler: Xurrent'teki açık talepler üç görünümde — bana atanan · tarafımdan
+ * Ticket › Açık Talepler: Xurrent'teki açık talepler üç görünümde — bana atanan · tarafımdan
  * açılanlar · ekibim. Kayıt sekmelerinin düzeni: çipler, filtreler (Ekibim'de atanan · durum ·
  * servis · açılış ayı), arama, açılış ayına göre gruplar; basınca ayrıntı + notlar
  * (`TicketSheet`). Her görünüm en yeni 50 ile açılır; fazlası kişi isteyince 50'şer ("Daha fazla",

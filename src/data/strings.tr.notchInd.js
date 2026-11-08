@@ -35,7 +35,7 @@ export const strings = {
   "notchInd.short.rm": "tyroRM",
   "notchInd.short.ask": "TYRO",
   "notchInd.short.notes": "Notlar",
-  "notchInd.short.tibot": "Tibot",
+  "notchInd.short.tibot": "Ticket",
   "notchInd.sticky": "{n} not",
   "notchInd.tibot": "Sana atanan açık talep: {n}",
   "notchInd.tibotLate": "Sana atanan açık talep: {n}, hedefi geçen: {late}",

@@ -9,7 +9,7 @@ import { headerEligible, widgetAlias } from "../headerWidgets/headerStore"
  */
 const read = () => {
   try {
-    // Eski kimlik yenisine döner (ör. Tibot Talepler → halkalı sürümü), yuva boşa düşmez.
+    // Eski kimlik yenisine döner (ör. Ticket Talepler → halkalı sürümü), yuva boşa düşmez.
     return parseSlots(localStorage.getItem(NOTCH_SLOTS_KEY), headerEligible, widgetAlias)
   } catch {
     return [...DEFAULT_SLOTS]

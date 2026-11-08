@@ -10,6 +10,7 @@ import { rowNames } from "@/features/widgets/market/marketFormat"
 import { baseLook, lookPalette } from "@/features/widgets/paletteTokens"
 import { useCityTimes } from "@/features/widgets/worldclock/useCityTimes"
 import { useLocale } from "@/hooks/useLocale"
+import { usePalette } from "@/hooks/usePalette"
 import { useWorldClock } from "@/hooks/useWorldClock"
 import { MARKET_CATALOG } from "@/lib/marketCatalog"
 import { cn } from "@/lib/utils"
@@ -76,7 +77,8 @@ export function HeaderFaceSettings({
   const name = t(headerTitleKey(id))
   const opts = faceOptionsOf(id)
   const looks = headerLooksOf(id)
-  const swatch = lookSwatch(baseLook(look), lookPalette(look))
+  const { palette } = usePalette()
+  const swatch = lookSwatch(baseLook(look), lookPalette(look), palette)
   return (
     <div className="space-y-5">
       <div>

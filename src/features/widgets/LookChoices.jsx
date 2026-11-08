@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { palettes } from "@/data/palettes"
 import { useLocale } from "@/hooks/useLocale"
+import { usePalette } from "@/hooks/usePalette"
 import { cn } from "@/lib/utils"
 import { SWATCH, lookSwatch, paletteSwatch } from "./lookSwatch"
 import { baseLook, lookPalette, withBase, withPalette } from "./paletteTokens"
@@ -24,6 +25,7 @@ const keepOpen = (e) => e.preventDefault()
  */
 export function LookChoices({ looks, look, onLook }) {
   const { t } = useLocale()
+  const { palette } = usePalette()
   const base = baseLook(look)
   const own = lookPalette(look)
   const pickColor = (id) => id !== own && onLook(withPalette(look, id))
@@ -35,7 +37,7 @@ export function LookChoices({ looks, look, onLook }) {
         onValueChange={(value) => value !== base && onLook(withBase(look, value))}
       >
         {looks.map((value) => {
-          const swatch = lookSwatch(value, own)
+          const swatch = lookSwatch(value, own, palette)
           return (
             <DropdownMenuRadioItem
               key={value}

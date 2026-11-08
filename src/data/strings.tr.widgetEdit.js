@@ -21,7 +21,7 @@ export const strings = {
   "widgetEdit.group.markets": "Piyasa ve ticaret",
   "widgetEdit.group.tyro": "TYRO",
   "widgetEdit.group.ambient": "Hava ve ortam",
-  "widgetEdit.group.tibot": "Tibot",
+  "widgetEdit.group.tibot": "Ticket",
   "widgetEdit.notchReplaced": "{name}, {old} yerine çentikte",
   "widgetEdit.notchDropSwap": "Bir yuvanın üstüne bırak: yerine geçer",
 }

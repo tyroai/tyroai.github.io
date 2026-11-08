@@ -1,5 +1,12 @@
 import { getPalette } from "@/data/palettes"
-import { baseLook, glassTint, hexLuminance, lookPalette, paletteTokens } from "./paletteTokens"
+import {
+  baseLook,
+  glassTint,
+  hexLuminance,
+  lookPalette,
+  paletteKind,
+  paletteTokens,
+} from "./paletteTokens"
 
 // Seçeneğin küçük örneği: menüde adın yanında görünümün kendisi (header'ın düzenleme
 // panelinde de seçili görünümün düğmesi).
@@ -29,15 +36,34 @@ const inkOf = (id, mode) => paletteTokens(id, mode)?.["--brand-text"] ?? getPale
 const dotOf = (color) => `radial-gradient(circle at 68% 32%, ${color} 0 24%, transparent 27%)`
 
 /**
- * Görünüm seçeneğinin örneği, widget'ın kendi rengiyle — kartın gerçekte nasıl görüneceği:
- * Renkli paletin kendisi (düz palette düz), Cam kartın renk payıyla (`glassTint`: koyu paletlerde
- * soluk) buz, Standart · Açık · Koyu zeminde paletin o kipteki vurgusu. Renk yoksa uygulamanın
- * paletiyle (`SWATCH`).
+ * Renkli kartın düz dolgusu (`lookTone.css` ile aynı): paletin koyu temadaki beyaz yazılı ana rengi,
+ * bir ton koyu; düz renk paletinde koyu dolgusu. Okunamazsa `null`.
  */
-export function lookSwatch(base, id) {
+export function renkliFill(id) {
+  const dark = paletteTokens(id, "dark")
+  const pick = (k) => {
+    const v = dark?.[k]
+    return v && !v.startsWith("var(") ? v : null
+  }
+  if (paletteKind(id) === "solid") return pick("--brand-fill-deep") ?? pick("--brand-deep")
+  const solid = pick("--brand-solid")
+  return solid ? `color-mix(in oklab, ${solid}, black 12%)` : null
+}
+
+/**
+ * Görünüm seçeneğinin örneği, widget'ın kendi rengiyle — kartın gerçekte nasıl görüneceği:
+ * Renkli düz dolgu (`renkliFill`), Cam kartın renk payıyla (`glassTint`: koyu paletlerde soluk)
+ * buz, Standart · Açık · Koyu zeminde paletin o kipteki vurgusu. Renk yoksa uygulamanın paletiyle
+ * (`app`; Renkli dışında `SWATCH`).
+ */
+export function lookSwatch(base, id, app) {
+  if (base === "palette") {
+    const fill = renkliFill(id ?? app)
+    return fill
+      ? { className: "ring-1 ring-black/10", style: { backgroundColor: fill } }
+      : { className: SWATCH.palette }
+  }
   if (!id) return { className: SWATCH[base] }
-  const fill = paletteSwatch(id)
-  if (base === "palette") return { className: "ring-1 ring-black/10", style: fill }
   if (base === "glass") {
     const [from, via, to] = getPalette(id).swatch
     const tint = glassTint((hexLuminance(from) + hexLuminance(via)) / 2)

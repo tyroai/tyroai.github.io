@@ -6,7 +6,7 @@ import { useTibotPeek } from "@/lib/tibot/tibotPeek"
 import { TIBOT_PATH } from "@/lib/tibotPolicy"
 
 /**
- * Günün özeti'nin Tibot'u (yalnız kitlede, `pageAccess.tibot`): sayılar listenin son okumasından
+ * Günün özeti'nin Ticket'u (yalnız kitlede, `pageAccess.tibot`): sayılar listenin son okumasından
  * (`tibotPeek`); okunmadıysa bir kez okunur (ayrı parçadan). `ticket`: ipucundan açılan talep.
  */
 export function useDayTibot() {
@@ -21,11 +21,11 @@ export function useDayTibot() {
 }
 
 /**
- * Özetin TEK Tibot maddesi (`{ key, tone, node }` ya da hiç): sana atanan varsa "Tibot'ta seni
+ * Özetin TEK Ticket maddesi (`{ key, tone, node }` ya da hiç): sana atanan varsa "Ticket'ta seni
  * bekleyen 23 talep" (geciken varsa vurgu kırmızıya yakın tonda; açtıkların ipucunun notunda),
  * yoksa "Açtığın ve süren 1 talep". Tek madde: panodaki kart sabit boyda, her satır yer yer.
  * Vurgulu ifade öteki maddeler gibi bir kapı: ipucunda ilk üç talep (basınca pencere), dipte
- * "Tibot'a git". `t`, `phrase`, `fill`: özetin kendi yardımcıları (çoğul ve yuva).
+ * "Ticket'a git". `t`, `phrase`, `fill`: özetin kendi yardımcıları (çoğul ve yuva).
  */
 export function dayTibotItems({ day, t, phrase, fill }) {
   const peek = day.peek
@@ -52,7 +52,7 @@ export function dayTibotItems({ day, t, phrase, fill }) {
         <InsightTerm
           tone={tone}
           title={t(onMe ? "myspace.tip.tibot.title" : "myspace.tip.tibotWaiting.title")}
-          kicker="Tibot"
+          kicker="Ticket"
           list={(close) => (
             <TicketTipListLazy kind={onMe ? "onMe" : "waiting"} onOpen={open(close)} />
           )}

@@ -1,5 +1,5 @@
 /**
- * Xurrent ekip adları → kişi kartındaki gruplar (Tibotlar sayfası, `TibotTeams`). Ad iki dilli
+ * Xurrent ekip adları → kişi kartındaki gruplar (Ticket sayfası, `TibotTeams`). Ad iki dilli
  * ("Kurumsal Sistemler-AI / Enterprise Systems_AI"): Türkçe kısmı gösterilir, tamamı ipucunda.
  * Aynı öneki paylaşan ekipler tek grupta ("Kurumsal Sistemler" · GNL · SCM · AI); tek kalan kendi
  * adıyla. Sıra ilk görünüşe göre.

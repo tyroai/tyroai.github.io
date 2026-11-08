@@ -105,6 +105,20 @@ export const PATCHES = [
     replace:
       'src={estateImage(kind === "partly" && !night ? "sunny" : weather, night)}\n          style={{ objectPosition: estatePosition(kind === "partly" && !night ? "sunny" : weather, night) }}',
   },
+  // Denetim Merkezi: "Çentik" karosu kalkar (aynı işlev alttaki kısayol satırında zaten var).
+  {
+    file: "src/components/layout/control/controlModel.ts",
+    find: '  "tool:task",\n  "toggle:notch",\n  "tool:presence",',
+    replace: '  "tool:task",\n  "tool:presence",',
+  },
+  // Durum noktası: dairesel avatarın KÖŞE kutusuna değil çember kenarına (45°) oturur; büyük avatarda
+  // büyür. Kaynakta kutu köşesine konduğu için hero avatarlarında dışarı taşıp garip duruyordu.
+  {
+    file: "src/components/common/PersonAvatar.jsx",
+    find: '"absolute -top-0.5 -right-0.5 size-2.5 rounded-full ring-2 ring-popover",',
+    replace:
+      '"absolute top-[14.6%] right-[14.6%] size-[max(0.625rem,17%)] translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-popover",',
+  },
   // Sahne arka planı demoda HER saatte ve havada açık başlar (kaynakta yalnız güneşli gündüzde).
   {
     file: "src/features/myspace/weather/useEstatePref.js",
@@ -176,6 +190,8 @@ export function transformText(text) {
   s = s.replace(GUID_RE, fakeGuid)
   for (const [re, to] of BRAND_RULES) s = s.replace(re, to)
   for (const [re, to] of POST_FIXES) s = s.replace(re, to)
+  // Ürün adı: Tibot → Ticket (yalnız bağımsız sözcük; TibotPage gibi tanımlayıcılara dokunulmaz)
+  s = s.replace(/\bTibot(?:lar)?\b/g, "Ticket")
   return s
 }
 

@@ -3,7 +3,7 @@ import { getNumberFormat } from "@/lib/intl-cache"
 import { isOverdue, statusKey, type BucketView } from "./tibotModel"
 
 /**
- * Tibotlar sayfasının özet kutularının ayrıntısı (saf, testli): duruma göre dağılım, hedefi
+ * Ticket sayfasının özet kutularının ayrıntısı (saf, testli): duruma göre dağılım, hedefi
  * yaklaşanlar, en eski açık talep ve ekipte kimde kaç talep.
  */
 

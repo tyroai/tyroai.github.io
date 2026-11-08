@@ -146,7 +146,7 @@ export const REGISTRY = {
   },
   // tyroRM nabzı: ayın doluluğu, kapasite aşımı, takvim riski — yalnız tyroRM yetkisi olana.
   "rm-pulse": { title: "widgets.rm.title", access: "rm" },
-  // Tibot'un üç kartı (kimlikler eski adlarıyla, kayıtlı düzenler korunsun): Sıra sende (benden
+  // Ticket'un üç kartı (kimlikler eski adlarıyla, kayıtlı düzenler korunsun): Sıra sende (benden
   // hamle bekleyen deste), Pist (hedefler gün gün, geniş) ve Tempo (yılın halkası + hafta).
   // Header yüzleri renkli SVG (`components/tibot/TibotGlyphs`): deste · pist · tempo halkası.
   "tibot-summary": {
@@ -165,7 +165,7 @@ export const REGISTRY = {
     access: "tibot",
     header: { shows: ["value", "icon"], width: 64, desc: "headerWidgets.desc.tibot-intro" },
   },
-  // Tibot Talepler (halka): kovalar iç içe halkalarda + talepler (geniş). Eski liste kartının
+  // Ticket Talepler (halka): kovalar iç içe halkalarda + talepler (geniş). Eski liste kartının
   // (`tibot`) yerine geçti (`layout.js` › `MERGED`): header'da üç renkli halka + sana atanan sayısı
   // rozeti (geciken varsa kırmızı), çentikte aynı sayı.
   "tibot-rings": {

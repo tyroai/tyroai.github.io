@@ -26,7 +26,7 @@ function readYear(params) {
 }
 
 /**
- * TİBOTLAR — Self Servis'in Tibot sürümü, yalnız okuma (kitle `lib/tibotPolicy`). Aynı kişi
+ * TİBOTLAR — Self Servis'in Ticket sürümü, yalnız okuma (kitle `lib/tibotPolicy`). Aynı kişi
  * kartı (`SelfHero`, Graph'tan; alt şeritte yönetici yerine Xurrent ekiplerin, `TibotTeams`), kartın beyaz tepsisinde dört kutu
  * (`TibotTray`: bende bekleyen · ekibimde · açtığım · dönemde kapanan) ve altında talepler
  * (`TicketsPanel`: kova çipleri, filtreler, arama, aylık gruplar, ayrıntı penceresi). Dar ve

@@ -58,7 +58,7 @@ export function briefItems({
   if (invites) items.push({ id: "invites", n: invites })
   if (unread) items.push({ id: "mail", n: unread, important })
   if (overdue) items.push({ id: "overdue", n: overdue })
-  // Tibot (yalnız kitlede; sayılar listenin son okumasından): bende bekleyen, sonra beklediğim.
+  // Ticket (yalnız kitlede; sayılar listenin son okumasından): bende bekleyen, sonra beklediğim.
   if (tibot) items.push({ id: "tibot", n: tibot, late: tibotLate })
   if (open) items.push({ id: "tasks", n: open })
   if (tibotWaiting) items.push({ id: "tibotWaiting", n: tibotWaiting })

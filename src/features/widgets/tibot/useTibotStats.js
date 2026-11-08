@@ -4,7 +4,7 @@ import { STATUS } from "@/lib/graph"
 import { tibotStats } from "@/lib/tibot/tibotStats"
 
 /**
- * Tibot widget'larının ortak verisi: liste (`useTibotTickets` — açılışta bir kez, 5 dk bellek,
+ * Ticket widget'larının ortak verisi: liste (`useTibotTickets` — açılışta bir kez, 5 dk bellek,
  * ortak Yenile) ve ondan özet sayılar (`tibotStats`). `bodyStatus`: `WidgetBody`'nin sözlüğü.
  */
 export function useTibotStats() {

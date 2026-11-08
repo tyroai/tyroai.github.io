@@ -1,6 +1,6 @@
 /**
- * Tibot Talepler'in header yüzü ve çentik göstergesi için TEK özet (bağımlılıksız: tepsi ve çentik
- * Tibot'un ağır parçasını indirmeden okur). `tibotApi` liste her geldiğinde yazar; liste bu
+ * Ticket Talepler'in header yüzü ve çentik göstergesi için TEK özet (bağımlılıksız: tepsi ve çentik
+ * Ticket'un ağır parçasını indirmeden okur). `tibotApi` liste her geldiğinde yazar; liste bu
  * oturumda okunmadıysa `null` (yüz yalnız ikon).
  */
 import { useSyncExternalStore } from "react"

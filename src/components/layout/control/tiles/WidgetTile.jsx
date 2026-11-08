@@ -11,7 +11,7 @@ import { preloadPanel } from "../panelPreload"
 import { tileTitleKey } from "../tileTitle"
 import { TileShell } from "./TileShell"
 
-// Yüzünün verisini ayrı bir parça okuyanlar (notların destesi, Tibot'un sayısı): kutucuk
+// Yüzünün verisini ayrı bir parça okuyanlar (notların destesi, Ticket'un sayısı): kutucuk
 // açıkken o parça da çizilir, görünür bir şey eklemez (header'ın toplu tepsisi gibi).
 const KEEP_LIVE = new Set(["sticky", "tibot-rings"])
 
@@ -36,7 +36,7 @@ function MarketRows({ codes, title }) {
 
 /**
  * Header'a girebilen bir widget'ın kutucuğu: yuvada header'daki yüzü (kadran, sayaç halkası,
- * kâğıt destesi, Tibot halkası …), yanında adı ve canlı bilgisi (kur, saat, kalan süre —
+ * kâğıt destesi, Ticket halkası …), yanında adı ve canlı bilgisi (kur, saat, kalan süre —
  * header'da "yalnız simge" seçilmiş olsa da). Yüz seçimi header'la ortak (`faces`: piyasada
  * kurlar, dünya saatinde şehir). Üstüne gelince penceresinin kodu önden iner; dokununca widget
  * panelin içinde açılır (`ControlDetail`).

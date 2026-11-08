@@ -58,7 +58,7 @@ export function pageAccessFor(who) {
   const solutions = SOLUTIONS_PAGE.enabled && audienceAllows(SOLUTIONS_PAGE.audience, who)
   // Güvenlik: yalnız Yetkiler'deki yönetici işareti (fail-closed; cevap yoldayken bekler).
   const security = audienceAllows("appAdmins", who)
-  // Tibotlar sayfası (`/tibot`) ve Tibot widget'ları: aynı kitle.
+  // Ticket sayfası (`/tibot`) ve Ticket widget'ları: aynı kitle.
   const tibot = TIBOT.enabled && audienceAllows(TIBOT.audience, who)
   // Sayfa değil, Anasayfa'nın düzenlenebilirliği: rota kapısı yok.
   const homeEdit = HOME_EDIT.enabled && audienceAllows(HOME_EDIT.audience, who)

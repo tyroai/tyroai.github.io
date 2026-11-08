@@ -10,11 +10,11 @@ import { TibotRow } from "./TibotRow"
 import "./tibotWidget.css"
 import { TIBOT_PATH } from "@/lib/tibotPolicy"
 
-// Açılan listede en çok bu kadar talep; fazlası "Tümünü gör" ile Self Servis › Tibot'ta.
+// Açılan listede en çok bu kadar talep; fazlası "Tümünü gör" ile Self Servis › Ticket'ta.
 const MAX = 6
 
 /**
- * Bir sayının arkasındaki talepler (Tibot özeti, karşılama, ritim): basınca açılan kart — başlık
+ * Bir sayının arkasındaki talepler (Ticket özeti, karşılama, ritim): basınca açılan kart — başlık
  * ve sayı, en çok altı talep (gecikenler önce), "Tümünü gör". Talebe basınca kart kapanır, ayrıntı
  * bir kare sonra açılır (`onOpen`; odak yarışmasın). `children`: tetik (düğme).
  */

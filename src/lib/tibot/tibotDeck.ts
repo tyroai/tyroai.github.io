@@ -2,7 +2,7 @@ import type { TicketRow } from "./tibotApi"
 import { isOverdue } from "./tibotModel"
 
 /**
- * Tibot widget'larının saf hesapları (testli):
+ * Ticket widget'larının saf hesapları (testli):
  * - `deck`: "Sıra sende" destesi — benden hamle bekleyen talepler (sana atanan açıklar ve
  *   açtığından senden yanıt bekleyenler) aciliyet sırasıyla; 14 günden eski gecikenler destenin
  *   sonunda TEK kart (her gün aynı eski talep başrolde kalmasın);

@@ -155,7 +155,7 @@ function Week({ week, lastWeek, now, onOpen }) {
  * TIBOT · TEMPO — "bu yıl ne kadarını kapattım": tek halka, payda gerçek (BT çalışanında kapattığın
  * / sana atanan, talep edende açtığından kapanan / açtığın; sağ üstte Ekip: ekiplerinde kapanan /
  * gelen; akışın `year` işlemi). Ortada sayı
- * sayaçla gelir; halka Tibotlar sayfasına götürür. Genişte sağda bu haftanın yedi günü (yoğunluk,
+ * sayaçla gelir; halka Ticket sayfasına götürür. Genişte sağda bu haftanın yedi günü (yoğunluk,
  * bugün çerçeveli) ve geçen haftayla fark. Seri (streak) yok: geçmiş veri yok, baskı kurmaz.
  */
 export default function TibotPaceWidget({ className }) {

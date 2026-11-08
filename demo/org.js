@@ -77,8 +77,56 @@ export const COLLEAGUES = [
   person(26, "Elif Kaya", "Yapay Zekâ Mühendisi", "Ürün"),
 ]
 
+/** Genel müdür (Selin Aydın'ın yöneticisi; organizasyon şemasının tepesi). */
+export const EXEC = person(2, "Haluk Erim", "Genel Müdür", "Yönetim")
+
+/** Diğer bölümlerden ek kişiler (rehber, organizasyon şeması, BT destek kadrosu). */
+export const MORE = [
+  person(31, "Tuna Erdoğan", "Bölge Satış Müdürü", "Satış"),
+  person(32, "Melis Sarıçam", "Satış Analisti", "Satış"),
+  person(33, "Pelin Kocabaş", "Finans Uzmanı", "Finans"),
+  person(34, "Barış Taşkın", "Lojistik Uzmanı", "Operasyon"),
+  person(35, "Seda Önal", "Tedarik Planlama Uzmanı", "Operasyon"),
+  person(36, "Cansu Bilgin", "Dijital Pazarlama Uzmanı", "Pazarlama"),
+  person(37, "Yiğit Kaplan", "Marka Uzmanı", "Pazarlama"),
+  person(38, "Neslihan Duran", "İK İş Ortağı", "İnsan Kaynakları"),
+  person(39, "Alper Güler", "Hukuk Müşaviri", "Hukuk"),
+  person(40, "Tolga Ergin", "BT Altyapı Uzmanı", "BT"),
+  person(41, "Cem Sönmez", "BT Destek Uzmanı", "BT"),
+  person(42, "Elvan Gür", "BT Destek Uzmanı", "BT"),
+  person(43, "Gökhan Yurt", "BT Destek Uzmanı", "BT"),
+  person(44, "Defne Aras", "Veri Bilimci", "Ürün"),
+]
+
 export const ME = me
-export const EVERYONE = [me, MANAGER, ...REPORTS, ...COLLEAGUES]
+export const EVERYONE = [me, MANAGER, ...REPORTS, ...COLLEAGUES, EXEC, ...MORE]
+
+const nm = (name) => EVERYONE.find((p) => p.displayName === name)
+
+/** Kişinin yöneticisi (organizasyon şeması): genel müdür → direktör/müdürler → uzmanlar. */
+const MANAGER_OF = new Map([
+  [EXEC.id, null],
+  [MANAGER.id, EXEC],
+  [me.id, MANAGER],
+  ...REPORTS.map((r) => [r.id, me]),
+  ...["Can Yıldız", "Mert Aksoy", "Emre Şahin", "Neslihan Duran", "Alper Güler", "Tolga Ergin", "Deniz Arslan"].map((n) => [nm(n).id, EXEC]),
+  [nm("Pelin Kocabaş").id, nm("Can Yıldız")],
+  [nm("Barış Taşkın").id, nm("Mert Aksoy")],
+  [nm("Seda Önal").id, nm("Mert Aksoy")],
+  [nm("Cansu Bilgin").id, nm("Emre Şahin")],
+  [nm("Yiğit Kaplan").id, nm("Emre Şahin")],
+  [nm("Ayşe Demir").id, nm("Neslihan Duran")],
+  [nm("Cem Sönmez").id, nm("Tolga Ergin")],
+  [nm("Elvan Gür").id, nm("Tolga Ergin")],
+  [nm("Gökhan Yurt").id, nm("Tolga Ergin")],
+  [nm("Elif Kaya").id, nm("Deniz Arslan")],
+  [nm("Defne Aras").id, nm("Deniz Arslan")],
+  [nm("Tuna Erdoğan").id, MANAGER],
+  [nm("Melis Sarıçam").id, MANAGER],
+])
+
+export const managerOf = (p) => MANAGER_OF.get(p.id) ?? null
+export const reportsOf = (p) => EVERYONE.filter((x) => MANAGER_OF.get(x.id)?.id === p.id)
 
 export const byMail = (mail) =>
   EVERYONE.find((p) => p.mail.toLowerCase() === String(mail ?? "").toLowerCase()) ?? null

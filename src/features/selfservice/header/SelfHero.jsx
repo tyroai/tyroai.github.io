@@ -53,7 +53,7 @@ export function SelfHero({ profile, team, tray, people, showMeta = true, band = 
   const handset = useIsMobile()
   const meta = metaOf(profile, { omit: phone ? PHONE_OMIT : OMIT, companyCode: phone })
   const { title } = meta
-  // `showMeta={false}`: şirket ve departman yazılmaz (Tibotlar: o sayfada bilgi değil).
+  // `showMeta={false}`: şirket ve departman yazılmaz (Ticket: o sayfada bilgi değil).
   const company = showMeta && phone ? meta.chips.find((c) => c.key === "company") : null
   const chips = company ? meta.chips.filter((c) => c !== company) : meta.chips
   const companyCode = company && (
@@ -136,7 +136,7 @@ export function SelfHero({ profile, team, tray, people, showMeta = true, band = 
           </div>
           {showMeta && <MetaChips chips={chips} onHero grid={compact} className="ss-hero-chips" />}
           {/* Dar kartta kişi bilgileri tek cam şeritte eşit hücreler; genişte yan yana haplar.
-              `people`: sayfanın kendi şeridi (Tibotlar: Xurrent ekiplerin). */}
+              `people`: sayfanın kendi şeridi (Ticket: Xurrent ekiplerin). */}
           {people ??
             (compact ? (
               <HeroStatsBar profile={profile} team={team} />

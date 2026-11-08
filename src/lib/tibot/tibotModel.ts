@@ -1,7 +1,7 @@
 import type { Bucket, SourceKey, TicketList, TicketRow } from "./tibotApi"
 
 /**
- * Tibot Talepler'in saf mantığı (testli): kova (açtıklarım · bana atanan · ekibim), durum tonu,
+ * Ticket Talepler'in saf mantığı (testli): kova (açtıklarım · bana atanan · ekibim), durum tonu,
  * gecikme, Xurrent bağlantısı ve not metninin sadeleştirilmesi.
  */
 

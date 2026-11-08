@@ -16,9 +16,9 @@ const pct = (part, whole, locale) => {
 }
 
 /**
- * Tibotlar sayfasının yıl kutusunun ayrıntısı (fare kartı ve telefon çekmecesi) — soldaki kutuların kalıbında:
+ * Ticket sayfasının yıl kutusunun ayrıntısı (fare kartı ve telefon çekmecesi) — soldaki kutuların kalıbında:
  * bölümler, renkli dağılım çubuğu, noktalı satırlar ve yüzdeler. "Sana atanan" (kapattığın ·
- * süren) ve "Açtığın" (kapanan · süren); şu anki sayılar Tibotlar sayfasının öteki kutularında.
+ * süren) ve "Açtığın" (kapanan · süren); şu anki sayılar Ticket sayfasının öteki kutularında.
  */
 export function TibotTileBody({ data, failed, period }) {
   const { t, locale } = useLocale()

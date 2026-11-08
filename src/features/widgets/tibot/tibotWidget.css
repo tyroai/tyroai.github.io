@@ -1,4 +1,4 @@
-/* Tibot'un satır ve açılır listesi (`TibotRow`, `TibotStatPop`, halkalı kartın listesi). Düz CSS,
+/* Ticket'un satır ve açılır listesi (`TibotRow`, `TibotStatPop`, halkalı kartın listesi). Düz CSS,
    kartların tembel parçasında. */
 /* Liste kartın kalan boyunda kayar; altta solma (devamı var), son satır solmanın üstüne kayabilsin
    diye alt pay. Farede iç kaydırma sayfaya taşmaz; dokunmatikte liste bitince sayfa kaymaya devam eder. */

@@ -4,7 +4,7 @@ import { TileTray } from "../summary/TileTray"
 import { useTibotTiles } from "./useTibotTiles"
 
 /**
- * Tibotlar'ın özet tepsisi — Self Servis'in tepsisiyle aynı (`TileTray`, dört kutu): üstte dönem
+ * Ticket'ın özet tepsisi — Self Servis'in tepsisiyle aynı (`TileTray`, dört kutu): üstte dönem
  * çubuğu (yıllar + Tümü, son okuma, tek Yenile: liste ve yıl sayıları; dışa aktarma yok). Geniş
  * kartta gradyanın beyaz tepsisinde (`bare`), dar kapta kartın altında (`below`).
  */

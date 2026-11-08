@@ -33,7 +33,7 @@
  * akışını başlatmak; bir güvenlik sınırı DEĞİL. Sınırı hedef sistem koyar.
  *
  * ⚠️ **KAPSAM: ASİSTANLAR + AI UYGULAMALARI. İŞ UYGULAMALARI HARİÇ**
- * (2026-09-17, istek üzerine). D365, Power BI ve Tibot kendi kimlik ve
+ * (2026-09-17, istek üzerine). D365, Power BI ve Ticket kendi kimlik ve
  * lisans kapılarını taşıyor; orada bizim kilidimiz ne engelliyor ne
  * ekliyordu.
  *

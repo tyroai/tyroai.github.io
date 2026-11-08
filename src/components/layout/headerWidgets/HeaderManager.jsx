@@ -9,6 +9,7 @@ import { LookMenu } from "@/features/widgets/LookMenu"
 import { lookNotice, lookSwatch } from "@/features/widgets/lookSwatch"
 import { baseLook, lookPalette } from "@/features/widgets/paletteTokens"
 import { useLocale } from "@/hooks/useLocale"
+import { usePalette } from "@/hooks/usePalette"
 import { notify } from "@/lib/notify"
 import { cn } from "@/lib/utils"
 import {
@@ -214,7 +215,8 @@ function PinnedRow({ id, name, look, hint, onMove, onRemove, onLook, onDragEnd }
   const controls = useDragControls()
   const [dragging, setDragging] = useState(false)
   const options = headerLooksOf(id)
-  const swatch = lookSwatch(baseLook(look), lookPalette(look))
+  const { palette } = usePalette()
+  const swatch = lookSwatch(baseLook(look), lookPalette(look), palette)
   return (
     <Reorder.Item
       as="li"

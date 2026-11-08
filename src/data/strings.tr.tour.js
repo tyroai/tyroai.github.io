@@ -46,7 +46,7 @@ export const strings = {
   "tour.home.cards.rhythm":
     "Toplantı ritmin: haftanın toplantı yükü; bir günün ayrıntısı için çubuğuna dokun.",
   "tour.home.cards.focus":
-    "Bugünün odağı: günün iş listen — ekle ve tamamla; Microsoft To Do ile eşitlenir.",
+    "Bugünün görevleri: günün iş listen — ekle ve tamamla; Microsoft To Do ile eşitlenir.",
   "tour.home.cards.helporb":
     "Küre anın önerisini getirir; dokununca asistanla sohbet sayfanın yanında açılır.",
   "tour.home.edit.title": "Anasayfan senin",

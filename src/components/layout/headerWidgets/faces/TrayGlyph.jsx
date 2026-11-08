@@ -16,7 +16,7 @@ import "./trayFaces.css"
 
 // Renkli hava simgesi kendi stilleriyle (gök renkleri) yalnız hava header'dayken iner.
 const WeatherSymbol = lazy(() => import("./WeatherSymbol"))
-// Tibot kartlarının renkli yüzleri (halka · deste · pist · tempo) yalnız header'da istenince iner.
+// Ticket kartlarının renkli yüzleri (halka · deste · pist · tempo) yalnız header'da istenince iner.
 const TibotGlyph = lazy(() =>
   import("@/components/tibot/TibotGlyphs").then((m) => ({ default: m.TibotGlyph })),
 )
@@ -35,7 +35,7 @@ const Icon = ({ id }) => (
 export function TrayGlyph({ id, live = true, face, badge = false }) {
   // Yapışkan notlar: ikon yerine renkli kâğıt destesi; sayı rozeti yalnız istenince (header).
   if (id === "sticky") return <StickyDeck badge={badge && live && face?.show !== "icon"} />
-  // Tibot: kartın renkli küçük hâli (halka · deste · pist · tempo); sayılar yanındaki değerde.
+  // Ticket: kartın renkli küçük hâli (halka · deste · pist · tempo); sayılar yanındaki değerde.
   if (TIBOT_FACES.has(id))
     return (
       <Suspense fallback={<Icon id={id} />}>

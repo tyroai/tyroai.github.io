@@ -102,6 +102,6 @@ export const TRAY_TILE = {
 
 export const TRAY_LIVE = {
   sticky: () => import("./sticky/StickyTrayFace"),
-  // Tibot: listeyi bir kez okur; halkanın sayı rozeti ve çentik göstergesi `tibotPeek`ten.
+  // Ticket: listeyi bir kez okur; halkanın sayı rozeti ve çentik göstergesi `tibotPeek`ten.
   "tibot-rings": () => import("./tibot/TibotTrayFace"),
 }

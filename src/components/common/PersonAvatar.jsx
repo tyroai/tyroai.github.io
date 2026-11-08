@@ -80,7 +80,7 @@ export function PersonAvatar({ name, photo, response, presence, presenceLabel, c
         <span
           aria-hidden="true"
           className={cn(
-            "absolute -top-0.5 -right-0.5 size-2.5 rounded-full ring-2 ring-popover",
+            "absolute top-[14.6%] right-[14.6%] size-[max(0.625rem,17%)] translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-popover",
             tone,
           )}
         />

@@ -6,7 +6,7 @@ import { foldText } from "@/lib/selfServiceStatus"
  * açsın diye her seçim adreste:
  *
  *   view   me (varsayılan) · team            görünüm (Bilgilerim · Ekibim)
- *   tab    leave (varsayılan) · expense · advance · tickets (Tibot Talepler, kitledeyse)
+ *   tab    leave (varsayılan) · expense · advance · tickets (Ticket Talepler, kitledeyse)
  *   year   2026 · all                        dönem; yoksa bu yıl (kayıt yoksa en yeni yıl)
  *   status pending · draft · …              durum kategorisi
  *   f      TR01 · "y.içi konaklama" · fair   sekmeye göre tür: izin türü · masraf kategorisi · avans türü

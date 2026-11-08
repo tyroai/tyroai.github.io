@@ -98,7 +98,7 @@ function useStickyIndicator() {
   return n > 0 ? { count: n, sr: t("notchInd.sticky", { n }) } : null
 }
 
-/** Tibot: sana atanan açık talep sayısı — listenin bu oturumdaki son okumasından (`tibotPeek`). */
+/** Ticket: sana atanan açık talep sayısı — listenin bu oturumdaki son okumasından (`tibotPeek`). */
 function useTibotIndicator() {
   const { t } = useLocale()
   const peek = useTibotPeek()

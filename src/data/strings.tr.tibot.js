@@ -1,4 +1,4 @@
-// Tibot Talepler metinleri (Türkçe) — yalnız widget, Self Servis › Talepler ve talep penceresiyle iner.
+// Ticket Talepler metinleri (Türkçe) — yalnız widget, Self Servis › Talepler ve talep penceresiyle iner.
 export const strings = {
   "tibot.bucket.assigned": "Bana atanan",
   "tibot.bucket.team": "Ekibim",
@@ -91,8 +91,8 @@ export const strings = {
   "tibot.stat.onMe": "Bende bekleyen",
   "tibot.allClear": "Burada bekleyen talep yok.",
   "tibot.seeAll": "Tümünü gör",
-  "tibot.tile.title": "Tibot · {year}",
-  "tibot.tile.short": "Tibot",
+  "tibot.tile.title": "Ticket · {year}",
+  "tibot.tile.short": "Ticket",
   "tibot.tile.staffCaption": "Kapattığın · {assigned} atanan · {opened} açtığın",
   "tibot.tile.requesterCaption": "Açtığından kapanan",
   "tibot.tile.closed": "Kapattığın",
@@ -127,7 +127,7 @@ export const strings = {
   "tibot.pt.days": "{n} gün",
   "tibot.pt.dueWeek": "7 günde dolan",
   "tibot.pt.empty": "Açık talep yok.",
-  "tibot.pt.teams": "Tibot ekiplerin",
+  "tibot.pt.teams": "Ticket ekiplerin",
   "tibot.pt.teamsMore": "{n} ekip daha",
   "tibot.next.reply": "Senden yanıt bekleniyor",
   "tibot.next.late": "{n} gün gecikti",
@@ -165,7 +165,7 @@ export const strings = {
   "tibot.pace.failed": "Yıl sayıları okunamadı",
   "tibot.pace.retry": "Yeniden dene",
   "tibot.pace.dayAria": "{day}: {n} talep",
-  "tibot.pace.ringAria": "{year}: {done} / {total} — Tibotlar'ı aç",
+  "tibot.pace.ringAria": "{year}: {done} / {total} — Ticket'ı aç",
   "tibot.pace.scope.me": "Ben",
   "tibot.pace.scope.team": "Ekip",
   "tibot.pace.scopeAria": "Kapsam",

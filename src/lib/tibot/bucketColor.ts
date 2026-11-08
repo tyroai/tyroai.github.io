@@ -3,7 +3,7 @@ import type { BucketId } from "./tibotModel"
 /**
  * Kovanın kimlik rengi — sayfada zaten görünen üç belirgin ton: marka mürekkebi (Bana atanan) ve
  * paletin grafik serileri (Tarafımdan açılanlar · Ekibim). Degradenin son durağı bazı paletlerde
- * çok açık (Insta: sarı), beyaz zeminde seçilmiyordu. Tibotlar'ın kova çipleri, halkalı Tibot
+ * çok açık (Insta: sarı), beyaz zeminde seçilmiyordu. Ticket'ın kova çipleri, halkalı Ticket
  * Talepler kartı ve header yüzü aynı rengi kullanır (biri ötekinin lejantı olur). Gecikme rengi
  * değildir; gecikme sayıyla söylenir.
  */

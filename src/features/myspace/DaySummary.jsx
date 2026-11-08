@@ -103,7 +103,7 @@ export function DaySummary({
   const plural = useMemo(() => new Intl.PluralRules(locale), [locale])
   const timeFmt = getDateTimeFormat(locale, OPTS_TIME)
   const [preview, setPreview] = useState(null) // telefonda önizlemesi açık toplantı/davet
-  // Tibot (yalnız kitlede): tek madde — seni bekleyen ya da açtığın talepler (`useDayTibot`).
+  // Ticket (yalnız kitlede): tek madde — seni bekleyen ya da açtığın talepler (`useDayTibot`).
   const day = useDayTibot()
   // Telefonda önizleme penceresi: ipucu kapanır, sonra pencere açılır.
   const openWith = (close, kind) => (item) => {

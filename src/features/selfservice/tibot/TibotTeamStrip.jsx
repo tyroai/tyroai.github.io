@@ -47,7 +47,7 @@ function TeamList({ groups }) {
 
 /**
  * Dar kartta (telefon, tablet, dar pencere) Xurrent ekiplerin tek cam şeritte: grup adları tek
- * satırda (sığmayan kesilir), altında "Tibot ekiplerin", sağda ekip sayısı. Ayrı haplar telefonda
+ * satırda (sığmayan kesilir), altında "Ticket ekiplerin", sağda ekip sayısı. Ayrı haplar telefonda
  * her biri bir satıra düşüp kartı uzatıyordu ve "+n"nin adları dokunmatikte görünmüyordu: şeride
  * basınca tam liste açılır — telefonda alttan çekmece, öteki ekranlarda şeridin altında pencere.
  */

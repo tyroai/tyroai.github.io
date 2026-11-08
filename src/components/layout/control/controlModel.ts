@@ -16,7 +16,7 @@ export const PINNED_LAST = "tool:shortcuts"
 /**
  * Varsayılan sıra: üstte modlar ve Tyrofy, sonra Piyasa, sayaç, saat, döviz çevirici ve Çevir;
  * notlar ve tema küçük;
- * hızlı görev ve çentik (Tibot açıksa yanında); en altta tam genişlikte kısayollar. Tibot'suz
+ * hızlı görev ve çentik (Ticket açıksa yanında); en altta tam genişlikte kısayollar. Ticket'suz
  * altı satır boşluksuz.
  */
 export const DEFAULT_TILES: readonly string[] = [
@@ -31,7 +31,6 @@ export const DEFAULT_TILES: readonly string[] = [
   "sticky",
   "toggle:theme",
   "tool:task",
-  "toggle:notch",
   "tool:presence",
   "tool:oof",
   "tibot-rings",

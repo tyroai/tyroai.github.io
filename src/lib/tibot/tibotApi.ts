@@ -5,7 +5,7 @@ import { buckets } from "./tibotModel"
 import { setTibotPeek } from "./tibotPeek"
 
 /**
- * Tibot Talepler'in veri hattı: Power Automate akışı `tyroXurrentTickets` (TYRO ortamı). Akış
+ * Ticket Talepler'in veri hattı: Power Automate akışı `tyroXurrentTickets` (TYRO ortamı). Akış
  * yalnız TYRO jetonuyla çağrılır (tetikleyici "kiracımdaki kullanıcılar"); kişiyi Power
  * Platform'un jetondan yazdığı `x-ms-user-email`den tanır — tarayıcı başkası adına soramaz.
  * Xurrent anahtarı akışta, tarayıcıya hiç gelmez. Adres sır değil (jetonsuz çağrı 401).
@@ -232,7 +232,7 @@ export function onTicketsRefresh(fn: () => Promise<unknown>): () => void {
 /**
  * Ortak "Yenile" (Self Servis'in özet kartındaki düğme de çağırır): bellek boşalır; açık bir liste
  * varsa YALNIZ o akışa yeniden sorar (aynı anda tek istek: liste önbelleği uçuştakini paylaşır).
- * Ekranda Tibot yoksa istek gitmez — sekme açılınca taze okur.
+ * Ekranda Ticket yoksa istek gitmez — sekme açılınca taze okur.
  */
 export function refreshTickets(): Promise<void> {
   forgetTickets()
