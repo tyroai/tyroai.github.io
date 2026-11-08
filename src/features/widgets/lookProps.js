@@ -39,8 +39,7 @@ export function lookMode(look, tone, theme) {
 function renkliVars(id) {
   const swatch = getPalette(id)?.swatch
   if (!swatch) return null
-  const [a, b, c] = renkliStops(swatch)
-  return { "--renkli-0": a, "--renkli-1": b, "--renkli-2": c }
+  return Object.fromEntries(renkliStops(swatch).map((color, i) => [`--renkli-${i}`, color]))
 }
 
 // Renkli cam ve düz dolgu kuralları yalnız gerektiğinde iner: renk seçmeyenin ilk CSS'i büyümez.
@@ -53,8 +52,8 @@ const loadOwnLook = () =>
 /**
  * Kart kabuğunun öznitelikleri (`data-widget-look`, ton sınıfı, palet) ve kartın mürekkebi.
  * Koyu ada paletin koyu temadaki mürekkebini de alsın diye `data-palette` taşır
- * (`.dark[data-palette=…]`). Renkli'de degradenin üç rengi `--renkli-0/1/2` (paletin renkleri beyaz
- * yazıya uydurulmuş, `renkliStops`); düz renk paletinde (`data-palette-kind="solid"`) koyu dolgu.
+ * (`.dark[data-palette=…]`). Renkli'de degradenin durakları `--renkli-0…4` (koyudan açığa, paletin
+ * renkleri beyaz yazıya uydurulmuş, `renkliStops`); düz renk paletinde (`data-palette-kind="solid"`) koyu dolgu.
  * Widget kendi rengini seçtiyse (`<görünüm>:<palet>`) o paletin kartın kipindeki token'ları
  * kabuğa yazılır (camda renk payı `--look-tint`), mürekkep o paletten ölçülür ve döner (`ink`:
  * içerideki `useBrandInk` için, `CardInkContext`). Renk seçilmediyse uygulamanın paleti.

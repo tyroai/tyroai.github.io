@@ -6903,7 +6903,6 @@ export const strings = {
   "tools.translate.edit": "Изменить текст",
   "tools.translate.dictate": "Диктовать ({lang})",
   "tools.translate.listening": "Слушаю…",
-  "tools.market.chartFor": "{name}: последние 30 дней",
   "tools.focusTimer.startTip": "Начать фокус на {m} мин; по окончании придёт напоминание",
   "tools.focusTimer.pauseTip": "Пауза; можно продолжить с того же места",
   "tools.focusTimer.resumeTip": "Продолжить с того же места",

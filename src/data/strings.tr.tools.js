@@ -18,7 +18,6 @@ export const strings = {
   "tools.translate.edit": "Metni düzenle",
   "tools.translate.dictate": "Sesle yazdır ({lang})",
   "tools.translate.listening": "Dinleniyor…",
-  "tools.market.chartFor": "{name}: son 30 gün",
   "tools.focusTimer.startTip": "{m} dakikalık odağı başlat; bitince haber verir",
   "tools.focusTimer.pauseTip": "Duraklat; kaldığı yerden sürdürebilirsin",
   "tools.focusTimer.resumeTip": "Kaldığı yerden sürdür",

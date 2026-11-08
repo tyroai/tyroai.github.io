@@ -9,11 +9,8 @@ import { useRest } from "@/lib/restMode"
 const Liveline = lazy(() => import("liveline").then((m) => ({ default: m.Liveline })))
 
 const HEIGHT = 136
-// Sağda canlı noktanın halesi kesilmesin; solda çizgi kenara yapışmasın. Kartta (`compact`) eksen
-// yazısı yok: tarih aralığı başlıkta, yükseklik çizgiye kalsın.
+// Sağda canlı noktanın halesi kesilmesin; solda çizgi kenara yapışmasın.
 const PAD = { top: 12, right: 18, bottom: 28, left: 6 }
-const PAD_COMPACT = { top: 8, right: 18, bottom: 6, left: 4 }
-const noTime = () => ""
 const DAY_S = 86_400
 
 const luminance = (rgb) => {
@@ -73,20 +70,12 @@ function StillLine({ points, color }) {
 /**
  * Seçili kurun son 30 günü (Liveline — Benji Taylor, MIT): Avrupa Merkez Bankası'nın günlük
  * kurları ve en sağda canlı değer (karttaki); üstüne gelince gün gün okunur. Piyasa penceresinde
- * (header, Denetim Merkezi) ve Piyasa kartında. Kod ilk çizimde iner; dinlenme kipinde grafik yerine
+ * (header, Denetim Merkezi). Kod ilk çizimde iner; dinlenme kipinde grafik yerine
  * aynı çizgi durağan (`StillLine`). Tuvale ekran okuyucu ulaşamaz: başlığın yanında ilk ve son değer.
  * Değer rozeti yok (değer zaten karoda ya da satırda): rozetin payı çizgiyi daraltıyor, eksene
- * gelecekteki bir gün yazdırıyordu. `named`: başlıkta kurun adı (kartta grafik kur değiştirir);
- * `compact`: eksen yazısız, kartın içinde.
+ * gelecekteki bir gün yazdırıyordu.
  */
-export function MarketChart({
-  row,
-  name,
-  named = false,
-  compact = false,
-  height = HEIGHT,
-  className = "mt-3",
-}) {
+export function MarketChart({ row, name, height = HEIGHT, className = "mt-3" }) {
   const { t, locale } = useLocale()
   const rest = useRest()
   const box = useRef(null)
@@ -124,10 +113,10 @@ export function MarketChart({
   return (
     <figure ref={box} className={className}>
       <figcaption className="flex min-w-0 items-baseline justify-between gap-2 text-[0.71875rem] text-muted-foreground">
-        <span className="truncate font-medium">{named ? `${name} · ${title}` : title}</span>
+        <span className="truncate font-medium">{title}</span>
         {ready && (
           <span className="shrink-0 tabular-nums">
-            {!named && <span className="sr-only">{`${name}: `}</span>}
+            <span className="sr-only">{`${name}: `}</span>
             {fmt.format(data[0].value)} → {fmt.format(row.value)}
           </span>
         )}
@@ -148,12 +137,10 @@ export function MarketChart({
               grid={false}
               badge={false}
               momentum={false}
-              padding={compact ? PAD_COMPACT : PAD}
+              padding={PAD}
               degen={false}
               formatValue={(v) => fmt.format(v)}
-              formatTime={
-                compact ? noTime : (s) => (s > lastTime + DAY_S / 2 ? "" : day.format(s * 1000))
-              }
+              formatTime={(s) => (s > lastTime + DAY_S / 2 ? "" : day.format(s * 1000))}
             />
           </Suspense>
         )}

@@ -73,8 +73,9 @@ Veri seti eklemek ya da düzenlemek için `demo/datasets/sets/ana.js` örnek al�
   veri setinde `image: "<anahtar>"` (ya da `image: false`) verilir.
 - **Kişi fotoğrafları:** Ömer'in fotoğrafı ve 17 kadro üyesi için Unsplash stok portreleri vardır
   (`demo/overlay/public/images/people/<ad-soyad>.jpg`, kaynaklar `CREDITS.md`); kalanlar baş harflerle çizilir.
-- **Hava kartı arka planları** (`demo/overlay/public/images/weather/`) [Imageory](https://imageory.in) galerisinden
-  alınmış yapay zekâ görselleridir; sitede açık lisans metni yoktur, kaynaklar `CREDITS.md` içindedir.
+- **Hava kartı arka planları** (`demo/overlay/public/images/weather/`): güneşli ve bulutlu görseller
+  [Imageory](https://imageory.in) galerisinden (yapay zekâ sanatı; sitede açık lisans metni yoktur), yağmur, kar ve sis
+  [Unsplash](https://unsplash.com/license) fotoğraflarıdır. Kaynaklar `CREDITS.md` içindedir.
 - **Logo:** işaret ve "tyro" yazısı kurumsal logodan izlenmiştir; ikinci kelime "hub" paletin renginde `demo/hub.mjs`
   ile üretilir (sync, bunu `BrandText`e yamar).
 

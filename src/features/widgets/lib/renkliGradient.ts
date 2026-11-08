@@ -5,6 +5,10 @@
  * Peach) solgun değil koyu mücevher tonunda, koyu paletler olduğu gibi. Koyulaşınca kahveye dönen
  * sıcaklar kırmızıya kayar (Insta'nın sarısı → mercan), pasteller doygunlaşır. Ölçü: beyaz yazı her durakta
  * `WHITE_MIN` ve %88'lik ikincil yazı ≥ 4,5 (AA) — ikisi birden.
+ *
+ * Sıra koyudan açığa (sol üst koyu: başlık en kontrastlı yerde) ve geçiş bir skala gibi: renklerin
+ * arasına ton çemberinin kısa yayından ara tonlar girer (`SCALE` durak), açıklık adım adım artar;
+ * iki renk arasında sert sıçrama olmaz. Ara ton da okunurluk sınırını geçer (geçmezse koyulaşır).
  */
 
 type Rgb = [number, number, number]
@@ -116,19 +120,59 @@ export function fitStop(hex: string): string {
   return rgbToHex(at(lo))
 }
 
+/** Okunmuyorsa açıklığı düşürür (ton ve doygunluk korunur). */
+function readableOf(lch: Lch): Rgb {
+  const at = (l: number): Rgb => toRgb({ l, c: clampChroma(l, lch.h, lch.c), h: lch.h })
+  if (readable(at(lch.l))) return at(lch.l)
+  let [lo, hi] = [0, lch.l]
+  for (let i = 0; i < 22; i++) {
+    const mid = (lo + hi) / 2
+    if (readable(at(mid))) lo = mid
+    else hi = mid
+  }
+  return at(lo)
+}
+
+/** Degradenin durak sayısı: üç renk ve aralarında birer ara ton. */
+export const SCALE = 5
+
+/** Koyudan açığa en az bu kadar açıklık farkı (OKLab L): eşit parlak paletler de skala olsun. */
+const MIN_SPAN = 0.1
+
+/** İki ton arasında kısa yaydan (ara ton gri-kahveye düşmesin: doygunluk korunur). */
+function mixLch(x: Lch, y: Lch, t: number): Lch {
+  let dh = y.h - x.h
+  if (dh > 180) dh -= 360
+  if (dh < -180) dh += 360
+  return { l: x.l + (y.l - x.l) * t, c: x.c + (y.c - x.c) * t, h: (x.h + dh * t + 360) % 360 }
+}
+
 const cache = new Map<string, string[]>()
 
-/** Paletin üç durağı (`swatch`: from · via · to) → kartın degradesinin üç rengi. */
+/**
+ * Paletin üç rengi (`swatch`: from · via · to) → kartın degradesinin `SCALE` durağı. Paletin renk
+ * sırası korunur, koyu uç başa gelir; aralara ton çemberinin kısa yayından birer ara ton girer. Sonra
+ * açıklık rampası: son durak okunurluğun izin verdiği en açık ton, öncekiler adım adım koyulaşır
+ * (en az `MIN_SPAN`) — hiçbir durak açılmaz, yalnız koyulaşır.
+ */
 export function renkliStops(swatch: readonly string[]): string[] {
   const key = swatch.join("|")
   let stops = cache.get(key)
   if (!stops) {
-    stops = swatch.slice(0, 3).map(fitStop)
+    let seq = swatch.slice(0, 3).map((hex) => toLch(hexToRgb(fitStop(hex)) ?? [0, 0, 0]))
+    if (seq[0].l > seq[2].l) seq = [...seq].reverse()
+    const raw = [seq[0], mixLch(seq[0], seq[1], 0.5), seq[1], mixLch(seq[1], seq[2], 0.5), seq[2]]
+    const top = raw[4].l
+    const span = Math.max(MIN_SPAN, top - raw[0].l)
+    stops = raw.map((lch, k) => {
+      const ramp = top - ((raw.length - 1 - k) / (raw.length - 1)) * span
+      return rgbToHex(readableOf({ ...lch, l: Math.min(lch.l, ramp) }))
+    })
     cache.set(key, stops)
   }
   return stops
 }
 
-/** Degradenin CSS'i: sol üstten sağ alta, orta durak biraz geniş. */
+/** Degradenin CSS'i: sol üstte koyu, sağ altta açık; duraklar eşit aralıklı. */
 export const renkliGradient = (stops: readonly string[]) =>
-  `linear-gradient(150deg, ${stops[0]}, ${stops[1]} 55%, ${stops[2]})`
+  `linear-gradient(150deg, ${stops.join(", ")})`

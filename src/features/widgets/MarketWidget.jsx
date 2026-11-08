@@ -1,20 +1,16 @@
-import "@/lib/i18n/tools"
 import { lazy, useMemo, useRef, useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import ChartLineData02Icon from "@hugeicons/core-free-icons/ChartLineData02Icon"
 import PencilEdit02Icon from "@hugeicons/core-free-icons/PencilEdit02Icon"
 import RefreshIcon from "@hugeicons/core-free-icons/RefreshIcon"
 import { useLocale } from "@/hooks/useLocale"
-import { hasFxHistory } from "@/lib/fxHistory"
 import { getDateTimeFormat } from "@/lib/intl-cache"
 import { orderedList } from "@/lib/marketCatalog"
 import { INDICATIVE_IDS } from "@/features/widgets/lib/marketIndicative"
 import { cn } from "@/lib/utils"
-import { MarketChart } from "@/components/market/MarketChart"
-import { MarketChartDetail } from "./market/MarketChartDetail"
 import { MarketFooter } from "./market/MarketFooter"
 import { MarketRow } from "./market/MarketRow"
-import { rowNames, stamp } from "./market/marketFormat"
+import { stamp } from "./market/marketFormat"
 import { useIndicative } from "./market/useIndicative"
 import { useMarketData } from "./market/useMarketData"
 import { useMarketList } from "./market/useMarketList"
@@ -22,20 +18,12 @@ import { FrameAction, WidgetFrame } from "./WidgetFrame"
 import { WidgetOverlay } from "./WidgetOverlay"
 import { PageBody, Pager } from "./paging/Pager"
 import { usePager } from "./paging/usePager"
-import { useNarrow, useWide } from "./useNarrow"
+import { useNarrow } from "./useNarrow"
 
 const MarketEditor = lazy(() => import("./market/MarketEditor"))
 
 // İçerik < 26rem: tek sütun, sayfada 3 satır (2 sütunda 3 satır sığmıyor, kart dibinde kesiliyordu).
 const NARROW_PX = 416
-// İçerik ≥ 46rem: iki sütun kurun yanında son 30 günün grafiği (kartın boyu değişmez).
-const ROOMY_PX = 736
-const ROOMY_GRID = {
-  gridTemplateColumns: "minmax(0, 2fr) minmax(14rem, 1fr)",
-  columnGap: "1.25rem",
-}
-const HIT =
-  "absolute inset-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
 const OPTS_DAY = { day: "numeric", month: "short", timeZone: "UTC" }
 
 /**
@@ -44,8 +32,6 @@ const OPTS_DAY = { day: "numeric", month: "short", timeZone: "UTC" }
  * Nijerya, Gana, Venezuela kurları günlük gösterge kaynaktan (`features/widgets/lib/marketIndicative`, "≈").
  * Başlıktaki kalem listeyi açar (`MarketEditor`: ofis kurları şehirleriyle, canlı değerler). Geniş
  * kartta iki sütun (solda kurlar, sağda altın ve endeks), dar kartta sayfada üç satır.
- * Son 30 gün (`MarketChart`, ECB'nin yayınladığı kurlarda): çok geniş kartta sağda grafik, kura
- * dokununca o kura geçer; daha dar kartta kura dokununca yanında açılır (`MarketChartDetail`).
  */
 export function MarketWidget({ className }) {
   const { t, locale } = useLocale()
@@ -66,39 +52,7 @@ export function MarketWidget({ className }) {
   const when = at ? stamp(at, locale) : null
   const body = useRef(null)
   const narrow = useNarrow(body, NARROW_PX)
-  const roomy = useWide(body, ROOMY_PX)
   const pager = usePager(rows, narrow ? 3 : 6)
-  // Grafiği olan kurlar (altın, BIST, gösterge kurlar için geçmiş yok); seçilmemişse ilki.
-  const [pick, setPick] = useState(null)
-  const [openId, setOpenId] = useState(null)
-  const chartable = loading ? [] : rows.filter(hasFxHistory)
-  const chartRow = chartable.find((r) => r.id === pick) ?? chartable[0] ?? null
-  const showChart = roomy && chartRow
-  const chartLabel = (row) => t("tools.market.chartFor", { name: rowNames(row, t, locale).long })
-  const actionFor = (row) => {
-    if (!hasFxHistory(row) || loading) return null
-    if (showChart)
-      return (
-        <button
-          type="button"
-          aria-pressed={row.id === chartRow.id}
-          aria-label={chartLabel(row)}
-          onClick={() => setPick(row.id)}
-          className={HIT}
-        />
-      )
-    return (
-      <WidgetOverlay
-        trigger={<button type="button" aria-label={chartLabel(row)} className={HIT} />}
-        title={rowNames(row, t, locale).long}
-        open={openId === row.id}
-        onOpenChange={(open) => setOpenId(open ? row.id : null)}
-        align="start"
-      >
-        <MarketChartDetail row={row} />
-      </WidgetOverlay>
-    )
-  }
   const indicativeHint = indicative?.date
     ? t("widgets.market.indicativeHint", {
         date: getDateTimeFormat(locale, OPTS_DAY).format(new Date(`${indicative.date}T12:00:00Z`)),
@@ -166,38 +120,20 @@ export function MarketWidget({ className }) {
             {t("widgets.market.error")}
           </p>
         ) : (
-          <div
-            className={showChart ? "grid" : undefined}
-            style={showChart ? ROOMY_GRID : undefined}
+          <PageBody
+            pager={pager}
+            className="mt-2.5 grid gap-x-3 gap-y-1 @[26rem]/widget:grid-flow-col @[26rem]/widget:grid-cols-2 @[26rem]/widget:grid-rows-3"
           >
-            <PageBody
-              pager={pager}
-              className="mt-2.5 grid gap-x-3 gap-y-1 @[26rem]/widget:grid-flow-col @[26rem]/widget:grid-cols-2 @[26rem]/widget:grid-rows-3"
-            >
-              {pager.items.map((row) => (
-                <MarketRow
-                  key={row.id}
-                  row={row}
-                  loading={loading}
-                  indicativeHint={indicativeHint}
-                  compact={narrow}
-                  selected={showChart && row.id === chartRow.id}
-                  action={actionFor(row)}
-                />
-              ))}
-            </PageBody>
-            {showChart && (
-              <MarketChart
-                key={chartRow.id}
-                row={chartRow}
-                name={rowNames(chartRow, t, locale).short}
-                named
-                compact
-                height={92}
-                className="mt-2.5 min-w-0"
+            {pager.items.map((row) => (
+              <MarketRow
+                key={row.id}
+                row={row}
+                loading={loading}
+                indicativeHint={indicativeHint}
+                compact={narrow}
               />
-            )}
-          </div>
+            ))}
+          </PageBody>
         )}
         <MarketFooter
           narrow={narrow}

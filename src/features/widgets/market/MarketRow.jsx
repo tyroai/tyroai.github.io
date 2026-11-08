@@ -39,17 +39,9 @@ export function ChangePill({ change, className }) {
 /**
  * İzleme listesinin satırı: ad · değer · değişim hapı. Gösterge kur (günlük, işlem kuru değil)
  * "≈" ile ve ipucunda tarihiyle; değişimi yok. `compact`: dar kart — ad kısalır ("Gram"), değer
- * kesilmez. `action`: satırın tamamını kaplayan dokunma öğesi (kartta grafiği açar ya da seçer);
- * `selected`: grafiği gösterilen satır.
+ * kesilmez.
  */
-export function MarketRow({
-  row,
-  loading,
-  indicativeHint,
-  compact = false,
-  action = null,
-  selected = false,
-}) {
+export function MarketRow({ row, loading, indicativeHint, compact = false }) {
   const { t, locale } = useLocale()
   const names = rowNames(row, t, locale)
   const label = compact ? names.tiny : names.short
@@ -62,12 +54,7 @@ export function MarketRow({
       setTick((p) => ({ dir: row.value > last ? "up" : "down", n: (p?.n ?? 0) + 1 }))
   }
   return (
-    <li
-      className={cn(
-        "relative isolate flex h-8 min-w-0 items-center gap-2 rounded-lg px-1.5 transition-colors hover:bg-muted/60",
-        selected && "bg-muted/60",
-      )}
-    >
+    <li className="relative isolate flex h-8 min-w-0 items-center gap-2 rounded-lg px-1.5 transition-colors hover:bg-muted/60">
       {tick && (
         <span key={tick.n} aria-hidden="true" data-dir={tick.dir} className="market-flash" />
       )}
@@ -97,7 +84,6 @@ export function MarketRow({
           {row.change != null && <ChangePill change={row.change} />}
         </>
       )}
-      {action}
     </li>
   )
 }

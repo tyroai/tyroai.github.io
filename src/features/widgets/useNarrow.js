@@ -16,17 +16,3 @@ export function useNarrow(ref, limit) {
   }, [ref, limit])
   return narrow
 }
-
-/** Kartın içeriği `limit` px ve üstü mü — ölçülene kadar `false` (geniş düzen sonradan açılır,
- * dar kartta bir an görünmez). */
-export function useWide(ref, limit) {
-  const [wide, setWide] = useState(false)
-  useEffect(() => {
-    const el = ref.current
-    if (!el || typeof ResizeObserver === "undefined") return undefined
-    const ro = new ResizeObserver(() => setWide(el.offsetWidth >= limit))
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [ref, limit])
-  return wide
-}

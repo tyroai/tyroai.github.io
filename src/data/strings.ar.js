@@ -6767,7 +6767,6 @@ export const strings = {
   "tools.translate.edit": "تعديل النص",
   "tools.translate.dictate": "إملاء صوتي ({lang})",
   "tools.translate.listening": "جارٍ الاستماع…",
-  "tools.market.chartFor": "{name}: آخر 30 يومًا",
   "tools.focusTimer.startTip": "ابدأ تركيزًا لمدة {m} دقيقة؛ ستُنبَّه عند انتهائه",
   "tools.focusTimer.pauseTip": "إيقاف مؤقت؛ يمكنك المتابعة من حيث توقفت",
   "tools.focusTimer.resumeTip": "تابع من حيث توقفت",

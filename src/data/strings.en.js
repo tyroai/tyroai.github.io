@@ -6909,7 +6909,6 @@ export const strings = {
   "tools.translate.edit": "Edit text",
   "tools.translate.dictate": "Dictate ({lang})",
   "tools.translate.listening": "Listening…",
-  "tools.market.chartFor": "{name}: last 30 days",
   "tools.focusTimer.startTip": "Start a {m}-minute focus session; you'll be told when it ends",
   "tools.focusTimer.pauseTip": "Pause; you can resume where you left off",
   "tools.focusTimer.resumeTip": "Resume where you left off",
