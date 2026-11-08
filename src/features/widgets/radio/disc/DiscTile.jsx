@@ -1,9 +1,11 @@
+import "@/lib/i18n/control"
 import { useRef } from "react"
 import { MotionConfig } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import Loading03Icon from "@hugeicons/core-free-icons/Loading03Icon"
 import PauseIcon from "@hugeicons/core-free-icons/PauseIcon"
 import PlayIcon from "@hugeicons/core-free-icons/PlayIcon"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { useLocale } from "@/hooks/useLocale"
 import { useRadioPlayer } from "@/hooks/useRadioPlayer"
 import { bcp47 } from "@/lib/intl-cache"
@@ -29,7 +31,8 @@ const tileDisc = (box) =>
 /**
  * Denetim Merkezi'nin Tyrofy kutucuğu — Disk kartının küçük hâli: kutucuğun üst kenarından yarım
  * disk taşar. Çalarken kanalın görseli döner, altında ses dalgası, tür · yer, ad ve süre; çalmıyorken
- * paletin etiketli plağı, hiç istasyon seçilmediyse "Tyrofy · İstasyon seç". Kutucuğa dokunmak
+ * paletin etiketli plağı, hiç istasyon seçilmediyse "Tyrofy · Radyo seç". İpuçları: kutucuk
+ * ne açar, düğme neyi çalar/duraklatır. Kutucuğa dokunmak
  * radyonun sahnesini panelde açar (`onOpen`, eskisi gibi); sağ üstteki düğme çalar ya da duraklatır.
  */
 export default function DiscTile({ onOpen, onIntent, still = false }) {
@@ -73,30 +76,44 @@ export default function DiscTile({ onOpen, onIntent, still = false }) {
               <p className="disc-meta">{t("widgets.tyroDisc.pick")}</p>
             </div>
           )}
-          <button
-            type="button"
-            className="disc-hit"
-            aria-label={st ? `${st.name}, ${brand}` : `${brand}, ${t("widgets.tyroDisc.pick")}`}
-            onClick={onOpen}
-            onPointerEnter={onIntent}
-            onFocus={onIntent}
-          />
-          {st && (
-            <button
-              type="button"
-              className="disc-toggle"
-              aria-label={t(active ? "widgets.radio.pauseNamed" : "widgets.radio.playNamed", {
-                name: st.name,
-              })}
-              onClick={() => toggleRadio()}
-            >
-              <HugeiconsIcon
-                icon={busy ? Loading03Icon : playing ? PauseIcon : PlayIcon}
-                strokeWidth={2}
-                aria-hidden="true"
-                className={cn(busy ? "animate-spin motion-reduce:animate-none" : FILLED)}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="disc-hit"
+                aria-label={st ? `${st.name}, ${brand}` : `${brand}, ${t("widgets.tyroDisc.pick")}`}
+                onClick={onOpen}
+                onPointerEnter={onIntent}
+                onFocus={onIntent}
               />
-            </button>
+            </TooltipTrigger>
+            <TooltipContent>{t("control.radio.hint")}</TooltipContent>
+          </Tooltip>
+          {st && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className="disc-toggle"
+                  aria-label={t(active ? "widgets.radio.pauseNamed" : "widgets.radio.playNamed", {
+                    name: st.name,
+                  })}
+                  onClick={() => toggleRadio()}
+                >
+                  <HugeiconsIcon
+                    icon={busy ? Loading03Icon : playing ? PauseIcon : PlayIcon}
+                    strokeWidth={2}
+                    aria-hidden="true"
+                    className={cn(busy ? "animate-spin motion-reduce:animate-none" : FILLED)}
+                  />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {t(active ? "widgets.radio.pauseNamed" : "widgets.radio.playNamed", {
+                  name: st.name,
+                })}
+              </TooltipContent>
+            </Tooltip>
           )}
         </div>
       </div>

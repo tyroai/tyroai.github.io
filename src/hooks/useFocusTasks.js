@@ -21,12 +21,13 @@ import {
   localDayKey,
   setFocusTaskDone,
 } from "@/lib/todo"
+import { adoptTask, keepKeys } from "@/lib/focusAdopt"
 import { notifyTodoChanged, onTodoChanged } from "@/lib/todoSync"
 import { worstFocus } from "@/dev/worstCase/home"
 import { onSessionClear } from "@/lib/sessionCache"
 
 /**
- * "Bugünün odağı"nın TEK kapısı — Microsoft To Do varsa o, yoksa bu tarayıcı.
+ * "Bugünün görevleri"nin TEK kapısı — Microsoft To Do varsa o, yoksa bu tarayıcı.
  *
  * | durum | kart |
  * |---|---|
@@ -68,7 +69,7 @@ function setCache(next) {
   tellWatchers()
 }
 
-/** Bugünün odağının bellekteki son hâli (`{ key, day, tasks }` ya da `null`); istek atmaz. */
+/** Bugünün görevlerinin bellekteki son hâli (`{ key, day, tasks }` ya da `null`); istek atmaz. */
 export const peekFocusTasks = () => cache
 export function watchFocusTasks(fn) {
   watchers.add(fn)
@@ -140,7 +141,15 @@ export function useFocusTasks() {
       setCache(
         skipped ? null : { key, day: today, tasks, defaultListId, skipped, detail, at: Date.now() },
       )
-      setState({ key, status: "ready", tasks, defaultListId, skipped, detail })
+      // Satır anahtarları korunur (`keepKeys`): tazelenen liste satırları yeniden çizdirmesin.
+      setState((s) => ({
+        key,
+        status: "ready",
+        tasks: s.key === key ? keepKeys(s.tasks, tasks) : tasks,
+        defaultListId,
+        skipped,
+        detail,
+      }))
     })
     return () => {
       cancelled = true
@@ -265,7 +274,10 @@ export function useFocusTasks() {
         today,
       }).then((res) => {
         if (res.status === STATUS.ready) {
-          patchTasks((list) => list.map((x) => (x.id === temp.id ? res.task : x)))
+          // Satırın anahtarı geçici kimlikte kalır (`uiKey`): sunucu kimliğine geçerken satır yenilenmesin.
+          patchTasks((list) =>
+            list.map((x) => (x.id === temp.id ? { ...res.task, uiKey: temp.id } : x)),
+          )
           notifyTodoChanged("focus")
         } else {
           patchTasks((list) => list.filter((x) => x.id !== temp.id))
@@ -331,6 +343,17 @@ export function useFocusTasks() {
     [mode, current.tasks, patchTasks, instance, key, fail],
   )
 
+  // Öneriden "Bugüne al": tarih To Do'ya yazılırken iş listede hemen görünür; yazılamazsa
+  // çağıran `release` ile geri alır (panonun `updateTask`i hatayı zaten söyler).
+  const adopt = useCallback(
+    (task) => patchTasks((list) => adoptTask(list, task, localDayKey())),
+    [patchTasks],
+  )
+  const release = useCallback(
+    (id) => patchTasks((list) => list.filter((x) => x.id !== id)),
+    [patchTasks],
+  )
+
   const connect = useCallback(async () => {
     const ok = await requestGraphScopes(instance, accountOf(instance, key), TODO_SCOPES)
     if (ok) setNonce((n) => n + 1)
@@ -340,7 +363,7 @@ export function useFocusTasks() {
   const retry = useCallback(() => setNonce((n) => n + 1), [])
 
   // DEV: `?data=worst` en kötü veri (src/dev/worstCase); üretimde ölü kod.
-  const worst = import.meta.env.DEV ? worstFocus() : null
+  const worst = import.meta.env.DEV ? worstFocus(() => setNonce((n) => n + 1)) : null
   if (worst) return worst
   const tasks = mode === "local" ? local : current.tasks
   return {
@@ -358,6 +381,8 @@ export function useFocusTasks() {
     add,
     toggle,
     remove,
+    adopt,
+    release,
     connect,
     retry,
   }

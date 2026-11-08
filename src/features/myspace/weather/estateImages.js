@@ -1,17 +1,17 @@
-// Anasayfa hava kartının arka planı: köşk fotoğrafı yerine sahne koleksiyonundan (`public/tyro-stage/`)
-// hava durumuna ve gündüz/geceye göre seçilen görseller. `pos` görselin kesim odağıdır
-// (`stageArt.js` ile aynı değerler); EstateLayer onu `object-position` olarak uygular.
-const BASE = `${import.meta.env?.BASE_URL ?? "/"}tyro-stage/`
+// Anasayfa hava kartının arka planı: köşk fotoğrafı yerine, hava durumuna ve gündüz/geceye göre seçilen
+// manzara görselleri (`public/images/weather/`, kaynaklar `CREDITS.md`). `pos` görselin kesim odağıdır:
+// kart yatay ve geniş olduğu için görselin yalnız bir şeridi görünür; EstateLayer `object-position` verir.
+const BASE = `${import.meta.env?.BASE_URL ?? "/"}images/weather/`
 
-const scene = (name, x = 50, y = 50) => ({ src: `${BASE}${name}.webp`, pos: `${x}% ${y}%` })
+const scene = (name, y = 50, x = 50) => ({ src: `${BASE}${name}.jpg`, pos: `${x}% ${y}%` })
 
 // [gündüz, gece]
 const SCENES = {
-  sunny: [scene("spring-hill", 100, 50), scene("starry-lake", 65, 50)],
-  cloudy: [scene("coast-road", 35, 50), scene("swirl-tree", 50, 55)],
-  rain: [scene("sunset-boat", 45, 60), scene("sea-ripples", 50, 56)],
-  snow: [scene("mist-embrace", 45, 40), scene("moon-road", 50, 30)],
-  fog: [scene("mist-embrace", 45, 40), scene("sea-ripples", 50, 56)],
+  sunny: [scene("sunny-day", 55), scene("sunny-night", 30)],
+  cloudy: [scene("cloudy-day", 30), scene("cloudy-night", 40)],
+  rain: [scene("rain-day", 35), scene("rain-night", 50)],
+  snow: [scene("snow-day", 35), scene("snow-night", 40)],
+  fog: [scene("fog-day", 45), scene("fog-night", 70)],
 }
 SCENES.storm = SCENES.rain
 

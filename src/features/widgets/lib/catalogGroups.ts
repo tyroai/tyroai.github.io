@@ -12,11 +12,11 @@ export const CATALOG_GROUPS = [
   },
   {
     id: "time",
-    ids: ["next-meeting", "rhythm", "world-clock", "common-time", "holiday", "travel", "outcomes"],
+    ids: ["next-meeting", "rhythm", "world-clock", "holiday", "travel", "outcomes"],
   },
   {
     id: "mail",
-    ids: ["pending-mail", "recent-files", "saved-search", "onenote", "sticky", "feed-picks"],
+    ids: ["pending-mail", "saved-search", "onenote", "sticky"],
   },
   { id: "team", ids: ["team-today", "leave-balance", "requests", "rm-pulse"] },
   // Ticket (Xurrent talepleri) kendi bölümünde; kitle dışında boş kalır, bölüm hiç çizilmez.
@@ -25,10 +25,18 @@ export const CATALOG_GROUPS = [
     ids: ["tibot-rings", "tibot-summary", "tibot-rhythm", "tibot-intro"],
   },
   { id: "markets", ids: ["market", "tyro-fx", "trader", "report-day", "region-weather"] },
-  { id: "tyro", ids: ["ask", "help", "tyro-translate"] },
   {
     id: "ambient",
-    ids: ["weather", "weather-plain", "intro", "tyro-radio-stage", "tyro-radio-disc"],
+    ids: [
+      "weather",
+      "weather-plain",
+      "ask",
+      "help",
+      "intro",
+      "tyro-radio-stage",
+      "tyro-radio-disc",
+      "tyro-translate",
+    ],
   },
 ] as const
 

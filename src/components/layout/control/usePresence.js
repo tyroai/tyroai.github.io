@@ -45,9 +45,9 @@ export function usePresence() {
     if (await requestGraphScopes(instance, account, PRESENCE_SCOPES)) await load()
   }
 
-  const choose = async (choice, duration) => {
+  const choose = async (choice, duration, until) => {
     const res = await withConsent(instance, account, PRESENCE_SCOPES, () =>
-      setPresence(instance, account, choice, presenceMinutes(duration, Date.now())),
+      setPresence(instance, account, choice, presenceMinutes(duration, Date.now(), until)),
     )
     if (res.status === STATUS.ready) setState({ status: "ready", availability: choice })
     return res

@@ -1,4 +1,5 @@
 import { useTodoBoard } from "@/hooks/useTodoBoard"
+import { worstBoard, worstUpdateTask } from "@/dev/worstCase/calendarEvents"
 import { BoardEditBar } from "@/features/widgets/BoardEditBar"
 import { MainWidgets } from "@/features/widgets/MainWidgets"
 import { WidgetEditor } from "@/features/widgets/WidgetEditor"
@@ -16,7 +17,10 @@ import { useWidgetLayout } from "@/features/widgets/useWidgetLayout"
  * Anasayfa onu hiç çağırmaz.
  */
 export function HomeBoard({ env }) {
-  const board = useTodoBoard()
+  const realBoard = useTodoBoard()
+  // DEV: `?data=worst` en kötü veri (src/dev/worstCase); üretimde ölü kod.
+  const worst = import.meta.env.DEV ? worstBoard() : null
+  const board = worst ? { ...realBoard, ...worst, updateTask: worstUpdateTask } : realBoard
   const available = useAvailableWidgets(env.ctx.pageAccess)
   const layout = useWidgetLayout(available, BOARDS.home)
   const render = renderWidgetFor({ ...env, ctx: { ...env.ctx, board } })

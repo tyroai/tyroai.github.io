@@ -37,7 +37,7 @@ export const PERSONAL_STORAGE = Object.freeze({
   celebrations: { area: "local", key: "tyro-celebrations-v1" },
   // Yarım kalan talep formları (tutar, tarih, açıklama).
   requestDrafts: { area: "local", key: "tyro-request-drafts-v1" },
-  // Ortak saat: seçilen iş arkadaşlarının adresleri.
+  // Kaldırılan Ortak saat widget'ının eski kaydı (iş arkadaşlarının adresleri): çıkışta silinir.
   commonTime: { area: "local", key: "tyro-common-time-v1" },
   // Kendi profil fotoğrafım, etiketi ve son bakış zamanı.
   myPhoto: { area: "local", prefix: "tyro-photo-" },

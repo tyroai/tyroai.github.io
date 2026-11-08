@@ -7,6 +7,7 @@ import { readFileSync } from "node:fs"
 import { DEMO_CHANGELOG } from "../demo/changelog.demo.mjs"
 import { DICT_OVERRIDES } from "../demo/dict-overrides.mjs"
 import { GROUP_COMPANIES, GROUP_SHORT_NAMES, OFFICE_CITIES_JS } from "../demo/fictional.mjs"
+import { hubWord } from "../demo/hub.mjs"
 import { tyroWord } from "../demo/logo.mjs"
 
 const priv = await import("./sync.private.mjs").catch(() => null)
@@ -105,12 +106,7 @@ export const PATCHES = [
     replace:
       'src={estateImage(kind === "partly" && !night ? "sunny" : weather, night)}\n          style={{ objectPosition: estatePosition(kind === "partly" && !night ? "sunny" : weather, night) }}',
   },
-  // Denetim Merkezi: "Çentik" karosu kalkar (aynı işlev alttaki kısayol satırında zaten var).
-  {
-    file: "src/components/layout/control/controlModel.ts",
-    find: '  "tool:task",\n  "toggle:notch",\n  "tool:presence",',
-    replace: '  "tool:task",\n  "tool:presence",',
-  },
+  // (Denetim Merkezi'nde "Çentik" karosu: kaynak bunu #839'da kendisi varsayılandan çıkardı; yama gerekmedi.)
   // Durum noktası: dairesel avatarın KÖŞE kutusuna değil çember kenarına (45°) oturur; büyük avatarda
   // büyür. Kaynakta kutu köşesine konduğu için hero avatarlarında dışarı taşıp garip duruyordu.
   {
@@ -245,6 +241,46 @@ export const POST_PATCHES = [
     find: /export const WORD =\s*"([^"]+)"/,
     replace: (_m, d) => `export const WORD =\n  "${tyroWord(d)}"`,
   },
+  {
+    // Logonun ikinci kelimesi "hub" (tyro·hub): paletin renginde, harfler logodan ölçülen değerlerle çizilir.
+    file: "src/components/brand/tyroLogoPaths.js",
+    find: /export const WORD_RIGHT = \d+/,
+    replace: (m) => `${m}\n\n/** İkinci kelime "hub": \`BrandText\` ek verilmezse bunu çizer (\`demo/hub.mjs\`). */\nexport const HUB = ${JSON.stringify(hubWord())}`,
+  },
+  {
+    file: "src/components/brand/BrandText.jsx",
+    find: 'import { SUFFIX, WORD, WORD_BOX, WORD_RIGHT } from "./tyroLogoPaths"',
+    replace: 'import { HUB, SUFFIX, WORD, WORD_BOX, WORD_RIGHT } from "./tyroLogoPaths"',
+  },
+  {
+    file: "src/components/brand/BrandText.jsx",
+    find: "const extra = suffix ? SUFFIX[suffix] : null",
+    replace: "const extra = suffix ? SUFFIX[suffix] : HUB",
+  },
+  {
+    file: "src/components/brand/BrandText.jsx",
+    find: 'aria-label={`tyro${suffix ?? ""}`}',
+    replace: 'aria-label={`tyro${suffix ?? "hub"}`}',
+  },
+  {
+    file: "src/components/brand/BrandText.jsx",
+    find: '{extra ? <path d={extra.d} className="fill-brand" /> : null}',
+    replace:
+      '{extra ? <path d={extra.d} className="fill-brand" fillRule={extra === HUB ? "nonzero" : undefined} /> : null}',
+  },
+  // Giriş sayfası (yalnız orada): marka satırı altında "powered by TYRO Tech"; alt bilgi yalnız telif.
+  ...["tr", "en", "ar", "ru"].flatMap((lng) => [
+    {
+      file: `src/data/strings.${lng}.js`,
+      find: /"login\.subBrand": "[^"]*"/,
+      replace: '"login.subBrand": "powered by TYRO Tech"',
+    },
+    {
+      file: `src/data/strings.${lng}.js`,
+      find: '"login.copyright": "© {year} Powered by TYRO Tech Business Solutions · tyroAI"',
+      replace: '"login.copyright": "© {year} TYRO Tech"',
+    },
+  ]),
   {
     file: "src/data/worldCities.js",
     find: /export const OFFICE_CITIES = \[[\s\S]*?\n\]\n/,

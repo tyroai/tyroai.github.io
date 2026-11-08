@@ -26,7 +26,7 @@ export type WidgetLook = "palette" | "glass" | "plain" | "standard" | "light" | 
 export type HeaderShow = "value" | "range" | "icon" | "unread" | "late"
 
 /** Header'da açılınca çağrılan veri grubu (`HeaderWidgetBody`). */
-export type WidgetData = "weather" | "brief" | "cal" | "focus" | "todo" | "feed"
+export type WidgetData = "weather" | "brief" | "cal" | "focus" | "todo"
 
 export interface WidgetHeader {
   shows?: HeaderShow[]
@@ -102,7 +102,6 @@ export const REGISTRY = {
     },
   },
   planner: { title: "widgets.planner.title" },
-  "recent-files": { title: "widgets.files.title" },
   "team-today": { title: "widgets.team.title", wide: true },
   market: {
     title: "widgets.market.title",
@@ -192,8 +191,6 @@ export const REGISTRY = {
       suggest: 4,
     },
   },
-  // Ortak saat: seçilen iş arkadaşlarının durumu ve herkesin boş olduğu ilk yarım saat.
-  "common-time": { title: "widgets.commonTime.title" },
   // Odak sayacının simgesi kalan süre halkası (`TrayGlyph`).
   "focus-timer": {
     title: "widgets.focusTimer.title",
@@ -216,7 +213,6 @@ export const REGISTRY = {
     header: { shows: ["value", "icon"], width: 64 },
   },
   "focus-window": { title: "widgets.focusWindow.title", data: "cal" },
-  "feed-picks": { title: "widgets.feed.title", access: "feed", data: "feed" },
   // Tyrofy: header'daki radyo — çalarken yüzü kapsül, penceresi sahne (`TRAY_PANEL`), Denetim
   // Merkezi'nde plaklı kutucuk. Görünümleri kapsülün. Panodaki istasyon listeli ilk kartı kalktı
   // (`board: false`): kayıtlı düzende yerini Tyrofy Disk alır. Eski kimlik `radio-list`

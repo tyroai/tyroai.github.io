@@ -9,8 +9,8 @@ import { SHORTCUT_SLOTS, useShortcutItems } from "../shortcuts"
 import { TileShell } from "./TileShell"
 
 /**
- * Adı görünen kısa etiket (sesli komutla "Çentik" denince bulunsun — WCAG 2.5.3), uzun hali
- * açıklama: ipucu ve ekran okuyucu ("Çentiği düzenle").
+ * Adı görünen kısa etiket (sesli komutla "Görev" denince bulunsun — WCAG 2.5.3), uzun hali
+ * açıklama: ipucu ve ekran okuyucu ("Hızlı görev ekle").
  */
 function Shortcut({ icon, label, tip, onClick }) {
   const tipId = useId()
@@ -36,8 +36,8 @@ function Shortcut({ icon, label, tip, onClick }) {
 
 /**
  * Kısayollar (Raycast'in hızlı bağlantıları gibi; tam genişlik, tek satır, panelin en altında):
- * çentiği düzenle, izin, masraf, toplantı, Anasayfa'yı düzenle ve kişinin kendi bağlantıları
- * (yeni sekmede). Altıncı
+ * hızlı görev ("Görev", panelin içinde), toplantı, izin, masraf, Anasayfa'yı düzenle ve kişinin
+ * kendi bağlantıları (yeni sekmede). Altıncı
  * yuva beşten azsa "Bağlantı" (kendi bağlantılarını ekle), fazlaysa "Diğer" (hepsi ve yönetim
  * panelin içinde).
  */
@@ -55,7 +55,7 @@ export function ShortcutsTile({ onOpen, ...shell }) {
             icon={it.icon}
             label={it.translate ? t(it.label) : it.label}
             tip={it.translate ? t(it.tip) : it.tip}
-            onClick={() => it.run(actions)}
+            onClick={() => it.run({ ...actions, open: onOpen })}
           />
         ))}
         <Shortcut

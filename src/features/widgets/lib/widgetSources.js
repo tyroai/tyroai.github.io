@@ -1,6 +1,4 @@
 import { presenceState } from "@/hooks/usePresence"
-import { folderOfUrl } from "@/lib/filesResults"
-import { typeFamily } from "@/lib/filesTypes"
 import { STATUS, graphGet, graphPost } from "@/lib/graph"
 import { flagDueKey } from "@/features/widgets/lib/mailFollow"
 
@@ -67,29 +65,6 @@ export async function fetchPendingMail(instance, account) {
       unreadTotal: inbox.data?.unreadItemCount ?? null,
     },
   }
-}
-
-// Arama satırının tür ailesi → kartın Office tonu (`RecentFilesWidget` › KIND).
-const KIND_OF_FAMILY = { word: "Word", excel: "Excel", powerpoint: "PowerPoint", pdf: "Pdf" }
-
-/**
- * "Son çalıştıkların" (`useRecentFiles`, Dosyalarım'ın arama tabanlı listesi) → Kaldığın yerden
- * devam satırları: yalnız dosyalar, en çok 12; konum dosyanın klasörü. Eski kaynak (`insights/used`
- * — "son açtıkların") Kasım 2026'da veri döndürmeyi bırakıyor; yalnız açıp baktığın dosyanın
- * karşılığı yok, liste son değiştirdiğin ve oluşturduğun dosyalardır (saf, testli).
- */
-export function recentRows(items) {
-  return (items ?? [])
-    .filter((it) => it?.kind === "file" && it.name && it.webUrl)
-    .slice(0, 12)
-    .map((it) => ({
-      id: it.id,
-      title: it.name,
-      type: KIND_OF_FAMILY[typeFamily(it)] ?? "Other",
-      container: folderOfUrl(it.webUrl)?.name ?? "",
-      webUrl: it.webUrl,
-      at: dateOf(it.modified),
-    }))
 }
 
 const PERSON = "$select=id,displayName,mail,userPrincipalName,jobTitle,accountEnabled"

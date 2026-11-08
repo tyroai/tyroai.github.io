@@ -14,28 +14,32 @@ export type ToggleId = (typeof TOGGLES)[number]
 export const PINNED_LAST = "tool:shortcuts"
 
 /**
- * Varsayılan sıra: üstte modlar ve Tyrofy, sonra Piyasa, sayaç, saat, döviz çevirici ve Çevir;
- * notlar ve tema küçük;
- * hızlı görev ve çentik (Ticket açıksa yanında); en altta tam genişlikte kısayollar. Ticket'suz
- * altı satır boşluksuz.
+ * Varsayılan (ürün sahibinin seçtiği araçlar; yerleri bizim): sol üstte Odak ve Sunum, sağ üstte
+ * iki satırlık Tyrofy; sonra Teams durumu · otomatik yanıt, odak sayacı · hava, Piyasa ve
+ * yanında küçük tema ile notlar (ikili küçük — ürün sahibinin seçimi), döviz çevirici · Çevir,
+ * dünya saati · Ticket; en altta tam genişlikte kısayollar (hızlı görev orada, "Görev"). Ticket'u
+ * görmeyen kişide Ticket'un yerinde Sıradaki tatil (`DEFAULT_STANDIN`): iki düzen de boşluksuz.
  */
 export const DEFAULT_TILES: readonly string[] = [
   "toggle:focus",
   "radio",
   "toggle:present",
-  "market",
-  "focus-timer",
-  "world-clock",
-  "tyro-fx",
-  "tyro-translate",
-  "sticky",
-  "toggle:theme",
-  "tool:task",
   "tool:presence",
   "tool:oof",
+  "focus-timer",
+  "weather",
+  "market",
+  "toggle:theme",
+  "sticky",
+  "tyro-fx",
+  "tyro-translate",
+  "world-clock",
   "tibot-rings",
   PINNED_LAST,
 ]
+
+/** Varsayılanda kişiye açık olmayan kutucuğun yerine geçen: Ticket'u görmeyene Sıradaki tatil. */
+export const DEFAULT_STANDIN: Readonly<Record<string, string>> = { "tibot-rings": "holiday" }
 
 /** Panelde en çok bu kadar kutucuk (ekleme listesi bunun üstüne çıkarmaz). */
 export const CONTROL_MAX = 16
@@ -149,9 +153,19 @@ export function upgradeTiles(raw: unknown, version: number): unknown {
   return list
 }
 
-/** Görünen kutucuklar: kayıt (yoksa varsayılan), yalnız bu kişiye açık widget'lar; kısayollar sonda. */
+/**
+ * Görünen kutucuklar: kayıt (yoksa varsayılan), yalnız bu kişiye açık widget'lar; kısayollar sonda.
+ * Varsayılanda kişiye kapalı kutucuğun yerine (varsa) `DEFAULT_STANDIN`ı geçer.
+ */
 export function visibleTiles(saved: readonly string[] | null, available: Pred): string[] {
-  return pinLast((saved ?? DEFAULT_TILES).filter((id) => isBuiltin(id) || available(id)))
+  const open = (id: string) => isBuiltin(id) || available(id)
+  if (saved) return pinLast(saved.filter(open))
+  const list: string[] = []
+  for (const id of DEFAULT_TILES) {
+    const shown = open(id) ? id : DEFAULT_STANDIN[id]
+    if (shown && open(shown) && !list.includes(shown)) list.push(shown)
+  }
+  return pinLast(list)
 }
 
 /**

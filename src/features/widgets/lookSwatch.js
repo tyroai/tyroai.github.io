@@ -1,4 +1,5 @@
 import { getPalette } from "@/data/palettes"
+import { renkliGradient, renkliStops } from "./lib/renkliGradient"
 import {
   baseLook,
   glassTint,
@@ -36,23 +37,22 @@ const inkOf = (id, mode) => paletteTokens(id, mode)?.["--brand-text"] ?? getPale
 const dotOf = (color) => `radial-gradient(circle at 68% 32%, ${color} 0 24%, transparent 27%)`
 
 /**
- * Renkli kartın düz dolgusu (`lookTone.css` ile aynı): paletin koyu temadaki beyaz yazılı ana rengi,
- * bir ton koyu; düz renk paletinde koyu dolgusu. Okunamazsa `null`.
+ * Renkli kartın zemini (kartla aynı): paletin beyaz yazıya uydurulmuş degradesi
+ * (`lib/renkliGradient`); düz renk paletinde koyu dolgusu. Okunamazsa `null`.
  */
 export function renkliFill(id) {
-  const dark = paletteTokens(id, "dark")
-  const pick = (k) => {
-    const v = dark?.[k]
+  if (paletteKind(id) === "solid") {
+    const dark = paletteTokens(id, "dark")
+    const v = dark?.["--brand-fill-deep"] ?? dark?.["--brand-deep"]
     return v && !v.startsWith("var(") ? v : null
   }
-  if (paletteKind(id) === "solid") return pick("--brand-fill-deep") ?? pick("--brand-deep")
-  const solid = pick("--brand-solid")
-  return solid ? `color-mix(in oklab, ${solid}, black 12%)` : null
+  const swatch = getPalette(id)?.swatch
+  return swatch ? renkliGradient(renkliStops(swatch)) : null
 }
 
 /**
  * Görünüm seçeneğinin örneği, widget'ın kendi rengiyle — kartın gerçekte nasıl görüneceği:
- * Renkli düz dolgu (`renkliFill`), Cam kartın renk payıyla (`glassTint`: koyu paletlerde soluk)
+ * Renkli degradesi (`renkliFill`), Cam kartın renk payıyla (`glassTint`: koyu paletlerde soluk)
  * buz, Standart · Açık · Koyu zeminde paletin o kipteki vurgusu. Renk yoksa uygulamanın paletiyle
  * (`app`; Renkli dışında `SWATCH`).
  */
@@ -60,7 +60,7 @@ export function lookSwatch(base, id, app) {
   if (base === "palette") {
     const fill = renkliFill(id ?? app)
     return fill
-      ? { className: "ring-1 ring-black/10", style: { backgroundColor: fill } }
+      ? { className: "ring-1 ring-black/10", style: { background: fill } }
       : { className: SWATCH.palette }
   }
   if (!id) return { className: SWATCH[base] }

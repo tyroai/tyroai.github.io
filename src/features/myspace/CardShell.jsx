@@ -29,11 +29,12 @@ export function CardTitle({ children, icon, leadingIcon, action }) {
   return (
     <div className="flex min-h-7 items-center justify-between gap-2">
       <h3 className="flex min-w-0 items-center gap-2 text-[0.8125rem] font-medium text-muted-foreground">
-        {/* Başlığın solundaki ikon — pano kartlarıyla aynı (`WidgetFrame`, ör. Günün brifingi). */}
+        {/* Başlığın solundaki ikon — pano kartlarıyla aynı (`WidgetFrame`): paletin renginde,
+            Renkli görünümde ikincil yazının tonunda (`widgetLooks.css` › `.widget-frame-icon`). */}
         {leadingIcon && (
           <HugeiconsIcon
             icon={leadingIcon}
-            className="size-4 shrink-0 text-muted-foreground/60"
+            className="widget-frame-icon size-4 shrink-0 text-brand"
             strokeWidth={1.8}
           />
         )}

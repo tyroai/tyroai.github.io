@@ -89,6 +89,6 @@ export function tyroWord(d) {
   }
   // 'r' parçasının ilk komutu göreli `m dx dy`: mutlak `M x y`e çevir
   const r = pieces[2].replace(/^[Mm]\s*-?\d*\.?\d+[\s,]*-?\d*\.?\d+/, `M${starts[2][0]} ${starts[2][1]}`)
-  const ring = oval(2417, 509, 290, 298) + oval(2417, 509, 190, 216)
+  const ring = oval(2417, 509, 290, 298) + oval(2417, 509, 180, 210)
   return pieces[0] + r + ring
 }

@@ -67,12 +67,6 @@ function TodoBody({ id }) {
   return show(id, { ...b, ctx: ctxOf(b, { board }) })
 }
 
-function FeedBody({ id }) {
-  const b = useBase()
-  const feedFresh = useFeedFresh()
-  return show(id, { ...b, ctx: ctxOf(b, { feedFresh }) })
-}
-
 // Hangi widget hangi veriyi ister: kayıttaki `data` (`renderWidget`in okudukları). Header'da açılan
 // widget yalnız kendi grubunun kancalarını çağırır: To-Do panosu gibi ağır okumalar ancak o widget
 // açılınca. Grubu olmayanlar veriyi kendileri çeker (piyasa, posta, Planner, dosyalar, ekip, radyo)
@@ -83,7 +77,6 @@ const BODY = {
   cal: CalBody,
   focus: FocusBody,
   todo: TodoBody,
-  feed: FeedBody,
 }
 
 /**

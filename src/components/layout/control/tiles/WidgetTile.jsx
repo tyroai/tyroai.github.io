@@ -10,6 +10,7 @@ import { tileSize } from "../controlModel"
 import { preloadPanel } from "../panelPreload"
 import { tileTitleKey } from "../tileTitle"
 import { TileShell } from "./TileShell"
+import { TileTip } from "./TileTip"
 
 // Yüzünün verisini ayrı bir parça okuyanlar (notların destesi, Ticket'un sayısı): kutucuk
 // açıkken o parça da çizilir, görünür bir şey eklemez (header'ın toplu tepsisi gibi).
@@ -53,29 +54,31 @@ export function WidgetTile({ id, onOpen, size, ...shell }) {
   return (
     <TileShell id={id} size={size} {...shell}>
       {KEEP_LIVE.has(id) && <LiveCapsule id={id} bare />}
-      <button
-        type="button"
-        className="cc-hit"
-        onClick={() => onOpen(id)}
-        onPointerEnter={() => preloadPanel(id)}
-        onFocus={() => preloadPanel(id)}
-      >
-        {small && <span className="sr-only">{title}</span>}
-        <span className="cc-ic">
-          <TrayGlyph id={id} live={id === "sticky"} face={face} badge={id === "sticky"} />
-        </span>
-        {twoRates && <MarketRows codes={face.codes} title={title} />}
-        {!small && !twoRates && (
-          <span className="cc-text">
-            <span className="cc-label">
-              {id === "world-clock" ? <ClockName city={face.city} fallback={title} /> : title}
-            </span>
-            <span className="cc-sub">
-              <LiveLabel id={id} face={face} />
-            </span>
+      <TileTip hint={t(`widgets.catalog.${id}`)} title={small ? title : undefined}>
+        <button
+          type="button"
+          className="cc-hit"
+          onClick={() => onOpen(id)}
+          onPointerEnter={() => preloadPanel(id)}
+          onFocus={() => preloadPanel(id)}
+        >
+          {small && <span className="sr-only">{title}</span>}
+          <span className="cc-ic">
+            <TrayGlyph id={id} live={id === "sticky"} face={face} badge={id === "sticky"} />
           </span>
-        )}
-      </button>
+          {twoRates && <MarketRows codes={face.codes} title={title} />}
+          {!small && !twoRates && (
+            <span className="cc-text">
+              <span className="cc-label">
+                {id === "world-clock" ? <ClockName city={face.city} fallback={title} /> : title}
+              </span>
+              <span className="cc-sub">
+                <LiveLabel id={id} face={face} />
+              </span>
+            </span>
+          )}
+        </button>
+      </TileTip>
     </TileShell>
   )
 }

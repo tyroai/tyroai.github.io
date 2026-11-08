@@ -1,3 +1,4 @@
+import "@/lib/i18n/tools"
 import { useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import PauseIcon from "@hugeicons/core-free-icons/PauseIcon"
@@ -5,6 +6,7 @@ import PlayIcon from "@hugeicons/core-free-icons/PlayIcon"
 import Timer02Icon from "@hugeicons/core-free-icons/Timer02Icon"
 import Undo02Icon from "@hugeicons/core-free-icons/Undo02Icon"
 import { SegmentedControl } from "@/components/common/SegmentedControl"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { useLocale } from "@/hooks/useLocale"
 import {
   PRESETS,
@@ -54,12 +56,28 @@ export function FocusTimerWidget({ className }) {
         ? t("widgets.focusTimer.done")
         : t("widgets.focusTimer.ready", { m: timer.minutes })
 
+  // `tip`: düğmenin ne yapacağı (ipucu balonu; ad ekran okuyucuda).
   const primary = running
-    ? { label: t("widgets.focusTimer.pause"), icon: PauseIcon, run: pauseTimer, say: "paused" }
+    ? {
+        label: t("widgets.focusTimer.pause"),
+        tip: t("tools.focusTimer.pauseTip"),
+        icon: PauseIcon,
+        run: pauseTimer,
+        say: "paused",
+      }
     : paused
-      ? { label: t("widgets.focusTimer.resume"), icon: PlayIcon, run: resumeTimer, say: "resumed" }
+      ? {
+          label: t("widgets.focusTimer.resume"),
+          tip: t("tools.focusTimer.resumeTip"),
+          icon: PlayIcon,
+          run: resumeTimer,
+          say: "resumed",
+        }
       : {
           label: t(done ? "widgets.focusTimer.again" : "widgets.focusTimer.start"),
+          tip: t(done ? "tools.focusTimer.againTip" : "tools.focusTimer.startTip", {
+            m: timer.minutes,
+          }),
           icon: PlayIcon,
           run: () => startTimer(timer.minutes),
           say: "started",
@@ -106,37 +124,47 @@ export function FocusTimerWidget({ className }) {
           {presets && <div className="ft-presets-side w-full">{presets}</div>}
           {/* Çok dar kartta düğmeler alt alta: halkanın yanına sığsın. */}
           <div className="ft-controls flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                primary.run()
-                setSay(t(`widgets.focusTimer.say.${primary.say}`, { m: timer.minutes }))
-              }}
-              aria-label={primary.label}
-              title={primary.label}
-              className={cn(
-                ROUND,
-                "ft-primary bg-brand-fill-deep text-brand-on-brand shadow-sm hover:brightness-110",
-              )}
-            >
-              <HugeiconsIcon icon={primary.icon} strokeWidth={2} aria-hidden="true" />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => {
+                    primary.run()
+                    setSay(t(`widgets.focusTimer.say.${primary.say}`, { m: timer.minutes }))
+                  }}
+                  aria-label={primary.label}
+                  className={cn(
+                    ROUND,
+                    "ft-primary bg-brand-fill-deep text-brand-on-brand shadow-sm hover:brightness-110",
+                  )}
+                >
+                  <HugeiconsIcon icon={primary.icon} strokeWidth={2} aria-hidden="true" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>{primary.tip}</TooltipContent>
+            </Tooltip>
             {(running || paused || done) && (
-              <button
-                type="button"
-                onClick={() => {
-                  resetTimer()
-                  setSay(t("widgets.focusTimer.say.reset"))
-                }}
-                aria-label={t("widgets.focusTimer.reset")}
-                title={t("widgets.focusTimer.reset")}
-                className={cn(
-                  ROUND,
-                  "bg-muted text-foreground/80 hover:bg-accent hover:text-foreground",
-                )}
-              >
-                <HugeiconsIcon icon={Undo02Icon} strokeWidth={2} aria-hidden="true" />
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetTimer()
+                      setSay(t("widgets.focusTimer.say.reset"))
+                    }}
+                    aria-label={t("widgets.focusTimer.reset")}
+                    className={cn(
+                      ROUND,
+                      "bg-muted text-foreground/80 hover:bg-accent hover:text-foreground",
+                    )}
+                  >
+                    <HugeiconsIcon icon={Undo02Icon} strokeWidth={2} aria-hidden="true" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {t("tools.focusTimer.resetTip", { m: timer.minutes })}
+                </TooltipContent>
+              </Tooltip>
             )}
           </div>
         </div>

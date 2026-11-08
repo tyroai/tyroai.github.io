@@ -42,15 +42,34 @@ export const presenceLabelKey = (availability: string | null | undefined): strin
   return `control.presence.tone.${presenceTone(a)}`
 }
 
-/** Tercihin süresi: 1 saat · 2 saat · gün sonuna kadar. */
-export const PRESENCE_DURATIONS = [60, 120, "day"] as const
+/** Tercihin süresi: 1 saat · seçilen saate kadar (`time`) · gün sonuna kadar. */
+export const PRESENCE_DURATIONS = [60, "time", "day"] as const
 export type PresenceDuration = (typeof PRESENCE_DURATIONS)[number]
 
-/** Süre (dakika): "gün" bugün 23.59'a kadar; en az 5 dakika. */
-export function presenceMinutes(choice: PresenceDuration, now: number): number {
-  if (choice !== "day") return choice
+const hhmm = (minutes: number): string =>
+  `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`
+
+/** "Saat seç"in ilk değeri: en az yarım saat sonrası, yarım saate yuvarlı (14.10 → "15:00"). */
+export function defaultUntil(now: number): string {
+  const d = new Date(now)
+  const minute = d.getHours() * 60 + d.getMinutes()
+  return hhmm((Math.ceil(minute / 30) * 30 + 30) % (24 * 60))
+}
+
+/**
+ * Süre (dakika): "gün" bugün 23.59'a kadar; `time` seçilen saatin ("HH:MM") bir sonraki gelişine
+ * kadar — geçmiş bir saat yarına düşer, okunamayan saat 1 saat sayılır; en az 5 dakika.
+ */
+export function presenceMinutes(choice: PresenceDuration, now: number, until = ""): number {
+  if (choice === 60) return 60
   const end = new Date(now)
-  end.setHours(23, 59, 0, 0)
+  if (choice === "day") end.setHours(23, 59, 0, 0)
+  else {
+    const [h, m] = until.split(":").map(Number)
+    if (!Number.isInteger(h) || !Number.isInteger(m) || h > 23 || m > 59) return 60
+    end.setHours(h, m, 0, 0)
+    if (end.getTime() <= now) end.setDate(end.getDate() + 1)
+  }
   return Math.max(5, Math.round((end.getTime() - now) / 60_000))
 }
 

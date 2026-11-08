@@ -7,20 +7,23 @@ import { useLocale } from "@/hooks/useLocale"
 import { STATUS } from "@/lib/graph"
 import { addQuickTask } from "@/lib/todoQuickAdd"
 import { TileShell } from "./TileShell"
+import { TileTip } from "./TileTip"
 
 /** Hızlı görev kutucuğu: dokununca yazma alanı panelin içinde açılır (`TaskDetail`). */
 export function TaskTile({ onOpen, ...shell }) {
   const { t } = useLocale()
   return (
     <TileShell id="tool:task" {...shell}>
-      <button type="button" className="cc-hit" onClick={() => onOpen("tool:task")}>
-        <span className="cc-ic">
-          <HugeiconsIcon icon={TaskAdd01Icon} strokeWidth={1.8} aria-hidden="true" />
-        </span>
-        <span className="cc-text">
-          <span className="cc-label">{t("control.task.title")}</span>
-        </span>
-      </button>
+      <TileTip hint={t("control.task.hint")}>
+        <button type="button" className="cc-hit" onClick={() => onOpen("tool:task")}>
+          <span className="cc-ic">
+            <HugeiconsIcon icon={TaskAdd01Icon} strokeWidth={1.8} aria-hidden="true" />
+          </span>
+          <span className="cc-text">
+            <span className="cc-label">{t("control.task.title")}</span>
+          </span>
+        </button>
+      </TileTip>
     </TileShell>
   )
 }

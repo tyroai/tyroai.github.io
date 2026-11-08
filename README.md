@@ -71,8 +71,12 @@ Veri seti eklemek ya da düzenlemek için `demo/datasets/sets/ana.js` örnek al�
   `CREDITS.md` içindedir. Hangi gönderiye hangi fotoğrafın geleceği başlığa göre
   `demo/state.js` içindeki `COVER_RULES` ile seçilir; tek bir gönderiyi sabitlemek için
   veri setinde `image: "<anahtar>"` (ya da `image: false`) verilir.
-- **Kişi fotoğrafları:** yalnız Ömer'in fotoğrafı vardır. Kadrodan birine gerçek yüz koymak için
-  `demo/overlay/public/images/people/<ad-soyad>.jpg` (örn. `selin-aydin.jpg`) eklenir; yoksa baş harfler çizilir.
+- **Kişi fotoğrafları:** Ömer'in fotoğrafı ve 17 kadro üyesi için Unsplash stok portreleri vardır
+  (`demo/overlay/public/images/people/<ad-soyad>.jpg`, kaynaklar `CREDITS.md`); kalanlar baş harflerle çizilir.
+- **Hava kartı arka planları** (`demo/overlay/public/images/weather/`) [Imageory](https://imageory.in) galerisinden
+  alınmış yapay zekâ görselleridir; sitede açık lisans metni yoktur, kaynaklar `CREDITS.md` içindedir.
+- **Logo:** işaret ve "tyro" yazısı kurumsal logodan izlenmiştir; ikinci kelime "hub" paletin renginde `demo/hub.mjs`
+  ile üretilir (sync, bunu `BrandText`e yamar).
 
 ## Lisans
 

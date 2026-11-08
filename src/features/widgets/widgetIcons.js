@@ -1,4 +1,3 @@
-import AiArtIcon from "@hugeicons/core-free-icons/AiArtIcon"
 import AirplaneTakeOff01Icon from "@hugeicons/core-free-icons/AirplaneTakeOff01Icon"
 import Beach02Icon from "@hugeicons/core-free-icons/Beach02Icon"
 import News01Icon from "@hugeicons/core-free-icons/News01Icon"
@@ -15,7 +14,6 @@ import ChartLineData02Icon from "@hugeicons/core-free-icons/ChartLineData02Icon"
 import CheckListIcon from "@hugeicons/core-free-icons/CheckListIcon"
 import CheckmarkCircle02Icon from "@hugeicons/core-free-icons/CheckmarkCircle02Icon"
 import ClipboardClockIcon from "@hugeicons/core-free-icons/ClipboardClockIcon"
-import Folder01Icon from "@hugeicons/core-free-icons/Folder01Icon"
 import Idea01Icon from "@hugeicons/core-free-icons/Idea01Icon"
 import InboxUnreadIcon from "@hugeicons/core-free-icons/InboxUnreadIcon"
 import KanbanIcon from "@hugeicons/core-free-icons/KanbanIcon"
@@ -36,7 +34,6 @@ import TicketStarIcon from "@hugeicons/core-free-icons/TicketStarIcon"
 import Target02Icon from "@hugeicons/core-free-icons/Target02Icon"
 import Timer02Icon from "@hugeicons/core-free-icons/Timer02Icon"
 import UserGroupIcon from "@hugeicons/core-free-icons/UserGroupIcon"
-import UserTime01Icon from "@hugeicons/core-free-icons/UserTime01Icon"
 
 /**
  * Widget'ların ikonu — header tepsisi ve header'ın ekleme menüsü (kartın kendi başlık ikonu
@@ -53,7 +50,6 @@ export const WIDGET_ICON = {
   rhythm: ChartColumnIcon,
   "pending-mail": InboxUnreadIcon,
   planner: KanbanIcon,
-  "recent-files": Folder01Icon,
   "team-today": UserGroupIcon,
   market: ChartLineData02Icon,
   focus: CheckmarkCircle02Icon,
@@ -76,12 +72,10 @@ export const WIDGET_ICON = {
   requests: ClipboardClockIcon,
   travel: AirplaneTakeOff01Icon,
   "focus-window": Target03Icon,
-  "feed-picks": AiArtIcon,
   radio: Radio02Icon,
   "tyro-radio-stage": DiscAlbumIcon,
   "tyro-radio-disc": CdIcon,
   "world-clock": TimeZoneIcon,
-  "common-time": UserTime01Icon,
   "focus-timer": Timer02Icon,
   horizon: MilestoneIcon,
 }

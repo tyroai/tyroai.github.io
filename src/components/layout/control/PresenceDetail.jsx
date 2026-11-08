@@ -3,23 +3,26 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import Tick02Icon from "@hugeicons/core-free-icons/Tick02Icon"
 import { useLocale } from "@/hooks/useLocale"
 import { STATUS } from "@/lib/graph"
-import { PRESENCE_CHOICES, PRESENCE_DURATIONS, presenceTone } from "./presenceModel"
+import { PRESENCE_CHOICES, PRESENCE_DURATIONS, defaultUntil, presenceTone } from "./presenceModel"
 import { usePresence } from "./usePresence"
 
 const DURATION_KEY = {
   60: "control.presence.d60",
-  120: "control.presence.d120",
+  time: "control.presence.dtime",
   day: "control.presence.dday",
 }
 
 /**
- * Teams durumunu seç (Teams'in kendi menüsü gibi): beş durum, süre (1 saat · 2 saat · gün sonu),
- * "Teams'e bırak". İzin yoksa önce bir kez "Bağlan". Tercih yalnız Teams açıkken görünür.
+ * Teams durumunu seç (Teams'in kendi menüsü gibi): beş durum, süre (1 saat · seçilen saate kadar ·
+ * gün sonu), "Teams'e bırak". "Saat seç" altında bitiş saati açılır; ilk değeri yarım saate yuvarlı
+ * (`defaultUntil`), geçmiş bir saat yarına düşer. İzin yoksa önce bir kez "Bağlan". Tercih yalnız
+ * Teams açıkken görünür.
  */
 export function PresenceDetail() {
   const { t } = useLocale()
   const p = usePresence()
   const [duration, setDuration] = useState(60)
+  const [until, setUntil] = useState("")
   const [error, setError] = useState("")
   const done = (res) => setError(res.status === STATUS.ready ? "" : t("control.presence.failed"))
 
@@ -42,7 +45,7 @@ export function PresenceDetail() {
             type="button"
             className="cc-row"
             aria-pressed={p.availability === c}
-            onClick={async () => done(await p.choose(c, duration))}
+            onClick={async () => done(await p.choose(c, duration, until))}
           >
             <span className="cc-dot" data-tone={presenceTone(c)} aria-hidden="true" />
             <span className="cc-row-label">{t(`control.presence.${c}`)}</span>
@@ -64,12 +67,28 @@ export function PresenceDetail() {
             type="button"
             className="cc-chip"
             aria-pressed={duration === d}
-            onClick={() => setDuration(d)}
+            onClick={() => {
+              if (d === "time" && !until) setUntil(defaultUntil(Date.now()))
+              setDuration(d)
+            }}
           >
             {t(DURATION_KEY[d])}
           </button>
         ))}
       </div>
+      {duration === "time" && (
+        <label className="cc-until">
+          {t("control.presence.until")}
+          <input
+            type="time"
+            step={300}
+            required
+            className="cc-input"
+            value={until}
+            onChange={(e) => setUntil(e.target.value)}
+          />
+        </label>
+      )}
       <div className="cc-list">
         <button
           type="button"

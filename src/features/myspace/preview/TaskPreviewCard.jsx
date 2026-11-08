@@ -30,9 +30,10 @@ const dayOf = (key) => {
  * (gecikmişse kırmızı), önem, hatırlatma, not ve adımlar. Microsoft To Do'daki
  * görevin tam hâli açılınca istenir (`useTodoTask`); gelene kadar kısa model
  * görünür. Yerel listedeki iş (To Do yok) yalnız başlığını ve bunu söyler.
- * Dipte "To-Do'da aç" görevin ayrıntısını To-Do sayfasında açar.
+ * Dipte "To-Do'da aç" görevin ayrıntısını To-Do sayfasında açar. `actions`: onun üstünde eşit
+ * genişlikte düğmeler (Bugünün görevleri: Tamamla · Bugünden çıkar — `tasks/TaskDetail`).
  */
-export function TaskPreviewCard({ task, openTo }) {
+export function TaskPreviewCard({ task, openTo, actions = null }) {
   const { t, locale } = useLocale()
   const res = useTodoTask(task)
   const v = { ...task, ...(res.task ?? {}) }
@@ -172,6 +173,7 @@ export function TaskPreviewCard({ task, openTo }) {
 
       <Separator />
       <div className="p-3.5">
+        {actions && <div className="task-preview-actions">{actions}</div>}
         {openTo ? (
           <Link
             to={openTo}

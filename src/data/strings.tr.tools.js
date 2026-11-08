@@ -16,5 +16,12 @@ export const strings = {
   "tools.translate.noDevice": "Bu tarayıcı cihazda çeviremiyor: TYRO sohbette çevirir.",
   "tools.translate.private": "Metin cihazında çevrilir, hiçbir yere gönderilmez.",
   "tools.translate.edit": "Metni düzenle",
+  "tools.translate.dictate": "Sesle yazdır ({lang})",
+  "tools.translate.listening": "Dinleniyor…",
   "tools.market.chartFor": "{name}: son 30 gün",
+  "tools.focusTimer.startTip": "{m} dakikalık odağı başlat; bitince haber verir",
+  "tools.focusTimer.pauseTip": "Duraklat; kaldığı yerden sürdürebilirsin",
+  "tools.focusTimer.resumeTip": "Kaldığı yerden sürdür",
+  "tools.focusTimer.againTip": "{m} dakikalık odağı yeniden başlat",
+  "tools.focusTimer.resetTip": "Sayacı sıfırla; süre yeniden {m} dakika olur",
 }

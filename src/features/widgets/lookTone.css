@@ -63,16 +63,19 @@
   --hp-shine: rgb(255 255 255 / 0.42);
 }
 
-/* RENKLİ — paletin beyaz yazılı ana renginde düz dolgu (`--brand-solid`; kabuk koyu ada: o paletin
-   koyu temadaki canlı tonu), bir ton koyu: beyaz yazı da %88'lik ikincil yazı da her palette AA.
-   Degrade yok (ürün sahibi). Düz renk paletleri (Black, Periwinkle) kendi koyu dolgusunda (`ownLook.css`). */
+/* RENKLİ — paletin kendi degradesi, beyaz yazıya uydurulmuş (`lib/renkliGradient` › `renkliStops`:
+   üç renk tonunu korur, her biri beyaz yazının ≥ 5,4:1 okunduğu koyuluğa iner; sıcaklar kırmızıya
+   kayar, pasteller doygunlaşır). Sol üstten sağ alta. Işık katmanı bilerek yok: %88'lik ikincil
+   yazının payı ~0,005 (her durakta ≥ 4,5:1, testli); degradenin ara tonu duraklardan açık olamaz.
+   Değişkenler yoksa düz dolgu. Düz renk paletleri (Black, Periwinkle) kendi koyu
+   dolgusunda (`ownLook.css`). */
 [data-widget-look="palette"] .ms-surface {
   border-color: rgb(255 255 255 / 0.14);
-  background-color: color-mix(in oklab, var(--brand-solid), black 12%);
-  background-image: none;
+  background-color: var(--renkli-1, color-mix(in oklab, var(--brand-solid), black 12%));
+  background-image: linear-gradient(150deg, var(--renkli-0), var(--renkli-1) 55%, var(--renkli-2));
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.16),
-    0 22px 44px -24px color-mix(in oklab, var(--brand-solid) 60%, transparent);
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    0 22px 44px -24px color-mix(in oklab, var(--renkli-1, var(--brand-solid)) 65%, transparent);
 }
 [data-widget-look="palette"][data-palette].dark {
   --foreground: #fff;

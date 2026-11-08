@@ -14,7 +14,8 @@ export function suggestTasks(tasks, today, exclude = new Set()) {
 }
 
 /**
- * Tepside kaç öneri — listenin satır sayısına göre (biten de satır): kart sabit boyda, ekleme
- * alanı dipte kalmalı. Liste boş ya da tek satırsa iki, iki satırsa bir, üç ve üstünde hiç.
+ * Kaç öneri — bugünün AÇIK iş sayısına göre: gün boşken üç, ikiden fazla açık işte iki, beş ve
+ * üstünde hiç (gün dolu). Öneriler listeyle aynı kaydırma alanında: kartın boyunu zorlamaz, ekleme
+ * alanı dipte sabit kalır.
  */
-export const suggestCount = (rows) => (rows >= 3 ? 0 : rows === 2 ? 1 : 2)
+export const suggestCount = (open) => (open >= 5 ? 0 : open >= 3 ? 2 : 3)

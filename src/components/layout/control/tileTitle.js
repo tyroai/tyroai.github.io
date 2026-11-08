@@ -11,6 +11,8 @@ const OWN_TITLE = {
   "tool:shortcuts": "control.sc.title",
   // Kartın adı ("Ticket Talepler · Halka") kutucuğa uzun: kısa adı.
   "tibot-rings": "control.tile.tibot",
+  // "Sıradaki resmî tatil" kutucuğa uzun (ürün sahibi: "denetimde ismi sıradaki tatil olsun").
+  holiday: "control.tile.holiday",
 }
 
 /** Kutucuğun adı (kutucuk, düzenleme listesi, "−" düğmesi, ayrıntının başlığı). */

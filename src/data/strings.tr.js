@@ -495,7 +495,7 @@ export const strings = {
   // Login page
   "login.motto": "Yapay zeka iş asistanları ve kurumsal yapay zeka ürünlerine",
   "login.mottoEnd": "anında eriş.",
-  "login.subBrand": "Kurumsal AI Platformu",
+  "login.subBrand": "powered by TYRO Tech",
   "about.nav": "Hakkımızda",
   "about.title": "Hakkımızda",
   "about.lead":
@@ -544,7 +544,7 @@ export const strings = {
   "team.skill.aiMsc": "Yapay zekâ yüksek lisansı",
   "login.cta": "Bağlan",
   "login.ssoHint": "Kurumsal Microsoft hesabınla güvenli giriş",
-  "login.copyright": "© {year} Powered by TYRO Tech Business Solutions · tyroAI",
+  "login.copyright": "© {year} TYRO Tech",
   "login.error": "Giriş yapılamadı, lütfen tekrar dene.",
   "login.connectingTitle": "TYROVERSE'e bağlanılıyor",
 
@@ -2160,7 +2160,6 @@ export const strings = {
   "myspace.tip.meetings.kicker": "Takvimin",
   "myspace.tip.meetings.note": "Kendi takvimin; tüm gün etkinlikleri ve reddettiklerin sayılmaz.",
   "myspace.tip.meetings.open": "Takvimi aç",
-  "myspace.focus.openInTodo": "To-Do'da aç",
   "myspace.tip.invites.title": "Yanıt bekleyen davetler",
   "myspace.tip.invites.note":
     "Yanıtın düzenleyiciye gider. İlk yanıtta takvime yazma izni istenir.",
@@ -2227,8 +2226,6 @@ export const strings = {
   "myspace.meeting.unit.hm": "{h} sa {m} dk",
   "myspace.loading": "Yükleniyor…",
   "myspace.tasks.title": "Bugünün görevleri",
-  "myspace.tasks.tip.open": "Açık iş",
-  "myspace.tasks.tip.done": "Tamamlandı",
   "myspace.tasks.add": "Görev ekle",
   "myspace.tasks.remove": "Görevi sil",
   "myspace.tasks.full": "Liste dolu — önce birini bitir ya da sil.",
@@ -2245,6 +2242,10 @@ export const strings = {
   "myspace.tasks.unplan": "Bugünden çıkar",
   "myspace.tasks.tip.overdue": "Gecikti · {date}",
   "myspace.tasks.titleShort": "Bugün",
+  "myspace.tasks.complete": "Tamamla",
+  "myspace.tasks.reopen": "Yeniden aç",
+  "myspace.tasks.allDone": "Hepsi tamam",
+  "myspace.tasks.take": "Bugüne al",
   "myspace.focus.placeholder": "Bugüne bir iş ekle…",
   "myspace.focus.addHint":
     "Enter ile ekle; birden çok satır yapıştırırsan her satır ayrı bir iş olur.",
@@ -2862,9 +2863,6 @@ export const strings = {
   "widgets.focusWindow.failed": "Odak bloğu eklenemedi.",
   "widgets.focusWindow.none": "Mesai içinde 1 saatlik boşluk yok.",
   "widgets.focusWindow.titleShort": "Odak",
-  "widgets.files.title": "Kaldığın yerden devam",
-  "widgets.files.empty": "Son çalıştığın belge yok.",
-  "widgets.files.titleShort": "Dosyalar",
   "widgets.team.title": "Ekibim bugün",
   "widgets.team.summary": "{available} kişi müsait · {away} kişi ofis dışında",
   "widgets.team.total": "{n} kişi",
@@ -2935,30 +2933,6 @@ export const strings = {
   "widgets.requests.pending.advance": "Avans talebin onayda",
   "widgets.requests.savedAt": "{time} kaydedildi",
   "widgets.requests.empty": "Bekleyen bir talebin yok.",
-  "widgets.commonTime.title": "Ortak saat",
-  "widgets.commonTime.pick": "Kişi seç",
-  "widgets.commonTime.edit": "Kişiler",
-  "widgets.commonTime.empty": "Kişi seç: durumları ve ortak boş saat",
-  "widgets.commonTime.slot": "Ortak boşluk",
-  "widgets.commonTime.today": "Bugün",
-  "widgets.commonTime.tomorrow": "Yarın",
-  "widgets.commonTime.open": "Outlook'ta aç",
-  "widgets.commonTime.noSlot": "{n} gün içinde ortak boşluk yok",
-  "widgets.commonTime.noOverlap": "Mesai saatleri kesişmiyor",
-  "widgets.commonTime.partial": "Takvimi okunamayanlar hesaba katılmadı",
-  "widgets.commonTime.state.free": "müsait",
-  "widgets.commonTime.state.busy": "toplantıda",
-  "widgets.commonTime.state.busyUntil": "toplantıda · {time} sonrası boş",
-  "widgets.commonTime.state.off": "ofis dışında",
-  "widgets.commonTime.state.night": "gece",
-  "widgets.commonTime.state.after": "mesai dışı",
-  "widgets.commonTime.state.unknown": "takvim okunamadı",
-  "widgets.commonTime.dialog.title": "Ortak saat: kişiler",
-  "widgets.commonTime.dialog.hint":
-    "En çok 6 kişi. Takvimleri yalnız boş/meşgul olarak okunur, toplantı adları görünmez.",
-  "widgets.commonTime.dialog.field": "Kişiler",
-  "widgets.commonTime.dialog.placeholder": "Ad ya da e-posta yaz",
-  "widgets.commonTime.dialog.save": "Kaydet",
   "widgets.travel.title": "Seyahatim",
   "widgets.travel.localTime": "{city} saati: {time}",
   "widgets.travel.none": "Önümüzdeki 3 haftada seyahat görünmüyor.",
@@ -2972,7 +2946,6 @@ export const strings = {
   "widgets.travel.tempAria": "{cond}, en yüksek {max}°, en düşük {min}°",
   "widgets.travel.hint":
     'Takvimde "seyahat", "uçuş", "ziyaret" ya da "fuar" geçen etkinlikler burada görünür.',
-  "widgets.feed.title": "Keşfet'ten sana özel",
   "widgets.radio.title": "Tyrofy",
   "widgets.radio.stations": "İstasyonlar",
   "widgets.radio.play": "Çal",
@@ -2999,12 +2972,8 @@ export const strings = {
   "widgets.radio.place.locating": "Konum alınıyor…",
   "widgets.radio.place.denied": "Konum izni verilmedi",
   "widgets.radio.place.offices": "TYRO ofisleri",
-  "widgets.feed.all": "Keşfet",
   "widgets.feed.count": "Son ziyaretinden beri {n} yeni bildirim",
-  "widgets.feed.countShort": "{n} yeni",
-  "widgets.feed.markSeen": "Hepsini gördüm",
   "widgets.feed.none": "Keşfet'te yeni bir şey yok.",
-  "widgets.feed.titleShort": "Sana özel",
   "widgets.week.meetings": "Toplantıda",
   "widgets.week.meetingsSub": "{n} toplantı",
   "widgets.week.focus": "Boş odak süresi",
@@ -3075,10 +3044,7 @@ export const strings = {
   "widgets.ctl.remove": "{name}: kaldır",
   "widgets.catalog.pending-mail": "Bayraklı ve okunmamış postalar",
   "widgets.catalog.planner": "Planner'da sana atanmış işler",
-  "widgets.catalog.recent-files": "Son değiştirdiğin ve oluşturduğun belgeler",
   "widgets.catalog.team-today": "Ekibinin Teams durumu ve ofis dışındakiler",
-  "widgets.catalog.common-time":
-    "Farklı ofislerdeki iş arkadaşlarının durumu ve herkesin boş olduğu ilk saat",
   "widgets.catalog.world-clock": "Ofis şehirlerinin saati, saat farkı ve mesai durumu",
   "widgets.focusTimer.title": "Odak sayacı",
   "widgets.catalog.focus-timer": "15 · 25 · 50 dakikalık odak; header'da kalan süre",
@@ -3148,7 +3114,6 @@ export const strings = {
     "İade edilen, gönderilmemiş ve onaydaki taleplerin; yarım kalan formlar",
   "widgets.catalog.travel": "Takvimindeki yolculuklar",
   "widgets.catalog.focus-window": "Boş saatlerine tek tıkla odak bloğu",
-  "widgets.catalog.feed-picks": "Keşfet'te sana yeni bildirimler",
   "widgets.catalog.radio":
     "Bulunduğun yerin radyoları: solda çalan, sağda istasyonlar; dinle, favorilere ekle",
   "widgets.ctl.toolbar": "{name} düzeni",
@@ -3268,8 +3233,6 @@ export const strings = {
     "Takip masan: bayraklı postalar vadesine göre (gecikenler başta), sonra okunmamışlar. “Yanıtsız” sekmesi son 14 günde gönderip iki gündür yanıt alamadıklarını listeler. Takibi unutmazsın.",
   "widgets.info.planner":
     "Planner'da sana atanan bitmemiş işleri teslimi en yakın önce sıralar; gecikmiş ve acil olanlar işaretli. Kutuya basınca işi kartta tamamlarsın (geri alınır); Planner'ı açman gerekmez.",
-  "widgets.info.recent-files":
-    "Son oluşturduğun ya da değiştirdiğin Word, Excel, PowerPoint ve PDF belgeleri, klasörü ve zamanıyla. Tek tıkla tarayıcıda açılır; dosya aramadan kaldığın yerden devam edersin.",
   "widgets.info.team-today":
     "Yöneticin, ekip arkadaşların ve sana bağlı kişilerin canlı Teams durumu; otomatik yanıtı açık olanlar “Ofis dışında” görünür, müsaitler önce gelir. Kime şimdi ulaşabileceğini hemen görürsün.",
   "widgets.info.market":
@@ -3300,8 +3263,6 @@ export const strings = {
     "Self Servis'te seni bekleyenler tek listede: iadeler, gönderilmemiş masraflar, kapanmamış avanslar, yarım formlar, onaydaki talepler; her satırda tek eylem. Hiçbiri takipsiz kalmaz.",
   "widgets.info.world-clock":
     "Ofis şehirlerinin saati, saat farkı ve orada mesai olup olmadığı; “Planla” 24 saatlik şeritte en uygun toplantı saatini bulur. Şehirleri dünya saati penceresinde iğnelersin (en çok 5).",
-  "widgets.info.common-time":
-    "Farklı ofislerden en çok 6 iş arkadaşının şu anki durumu ve herkesin (sen dahil) boş olduğu mesai içindeki ilk yarım saat; tek tıkla Outlook'ta toplantı penceresi açılır. Saat aramak biter.",
   "widgets.info.focus-timer":
     "15, 25 ya da 50 dakikalık odak sayacı: halkada kalan süre ve bitiş saati. Sayfa değiştirsen de sürer, header'a koyarsan kalan süre orada akar; bitince bildirim gelir.",
   "widgets.info.horizon":
@@ -3310,8 +3271,6 @@ export const strings = {
     "Önümüzdeki üç haftanın yolculukları: takvimde seyahat, uçuş, ziyaret, fuar ya da otel geçen etkinlikler. Varış saati ve havası; ayrıntıda ofis adresi ve yol tarifi. Hazırlıklı çıkarsın.",
   "widgets.info.focus-window":
     "Mesai içindeki en az 1 saatlik toplantısız boşlukları bulur; tek tıkla takvimine en çok 2 saatlik meşgul bir “Odak zamanı” yazar. Derin çalışma için zamanı korursun.",
-  "widgets.info.feed-picks":
-    "Keşfet'te son ziyaretinden beri gelen iş bildirimlerinin en yenileri; satırdan “TYRO ile özetle” ve “Kaydet” (To Do'ya), “Hepsini gördüm” rozeti söndürür. Keşfet'e girmeden haberdar olursun.",
   "widgets.info.radio":
     "Bulunduğun yerin (ya da seçtiğin TYRO ofisinin) radyoları: dinle, favorilere ekle, sesi ayarla. Sayfa değişse de yayın sürer; çalan radyo header'daki mini oynatıcıdan yönetilir.",
   "widgets.info.onenote":
@@ -3683,7 +3642,7 @@ export const strings = {
   "widgets.tibotRings.short": "Halka",
   "widgets.tyroStage.title": "Tyrofy Sahne",
   "widgets.tyroDisc.title": "Tyrofy Disk",
-  "widgets.tyroDisc.pick": "İstasyon seç",
+  "widgets.tyroDisc.pick": "Radyo seç",
   "widgets.fx.title": "Döviz çevirici",
   "widgets.translate.title": "Çevir",
   "selfService.cta.leave": "İzin talebi",

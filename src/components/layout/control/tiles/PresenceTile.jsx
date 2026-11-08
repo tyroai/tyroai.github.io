@@ -4,6 +4,7 @@ import { useLocale } from "@/hooks/useLocale"
 import { presenceLabelKey, presenceTone } from "../presenceModel"
 import { usePresence } from "../usePresence"
 import { TileShell } from "./TileShell"
+import { TileTip } from "./TileTip"
 
 /**
  * Teams durumu: simgenin köşesinde durumun rengi, altında durum ("Müsait", "Toplantıda meşgul" …);
@@ -22,18 +23,20 @@ export function PresenceTile({ onOpen, ...shell }) {
           : null
   return (
     <TileShell id="tool:presence" {...shell}>
-      <button type="button" className="cc-hit" onClick={() => onOpen("tool:presence")}>
-        <span
-          className="cc-ic cc-presence"
-          data-tone={p.status === "ready" ? presenceTone(p.availability) : undefined}
-        >
-          <HugeiconsIcon icon={UserStatusIcon} strokeWidth={1.8} aria-hidden="true" />
-        </span>
-        <span className="cc-text">
-          <span className="cc-label">{t("control.presence.title")}</span>
-          {sub && <span className="cc-sub">{sub}</span>}
-        </span>
-      </button>
+      <TileTip hint={t("control.presence.hint")}>
+        <button type="button" className="cc-hit" onClick={() => onOpen("tool:presence")}>
+          <span
+            className="cc-ic cc-presence"
+            data-tone={p.status === "ready" ? presenceTone(p.availability) : undefined}
+          >
+            <HugeiconsIcon icon={UserStatusIcon} strokeWidth={1.8} aria-hidden="true" />
+          </span>
+          <span className="cc-text">
+            <span className="cc-label">{t("control.presence.title")}</span>
+            {sub && <span className="cc-sub">{sub}</span>}
+          </span>
+        </button>
+      </TileTip>
     </TileShell>
   )
 }

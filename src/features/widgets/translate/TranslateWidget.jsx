@@ -5,9 +5,11 @@ import ArrowRight01Icon from "@hugeicons/core-free-icons/ArrowRight01Icon"
 import Cancel01Icon from "@hugeicons/core-free-icons/Cancel01Icon"
 import ClipboardPasteIcon from "@hugeicons/core-free-icons/ClipboardPasteIcon"
 import Copy01Icon from "@hugeicons/core-free-icons/Copy01Icon"
+import Mic01Icon from "@hugeicons/core-free-icons/Mic01Icon"
 import PencilEdit02Icon from "@hugeicons/core-free-icons/PencilEdit02Icon"
 import Tick01Icon from "@hugeicons/core-free-icons/Tick01Icon"
 import TranslationIcon from "@hugeicons/core-free-icons/TranslationIcon"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { useLocale } from "@/hooks/useLocale"
 import { useTranslate } from "@/hooks/useTranslate"
 import { requestOpenChat, setPendingAsk } from "@/lib/chatBus"
@@ -15,6 +17,7 @@ import { notify } from "@/lib/notify"
 import { languageName, onDeviceTranslateReady } from "@/lib/onDeviceTranslate"
 import { WidgetFrame } from "../WidgetFrame"
 import { TranslateOutput } from "./TranslateOutput"
+import { useTranslateDictation } from "./useTranslateDictation"
 import "./translate.css"
 
 /** Hedef diller: uygulamanın dört dili. */
@@ -32,6 +35,10 @@ const LANGS = ["tr", "en", "ru", "ar"]
  * iner ("Rusça · …", dokununca yeniden düzenlenir), Kopyala dillerin yanına geçer ve kalan yerin
  * tamamı çeviriye kalır — sabit boylu kartta çeviri sıfır yüksekliğe sıkışıyordu. Büyük kartta iki
  * bölme, ikisi hep görünür (`translate.css`).
+ *
+ * Mikrofon (kutunun sağ altı): sesle yazdırır (`useTranslateDictation`); dinlenen dil arayüz dili,
+ * hedef zaten oysa İngilizce. Söylenen kutuya yazılır, Çevir'e basınca çevrilir. Tarayıcı
+ * desteklemiyorsa mikrofon yok.
  */
 export default function TranslateWidget({ className }) {
   const { t, locale } = useLocale()
@@ -53,6 +60,11 @@ export default function TranslateWidget({ className }) {
   }, [])
 
   const clean = text.trim()
+  // Konuşulan dil: çevrilecek metnin dili — arayüz dili; hedef zaten arayüz diliyse İngilizce
+  // (arayüz İngilizceyse Türkçe).
+  const ui = String(locale).slice(0, 2)
+  const spoken = target === ui ? (ui === "en" ? "tr" : "en") : ui
+  const mic = useTranslateDictation({ text, setText, lang: spoken })
   const state = tr.state
   const shown = target ?? (state.status === "done" ? state.target : null)
   const mode = editing || state.status === "idle" ? "edit" : "result"
@@ -67,6 +79,7 @@ export default function TranslateWidget({ className }) {
 
   function run(want = target) {
     if (!clean) return
+    mic.stop()
     if (device === false) return askTyro(want)
     // Aynı metinde yalnız hedef değiştiyse dil yeniden aranmaz.
     const source = done === clean && state.source ? state.source : undefined
@@ -163,7 +176,9 @@ export default function TranslateWidget({ className }) {
                 run()
               }
             }}
-            placeholder={t("tools.translate.placeholder")}
+            placeholder={t(
+              mic.listening ? "tools.translate.listening" : "tools.translate.placeholder",
+            )}
             aria-label={t("tools.translate.input")}
           />
           {text ? (
@@ -181,6 +196,29 @@ export default function TranslateWidget({ className }) {
               <HugeiconsIcon icon={ClipboardPasteIcon} aria-hidden="true" strokeWidth={1.9} />
               {t("tools.translate.paste")}
             </button>
+          )}
+          {mic.usable && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={mic.toggle}
+                  aria-pressed={mic.listening}
+                  aria-label={t(mic.listening ? "chat.mic.stop" : "chat.mic.start")}
+                  className="tw-corner tw-mic"
+                  data-on={mic.listening || undefined}
+                >
+                  <HugeiconsIcon icon={Mic01Icon} aria-hidden="true" strokeWidth={1.9} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {mic.listening
+                  ? t("chat.mic.stop")
+                  : t("tools.translate.dictate", {
+                      lang: languageName(spoken, locale),
+                    })}
+              </TooltipContent>
+            </Tooltip>
           )}
         </div>
         <div className="tw-bar">

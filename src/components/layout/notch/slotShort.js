@@ -11,8 +11,6 @@ const SHORT = {
   "myspace.meeting.title": "meeting",
   "myspace.rhythm.title": "rhythm",
   "myspace.tasks.title": "focus",
-  "widgets.feed.title": "feed",
-  "widgets.files.title": "files",
   "widgets.focusTimer.title": "timer",
   "widgets.focusWindow.title": "freeTime",
   "widgets.holiday.title": "holiday",

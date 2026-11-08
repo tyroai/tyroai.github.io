@@ -3,20 +3,30 @@ import CalendarAdd01Icon from "@hugeicons/core-free-icons/CalendarAdd01Icon"
 import DashboardSquareEditIcon from "@hugeicons/core-free-icons/DashboardSquareEditIcon"
 import Invoice01Icon from "@hugeicons/core-free-icons/Invoice01Icon"
 import Link04Icon from "@hugeicons/core-free-icons/Link04Icon"
-import SidebarRightIcon from "@hugeicons/core-free-icons/SidebarRightIcon"
+import TaskAdd01Icon from "@hugeicons/core-free-icons/TaskAdd01Icon"
 import { usePageAccess } from "@/hooks/usePageAccess"
 import { useControlLinks } from "./controlStore"
 
-// Yerleşik kısayollar: adresin komutuyla (`?new=` · `?edit=1`) ya da Denetim Merkezi'nin
-// eylemiyle (`act`: çentiğin yuva seçicisi — telefonda çentik kutucuğu yok, yolu bu) açılır,
-// sayfanın koduna bağlanmaz. Yalnız kişiye açık sayfanınkiler görünür.
+// Yerleşik kısayollar (sık kullanılandan): adresin komutuyla (`?new=` · `?edit=1`) ya da Denetim
+// Merkezi'nin eylemiyle (`act`: hızlı görev panelin içinde açılır) açılır, sayfanın koduna
+// bağlanmaz. Yalnız kişiye açık sayfanınkiler görünür. Çentiğin yuva seçicisi kısayolda değil:
+// Çentik kutucuğu (Düzenle › ekle) ve çentiğin kendisi.
 const BUILT = [
   {
-    id: "notch",
-    icon: SidebarRightIcon,
-    short: "control.notch.title",
-    long: "control.notch.edit",
-    act: ({ openNotchEdit }) => openNotchEdit(),
+    id: "task",
+    icon: TaskAdd01Icon,
+    short: "control.sc.task",
+    long: "control.sc.taskLong",
+    // Panelin içinde hızlı görev alanı açılır; panel dışından çağrılırsa To-Do sayfası.
+    act: ({ open, go }) => (open ? open("tool:task") : go("/todo")),
+  },
+  {
+    id: "meeting",
+    icon: CalendarAdd01Icon,
+    short: "control.sc.meeting",
+    long: "control.sc.meetingLong",
+    to: () => "/calendar?new=meeting",
+    access: "calendar",
   },
   {
     id: "leave",
@@ -35,14 +45,6 @@ const BUILT = [
     access: "selfService",
   },
   {
-    id: "meeting",
-    icon: CalendarAdd01Icon,
-    short: "control.sc.meeting",
-    long: "control.sc.meetingLong",
-    to: () => "/calendar?new=meeting",
-    access: "calendar",
-  },
-  {
     id: "home",
     icon: DashboardSquareEditIcon,
     short: "control.sc.home",
@@ -58,7 +60,7 @@ export const SHORTCUT_SLOTS = 5
 /**
  * Kişiye açık kısayollar (yerleşikler + kendi bağlantıları), çalıştırılabilir biçimde:
  * `{ id, icon, label, tip, run(actions) }` — `actions` Denetim Merkezi'nin `go` · `close` ·
- * `openNotchEdit`i.
+ * `openNotchEdit`i ve şeridin `open`ı (paneldeki bir ayrıntıyı açar).
  */
 export function useShortcutItems() {
   const access = usePageAccess()

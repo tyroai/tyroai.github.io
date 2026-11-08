@@ -170,6 +170,41 @@
   width: 0.9375rem;
   height: 0.9375rem;
 }
+/* Mikrofon: kutunun sağ altı (köşedeki Yapıştır/Temizle'nin altında); dinlerken marka dolgusu ve
+   yavaşça nefes alan halka — yalnız saydamlık canlanır (gölge sabit), azaltılmış harekette durgun. */
+.tw-mic {
+  top: auto;
+  bottom: 0.375rem;
+}
+.tw-corner.tw-mic[data-on] {
+  background: var(--brand-solid);
+  color: #fff;
+}
+/* Boşken köşede Yapıştır kapsülü: yer tutucu onun altına girmesin. */
+.tw-input:has(.tw-paste) textarea {
+  padding-inline-end: 6.5rem;
+}
+.tw-mic[data-on]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0.3125rem color-mix(in oklab, var(--brand-solid) 24%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  animation: tw-mic-breath 1.6s ease-in-out infinite;
+}
+@keyframes tw-mic-breath {
+  50% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tw-mic[data-on]::after {
+    animation: none;
+    opacity: 1;
+  }
+}
 .tw-paste {
   padding-inline: 0.5rem 0.625rem;
   background: var(--background);

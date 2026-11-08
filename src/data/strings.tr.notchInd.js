@@ -14,8 +14,6 @@ export const strings = {
   "notchInd.short.meeting": "Toplantı",
   "notchInd.short.rhythm": "Ritim",
   "notchInd.short.focus": "Odak",
-  "notchInd.short.feed": "Keşfet",
-  "notchInd.short.files": "Dosyalar",
   "notchInd.short.timer": "Sayaç",
   "notchInd.short.freeTime": "Boş zaman",
   "notchInd.short.holiday": "Tatil",

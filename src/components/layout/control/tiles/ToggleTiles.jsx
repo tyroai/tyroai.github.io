@@ -125,7 +125,10 @@ export function ThemeTile(shell) {
             </span>
           </button>
         </TooltipTrigger>
-        <TooltipContent>{label}</TooltipContent>
+        <TooltipContent className="flex-col items-start gap-0.5">
+          <span className="font-semibold">{label}</span>
+          <span>{t("control.theme.hint")}</span>
+        </TooltipContent>
       </Tooltip>
     </TileShell>
   )

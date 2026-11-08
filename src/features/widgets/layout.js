@@ -27,7 +27,7 @@ const DEFAULT_ORDER = [
   ["help", "main"],
   ["pending-mail", "more"],
   ["planner", "more"],
-  ["recent-files", "more"],
+  ["tyro-fx", "more"],
   ["team-today", "more", true],
   ["holiday", "more"],
   ["travel", "more"],
@@ -35,7 +35,7 @@ const DEFAULT_ORDER = [
   ["focus", "more", true],
   ["outcomes", "more", true],
   ["focus-window", "more"],
-  ["feed-picks", "more", true],
+  ["tyro-translate", "more", true],
 ]
 
 /**

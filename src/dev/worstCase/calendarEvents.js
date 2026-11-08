@@ -2,3 +2,4 @@
 export const worstBoard = () => null
 export const worstEvents = () => null
 export const worstSharedPeople = () => null
+export const worstUpdateTask = () => null

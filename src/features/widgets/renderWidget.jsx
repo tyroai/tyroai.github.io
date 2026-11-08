@@ -5,8 +5,6 @@ import { MeetingRhythmCard } from "@/features/myspace/MeetingRhythmCard"
 import { NextMeetingCard } from "@/features/myspace/NextMeetingCard"
 import { AskWidget } from "./AskWidget"
 import { BriefWidget } from "./BriefWidget"
-import { CommonTimeWidget } from "./commontime/CommonTimeWidget"
-import { FeedPicksWidget } from "./FeedPicksWidget"
 import { FocusWindowWidget } from "./FocusWindowWidget"
 import { HolidayWidget } from "./HolidayWidget"
 import { FocusTimerWidget } from "./focustimer/FocusTimerWidget"
@@ -22,7 +20,6 @@ import { FxGate } from "./fx/FxGate"
 import { TranslateGate } from "./translate/TranslateGate"
 import { PendingMailWidget } from "./PendingMailWidget"
 import { PlannerWidget } from "./PlannerWidget"
-import { RecentFilesWidget } from "./RecentFilesWidget"
 import { RequestsWidget } from "./requests/RequestsWidget"
 import { TeamTodayWidget } from "./TeamTodayWidget"
 import { TravelWidget } from "./TravelWidget"
@@ -113,8 +110,6 @@ export function renderWidgetFor(env) {
         return <PendingMailWidget key={id} className={className} />
       case "planner":
         return <PlannerWidget key={id} className={className} />
-      case "recent-files":
-        return <RecentFilesWidget key={id} className={className} />
       case "focus-window":
         return <FocusWindowWidget key={id} ctx={ctx} className={className} />
       case "team-today":
@@ -159,14 +154,10 @@ export function renderWidgetFor(env) {
         return <FocusTimerWidget key={id} className={className} />
       case "world-clock":
         return <WorldClockWidget key={id} ctx={ctx} className={className} />
-      case "common-time":
-        return <CommonTimeWidget key={id} ctx={ctx} className={className} />
       case "horizon":
         return <HorizonWidget key={id} ctx={ctx} className={className} />
       case "travel":
         return <TravelWidget key={id} ctx={ctx} className={className} />
-      case "feed-picks":
-        return <FeedPicksWidget key={id} ctx={ctx} className={className} />
       default:
         return null
     }

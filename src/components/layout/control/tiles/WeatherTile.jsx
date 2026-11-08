@@ -5,6 +5,7 @@ import { cardSkyOf } from "@/lib/weatherSky"
 import { headerTitleKey } from "../../headerWidgets/headerStore"
 import { preloadPanel } from "../panelPreload"
 import { TileShell } from "./TileShell"
+import { TileTip } from "./TileTip"
 import { WidgetTile } from "./WidgetTile"
 
 // Hava kartının renkli işareti (gök renkleri ve stilleri onunla iner; header'ın yüzü de bu).
@@ -32,37 +33,39 @@ export function WeatherTile({ onOpen, ...shell }) {
       sky={{ weather: cardSkyOf(c.kind), time: night ? "night" : "day" }}
       {...shell}
     >
-      <button
-        type="button"
-        className="cc-hit"
-        onClick={() => onOpen("weather")}
-        onPointerEnter={() => preloadPanel("weather")}
-      >
-        <span className="sr-only">{t(headerTitleKey("weather"))}</span>
-        <span className="cc-wx-sym" aria-hidden="true">
-          <Suspense fallback={null}>
-            <WeatherSymbol kind={c.kind} night={night} />
-          </Suspense>
-        </span>
-        <span className="cc-text">
-          <span className="cc-label">
-            <span className="cc-wx-temp">{Math.round(c.temp)}°</span> {t(condKey(c.kind, night))}
+      <TileTip hint={t("widgets.catalog.weather")}>
+        <button
+          type="button"
+          className="cc-hit"
+          onClick={() => onOpen("weather")}
+          onPointerEnter={() => preloadPanel("weather")}
+        >
+          <span className="sr-only">{t(headerTitleKey("weather"))}</span>
+          <span className="cc-wx-sym" aria-hidden="true">
+            <Suspense fallback={null}>
+              <WeatherSymbol kind={c.kind} night={night} />
+            </Suspense>
           </span>
-          {hasSpan && (
-            <span className="cc-sub">
-              <span aria-hidden="true">
-                {Math.round(span.max)}° / {Math.round(span.min)}°
-              </span>
-              <span className="sr-only">
-                {t("headerWidgets.rangeSr", {
-                  max: Math.round(span.max),
-                  min: Math.round(span.min),
-                })}
-              </span>
+          <span className="cc-text">
+            <span className="cc-label">
+              <span className="cc-wx-temp">{Math.round(c.temp)}°</span> {t(condKey(c.kind, night))}
             </span>
-          )}
-        </span>
-      </button>
+            {hasSpan && (
+              <span className="cc-sub">
+                <span aria-hidden="true">
+                  {Math.round(span.max)}° / {Math.round(span.min)}°
+                </span>
+                <span className="sr-only">
+                  {t("headerWidgets.rangeSr", {
+                    max: Math.round(span.max),
+                    min: Math.round(span.min),
+                  })}
+                </span>
+              </span>
+            )}
+          </span>
+        </button>
+      </TileTip>
     </TileShell>
   )
 }

@@ -2,16 +2,8 @@ import { useEffect, useRef } from "react"
 import { useIsBrave } from "@/hooks/useIsBrave"
 import { useLocale } from "@/hooks/useLocale"
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition"
+import { DICTATION_ERRORS } from "@/lib/dictationErrors"
 import { notify } from "@/lib/notify"
-
-const ERRORS = {
-  "not-allowed": "chat.mic.error.permission",
-  "no-speech": "chat.mic.error.noSpeech",
-  "audio-capture": "chat.mic.error.noMic",
-  network: "chat.mic.error.network",
-  "language-not-supported": "chat.mic.error.lang",
-  "not-supported": "chat.mic.error.unsupported",
-}
 
 /**
  * Anlat'ta sesle yazdırma: sohbet bestecisinin diktesinin (`useComposerDictation`) hüzmesiz
@@ -40,7 +32,7 @@ export function useNarrateDictation({ text, setText }) {
     },
     onError: (code) => {
       if (code === "aborted") return
-      const key = ERRORS[code] ?? "chat.mic.error.unknown"
+      const key = DICTATION_ERRORS[code] ?? "chat.mic.error.unknown"
       // Sessizlik bir hata değil, doğal bir duraklama.
       if (code === "no-speech") notify.info(t(key))
       else notify.error(t(key))

@@ -4,13 +4,15 @@ import { useTheme } from "@/hooks/useTheme"
 import { CATALOG } from "./layout"
 import { baseLook, glassTint, lookPalette, paletteKind, paletteTokens } from "./paletteTokens"
 import { inkOfColors, useBrandInk } from "./useBrandInk"
+import { renkliStops } from "./lib/renkliGradient"
+import { getPalette } from "@/data/palettes"
 import "./lookTone.css"
 
 /**
  * Görünümün tonu — kartın içi hangi temanın token'larıyla çizilir: "Koyu" açık temada da koyu
  * ada (`dark`), "Açık" koyu temada da açık ada (`look-light`; tema varyantı adanın içinde
- * `dark:` sınıflarını işletmez). "Renkli" paletin beyaz yazılı ana renginde düz dolgu: her palette
- * koyu ada, yazı beyaz (`lookTone.css`). Renkliyi kendisi çizen widget'lar (`ownPalette`: radyo,
+ * `dark:` sınıflarını işletmez). "Renkli" paletin beyaz yazıya uydurulmuş degradesi: her palette
+ * koyu ada, yazı beyaz (`lookTone.css`, `lib/renkliGradient`). Renkliyi kendisi çizen widget'lar (`ownPalette`: radyo,
  * Karşılama) tona girmez. Saf: testli.
  */
 export function lookTone(id, look) {
@@ -33,6 +35,14 @@ export function lookMode(look, tone, theme) {
   return theme === "dark" ? "dark" : "light"
 }
 
+/** Renkli degradenin üç rengi, CSS değişkeni olarak (palet başına bir kez hesaplanır). */
+function renkliVars(id) {
+  const swatch = getPalette(id)?.swatch
+  if (!swatch) return null
+  const [a, b, c] = renkliStops(swatch)
+  return { "--renkli-0": a, "--renkli-1": b, "--renkli-2": c }
+}
+
 // Renkli cam ve düz dolgu kuralları yalnız gerektiğinde iner: renk seçmeyenin ilk CSS'i büyümez.
 let ownLook = null
 const loadOwnLook = () =>
@@ -43,8 +53,8 @@ const loadOwnLook = () =>
 /**
  * Kart kabuğunun öznitelikleri (`data-widget-look`, ton sınıfı, palet) ve kartın mürekkebi.
  * Koyu ada paletin koyu temadaki mürekkebini de alsın diye `data-palette` taşır
- * (`.dark[data-palette=…]`). Renkli düz dolgudur: paletin beyaz yazılı ana rengi, düz renk paletinde
- * (`data-palette-kind="solid"`) koyu dolgusu.
+ * (`.dark[data-palette=…]`). Renkli'de degradenin üç rengi `--renkli-0/1/2` (paletin renkleri beyaz
+ * yazıya uydurulmuş, `renkliStops`); düz renk paletinde (`data-palette-kind="solid"`) koyu dolgu.
  * Widget kendi rengini seçtiyse (`<görünüm>:<palet>`) o paletin kartın kipindeki token'ları
  * kabuğa yazılır (camda renk payı `--look-tint`), mürekkep o paletten ölçülür ve döner (`ink`:
  * içerideki `useBrandInk` için, `CardInkContext`). Renk seçilmediyse uygulamanın paleti.
@@ -69,11 +79,13 @@ export function useLookProps(id, look, className) {
     () => (source ? paletteTokens(source, mode, { ink: base !== "palette" }) : null),
     [source, mode, base],
   )
+  const solid = base === "palette" && paletteKind(own ?? palette) === "solid"
+  const renkli = base === "palette" && tone === "dark" && !solid ? renkliVars(own ?? palette) : null
   const style = {
     ...tokens,
+    ...renkli,
     ...(base === "glass" && own ? { "--look-tint": glassTint(light) } : {}),
   }
-  const solid = base === "palette" && paletteKind(own ?? palette) === "solid"
   if (own || solid) loadOwnLook()
   const props = {
     "data-widget-look": base,

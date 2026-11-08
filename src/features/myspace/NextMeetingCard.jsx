@@ -279,7 +279,7 @@ export function NextMeetingCard({ cal, now, className }) {
       aria-busy={cal.status === "loading" ? true : undefined}
     >
       {!(current && cal.status === STATUS.ready) && (
-        <CardTitle icon={Calendar03Icon}>{t("myspace.meeting.title")}</CardTitle>
+        <CardTitle leadingIcon={Calendar03Icon}>{t("myspace.meeting.title")}</CardTitle>
       )}
       {body}
       {nav && (

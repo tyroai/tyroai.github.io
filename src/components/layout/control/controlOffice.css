@@ -46,11 +46,40 @@
 }
 
 /* ── Süre seçenekleri: yan yana kapsüller ──────────────────────────────────────────────── */
+/* Ritim: liste → süre 12 px, süre → bitiş saati 8 px, süre/saat → sonraki grup 12 px. */
 .cc-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.375rem;
-  margin: 0.625rem 0.25rem 0;
+  margin: 0.75rem 0.25rem 0;
+}
+:is(.cc-chips, .cc-until) + .cc-list {
+  margin-top: 0.75rem;
+}
+/* "Saat seç": bitiş saati kapsüllerin altında, etiketiyle tek satır. */
+.cc-until {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.5rem 0.25rem 0;
+  font-size: var(--text-footnote);
+  color: var(--muted-foreground);
+}
+/* Genişlik saatin biçiminden (24 saat · ÖÖ/ÖS): sabit en "11:00 PM"i kesiyordu. */
+.cc-until .cc-input {
+  flex: none;
+  width: auto;
+  min-width: 6.5rem;
+  height: var(--spacing-control-sm, 1.75rem);
+  padding-inline: 0.75rem;
+  border-radius: 999px;
+  font-size: var(--text-footnote);
+  font-variant-numeric: tabular-nums;
+}
+/* Koyu temada saat simgesi de açık renk (yerel seçici koyu çizilir). */
+.dark .cc-until .cc-input {
+  color-scheme: dark;
 }
 .cc-chip {
   height: var(--spacing-control-sm, 1.75rem);
@@ -172,8 +201,12 @@
     height: 2.75rem;
   }
   .cc-area,
-  .cc-dates .cc-input {
+  .cc-dates .cc-input,
+  .cc-until .cc-input {
     font-size: 16px;
+  }
+  .cc-until .cc-input {
+    height: 2.75rem;
   }
 }
 
