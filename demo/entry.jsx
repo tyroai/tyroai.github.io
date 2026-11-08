@@ -18,6 +18,12 @@ try {
   if (!ls.getItem("tyro-tours-v1")) ls.setItem("tyro-tours-v1", JSON.stringify({ off: true, seen: {} }))
   // Dil: seçim yoksa Türkçe (kaynakta giriş sayfası İngilizce açılır; içerik Türkçe olduğu için tutarsız dururdu).
   if (!ls.getItem("tyro-locale-v2")) ls.setItem("tyro-locale-v2", "tr")
+  // Kişi fotoğrafları sonradan eklendi: uygulamanın 7 günlük "fotoğrafı yok" önbelleği eski ziyaretlerden
+  // kalmış olabilir; sürüm damgası yoksa bir kez temizle (yeni ziyaretçide zaten boş).
+  if (!ls.getItem("demo-people-photos-v1")) {
+    ls.removeItem("tyro-nophoto-v1")
+    ls.setItem("demo-people-photos-v1", "1")
+  }
 } catch {
   /* depo yok: rozet sıfır kalır, turlar zaten açılmaz */
 }
