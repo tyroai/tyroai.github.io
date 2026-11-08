@@ -9,9 +9,9 @@ const scene = (name, y = 50, x = 50) => ({ src: `${BASE}${name}.jpg`, pos: `${x}
 const SCENES = {
   sunny: [scene("sunny-day", 55), scene("sunny-night", 30)],
   cloudy: [scene("cloudy-day", 30), scene("cloudy-night", 40)],
-  rain: [scene("rain-day", 55), scene("rain-night", 55)],
-  snow: [scene("snow-day", 35), scene("snow-night", 40)],
-  fog: [scene("fog-day", 50), scene("fog-night", 72)],
+  rain: [scene("rain-day", 50), scene("rain-night", 55)],
+  snow: [scene("snow-day", 60), scene("snow-night", 40)],
+  fog: [scene("fog-day", 45), scene("fog-night", 72)],
 }
 SCENES.storm = SCENES.rain
 

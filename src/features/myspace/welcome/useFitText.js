@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect } from "react"
 
-const MAX = 31
-const MIN = 22
+const MAX = 28
+const MIN = 20
 
 /** Yazının kutuya sığan en büyük boyu (ikili arama, yarım piksel). */
 function fitText(box, text) {
@@ -12,7 +12,9 @@ function fitText(box, text) {
     text.style.fontSize = `${px}px`
     return text.offsetHeight <= room
   }
-  if (fits(MAX)) return
+  // Satır içindeki küre (`OrbToken`) piksel boyunda çizilir: yazıyla aynı oranda ölçeklensin.
+  const done = (px) => text.style.setProperty("--welcome-scale", String(px / MAX))
+  if (fits(MAX)) return done(MAX)
   let lo = MIN
   let hi = MAX
   while (hi - lo > 0.5) {
@@ -21,10 +23,12 @@ function fitText(box, text) {
     else hi = mid
   }
   text.style.fontSize = `${lo}px`
+  done(lo)
 }
 
 /**
- * Yazı kutuya sığsın: 31 → 22 px. Çekmecenin boyu sabit, cümleler dile ve güne göre uzar (Rusça,
+ * Yazı kutuya sığsın: 28 → 20 px (günün okuması ve öneriyle cümle sayısı arttı; ürün sahibi: "biraz
+ * küçültebilirsin ama çok kaotik olmasın"). Çekmecenin boyu sabit, cümleler dile ve güne göre uzar (Rusça,
  * uzun ad, uzun hava cümlesi): sığmayan satır kesilmez, yazı küçülür. Her çizimde ve kutu boy değiştirdiğinde
  * (döndürme, klavye) yeniden ölçer; durum yazmaz.
  */

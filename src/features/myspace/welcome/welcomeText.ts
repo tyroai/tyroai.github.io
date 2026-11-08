@@ -55,3 +55,66 @@ export function splitMinor(value: string): [string, string] {
   if (time) return [time[1], time[2]]
   return [value, ""]
 }
+
+/** Havanın okumasından (`lib/weatherInsight`) çekmecenin kısa önerisi; söylenecek yoksa `null`. */
+export type WeatherTip =
+  | "thunder"
+  | "rain"
+  | "snow"
+  | "rainEnds"
+  | "snowEnds"
+  | "wind"
+  | "freeze"
+  | "cold"
+  | "heat"
+  | "fog"
+  | "clearing"
+  | "fair"
+  | "fairNight"
+
+/**
+ * Kartın uzun cümlesi yerine iki-üç sözlük öneri ("kat kat giyin", "şemsiyeni unutma"): hava kartından
+ * bağımsız, karşılamanın kendi dili. Saat ve ikinci sıcaklık yok — değer zaten "Dışarıda 6°"de.
+ */
+export function weatherTip(
+  w: { id: string; what?: string; night?: boolean } | null,
+): WeatherTip | null {
+  if (!w) return null
+  switch (w.id) {
+    case "thunder":
+      return "thunder"
+    case "soon":
+    case "long":
+      return w.what === "snow" ? "snow" : "rain"
+    case "until":
+      return w.what === "snow" ? "snowEnds" : "rainEnds"
+    case "wind":
+    case "freeze":
+    case "heat":
+    case "fog":
+    case "clearing":
+      return w.id
+    case "drop":
+    case "cold":
+      return "cold"
+    case "fair":
+      return w.night ? "fairNight" : "fair"
+    default:
+      return null
+  }
+}
+
+/** Çekmecede yer kazandıran kısaltmalar (dil başına; Anasayfa'daki cümle uzun kalır). */
+const SHORT: Record<string, [RegExp, string][]> = {
+  tr: [[/\bortalama(nın|sının|sı|ya)?(?=\s)/gu, "ort."]],
+}
+
+/** Günün okumasının parçalarını kısaltır (ürün sahibi: "ortalamanın derken ort. yazabilirsin"). */
+export function shortenParts(parts: readonly TextPart[], locale: string): TextPart[] {
+  const rules = SHORT[String(locale).slice(0, 2)]
+  if (!rules) return [...parts]
+  return parts.map((p) => ({
+    ...p,
+    text: rules.reduce((s, [re, to]) => s.replace(re, to), p.text),
+  }))
+}

@@ -1,4 +1,5 @@
 import { HugeiconsIcon } from "@hugeicons/react"
+import { BrandOrb } from "@/components/brand/BrandOrb"
 import CloudAngledRainIcon from "@hugeicons/core-free-icons/CloudAngledRainIcon"
 import CloudAngledZapIcon from "@hugeicons/core-free-icons/CloudAngledZapIcon"
 import CloudBigRainIcon from "@hugeicons/core-free-icons/CloudBigRainIcon"
@@ -59,6 +60,24 @@ export function WeatherPearl({ kind, night }) {
     </span>
   )
 }
+
+/**
+ * TYRO'nun küresi satırın içinde ("[küre] Tyro … öneriyor"): öneriyi kimin yaptığını pekiştirir. Gerçek
+ * küre (`BrandOrb`, kişinin seçtiği görünüm), etkisiz kutuda; yazı boyuyla ölçeklenir
+ * (`--welcome-scale`, `useFitText`).
+ */
+export function OrbToken() {
+  return (
+    <span aria-hidden="true" inert className="welcome-orbtok">
+      <span className="welcome-orbtok-in">
+        <BrandOrb surface="dashboard" state="idle" mascotState="idle" size={ORB_TOKEN_PX} />
+      </span>
+    </span>
+  )
+}
+// 28 px yazıda 0,66em ≈ 18,5 px: büyük harften (0,73em) bir tık küçük, ortası harfin ortasında —
+// ürün sahibi: "aynı yükseklik olsun sırıtmasın", sonra "çok az bir tık büyük".
+const ORB_TOKEN_PX = 18.5
 
 /** Bugünkü toplantıların sahipleri: üst üste binen, beyaz halkalı, her biri kendi renginde pullar (en çok üç). */
 export function Coins({ people }) {

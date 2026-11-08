@@ -350,11 +350,13 @@ export function MySpacePage({ onOpenChat, onNewChat }) {
       {welcome.open && (
         <WelcomeLazy
           onClose={welcome.close}
-          onNewChat={onNewChat}
           firstName={firstName}
           celebration={celebration}
           weather={weather}
           cal={cal}
+          focus={focus}
+          rangeStart={rangeStart}
+          rangeEnd={rangeEnd}
           now={now}
         />
       )}

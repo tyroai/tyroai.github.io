@@ -61,35 +61,62 @@
   justify-content: space-between;
   padding: calc(env(safe-area-inset-top) + 0.625rem) 1.3125rem 0;
 }
-.welcome-orb-slot {
+/* Sol üstte kişinin avatarı, camın kendisi (ürün sahibi: "avatarı direk cam yap"): 36 px (çanla aynı),
+   dokunma alanı 44 px. Fotoğraf tam boy, üstüne camın ışık kenarı ve hafif parlaklığı biner
+   (`data-over`); fotoğraf yoksa baş harfler beyaz, cam diskin üstünde. */
+.welcome-avatar {
   position: relative;
+  display: grid;
+  place-items: center;
   width: 2.75rem;
   height: 2.75rem;
+  margin-inline-start: -0.25rem;
   border-radius: 9999px;
   transition: transform 120ms ease-out;
 }
-.welcome-orb-slot:has(> .welcome-orb-hit:active) {
+.welcome-avatar-face {
+  position: absolute;
+  inset: 0.25rem;
+  display: grid;
+  place-items: center;
+  width: auto;
+  border-radius: 9999px;
+  object-fit: cover;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+}
+img.welcome-avatar-face {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+/* Fotoğrafın üstündeki cam: dolgu yalnız üst yarıda hafif parlaklık (fotoğraf soluklaşmasın). */
+.welcome-glass[data-over] {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.26), rgb(255 255 255 / 0) 55%);
+}
+.welcome-avatar:active {
   transform: scale(0.94);
 }
-/* Küre ortalanır. Maskotun çiziminde altta gölge payı var: görünen gövde (42 px) kutunun merkezinden
-   2,5 px yukarıda kalıyordu (ölçüldü) — çanla aynı çizgiye iner. Küre görünümü zaten tam merkezde. */
-.welcome-orb-in {
+/* CAM (avatar ve çan): bulanıklık yok — altında ışık süzülüyor, her karede yeniden bulanıklaşırdı
+   (`.claude/rules/performance.md`); cam katmanlarla: yukarıdan aşağı solan dolgu, üstte keskin ışık
+   kenarı, ince beyaz kıyı, altta yansıma ve yumuşak gölge (Apple'ın cam düğmeleri gibi). */
+.welcome-glass {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  pointer-events: none;
-  transform: translate(-50%, calc(-50% + var(--orb-dy, 0px)));
-}
-.welcome-orb-slot[data-orb="mascot"] {
-  --orb-dy: 2.5px;
-}
-.welcome-orb-hit {
-  position: absolute;
-  inset: 0;
+  inset: 0.25rem;
   border-radius: 9999px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.36), rgb(255 255 255 / 0.12));
+  box-shadow:
+    inset 0 1px 0.5px rgb(255 255 255 / 0.8),
+    inset 0 -1px 1px rgb(255 255 255 / 0.28),
+    inset 0 0 0 1px rgb(255 255 255 / 0.22),
+    0 8px 18px -10px rgb(0 0 0 / 0.32);
+  pointer-events: none;
+  transition: background-color 150ms ease;
 }
-/* Cam çan küreden küçük (örnekte 35'e 42): görünen daire 36 px, dokunma alanı 44 px; görünen kenarı
-   sağ kenara, kürenin sol kenara uzaklığı kadar. */
+/* Cam çan: görünen daire 36 px (avatarla aynı), dokunma alanı 44 px; görünen kenarı sağ kenara,
+   avatarınki sol kenara aynı uzaklıkta. */
 .welcome-btn {
   position: relative;
   display: grid;
@@ -101,17 +128,8 @@
   color: #fff;
   transition: transform 120ms ease-out;
 }
-.welcome-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0.25rem;
-  border-radius: 9999px;
-  background: rgb(255 255 255 / 0.22);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.55),
-    inset 0 0 0 1px rgb(255 255 255 / 0.16),
-    0 8px 18px -10px rgb(0 0 0 / 0.3);
-  transition: background-color 150ms ease;
+.welcome-btn > svg {
+  position: relative;
 }
 .welcome-btn:active {
   transform: scale(0.92);
@@ -123,11 +141,11 @@
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.16));
 }
 @media (hover: hover) {
-  .welcome-btn:hover::before {
-    background: rgb(255 255 255 / 0.3);
+  :is(.welcome-btn, .welcome-avatar):hover .welcome-glass {
+    background-color: rgb(255 255 255 / 0.1);
   }
 }
-.welcome-orb-hit:focus-visible,
+.welcome-avatar:focus-visible,
 .welcome-btn:focus-visible,
 .welcome-grip:focus-visible {
   outline: 2px solid rgb(255 255 255 / 0.85);
@@ -149,7 +167,7 @@
    (--welcome-mark); değerin kesri yine koyu tonda ve küçük. Büyük yazı, sıkı satır, eksi harf
    aralığı; cümleler arasında boşluk yok, tek blok okunur. */
 .welcome-text {
-  font-size: 31px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.16;
   letter-spacing: -0.03em;
@@ -169,12 +187,43 @@
 .welcome-nowrap {
   white-space: nowrap;
 }
-/* Kesir küçük ve koyu tonda: saatin dakikası tabanda; derecenin işareti üstte, üst kenarı rakamın
-   üstüyle aynı hizada (ölçüldü: 0,52em'de 1,2 px yukarı taşıyordu). */
+/* Kesir küçük ama değerin renginde (yarısı beyaz yarısı koyu saat tek parça okunmuyordu): saatin
+   dakikası tabanda; derecenin işareti üstte, üst kenarı rakamın üstüyle aynı hizada (ölçüldü: 0,52em'de
+   1,2 px yukarı taşıyordu). */
 .welcome-minor {
-  color: var(--welcome-base);
+  color: inherit;
   font-size: 0.6em;
   letter-spacing: -0.01em;
+}
+/* Öneri ("TYRO 11:30–13:30 odak öneriyor"): cümlenin kendisi dokunulur — aynı yazı, sonda ok;
+   basınca hafif içe çöker. */
+.welcome-suggest {
+  display: inline;
+  padding: 0;
+  border-radius: 0.375rem;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: start;
+  transition: opacity 120ms ease-out;
+}
+.welcome-suggest:active {
+  opacity: 0.7;
+}
+.welcome-suggest:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: 3px;
+}
+.welcome-suggest-go {
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-inline-start: 0.12em;
+  color: var(--welcome-mark);
+  vertical-align: -0.04em;
+}
+.welcome-suggest-go:dir(rtl) {
+  transform: scaleX(-1);
 }
 .welcome-minor[data-deg] {
   margin-inline: 0.02em -0.08em;

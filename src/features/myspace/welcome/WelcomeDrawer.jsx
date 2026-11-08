@@ -5,12 +5,11 @@ import { useNavigate } from "react-router-dom"
 import { motion, useTransform } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import Notification01Icon from "@hugeicons/core-free-icons/Notification01Icon"
-import { BrandOrb } from "@/components/brand/BrandOrb"
 import { joinableMeeting } from "@/components/layout/control/joinModel"
 import { useBackToClose } from "@/hooks/useBackToClose"
 import { useJoinUrl } from "@/hooks/useJoinUrl"
 import { useLocale } from "@/hooks/useLocale"
-import { useOrbStyle } from "@/hooks/useOrbStyle"
+import { useMe } from "@/hooks/useMe"
 import { usePageAccess } from "@/hooks/usePageAccess"
 import { joinInTeams } from "@/lib/teamsJoin"
 import { useFitText } from "./useFitText"
@@ -19,7 +18,7 @@ import { useWelcomeInk } from "./useWelcomeInk"
 import { WelcomeActions } from "./WelcomeActions"
 import { WelcomeBackdrop } from "./WelcomeBackdrop"
 import { WelcomeLines } from "./WelcomeLines"
-import { skyOf } from "./welcomeText"
+import { skyOf, initialsOf } from "./welcomeText"
 import "./welcome.css"
 
 // Header'daki çanı açar (çekmece kapandıktan sonra): Radix tetiği tıklamayla açılır.
@@ -35,15 +34,26 @@ const openBell = () => document.querySelector("[data-bell-trigger]")?.click()
  * Karartı, tutamak, Esc ve Geri de kapatır; düğmeler çekmeceyi kapatıp kendi işini yapar.
  * Kurallar: `docs/features/anasayfa-karsilama.md`.
  */
-export default function WelcomeDrawer({ onClose, onNewChat, ...data }) {
-  const { t } = useLocale()
+/**
+ * Öneriye dokununca: çekmece kapandıktan sonra Anasayfa'daki selamlamanın öneri düğmesi (kartı ve
+ * eylemi orada — odak bloğu ekle, mola …) görünür yapılıp açılır.
+ */
+function openHomeCue() {
+  const cue = document.querySelector(".home-greeting__cue")
+  if (!cue) return
+  cue.scrollIntoView({ block: "center", behavior: "smooth" })
+  cue.click()
+}
+
+export default function WelcomeDrawer({ onClose, ...data }) {
+  const { t, locale } = useLocale()
   const titleId = useId()
   const sheetRef = useRef(null)
   const bodyRef = useRef(null)
   const textRef = useRef(null)
   const after = useRef(null)
   const ink = useWelcomeInk()
-  const orbStyle = useOrbStyle()
+  const me = useMe()
   const navigate = useNavigate()
   const access = usePageAccess()
   // Toplantı 15 dakika içinde başlıyor ya da sürüyorsa kapsülün birincili "Katıl" (Denetim
@@ -117,30 +127,42 @@ export default function WelcomeDrawer({ onClose, onNewChat, ...data }) {
         <div className="welcome-panel">
           <WelcomeBackdrop sky={skyOf(data.weather?.forecast?.current)} />
           <motion.div className="welcome-top" style={{ opacity: chromeOpacity }}>
-            {/* TYRO'nun küresi (yuvasız): dokununca çekmece kapanır, sohbet açılır. Küre kendi
-                düğmesini çizebiliyor: dokunma katmanı onun üstünde, iç içe düğme yok. */}
-            <div className="welcome-orb-slot" data-orb={orbStyle}>
-              <span aria-hidden="true" inert className="welcome-orb-in">
-                <BrandOrb surface="dashboard" state="idle" mascotState="idle" size={42} />
-              </span>
-              <button
-                type="button"
-                className="welcome-orb-hit"
-                aria-label={t("insight.welcome.ask")}
-                onClick={() => then(() => onNewChat?.())}
-              />
-            </div>
+            {/* Kişinin avatarı (kullanıcı menüsündeki fotoğraf ya da baş harfler), camın kendisi: fotoğraf
+                tam boy, üstünde camın ışığı; fotoğraf yoksa baş harfler cam diskte (çanla aynı malzeme).
+                Dokununca çekmece kapanır, Profilim açılır. TYRO'nun küresi öneri satırında. */}
+            <button
+              type="button"
+              className="welcome-avatar"
+              aria-label={t("nav.profile")}
+              onClick={() => then(() => navigate("/profile"))}
+            >
+              {me.photoUrl ? (
+                <img src={me.photoUrl} alt="" className="welcome-avatar-face" />
+              ) : (
+                <span aria-hidden="true" className="welcome-glass welcome-avatar-face">
+                  {initialsOf(me.fullName, locale)}
+                </span>
+              )}
+              {me.photoUrl && <span aria-hidden="true" className="welcome-glass" data-over="" />}
+            </button>
             <button
               type="button"
               className="welcome-btn"
               aria-label={t("bell.title")}
               onClick={() => then(openBell)}
             >
+              <span aria-hidden="true" className="welcome-glass" />
               <HugeiconsIcon icon={Notification01Icon} strokeWidth={1.8} aria-hidden="true" />
             </button>
           </motion.div>
           <div ref={bodyRef} className="welcome-body">
-            <WelcomeLines ref={textRef} progress={progress} titleId={titleId} {...data} />
+            <WelcomeLines
+              ref={textRef}
+              progress={progress}
+              titleId={titleId}
+              onSuggest={() => then(openHomeCue)}
+              {...data}
+            />
           </div>
           <button
             type="button"
