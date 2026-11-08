@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+.vite/
+# Bakımcıya özel sync kuralları (kaynak yolu, kuruma özgü eşleme) — asla commit'lenmez
+scripts/sync.private.mjs
+.sync-tmp/
+.claude/
+# Gerçek ad ve kimlik kodu özetleri: yalnız bakımcıda
+scripts/leak-denylist.json

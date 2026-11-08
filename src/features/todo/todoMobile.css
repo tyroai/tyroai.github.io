@@ -1,0 +1,121 @@
+/* To-Do'nun telefon düzeni (useIsMobile: dar ekran ve yatay telefon): kart (`todoPhoneCard.css`),
+   tek araç satırı, liste, sağ altta ekleme düğmesi. Sınıflar yalnız telefonda çizilen öğelerde; ilk
+   CSS'e Tailwind sınıfı eklememek için burada (sayfanın tembel parçası). */
+
+/* ── Araç satırı ───────────────────────────────────────────────────────── */
+.todo-mbar {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.375rem;
+}
+.todo-mbar-view {
+  display: inline-flex;
+  min-width: 0;
+  flex: 0 1 auto;
+  height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding-inline: 0.875rem 0.625rem;
+  /* Araç çubuğu standardı: çerçevesiz gri kapsül (Yenile ve aramayla aynı dolgu). */
+  background: var(--muted);
+  font-size: var(--text-callout);
+  font-weight: 600;
+  outline: none;
+}
+/* Seçici solda, ikonlar sağa yaslı. */
+.todo-mbar-view + .todo-mbar-icon {
+  margin-inline-start: auto;
+}
+.todo-mbar-icon {
+  display: grid;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 9999px;
+  color: var(--muted-foreground);
+  outline: none;
+  transition: background-color 150ms;
+}
+.todo-mbar-icon:active {
+  background-color: color-mix(in oklch, var(--foreground) 8%, transparent);
+}
+.todo-mbar-icon[aria-pressed="true"] {
+  background-color: color-mix(in oklch, var(--color-brand) 10%, transparent);
+  color: var(--color-brand);
+}
+.todo-mbar-view:focus-visible,
+.todo-mbar-icon:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-brand) 35%, transparent);
+}
+
+/* Dokunmatikte rayın ⋯ menüsü hep görünür: ad ve sayı onun altına girmesin. */
+@media (pointer: coarse) {
+  [data-rail-trailing] {
+    padding-inline-end: 3rem;
+  }
+}
+
+/* Kart ve araç satırı alt alta (yatay telefonda da): kart Self Servis'inkiyle aynı boyda. */
+.todo-mhead {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* ── Ekleme çekmecesi: yazı alanı tam en, seçenekler altta tek satır ───────
+   Seçenekler görünürde 36 px (çekmecede iri durmasın), dokunma payı görünmez ::after ile 44 px.
+   Tailwind'in `pointer-coarse:h-11`ini burada katmansız kural geçer. */
+.todo-add-sheet form {
+  row-gap: 0.25rem;
+  padding: 0.375rem 0.5rem 0.5rem 0.75rem;
+}
+.todo-add-sheet .todo-add-opts {
+  display: flex;
+  flex: 1 1 100%;
+  gap: 0.5rem;
+  padding-inline-start: 1.625rem;
+}
+.todo-add-sheet .todo-add-opts > :is(button, .todo-add-list) {
+  position: relative;
+  height: 2.25rem;
+}
+.todo-add-sheet .todo-add-opts > :is(button, .todo-add-list)::after {
+  content: "";
+  position: absolute;
+  inset: -0.25rem;
+}
+.todo-add-sheet .todo-add-opts > button[aria-pressed] {
+  width: 2.25rem;
+}
+.todo-add-sheet .todo-add-opts > button[type="submit"] {
+  margin-inline-start: auto;
+  padding-inline: 1rem;
+  font-size: 0.8125rem;
+}
+/* Liste çipi: görünen ad küçük; yerel seçici saydam ve üstte (16 px, yakınlaştırma yok). */
+.todo-add-list {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 9rem;
+  align-items: center;
+  gap: 0.25rem;
+  padding-inline: 0.75rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+.todo-add-list:focus-within {
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-brand) 30%, transparent);
+}
+.todo-add-list select {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  opacity: 0;
+  font-size: 16px;
+  cursor: pointer;
+}

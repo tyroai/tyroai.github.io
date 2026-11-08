@@ -1,0 +1,404 @@
+/*
+ * TYROFY DİSK (`RadioDisc`): koyu kart, kenardan taşan dönen CD, altta ses dalgası, istasyon
+ * ve süre (mono yazı). Durunca CD dikleşir ve paletin etiketli plağına döner (`.disc-rest`).
+ * Diskin yeri JS'te ölçülür (`discModel.ts`); burada görünüş, dönüş ve yazı. Sürekli hareketler
+ * (dönüş, canlı çizgi) CSS'te ve yalnız transform: bileştiricide döner, dinlenme kipinde durur.
+ */
+.disc {
+  --r-tile: #fff;
+  --r-edge: transparent;
+  --disc-dim: #8a8a8a;
+  --disc-fg: #c4c4c4;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  /* Hücrenin boyu belli değilse (telefon) kare. */
+  aspect-ratio: 1;
+  container-type: size;
+  color: var(--disc-fg);
+  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  user-select: none;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+.disc-card {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 1.75rem;
+  background: #111;
+  box-shadow: 0 12px 28px -18px rgb(0 0 0 / 0.5);
+}
+/* İnce kenar en üstte: kapak kartı kaplasa da kart kenarı belli. */
+.disc-card::after {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  content: "";
+  pointer-events: none;
+}
+
+/* CD ↔ kapak: kare öğe, yeri ve köşesi `motion`la. */
+.disc-art {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.disc-upright,
+.disc-spin {
+  position: absolute;
+  inset: 0;
+}
+.disc-spin {
+  animation: disc-turn 10s linear infinite paused;
+}
+.disc[data-spin] .disc-spin {
+  animation-play-state: running;
+}
+@keyframes disc-turn {
+  to {
+    transform: rotate(1turn);
+  }
+}
+/* İstasyonun görseli kareyi doldurur; logosuzun baş harfleri disk boyunda. */
+.disc-spin > span {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: calc(var(--disc-side, 250px) * 0.16);
+}
+/* Gökkuşağı yansıması (CD'nin yüzü): ışık yerinde, dönmez. */
+.disc-sheen {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from 210deg,
+    rgb(255 255 255 / 0) 0 6%,
+    rgb(255 120 210 / 0.16) 11%,
+    rgb(110 215 255 / 0.18) 15%,
+    rgb(255 240 140 / 0.12) 19%,
+    rgb(255 255 255 / 0) 25% 56%,
+    rgb(130 255 215 / 0.12) 61%,
+    rgb(175 130 255 / 0.16) 65%,
+    rgb(255 255 255 / 0) 71%
+  );
+}
+/* Şeffaf göbek: koyu delik, parlak iç halka, buzlu plastik, parlak dış halka. */
+.disc-hub {
+  position: absolute;
+  inset: 38%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    #111 0 30%,
+    rgb(255 255 255 / 0.75) 33% 37%,
+    rgb(222 228 238 / 0.3) 40% 88%,
+    rgb(255 255 255 / 0.6) 92% 96%,
+    rgb(255 255 255 / 0) 100%
+  );
+}
+.disc-sheen,
+.disc-hub {
+  transition: opacity 0.3s ease;
+}
+.disc-art[data-rest] :is(.disc-sheen, .disc-hub) {
+  opacity: 0;
+}
+
+/* Dinlenen disk: kanal görseli yerine plak — oluklu siyah yüz, ortada paletin degradesiyle
+   etiket ve mil deliği, üstünde sabit ışık. Kanal logoları çoğu zaman düşük çözünürlüklü; kart
+   ilk bakışta onlarla açılmasın. Çalınca kanalın dönen görseline geçer. */
+.disc-rest {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 30.5%, rgb(0 0 0 / 0.5) 31% 32%, transparent 32.5%),
+    repeating-radial-gradient(circle, #141414 0 1px, #1f1f1f 1px 2.4px);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.disc-rest::before {
+  position: absolute;
+  inset: 31%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #0b0b0b 0 7%, transparent 7.5%),
+    linear-gradient(135deg, var(--brand-from), var(--brand-via), var(--brand-to));
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.25);
+  content: "";
+}
+.disc-rest::after {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 25deg,
+    rgb(255 255 255 / 0) 0 6%,
+    rgb(255 255 255 / 0.08) 12%,
+    rgb(255 255 255 / 0) 20% 55%,
+    rgb(255 255 255 / 0.06) 62%,
+    rgb(255 255 255 / 0) 70%
+  );
+  content: "";
+}
+.disc-art[data-rest] .disc-rest {
+  opacity: 1;
+}
+
+/* Yazı: dalga, tür · yer, ad, süre. Dikeyde altta ortalı; yatay kartta diskin sağında. */
+.disc-info {
+  position: absolute;
+  inset-inline: 14px;
+  bottom: 8cqh;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  transition:
+    filter 0.4s ease,
+    scale 0.4s ease;
+}
+.disc[data-layout="row"] .disc-info {
+  top: 50%;
+  bottom: auto;
+  left: calc(50cqh + 14px);
+  translate: 0 -50%;
+}
+.disc-meta,
+.disc-name {
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.disc-meta {
+  color: var(--disc-dim);
+}
+.disc-name {
+  margin-top: -3px;
+}
+/* İlk açılışta (istasyon seçilmemiş) ad satırı platformun adı. */
+.disc-brand {
+  margin-top: 0;
+  color: #e5e5e5;
+  font-weight: 600;
+}
+.disc-waves {
+  height: 14px;
+  color: #a3a3a3;
+}
+.disc-bar {
+  background: currentColor;
+}
+.disc-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--disc-dim);
+}
+/* Canlı yayın çizgisi: çalarken içinde ışık akar (sonu yok, ilerleme değil). */
+.disc-line {
+  position: relative;
+  width: 19px;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 1px;
+  background: #3d4245;
+}
+.disc-line > span {
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  border-radius: inherit;
+  background: #a3a3a3;
+  transform: translateX(-100%);
+}
+.disc[data-spin] .disc-line > span {
+  animation: disc-live 2.4s ease-in-out infinite;
+}
+@keyframes disc-live {
+  to {
+    transform: translateX(200%);
+  }
+}
+.disc-digits {
+  display: inline-flex;
+  color: var(--disc-fg);
+}
+.disc-digit {
+  position: relative;
+  display: inline-block;
+  width: 1ch;
+  text-align: center;
+}
+.disc-digit > span {
+  display: inline-block;
+}
+
+/* Bütün kart çal/duraklat düğmesi; oklar ve kapaktaki oynat simgesi üstünde. */
+.disc-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.disc-hit:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: -4px;
+}
+.disc-play {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 4;
+  display: grid;
+  width: 30px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(17 17 17 / 0.62);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  scale: 0.8;
+  transition:
+    opacity 0.3s ease,
+    scale 0.3s ease;
+}
+.disc-play svg {
+  width: 44%;
+  height: 44%;
+  translate: 6% 0;
+}
+.disc[data-rest] .disc-play {
+  opacity: 1;
+  scale: 1;
+  transition-delay: 0.2s;
+}
+.disc-step {
+  position: absolute;
+  top: 50%;
+  z-index: 4;
+  display: grid;
+  width: 28px;
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.38);
+  color: #e5e5e5;
+  cursor: pointer;
+  opacity: 0;
+  translate: 0 -50%;
+  transition:
+    opacity 0.2s ease,
+    background-color 0.15s ease;
+}
+.disc-step::after {
+  position: absolute;
+  inset: -8px;
+  content: "";
+}
+.disc-step[data-dir="prev"] {
+  left: 10px;
+}
+.disc-step[data-dir="next"] {
+  right: 10px;
+}
+.disc[data-layout="row"] .disc-step[data-dir="prev"] {
+  left: calc(50cqh + 6px);
+}
+.disc-step svg {
+  width: 16px;
+  height: 16px;
+}
+@media (hover: hover) {
+  .disc:hover .disc-step {
+    opacity: 1;
+  }
+  .disc-step:hover {
+    background: rgb(0 0 0 / 0.55);
+  }
+}
+@media (hover: none) {
+  .disc-step {
+    opacity: 0.75;
+  }
+}
+.disc-step:focus-visible {
+  opacity: 1;
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: 2px;
+}
+
+/* Yükleniyor: diskin yerinde koyu bir daire. Boş ya da hata: ortada kısa yazı. */
+.disc-skel {
+  position: absolute;
+  top: calc(-50cqw - 3px);
+  left: 0;
+  width: 100cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1c1c1f;
+}
+.disc[data-layout="row"] .disc-skel {
+  top: 0;
+  left: calc(-50cqh - 3px);
+  width: 100cqh;
+}
+.disc-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  color: var(--disc-dim);
+  text-align: center;
+}
+.disc-empty p {
+  margin: 0;
+}
+.disc-retry {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.1);
+  color: var(--disc-fg);
+  cursor: pointer;
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disc-spin,
+  .disc-line > span {
+    animation: none;
+  }
+  .disc-info,
+  .disc-play {
+    transition: none;
+  }
+}

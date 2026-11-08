@@ -1,0 +1,96 @@
+/*
+ * Günün özetinin vurgu tonları (`DaySummary` › `TONE`, `--ds-*`); aynı tonu isteyen
+ * başka yer `ds-tones` sınıfını alır (Günün brifingi'nin cümleleri).
+ *
+ * ⚠️ AÇIKLIK SINIRLI, TON VE DOYGUNLUK PALETİN (2026-10-03). Ölçüldü (17 palet ×
+ * 2 tema, `--card` zeminine karşı, renk boyanıp pikselden okunarak): eski
+ * karışım (`72% durak + 28% --foreground`) açık temada en kötü 3,79:1
+ * (ocean-breeze · peach · sunset `via`), koyu temada 2,05:1 (chocolate `from`)
+ * — koyu bir durağı açık mürekkeple az karıştırmak onu koyu zeminde koyu
+ * bırakıyor. Şimdi açıkta oklch açıklığı ≤ 0,5, koyuda ≥ 0,8: iki uçta da
+ * 14 px yarı kalın metin için AA (≥ 4,5:1) — ölçülen en kötüler CLAUDE.md'de.
+ *
+ * ⚠️ Doygunluk tavanı göz için değil gamut için: açıklık sınırlanınca yüksek
+ * doygunluk sRGB dışına taşıp kırpılıyor ve kırpma açıklığı geri değiştiriyor
+ * (gökyüzü kartındaki adın aynı dersi). Koyuda tavan daha düşük: açık ve çok
+ * doygun bir renk koyu zeminde titreşiyor.
+ *
+ * Göreli renk sözdizimini desteklemeyen tarayıcı eski karışıma düşer.
+ */
+@layer components {
+  :is(.day-summary, .ds-tones) {
+    --ds-from: color-mix(in oklch, var(--brand-from) 72%, var(--foreground));
+    --ds-via: color-mix(in oklch, var(--brand-via) 72%, var(--foreground));
+    --ds-to: var(--brand-text);
+  }
+
+  @supports (color: oklch(from red l c h)) {
+    :is(.day-summary, .ds-tones) {
+      --ds-from: oklch(from var(--brand-from) min(l, 0.5) min(c, 0.2) h);
+      --ds-via: oklch(from var(--brand-via) min(l, 0.5) min(c, 0.2) h);
+      --ds-to: oklch(from var(--brand-text) min(l, 0.5) min(c, 0.2) h);
+    }
+
+    .dark :is(.day-summary, .ds-tones) {
+      --ds-from: oklch(from var(--brand-from) max(l, 0.8) min(c, 0.12) h);
+      --ds-via: oklch(from var(--brand-via) max(l, 0.8) min(c, 0.12) h);
+      --ds-to: oklch(from var(--brand-text) max(l, 0.8) min(c, 0.12) h);
+    }
+  }
+}
+
+/* Özetin satırları oturumun ilk açılışında sırayla gelir (`ds-reveal`, `--i`: sıra) — küre
+   konuşuyormuş gibi; azaltılmış harekette hazır. */
+.ds-reveal > li {
+  animation: ds-line-in 0.45s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 120ms);
+}
+@keyframes ds-line-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-reveal > li {
+    animation: none;
+  }
+}
+
+/* Panonun dar kartı sabit boyda: maddeler sığmazsa liste kartın içinde kayar (`BriefBubble`),
+   alttaki kartın altına taşmaz. Altta daha madde varken kenar solar; solma kaydırmaya bağlı
+   (`scroll(self)`): taşma yoksa zaman çizelgesi etkin değil, solma da yok. Desteklemeyen
+   tarayıcıda yalnız kaydırma. Yan pay: kaydıran kutu yatayda da kırpar; nokta hâlesi ve odak
+   halkası kesilmesin. */
+@property --ds-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+.ds-scroll {
+  margin-inline: -0.375rem;
+  padding-inline: 0.375rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - var(--ds-fade)), transparent);
+}
+@media (pointer: fine) {
+  .ds-scroll {
+    overscroll-behavior-y: contain;
+  }
+}
+@supports (animation-timeline: scroll()) {
+  .ds-scroll {
+    animation: ds-fade linear both;
+    animation-timeline: scroll(self);
+  }
+}
+@keyframes ds-fade {
+  0%,
+  90% {
+    --ds-fade: 1rem;
+  }
+  100% {
+    --ds-fade: 0px;
+  }
+}

@@ -1,0 +1,46 @@
+/* To-Do kartı 34–48rem kapta (header'ın geniş penceresi, Pano'nun geniş hücresi, tablette sayfa):
+   sağ üstte durum kutusu (kompakt `TodoKpiBar`), altta tam genişlikte ekleme alanı — hap üç
+   sütunlu sırada sıkışıyordu. Header penceresi tam 34rem ve kök yazı boyu akışkan: kap kırılma
+   noktasının kesirli piksel altında kalabiliyor, o yüzden aralık 33,5rem'den başlar ve bu aralıkta
+   sütunlar, küre, alt satır ve hap burada açıkça kurulur (Tailwind'in kırılmasına bağlı kalmaz).
+   Yatay telefonda (kısa ekran) kartın kendi tek sıralı düzeni kalır. */
+.todo-hero-aside {
+  display: none;
+}
+@media (min-height: 501px) {
+  @container todo (min-width: 33.5rem) and (max-width: 47.99rem) {
+    .todo-hero-greet {
+      --orb: 6rem;
+      grid-template-columns: calc(var(--orb) * 0.8) minmax(0, 1fr) minmax(0, 1.1fr);
+      column-gap: 1rem;
+    }
+    .todo-hero-sub {
+      display: -webkit-box;
+    }
+    .todo-hero-aside {
+      display: block;
+      grid-column: 3;
+      grid-row: 1;
+      align-self: center;
+      min-width: 0;
+    }
+    .todo-hero-pill {
+      display: block;
+      grid-column: 1 / -1;
+      grid-row: 2;
+      margin-top: 0.75rem;
+    }
+    .todo-hero-kpi {
+      display: none;
+    }
+    .todo-hero-grid {
+      grid-template-rows: minmax(0, 1fr);
+    }
+  }
+}
+
+/* Basma tepkisi: satıra dokunduğu an zemin koyulaşır (başlık, onay kutusu, menü; hepsi satırın içinde). */
+[data-task-row]:active {
+  background-color: color-mix(in oklch, var(--foreground) 7%, transparent);
+  transition-duration: 90ms;
+}

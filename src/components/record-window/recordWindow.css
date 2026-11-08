@@ -1,0 +1,366 @@
+/*
+ * KAYIT PENCERESİ kalıbı (ortak) — bir Mac uygulamasında kayıt açılmış gibi: açık gri çerçeve,
+ * üstte ince şerit (kapat · tür · eylemler), içerik beyaz kâğıtta; başlık, tek sayının kartı ve
+ * etiket | değer listesi. Renk yalnız anlam taşıyan yerde. Kalıp: `docs/design-system.md`.
+ * DÜZ CSS, yalnız kalıbı kullanan bileşenin parçasında: ilk yükleme stil bütçesi dolu.
+ */
+
+/* Çizgi ve soluk zemin tonu: çerçevede de kâğıtta da (kâğıt tek başına gömülebilir). */
+.rw,
+.rw-sheet,
+.rw-foot {
+  --rw-line: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --rw-faint: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+}
+.rw {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  background: color-mix(in oklab, var(--foreground) 3%, var(--background));
+  color: var(--foreground);
+}
+
+/* ── Üst şerit ─────────────────────────────────────────────────────────── */
+.rw-bar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.875rem 0.625rem 1.125rem;
+}
+/* Kapat: en sağda yarı saydam yuvarlak (Apple sayfalarının ×'i) — zemin yazıdan türer, iki temada aynı. */
+.rw-close {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 7%, transparent);
+  color: color-mix(in oklab, var(--foreground) 62%, transparent);
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+.rw-close svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.rw-close:active {
+  transform: scale(0.96);
+}
+.rw-bar-title {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--text-callout);
+  font-weight: 700;
+  line-height: var(--text-callout--line-height);
+  color: var(--foreground);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rw-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+}
+
+/* Düğmeler: macOS'un kapsül düğmeleri — beyaz zeminli, ince çizgili; birincil dolu marka renginde. */
+.rw-btn {
+  display: inline-flex;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  background: var(--background);
+  box-shadow:
+    0 0 0 1px var(--rw-line),
+    0 1px 1px rgb(0 0 0 / 0.04);
+  color: var(--foreground);
+  font-size: var(--text-callout);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+.rw-btn svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+.rw-btn--icon {
+  width: 2rem;
+  padding: 0;
+}
+.rw-btn--primary {
+  padding: 0 1rem;
+  background: var(--brand-solid);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 1px 2px rgb(0 0 0 / 0.14);
+  color: var(--brand-on-brand);
+  font-weight: 600;
+}
+@media (hover: hover) {
+  .rw-close:hover {
+    background: color-mix(in oklab, var(--foreground) 12%, transparent);
+    color: var(--foreground);
+  }
+  .rw-btn:hover {
+    background: color-mix(in oklab, var(--foreground) 4%, var(--background));
+  }
+  .rw-btn--primary:hover {
+    background: color-mix(in oklab, var(--brand-solid) 90%, black);
+  }
+}
+.rw-btn:active {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-btn:active {
+    transform: none;
+  }
+}
+.rw-close:focus-visible,
+.rw-btn:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand-text) 45%, transparent);
+  outline-offset: 2px;
+}
+@media (pointer: coarse) {
+  .rw-close,
+  .rw-btn--icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .rw-btn {
+    height: 2.75rem;
+  }
+}
+
+/* ── Kâğıt ──────────────────────────────────────────────────────────────── */
+.rw-scroll {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 0.75rem 0.75rem;
+}
+.rw-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 1.75rem 1.75rem;
+  border-radius: 1rem;
+  background: var(--background);
+  box-shadow:
+    0 0 0 1px var(--rw-line),
+    0 1px 2px rgb(0 0 0 / 0.04);
+}
+
+/* Telefon çekmecesinde kâğıt çerçevesiz: kenarı ve köşeyi çekmece çiziyor, iç boşluğu da onun. */
+.rw-sheet.rw-sheet--flat {
+  gap: 1.25rem;
+  padding: 0.25rem 0 1rem;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+/* Dar ekranda başlığın simgesi küçük (yazıya yer), sahibin adı ve unvanı alt alta ve sarar: uzun
+   ad kesilmez, unvan kaybolmaz. */
+.rw-sheet--flat .rw-head {
+  gap: 0.75rem;
+}
+.rw-sheet--flat .rw-head-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+}
+.rw-sheet--flat .rw-head-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.rw-sheet--flat .rw-owner {
+  display: grid;
+  align-items: start;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.125rem 0.5rem;
+}
+.rw-sheet--flat .rw-owner-avatar {
+  grid-row: span 2;
+}
+.rw-sheet--flat .rw-owner-name,
+.rw-sheet--flat .rw-owner-role {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.rw-sheet--flat .rw-owner-role {
+  padding-inline-start: 0;
+  border-inline-start: 0;
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+}
+/* İpucu (üstüne gelme) yok: uzun düz etiket (yer, şirket) kesilmez, sarar. */
+.rw-sheet--flat .rw-tag[data-plain] {
+  height: auto;
+  min-height: 1.375rem;
+  align-items: flex-start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.rw-sheet--flat .rw-tag[data-plain] svg {
+  margin-top: 0.1875rem;
+}
+/* Şeridin eylemleri telefonda çekmecenin alt şeridinde: aynı kapsüller, yazılılar eşit pay. */
+.rw-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.rw-foot .rw-btn:not(.rw-btn--icon) {
+  min-width: 0;
+  flex: 1;
+}
+
+/* ── Başlık ─────────────────────────────────────────────────────────────── */
+.rw-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.rw-head-icon {
+  --rw-icon: var(--brand-text);
+  --rw-icon-ink: var(--brand-ink);
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 0.875rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--rw-icon) 16%, transparent),
+    color-mix(in oklab, var(--rw-icon) 5%, transparent)
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--rw-icon) 14%, transparent);
+  color: var(--rw-icon-ink);
+}
+.rw-head-icon[data-tone="success"] {
+  --rw-icon: var(--success);
+  --rw-icon-ink: var(--success-ink);
+}
+.rw-head-icon[data-tone="warning"] {
+  --rw-icon: var(--warning);
+  --rw-icon-ink: var(--warning-ink);
+}
+.rw-head-icon[data-tone="danger"] {
+  --rw-icon: var(--danger);
+  --rw-icon-ink: var(--danger-ink);
+}
+.rw-head-icon[data-tone="neutral"] {
+  --rw-icon: var(--foreground);
+  --rw-icon-ink: var(--muted-foreground);
+}
+.rw-head-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.rw-head-text {
+  min-width: 0;
+  flex: 1;
+}
+.rw-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.625rem;
+  overflow-wrap: anywhere;
+}
+.rw-sub {
+  margin-top: 0.25rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  overflow-wrap: anywhere;
+}
+.rw-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 0.625rem;
+  margin-top: 0.875rem;
+}
+.rw-tag {
+  display: inline-flex;
+  height: 1.375rem;
+  max-width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 0.3125rem;
+  padding: 0 0.5rem;
+  border-radius: 0.375rem;
+  background: var(--rw-faint);
+  color: color-mix(in oklab, var(--foreground) 72%, transparent);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.rw-tag-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rw-tag[data-plain] {
+  padding: 0;
+  background: none;
+  color: var(--muted-foreground);
+}
+.rw-tag svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.rw-tag[data-tone="brand"] {
+  background: color-mix(in oklab, var(--brand-text) 12%, transparent);
+  color: var(--brand-ink);
+}
+/* Yeşil yazı açık zeminde AA'nın sınırında: %14'te 4,35:1 kalıyordu, %10'da 4,6:1. */
+.rw-tag[data-tone="success"] {
+  background: color-mix(in oklab, var(--success) 10%, transparent);
+  color: var(--success-ink);
+}
+.rw-tag[data-tone="warning"] {
+  background: color-mix(in oklab, var(--warning) 14%, transparent);
+  color: var(--warning-ink);
+}
+.rw-tag[data-tone="danger"] {
+  background: color-mix(in oklab, var(--danger) 12%, transparent);
+  color: var(--danger-ink);
+}
+.rw-owner {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: var(--text-callout);
+  line-height: var(--text-callout--line-height);
+}
+.rw-owner-avatar {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.rw-owner-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.rw-owner-role {
+  min-width: 0;
+  overflow: hidden;
+  padding-inline-start: 0.5rem;
+  border-inline-start: 1px solid var(--rw-line);
+  color: var(--muted-foreground);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

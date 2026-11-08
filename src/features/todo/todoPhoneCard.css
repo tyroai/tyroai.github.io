@@ -1,0 +1,228 @@
+/* To-Do'nun telefon kartı (`TodoPhoneCard`): Self Servis'in telefon kartıyla AYNI kabuk, boy ve
+   satır ritmi (ürün sahibi: "eşit standart"). Değerler `features/selfservice/header/selfHero.css`
+   ve `heroStyles.js`ten bire bir: kart 1rem pay, 1,75rem köşe, markanın renginde gölge; satırlar
+   0,5rem aralıkla — kimlik 3rem, bilgi 0,8125rem · 1,375, cam şerit 3rem — toplam 161,88 px.
+   Satır boyları sabit, içerik tek satıra iner: kart yükleme, sonuç ve hata arasında boy değiştirmez.
+   Yeni stiller Tailwind sınıfı olarak değil burada (sayfanın tembel parçası): ilk CSS büyümez.
+   Tablo ve gerekçe: docs/design-tokens.md › Gradyan kart boyu. */
+.todo-pcard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  border-radius: 1.75rem;
+  color: var(--hero-ink);
+  box-shadow: 0 18px 40px -24px var(--brand-via);
+}
+.todo-pcard-btn {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 0.5rem;
+  padding: 1rem;
+  text-align: start;
+  outline: none;
+  border-radius: inherit;
+}
+.todo-pcard-btn:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in oklch, white 75%, transparent);
+}
+.todo-pcard-btn:active {
+  background-color: color-mix(in oklch, black 8%, transparent);
+}
+
+/* ── Kimlik satırı: maskot · günün cümlesi · yüzde ─────────────────────── */
+.todo-pcard-id {
+  display: grid;
+  min-width: 0;
+  min-height: 3rem;
+  grid-template-columns: 3rem minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.875rem;
+}
+.todo-pcard-orb {
+  pointer-events: none;
+}
+.todo-pcard-text {
+  display: block;
+  min-width: 0;
+}
+.todo-pcard-title,
+.todo-pcard-sub {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todo-pcard-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+/* Cümle satıra sığmıyorsa (`useTitleFit`) bir kademe küçük: sayı kesilmesin. */
+.todo-pcard-title[data-fit="sm"] {
+  font-size: 1rem;
+}
+.todo-pcard-sub {
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.todo-pcard-sub:empty {
+  display: none;
+}
+/* Halka düz kart üstünde: gradyanın açık ucunda küçük rakam okunmuyordu (tepsinin kuralı). */
+.todo-pcard-ring {
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  background: var(--card);
+  color: var(--card-foreground);
+  padding: 0.1875rem;
+  box-shadow: 0 6px 16px -10px rgb(0 0 0 / 0.5);
+}
+.todo-pcard-skel-text {
+  display: grid;
+  gap: 0.5rem;
+}
+.todo-pcard-skel {
+  display: block;
+  height: 0.875rem;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.25);
+}
+.todo-pcard-skel-cap {
+  height: 0.625rem;
+  background: rgb(255 255 255 / 0.2);
+}
+
+/* ── Bilgi satırı: sıradaki iş (Self Servis'in bilgi çipleri gibi: ikon + yazı). Tarih yok: telefonda
+   saat zaten üstte (ürün sahibi). Satır boşken de boyunu korur: kart Self Servis'inkiyle eşit kalsın. ── */
+.todo-pcard-meta {
+  display: grid;
+  min-width: 0;
+  min-height: 1.375em;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  font-size: 0.8125rem;
+  line-height: 1.375;
+  color: color-mix(in oklch, var(--hero-ink) 90%, transparent);
+}
+.todo-pcard-chip {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.375rem;
+}
+.todo-pcard-chip > svg {
+  flex-shrink: 0;
+  width: 0.875rem;
+  height: 0.875rem;
+  color: color-mix(in oklch, var(--hero-ink) 75%, transparent);
+}
+.todo-pcard-chip > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todo-pcard-meta-skel {
+  display: flex;
+  grid-column: 1 / -1;
+  height: 1.375em;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ── Cam şerit: dört durum, eşit hücre (Self Servis'in kişi şeridi) ─────────
+   Zemin ve halka `FROST_BASE`in aynısı: beyaz mürekkepte markanın koyulaşmış tonu, koyu
+   mürekkepte yarı saydam beyaz. */
+.todo-pcard-stats {
+  display: grid;
+  overflow: hidden;
+  grid-template-columns: repeat(4, minmax(0, auto));
+  border-radius: 1rem;
+  background: color-mix(
+    in oklch,
+    color-mix(in oklch, var(--brand-from), black 40%),
+    transparent 55%
+  );
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.3);
+  backdrop-filter: blur(4px);
+}
+.todo-pcard[data-ink="dark"] .todo-pcard-stats {
+  background: rgb(255 255 255 / 0.45);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.6);
+}
+.todo-pcard-cell {
+  display: flex;
+  min-width: 0;
+  min-height: 3rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  padding: 0.375rem 0.25rem;
+  text-align: center;
+}
+.todo-pcard-cell + .todo-pcard-cell {
+  border-inline-start: 1px solid rgb(255 255 255 / 0.25);
+}
+.todo-pcard[data-ink="dark"] .todo-pcard-cell + .todo-pcard-cell {
+  border-inline-start-color: rgb(0 0 0 / 0.1);
+}
+.todo-pcard-value {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+.todo-pcard-cap {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: color-mix(in oklch, var(--hero-ink) 82%, transparent);
+}
+
+/* ── Geniş kap (≥ 40rem): kenar payı Self Servis'inkiyle 1,25rem ─────────── */
+@container todo (min-width: 40rem) {
+  .todo-pcard-btn {
+    padding-inline: 1.25rem;
+  }
+}
+
+/* ── Kısa ekran (yatay telefon): kartın üst-alt payı 0,75rem; kap genişse tek sıra —
+   solda kimlik ve bilgi, sağda şerit (Self Servis'in `short` düzeni). Kimlik 3rem + 0,125rem
+   + bilgi 1,375 = 67,88 px: kart 91,88. ─────────────────────────────────── */
+@media (max-height: 500px) {
+  .todo-pcard-btn {
+    padding-block: 0.75rem;
+  }
+  @container todo (min-width: 40rem) {
+    .todo-pcard-btn {
+      grid-template-columns: minmax(0, 1.185fr) minmax(0, 1fr);
+      align-items: center;
+      column-gap: 0.875rem;
+      row-gap: 0.125rem;
+    }
+    .todo-pcard-id {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .todo-pcard-meta {
+      grid-column: 1;
+      grid-row: 2;
+      /* Bilgi satırı maskotun yanındaki metinle aynı hizada (3rem + 0,875rem). */
+      padding-inline-start: 3.875rem;
+    }
+    .todo-pcard-stats {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+}

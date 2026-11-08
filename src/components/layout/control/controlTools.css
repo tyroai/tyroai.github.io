@@ -1,0 +1,227 @@
+/* Denetim Merkezi'nin araç kutucukları (`control.css`ın devamı): Tyrofy, kısayollar,
+   toplantıya katıl, hava, iki kur, yazma alanları. Panelin tembel parçasıyla iner. */
+
+/* ── Tyrofy (iki satır): yüzü plaklı disk (`features/widgets/radio/disc/DiscTile`, tembel);
+   inene kadar aynı koyu zemin, basılı tutunca öteki kutucuklar gibi küçülür. ─────────────── */
+.cc-disc-skel {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: #111;
+}
+.cc-tile:has(.disc-hit:active) {
+  transform: scale(0.97);
+}
+
+/* ── Kısayollar (tam genişlik şerit) ─────────────────────────────────────── */
+.cc-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-content: center;
+  gap: 0.125rem;
+  width: 100%;
+  height: 100%;
+  padding: 0.25rem;
+}
+.cc-sc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.25rem 0.125rem;
+  border-radius: 0.75rem;
+  outline: none;
+  transition:
+    background-color 0.15s ease,
+    transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.cc-sc .cc-ic {
+  width: 2rem;
+  height: 2rem;
+}
+.cc-sc .cc-ic svg {
+  width: 1rem;
+  height: 1rem;
+}
+.cc-sc-label {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  font-weight: 500;
+  color: color-mix(in oklab, var(--muted-foreground) 72%, var(--foreground));
+}
+@media (hover: hover) {
+  .cc-sc:hover {
+    background: var(--cc-soft-hover);
+  }
+}
+.cc-sc:active {
+  transform: scale(0.95);
+}
+.cc-sc:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+
+/* ── Toplantıya katıl (ızgaranın üstünde, yalnız gerekince) ──────────────── */
+.cc-join {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: var(--cc-gap);
+  padding: 0.625rem 0.625rem 0.625rem 0.75rem;
+  border-radius: var(--cc-r);
+  background: color-mix(in oklab, var(--brand-from) 12%, var(--popover));
+}
+.cc-join .cc-ic {
+  background-image: linear-gradient(135deg, var(--brand-from), var(--brand-via), var(--brand-to));
+  color: var(--brand-on-ramp);
+}
+.cc-join .cc-text {
+  flex: 1;
+}
+
+/* ── Hava: kutucuğun zemini kartın göğü (`.wxd-sky` değişkenleri; gök inene kadar mavi) ──── */
+.cc-tile.cc-wx {
+  background-image: linear-gradient(
+    160deg,
+    var(--sky-top, #12669b),
+    color-mix(in oklab, var(--sky-top, #12669b) 55%, var(--sky-middle, #369dde))
+  );
+  color: #fff;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+}
+@media (hover: hover) {
+  .cc-tile.cc-wx:has(.cc-hit:hover) {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.08), rgb(255 255 255 / 0.08)),
+      linear-gradient(
+        160deg,
+        var(--sky-top, #12669b),
+        color-mix(in oklab, var(--sky-top, #12669b) 55%, var(--sky-middle, #369dde))
+      );
+  }
+}
+.cc-wx .cc-sub {
+  color: rgb(255 255 255 / 0.86);
+}
+.cc-wx-sym {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  transform: scale(1.35);
+}
+.cc-wx-temp {
+  font-size: var(--text-card-title);
+  font-weight: 600;
+}
+
+/* ── Piyasa iki kurla: iki satır değer ───────────────────────────────────── */
+.cc-market2 {
+  gap: 0.125rem;
+}
+.cc-market2 .cc-sub {
+  font-size: var(--text-callout);
+  color: var(--foreground);
+}
+
+/* ── Yazma alanları (hızlı görev, bağlantı ekle) ─────────────────────────── */
+.cc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.cc-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cc-input {
+  flex: 1;
+  min-width: 0;
+  height: var(--spacing-control);
+  padding-inline: 0.875rem;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  background: var(--cc-soft);
+  color: var(--foreground);
+  font-size: var(--text-body);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+/* Formun doğrudan çocuğu (ad alanı) sütunda büyüyüp kısalmasın: boyu sabit. */
+.cc-form > .cc-input {
+  flex: none;
+}
+.cc-input::placeholder {
+  color: var(--muted-foreground);
+}
+.cc-input:focus-visible {
+  border-color: color-mix(in oklab, var(--brand-text) 45%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-text) 16%, transparent);
+}
+.cc-input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+.cc-error {
+  margin: 0 0.25rem;
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  color: var(--danger-ink);
+}
+.cc-done {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0 0.25rem;
+  font-size: var(--text-footnote);
+}
+.cc-done li {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+}
+.cc-done svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex: none;
+  color: var(--brand-text);
+}
+.cc-row-sub {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--text-footnote);
+  color: color-mix(in oklab, var(--muted-foreground) 72%, var(--foreground));
+}
+.cc-pill:disabled {
+  opacity: 0.6;
+}
+
+/* Dokunmatikte yazma alanı 16 px (iOS yakınlaşmasın) ve 44 px boy. */
+@media (pointer: coarse) {
+  .cc-input {
+    height: 2.75rem;
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-sc {
+    transition: none;
+  }
+  .cc-sc:active {
+    transform: none;
+  }
+}

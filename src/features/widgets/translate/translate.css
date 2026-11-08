@@ -1,0 +1,346 @@
+/* Çevir kartı (TranslateWidget). Renkler temanın değişkenlerinden: kartın görünümü (Açık · Koyu ·
+   Cam · Renkli) onları yeniden tanımlar. Sonuç alanı kalan yeri alır ve gerekirse kayar. Büyük
+   kartta iki bölme: solda metin ve diller, sağda çeviri (çeviri sitelerindeki gibi). */
+.tw-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+  margin-top: 0.625rem;
+}
+
+/* Dar kartın kipleri: çevirince metin kutusu tek satırlık özete iner, Çevir yerine Kopyala, sonuç
+   kalan yerin tamamını alır; düzenlerken (eski sonuç varsa) sonuç gizlenir. */
+.tw-body[data-mode="result"] .tw-input,
+.tw-body[data-mode="result"] .tw-go,
+.tw-body[data-mode="result"] .tw-head,
+.tw-body[data-mode="edit"][data-result] .tw-result {
+  display: none;
+}
+.tw-source {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  height: 2.25rem;
+  padding-inline: 0.75rem 0.625rem;
+  border-radius: 0.875rem;
+  background: color-mix(in oklab, var(--muted) 85%, transparent);
+  color: color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground));
+  font-size: 0.8125rem;
+  text-align: start;
+  transition: background-color 150ms ease;
+}
+@media (hover: hover) {
+  .tw-source:hover {
+    background: var(--accent);
+  }
+}
+.tw-source-lang {
+  flex: none;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.tw-source-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tw-source svg {
+  flex: none;
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+.tw-bar .tw-copy {
+  align-self: center;
+  margin-inline-start: auto;
+}
+.tw-body[data-mode="result"] .tw-text {
+  font-size: 0.9375rem;
+}
+
+@container widget (min-width: 40rem) {
+  .tw-body .tw-source,
+  .tw-bar .tw-copy {
+    display: none;
+  }
+  .tw-body[data-mode] .tw-input {
+    display: flex;
+  }
+  .tw-body[data-mode] .tw-go {
+    display: inline-flex;
+  }
+  .tw-body[data-mode] .tw-head {
+    display: flex;
+  }
+  .tw-body[data-mode][data-result] .tw-result {
+    display: flex;
+  }
+  .tw-body[data-mode="result"] .tw-text {
+    font-size: 0.875rem;
+  }
+  .tw-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: 0.75rem;
+  }
+  .tw-input {
+    display: flex;
+  }
+  .tw-input textarea {
+    max-height: none;
+  }
+  .tw-bar {
+    grid-row: 2;
+  }
+  .tw-result {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    min-height: 0;
+    padding: 0.625rem 0.875rem;
+    border-radius: 1rem;
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+}
+.tw-result {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.tw-input {
+  position: relative;
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--muted) 85%, transparent);
+  transition: box-shadow 150ms ease;
+}
+.tw-input:focus-within {
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--brand-text, var(--foreground)) 40%, transparent);
+}
+.tw-input textarea {
+  display: block;
+  width: 100%;
+  min-height: 4.5rem;
+  max-height: 9rem;
+  padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  resize: none;
+  outline: none;
+  field-sizing: content;
+}
+.tw-input textarea::placeholder {
+  color: var(--muted-foreground);
+}
+/* Köşedeki düğme: boşken Yapıştır, yazı varken temizle. */
+.tw-corner {
+  position: absolute;
+  top: 0.375rem;
+  inset-inline-end: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  color: var(--muted-foreground);
+  font-size: 0.71875rem;
+  font-weight: 500;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+.tw-corner::before {
+  content: "";
+  position: absolute;
+  inset: -0.5rem;
+}
+.tw-corner svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+.tw-paste {
+  padding-inline: 0.5rem 0.625rem;
+  background: var(--background);
+  box-shadow: 0 0 0 1px var(--border);
+  color: var(--foreground);
+}
+@media (hover: hover) {
+  .tw-corner:hover {
+    background: var(--accent);
+    color: var(--foreground);
+  }
+}
+
+/* Hedef diller ve Çevir düğmesi tek sırada; dar kartta düğme alta iner. */
+.tw-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.tw-langs {
+  display: inline-flex;
+  gap: 0.125rem;
+  padding: 0.1875rem;
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--muted) 85%, transparent);
+}
+.tw-lang {
+  position: relative;
+  min-width: 2.25rem;
+  height: 1.75rem;
+  padding-inline: 0.5rem;
+  border-radius: 9999px;
+  /* Gri zeminde küçük yazı: ikincil ton bir kademe koyu (AA). */
+  color: color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground));
+  font-size: 0.71875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease;
+}
+.tw-lang::before {
+  content: "";
+  position: absolute;
+  inset: -0.25rem 0;
+}
+.tw-lang[aria-checked="true"] {
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 1px 2px rgb(0 0 0 / 0.08);
+}
+.tw-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 2.125rem;
+  padding-inline: 0.875rem 0.625rem;
+  border-radius: 9999px;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    opacity 150ms ease,
+    transform 120ms ease-out;
+}
+.tw-go:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.tw-go:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.tw-go svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+.tw-source:focus-visible,
+.tw-lang:focus-visible,
+.tw-go:focus-visible,
+.tw-corner:focus-visible,
+.tw-chip:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text, var(--foreground)) 45%, transparent);
+  outline-offset: 2px;
+}
+
+/* Sonuç. */
+.tw-out {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-height: 0;
+}
+.tw-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.tw-pair {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.25rem;
+  overflow: hidden;
+  font-size: 0.71875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+.tw-pair svg {
+  flex: none;
+  width: 0.8125rem;
+  height: 0.8125rem;
+}
+.tw-chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.25rem;
+  height: 1.75rem;
+  padding-inline: 0.625rem;
+  border-radius: 9999px;
+  background: var(--background);
+  box-shadow: 0 0 0 1px var(--border);
+  color: var(--foreground);
+  font-size: 0.71875rem;
+  font-weight: 500;
+}
+.tw-chip svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.tw-text {
+  min-height: 0;
+  overflow-y: auto;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overscroll-behavior: contain;
+}
+.tw-note {
+  font-size: 0.71875rem;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+.tw-working {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+.tw-working svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+  animation: tw-spin 0.9s linear infinite;
+}
+@keyframes tw-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tw-working svg {
+    animation: none;
+  }
+}

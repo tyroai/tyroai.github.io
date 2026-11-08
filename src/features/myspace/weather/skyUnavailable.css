@@ -1,0 +1,66 @@
+/* Hava alınamadığında kartın ortası (`SkyUnavailable`). Katmansız: `skyCard.css` katmanının
+   okuma alanı kurallarını (dar en, alt boşluk) bilerek ezer. */
+.sky-weather[data-state="error"] .sky-weather__unavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 84%;
+  bottom: 22px;
+}
+.sky-weather__unavailable-text {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+  text-shadow:
+    0 1px 3px rgb(12 40 60 / 0.55),
+    0 0 12px rgb(12 40 60 / 0.3);
+}
+/* Okuma alanı tıklamayı kapatıyor (`__main`, skyCard.css): düğme kendisi açar. */
+.sky-weather__retry {
+  position: relative;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.5);
+  background: rgb(10 40 64 / 0.32);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: background-color 0.2s;
+}
+@media (hover: hover) {
+  .sky-weather__retry:hover {
+    background: rgb(10 40 64 / 0.48);
+  }
+}
+.sky-weather__retry:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.sky-weather__retry svg {
+  width: 14px;
+  height: 14px;
+}
+/* Dokunmatikte görünmez pay: 44 px vuruş alanı. */
+@media (pointer: coarse) {
+  .sky-weather__retry::after {
+    content: "";
+    position: absolute;
+    inset: -7px -2px;
+  }
+}
+/* Yer adı yokken saatin ayırıcısı boşta kalır. */
+.sky-weather[data-state="error"] .sky-weather__clock {
+  margin-left: 0;
+  padding-left: 0;
+  border-left: 0;
+}

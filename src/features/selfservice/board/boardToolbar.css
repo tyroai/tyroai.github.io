@@ -1,0 +1,43 @@
+/* Self Servis araç çubuğu (`BoardToolbar`) — tembel CSS: geniş kapta arama sağda sabit genişlikte
+   durur, büyümez; durum çipleri solda, araçlar sağa toplanır. Darda Tailwind'in `flex-1`i kalır:
+   arama alt satırın kalan enini doldurur. */
+@container ss (min-width: 64rem) {
+  .ss-search {
+    flex: 0 1 16rem;
+  }
+}
+
+/* Açılan arama (`ExpandingSearch`): büyüteçten sağa doğru açılır gibi belirir — kırpma alanı simge
+   boyundan kutunun tamamına. Bir kerelik; hareketi azalt tercihinde yok. */
+@keyframes ss-search-open {
+  from {
+    clip-path: inset(0 0 0 calc(100% - 2.25rem) round 999px);
+    opacity: 0.6;
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 999px);
+    opacity: 1;
+  }
+}
+@keyframes ss-search-open-rtl {
+  from {
+    clip-path: inset(0 calc(100% - 2.25rem) 0 0 round 999px);
+    opacity: 0.6;
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 999px);
+    opacity: 1;
+  }
+}
+.ss-search-open {
+  animation: ss-search-open 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+[dir="rtl"] .ss-search-open {
+  animation-name: ss-search-open-rtl;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ss-search-open,
+  [dir="rtl"] .ss-search-open {
+    animation: none;
+  }
+}

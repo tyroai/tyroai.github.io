@@ -1,0 +1,306 @@
+/*
+ * Takvimin açılır yüzeyleri: ayrıntı popover'ı ve çekmecesi, "Yeni" menüsü, tatil listesi.
+ * Portalda çizilirler (sayfanın dışında): renk ve çizgi değişkenleri `calendar.css`te üç kökte birden tanımlı.
+ */
+
+/* ── Açılır yüzeyler: ayrıntı, "Yeni", tatil listesi ─────────────────────────────────────────── */
+.cal-pop {
+  width: min(23.75rem, calc(100vw - 1.5rem));
+  max-height: min(var(--radix-popover-content-available-height), 36rem);
+  padding: 0;
+  gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 1rem;
+  font-size: 0.8125rem;
+}
+.cal-pop-detail {
+  width: min(23.75rem, calc(100vw - 1.5rem));
+}
+/* Yeni menüsü geniş: Anlat'ın örnek cümleleri ve yazılan cümle kesilmeden okunsun ("Anlat: yarın 14:00
+   Ahmet ile bütçe toplantısı"). Sağ kenarı Yeni düğmesinde, sola doğru açılır (`align="end"`). Yüzey
+   (buzlu cam + gölge) ve seçenek satırları Self Servis'le ortak: `common/new-menu/newMenu.css`. */
+.cal-pop-new {
+  width: min(30rem, calc(100vw - 1.5rem));
+}
+.cal-menu {
+  width: auto;
+  min-width: 12rem;
+}
+/* "+N" katman listesi: satırdaki çiplerin aynısı, alt alta; açık katmanın sağında ✓. */
+.cal-pop-layers {
+  width: min(16rem, calc(100vw - 1.5rem));
+}
+.cal-layer-menu {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+/* Listede satır: zeminsiz, açık olanı ✓ söyler. */
+.cal-layer-menu .cal-layer {
+  flex: 1;
+  min-height: var(--spacing-control);
+  background: transparent;
+}
+.cal-layer-tick {
+  margin-inline-start: auto;
+  color: var(--cal-mute);
+}
+.cal-sheet-body {
+  padding-bottom: 0.5rem;
+}
+.cal-d {
+  padding: 1rem;
+}
+.cal-d-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.cal-d-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  background: var(--t-bg);
+  color: var(--t-ink);
+}
+.cal-d-titles {
+  min-width: 0;
+}
+.cal-d-titles h3 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.cal-d-titles p {
+  margin: 0.125rem 0 0;
+  color: var(--cal-mute);
+}
+.cal-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 0.75rem;
+}
+.cal-d-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0.375rem 0;
+  color: color-mix(in oklch, var(--foreground) 85%, transparent);
+}
+.cal-d-row .cal-ic {
+  margin-top: 0.1875rem;
+  color: var(--cal-mute);
+}
+.cal-d-note {
+  margin: 0.625rem 0 0;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.75rem;
+  background: color-mix(in oklch, var(--foreground) 5%, transparent);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.cal-d-note[data-tone] {
+  background: var(--t-bg);
+  color: var(--t-ink);
+}
+.cal-d-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+}
+.cal-new {
+  padding: 0.5rem;
+}
+.cal-new-when {
+  margin: 0.375rem 0.5rem 0.5rem;
+  color: var(--cal-mute);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.cal-hol {
+  padding: 1rem;
+}
+.cal-hol h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.cal-hol ul {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cal-hol li {
+  display: grid;
+  gap: 0.0625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.75rem;
+}
+.cal-hol li:nth-child(odd) {
+  background: color-mix(in oklch, var(--foreground) 3.5%, transparent);
+}
+.cal-hol li span {
+  color: var(--cal-mute);
+  font-size: 0.75rem;
+}
+
+/* ── Takvim özeti balonu: satırın üstüne gelince açılan kart (telefonda satırın altında açılır) ── */
+.cal-pop-tip {
+  width: min(20rem, calc(100vw - 1.5rem));
+}
+.cal-tip {
+  display: grid;
+}
+.cal-tip-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+}
+.cal-tip-head .cal-stat-ic {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+}
+/* Kartın başı satırdan büyük: simge de (satırda 16 px). */
+.cal-tip-head .cal-stat-ic .cal-ic {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.cal-tip-titles {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+.cal-tip-titles strong {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.cal-tip-titles span {
+  color: var(--cal-mute);
+  font-size: 0.75rem;
+}
+.cal-tip-intro {
+  margin: 0;
+  padding: 0 1rem 0.875rem;
+  color: color-mix(in oklch, var(--foreground) 85%, transparent);
+  line-height: 1.45;
+}
+.cal-tip-list {
+  display: grid;
+  gap: 0.125rem;
+  margin: 0;
+  padding: 0.375rem 0.5rem;
+  border-top: 1px solid var(--cal-line);
+  list-style: none;
+}
+/* Satır: solda kartın tonunda ince şerit (ajanda kartlarındaki gibi), tıklanabilirse sağda ok. */
+.cal-tip-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  padding-inline-start: 1rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+.cal-tip-item::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.5rem;
+  inset-inline-start: 0.375rem;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--t-dot);
+}
+button.cal-tip-item {
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+@media (hover: hover) {
+  button.cal-tip-item:hover {
+    background: color-mix(in oklch, var(--foreground) 6%, transparent);
+  }
+}
+button.cal-tip-item:focus-visible {
+  background: color-mix(in oklch, var(--foreground) 6%, transparent);
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 70%, transparent);
+  outline-offset: -2px;
+}
+.cal-tip-text {
+  display: grid;
+  gap: 0.0625rem;
+  flex: 1;
+  min-width: 0;
+}
+.cal-tip-text strong {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.cal-tip-meta {
+  color: var(--cal-mute);
+  font-size: 0.75rem;
+}
+.cal-tip-time {
+  white-space: nowrap;
+}
+.cal-tip-go {
+  flex: none;
+  color: var(--cal-mute);
+}
+.cal-tip-more,
+.cal-tip-empty {
+  margin: 0;
+  padding: 0.25rem 1rem 0.875rem;
+  color: var(--cal-mute);
+  font-size: 0.75rem;
+}
+.cal-tip-empty {
+  padding-top: 0;
+  font-size: 0.8125rem;
+}
+.cal-tip-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 1rem;
+  border-top: 1px solid var(--cal-line);
+}
+/* Telefon: aynı gövde satırın altında yumuşak bir blok; başlığı satırın kendisi. */
+.cal-tip-inline {
+  margin-block: 0.125rem 0.5rem;
+  /* Balonla (`.cal-pop`) aynı yazı boyu: yoksa açıklama ve düğme gövdenin 16 px'ini alır, satırın
+     başlığından (13 px) büyük kalır. */
+  font-size: max(var(--text-callout), 12px);
+  border-radius: 1rem;
+  background: color-mix(in oklch, var(--foreground) 3.5%, transparent);
+}
+.cal-tip[data-inline] .cal-tip-intro {
+  padding-top: 0.75rem;
+}
+.cal-tip[data-inline] .cal-tip-list {
+  border-top: 0;
+}
+.cal-tip[data-inline] .cal-tip-empty {
+  padding-top: 0.75rem;
+}

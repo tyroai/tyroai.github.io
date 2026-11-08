@@ -1,0 +1,187 @@
+/*
+ * Izgaranın üstündeki gezinme satırı (`CalendarToolbar`): [Bugün] · [‹][›] · dönem başlığı (sonunda
+ * parantez içinde soluk hafta notu) · sağda görünüm seçici. Tek satır; dar kapta başlık kendi satırına
+ * çıkar, düğmeler altında sarar. Telefonda (dikey ve yatay) hiç sarmaz.
+ */
+.cal-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 0.75rem;
+  padding: 1.25rem 1.5rem 0.5rem;
+}
+.cal-tools {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cal-tools-end {
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-inline-start: auto;
+}
+.cal-titles {
+  flex: 1 1 10rem;
+  min-width: 0;
+}
+.cal-title {
+  margin: 0;
+  font-size: var(--text-section-title);
+  font-weight: 600;
+  line-height: var(--text-section-title--line-height);
+  letter-spacing: -0.01em;
+}
+/* Hafta notu başlıkla aynı satırda ve boyda, soluk ve normal ağırlıkta; parantezli parça bölünmez. */
+.cal-sub {
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--cal-mute);
+  white-space: nowrap;
+}
+/* Önceki/sonraki: tek gri kapsülde iki yarım (macOS bölümlü düğme), çerçevesiz. */
+.cal-nav {
+  display: inline-flex;
+  border-radius: 999px;
+  background: var(--muted);
+  overflow: hidden;
+}
+.cal-nav button {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-control);
+  height: var(--spacing-control);
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+}
+.cal-nav button + button {
+  border-inline-start: 1px solid color-mix(in oklch, var(--foreground) 8%, transparent);
+}
+@media (hover: hover) {
+  .cal-nav button:hover {
+    background: var(--accent);
+  }
+}
+/* Dar kap: başlık kendi satırında (önce), gezinme ve seçiciler altında. */
+@container cal (max-width: 47.99rem) {
+  .cal-titles {
+    flex-basis: 100%;
+    order: -1;
+  }
+}
+
+/* Telefon (dikey ve yatay sütun): Bugün · ‹ › · başlık tek satırda, ajandaya yer kalsın. Başlık sarmaz;
+   sığmazsa yalnız tarih kısalır (…), küçük hafta notu hep görünür. */
+/* Telefonda başlığın araçları tek satır: arama kalan eni alır, düğmeler (Yenile · Kişi ekle ·
+   Katmanlar) yanında; satır kırılmaz. */
+.cal-page[data-phone] .cal-heading > :last-child {
+  flex: 1 1 100%;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.cal-page[data-phone] .cal-search {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+.cal-page[data-phone] .cal-toolbar,
+.cal-page[data-phone] .cal-tools {
+  gap: 0.375rem;
+}
+.cal-page[data-phone] .cal-toolbar {
+  flex-wrap: nowrap;
+  padding-inline: 1rem;
+}
+.cal-page[data-phone] .cal-titles {
+  flex: 1 1 0;
+  order: 0;
+}
+.cal-page[data-phone] .cal-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-size: var(--text-card-title);
+  line-height: var(--text-card-title--line-height);
+  white-space: nowrap;
+}
+.cal-page[data-phone] .cal-title-main {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-page[data-phone] .cal-sub {
+  flex: none;
+  font-size: var(--text-footnote);
+}
+/* Bugün simgesi: takvim yaprağının içinde bugünün günü (yaprağın alt bölmesine oturur). */
+.cal-today {
+  position: relative;
+}
+.cal-today-ic {
+  width: 1.625rem;
+  height: 1.625rem;
+}
+.cal-today-day {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-top: 0.5rem;
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+/* Telefon: Bugün ve ‹ › başlıktaki simge düğmeleriyle (Yenile · Katmanlar) aynı dil — zeminsiz daire,
+   ince gri simge, dokunma payı yine 44 px. Gri kapsül ve 26 px kalın yaprak iri duruyordu (ürün
+   sahibi). Masaüstünde etiketli Bugün ve bölümlü ‹ › kapsülü kalır. */
+.cal-page[data-phone] .cal-today,
+.cal-page[data-phone] .cal-nav {
+  background: transparent;
+}
+.cal-page[data-phone] .cal-today {
+  width: var(--spacing-control);
+  padding: 0;
+  /* Zeminsiz simge kartın iç kenarıyla hizalı (dokunma payı kenarın dışına taşar). */
+  margin-inline-start: -0.75rem;
+}
+.cal-page[data-phone] :is(.cal-today, .cal-nav button) {
+  border-radius: 999px;
+  color: var(--muted-foreground);
+}
+.cal-page[data-phone] .cal-nav button + button {
+  border-inline-start: 0;
+}
+@media (hover: hover) {
+  .cal-page[data-phone] :is(.cal-today, .cal-nav button):hover {
+    background: color-mix(in oklch, var(--accent) 60%, transparent);
+    color: var(--foreground);
+  }
+}
+.cal-page[data-phone] .cal-today-ic {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.cal-page[data-phone] .cal-today-day {
+  padding-top: 0.3125rem;
+  font-size: 0.5rem;
+}
+
+/* Katmanlar düğmesi: kapalı katman varsa sağ üstte küçük nokta (görünen takvim eksik). */
+.cal-layers-btn[data-off] {
+  position: relative;
+}
+.cal-layers-btn[data-off]::after {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  inset-inline-end: 0.5rem;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 999px;
+  background: var(--brand-text);
+}

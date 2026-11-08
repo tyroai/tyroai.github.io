@@ -1,0 +1,113 @@
+/*
+ * Masraf kalem kartı (telefon ve dar pencere) — gruplu liste: etiket solda, değer sağda; kartın
+ * kendisi alandır. Tarih kutusu (`req-ctl`), seçici (`data-ms-shape`) ve yazı alanı (`xl-input`)
+ * dinlenirken çizgisiz ve şeffaf; üstüne gelince beyaz bir alan, odakta marka halkası belirir;
+ * zorunlu boş alan hafif kırmızı çerçeveli, hatada net kırmızı (masraf tablosunun hücreleriyle
+ * aynı dil). Katmansız: `requestForm.css`teki katmansız alan kurallarını ancak böyle ezer;
+ * özgüllük bilerek onunkinden yüksek.
+ */
+.xl-list {
+  --xl-hover:
+    0 0 0 1px color-mix(in oklab, var(--foreground) 9%, transparent),
+    0 4px 12px -4px rgb(0 0 0 / 0.12);
+  --xl-focus:
+    0 0 0 1px color-mix(in oklab, var(--brand-text) 55%, transparent),
+    0 0 0 4px color-mix(in oklab, var(--brand-text) 12%, transparent);
+  --xl-error: 0 0 0 1px color-mix(in oklab, var(--danger) 75%, transparent);
+  --xl-need: 0 0 0 1px color-mix(in oklab, var(--danger) 36%, transparent);
+  --xl-need-hover: 0 0 0 1px color-mix(in oklab, var(--danger) 55%, transparent);
+}
+
+/* Dinlenme: değer sağa yaslı, kutu görünmez. */
+.req-form .xl-list [data-xl-cell] .req-ctl,
+.req-form .xl-list [data-xl-cell] .xl-input {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.req-form .xl-list [data-xl-cell] .req-ctl {
+  justify-content: flex-end;
+}
+.req-form .xl-list [data-xl-cell] .req-ctl > span {
+  flex: 0 1 auto;
+}
+.req-form .xl-list [data-xl-cell] [data-ms-root]:not([data-morph-open]) [data-ms-shape] {
+  background: transparent;
+  box-shadow: none;
+}
+.req-form .xl-list [data-xl-cell] [data-ms-root]:not([data-morph-open]) [data-ms-shape]::after {
+  border-color: transparent;
+}
+.req-form .xl-list [data-xl-cell] [data-ms-trigger] > span > span {
+  justify-content: flex-end;
+}
+
+/* Üstüne gelince (yalnız gerçek imleçte: dokunuşta "takılı kalan" vurgu olmasın). */
+@media (hover: hover) {
+  .req-form .xl-list [data-xl-cell] .req-ctl:hover,
+  .req-form .xl-list [data-xl-cell] .xl-input:hover,
+  .req-form .xl-list [data-xl-cell] [data-ms-root]:not([data-morph-open]) [data-ms-shape]:hover {
+    background: var(--background);
+    box-shadow: var(--xl-hover);
+  }
+}
+
+/*
+ * Zorunlu ama boş alan (`data-field="need"`: tutar, kategori; `field/fieldState`) — formların
+ * ortak dili: yalnız çerçeve hafif kırmızı (iç boyanmaz), üstüne gelince biraz koyulaşır;
+ * odakta marka halkası ezer. Seçicinin çerçevesi kendi çizgisi (`requestForm.css`, aynı ton).
+ */
+.req-form .xl-list [data-field="need"] .xl-input {
+  box-shadow: var(--xl-need);
+}
+@media (hover: hover) {
+  .req-form .xl-list [data-field="need"] .xl-input:hover {
+    box-shadow: var(--xl-need-hover);
+  }
+  .req-form
+    .xl-list
+    [data-field="need"]
+    > [data-ms-root]:not([data-morph-open])
+    [data-ms-shape]:hover::after {
+    border-color: color-mix(in oklab, var(--danger) 55%, transparent);
+  }
+}
+
+/* Hata: kırmızı ince çizgi (üstüne gelince de kalır; odakta halka öne geçer). */
+.req-form .xl-list [data-xl-cell] .req-ctl[aria-invalid="true"],
+.req-form .xl-list [data-xl-cell] .xl-input[aria-invalid="true"],
+.req-form
+  .xl-list
+  [data-xl-cell]
+  [data-ms-root][data-invalid]:not([data-morph-open])
+  [data-ms-shape] {
+  background: var(--background);
+  box-shadow: var(--xl-error);
+}
+
+/* Odak ve açık takvim: marka halkası. */
+.req-form .xl-list [data-xl-cell] .req-ctl:focus-visible,
+.req-form .xl-list [data-xl-cell] .req-ctl[aria-expanded="true"],
+.req-form .xl-list [data-xl-cell] .xl-input:focus,
+.req-form
+  .xl-list
+  [data-xl-cell]
+  [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]:has([data-ms-trigger]:focus-visible) {
+  background: var(--background);
+  border-color: transparent;
+  box-shadow: var(--xl-focus);
+}
+
+/* Hatalı alan odakta da kırmızı kalır: halka hatanın rengini alır (ızgaradaki tutar gibi). */
+.req-form .xl-list [data-xl-cell] .xl-input[aria-invalid="true"]:focus,
+.req-form .xl-list [data-xl-cell] .req-ctl[aria-invalid="true"]:focus-visible,
+.req-form
+  .xl-list
+  [data-xl-cell]
+  [data-ms-root][data-invalid]:not([data-morph-open])
+  [data-ms-shape]:has([data-ms-trigger]:focus-visible) {
+  box-shadow:
+    var(--xl-error),
+    0 0 0 4px color-mix(in oklab, var(--danger) 12%, transparent);
+}

@@ -1,0 +1,8 @@
+/* Yapışkan açılışta kart, şekil büyüdükten biraz sonra belirir (şeklin akışı görünsün). Satır içi
+   stil değil: Radix pencerenin `animation` stilini kendisi yazıyor, uzun adlarla karışınca React
+   uyarıyordu. Seçici, `data-open:animate-in` kısaltmasından ağır basar. */
+[data-slot="popover-content"][data-goo][data-state="open"] {
+  animation-delay: 200ms;
+  animation-duration: 200ms;
+  animation-fill-mode: both;
+}

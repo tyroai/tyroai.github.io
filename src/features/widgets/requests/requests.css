@@ -1,0 +1,40 @@
+/* Taleplerim (`RequestsWidget`). Kurallar burada: ilk CSS'e yeni Tailwind sınıfı girmesin.
+   Başlık tek satır; ayrıntısı olmayan satırda (yıl sonu) iki satır. */
+.rq-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rq-title[data-wrap] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+}
+
+/* Eylemin yazısı ("TYRO ile gönder") ancak genişçe kartta görünür; dar kartta yalnız ekran
+   okuyucuya kalır, ok görünür — başlık kesilmesin. */
+@container widget (max-width: 22rem) {
+  .rq-action {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Çok dar kart: ikon ve ayrıntı yok, başlık iki satır — cümle okunsun. */
+@container widget (max-width: 12rem) {
+  .rq-icon,
+  .rq-sub {
+    display: none;
+  }
+  .rq-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+  }
+}

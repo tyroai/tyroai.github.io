@@ -1,0 +1,269 @@
+/*
+ * Takvimin yan paneli ("Takvim özeti"), telefondaki özet çubuğu ve alt kartı ("İzinler ve talepler").
+ * Kap, ızgara sütununa en az 640 px bırakacak kadar genişse (kenar çubuğu açık 1366 px dahil) panel
+ * ızgaranın sağında, daha darda ızgaranın altında yan yana kutular; telefonda ızgaranın altında tek sütun (akordeon satırlar).
+ */
+
+/* ── Takvim özeti ───────────────────────────────────────────────────────────────────────────── */
+.cal-stats {
+  min-width: 0;
+  border-top: 1px solid var(--cal-line);
+  background: color-mix(in oklch, var(--foreground) 1.8%, var(--card));
+}
+.cal-stats-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem 0.5rem;
+}
+.cal-stats-head h2 {
+  margin: 0;
+  font-size: var(--text-section-title);
+  font-weight: var(--text-section-title--font-weight);
+  line-height: var(--text-section-title--line-height);
+  letter-spacing: var(--text-section-title--letter-spacing);
+}
+.cal-stats-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 0.125rem 1.25rem;
+  margin: 0;
+  padding: 0.5rem 1rem 1.5rem;
+  list-style: none;
+}
+.cal-stat {
+  min-width: 0;
+}
+/* Gruplar: küçük başlık (solda grubun adı, sağda dönemin adı) ve altında satırlar. */
+.cal-stat-groups {
+  display: grid;
+  gap: 0.5rem;
+  padding-block: 0.25rem 0.75rem;
+}
+.cal-stat-group .cal-stats-list {
+  padding-block: 0;
+}
+.cal-stat-group-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.25rem 1.5rem;
+  color: var(--cal-mute);
+  /* Kaş rolü; kısa pencerede kök küçülse de 11 px'in altına inmez (en küçük yazı). Satır aralığı da
+     tabanlı: iki satıra inen grup adında Ö/İ noktaları üst satıra değmesin. */
+  font-size: max(var(--text-eyebrow), 11px);
+  font-weight: var(--text-eyebrow--font-weight);
+  line-height: max(var(--text-eyebrow--line-height), 13px);
+  /* Rolün 0.12em'i yerine 0.08em: dar yan panelde uzun grup adları (RU) daha az bölünsün. */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* Dönemin adı ("Bu hafta") bölünmez; dar panelde uzun grup adı (RU) kendi içinde iki satıra iner. */
+.cal-stat-group-head > span + span {
+  flex: none;
+  white-space: nowrap;
+}
+.cal-stat-group + .cal-stat-group {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--cal-line);
+}
+/* Satırın tamamı tek düğme (üstüne gelince balon, telefonda satırın altında açılır); yükleme
+   iskeleti aynı ölçüde. Düğmenin kendi 0,5 rem'i var: simgeler panel başlığıyla aynı hizada kalsın
+   diye listenin yan dolgusu o kadar dar. Sıkı liste satırı (yeni satırlar da sığsın): satır içi
+   kontrol boyunda simge, yazı callout/footnote rolünde. */
+.cal-stat-btn,
+.cal-stat-skel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+  padding: 0.5rem;
+}
+.cal-stat-btn {
+  border: 0;
+  border-radius: var(--radius-tile);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.cal-stat-btn[aria-expanded="true"] {
+  background: color-mix(in oklch, var(--foreground) 5%, transparent);
+}
+/* Üstüne gelme yalnız fareli cihazda: dokunmatikte basılan satır yapışkan "hover" kalmasın. */
+@media (hover: hover) {
+  .cal-stat-btn:hover {
+    background: color-mix(in oklch, var(--foreground) 5%, transparent);
+  }
+}
+.cal-stat-btn:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 70%, transparent);
+  outline-offset: -2px;
+}
+/* Telefonda satırın açıldığını gösteren ok. */
+.cal-stat-chev {
+  margin-inline-start: auto;
+  color: var(--cal-mute);
+  transition: transform 0.2s;
+}
+.cal-stat-btn[aria-expanded="true"] .cal-stat-chev {
+  transform: rotate(180deg);
+}
+.cal-stat-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  /* 28 px (satır içi kontrol boyu); token değil: dokunmatikte o token 44 px'e büyür, kutu düğme değil. */
+  width: 1.75rem;
+  height: 1.75rem;
+  /* Bilerek eşmerkezli değil (o 12 − 8 = 4 px olurdu): 8 px daha yumuşak bir kare. */
+  border-radius: 0.5rem;
+  background: color-mix(in oklab, var(--t-dot) 16%, transparent);
+  color: var(--t-ink);
+}
+.cal-stat-ic .cal-ic {
+  width: var(--spacing-icon);
+  height: var(--spacing-icon);
+}
+.cal-stat-text {
+  display: grid;
+  gap: 0.0625rem;
+  min-width: 0;
+}
+/* Başlık callout boyunda, önem ağırlıkla (600); alt yazı footnote, soluk. Kısa pencerede kök
+   küçülür: başlık 12 px'in altına inmez, yoksa 11 px tabanlı alt yazısından küçük kalır. */
+.cal-stat-text strong {
+  font-size: max(var(--text-callout), 12px);
+  font-weight: 600;
+  line-height: var(--text-callout--line-height);
+}
+.cal-stat-text > span {
+  color: var(--cal-mute);
+  /* Kısa pencerede kök küçülür; alt yazı en küçük yazı sınırının (11 px) altına inmez. */
+  font-size: max(var(--text-footnote), 11px);
+  line-height: var(--text-footnote--line-height);
+  text-align: start;
+}
+.cal-skel-line {
+  display: block;
+  height: 0.8125rem;
+  width: 9rem;
+  border-radius: 0.375rem;
+}
+.cal-skel-line[data-short] {
+  width: 6rem;
+  height: 0.75rem;
+}
+.cal-stat-ic.ms-skeleton {
+  display: block;
+}
+/* Çekmecenin içinde liste kenar boşluğu çekmecenin kendisinden; satırın dolgusu kadar dışarı çıkar.
+   Grup başlığı da çekmecenin kenarından: simgelerle aynı hizada. */
+.cal-sheet-body .cal-stats-list {
+  margin-inline: -0.5rem;
+  padding-inline: 0;
+}
+.cal-sheet-body .cal-stat-group-head {
+  padding-inline: 0;
+}
+/* ── İzinler ve talepler ────────────────────────────────────────────────────────────────────── */
+.cal-table-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+}
+.cal-table-head h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.cal-search-table {
+  width: min(100%, 20rem);
+}
+/* Satırlar Self Servis'in `RecordRow`u (Tailwind, kap adı `ss`): burada yalnız kartın içindeki yeri.
+   Satırın kendi iç payı 0.75rem: metin başlıkla aynı hizada başlar. */
+.cal-rows {
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.75rem;
+  border-top: 1px solid var(--cal-line);
+  list-style: none;
+}
+.cal-table-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  border-top: 1px solid var(--cal-line);
+}
+
+/* ── Kap genişliğine göre ───────────────────────────────────────────────────────────────────── */
+/* Özet sağda: ızgara sütunu en az 640 px kalır (7 günde gün sütunu ≥ ~84 px; JS'teki WEEK_MIN_PX
+   ile aynı sayı) — 642 = 640 + kartın iki kenarlığı. Kök yazı pencere yüksekliğiyle küçüldüğü için
+   (theme.css) 20 rem'in px karşılığı değişir: eşik sabit px değil "642 px + özet sütunu". Kap
+   sayfanın kendisi: kenar çubuğu açıkken pencereden dardır. Telefonda özet kartta değil. */
+@container cal (min-width: calc(642px + 20rem)) {
+  .cal-page:not([data-phone]) .cal-main {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    /* Özet sağda: etkinliğin ayrıntısı onun yerinde açılır (`hooks/useSidePanel` okur). */
+    --cal-side: 1;
+  }
+  .cal-stats {
+    border-top: 0;
+    border-inline-start: 1px solid var(--cal-line);
+  }
+  /* Tek sütun; satır ölçüsü dar kaptakiyle aynı (sıkı liste, yeni satırlara yer kalsın). */
+  .cal-stats-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Özet ızgaradan uzunsa saat ızgarası boşluğu doldurur, altında boş bant kalmaz. */
+  .cal-page:not([data-phone]) .cal-cal {
+    display: flex;
+    flex-direction: column;
+  }
+  .cal-cal > .cal-week {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+  }
+  .cal-week > .cal-scroll {
+    flex: 1 1 auto;
+  }
+}
+/* Dar kapta başlık, satırlar ve alt şerit kenara daha yakın. */
+@container cal (max-width: 55.99rem) {
+  .cal-table-head,
+  .cal-table-foot {
+    padding-inline: 1rem;
+  }
+  .cal-rows {
+    padding-inline: 0.5rem;
+  }
+}
+@container cal (max-width: 47.99rem) {
+  .cal-stats-head,
+  .cal-stat-group-head {
+    padding-inline: 1rem;
+  }
+  .cal-stats-list {
+    padding-inline: 0.5rem;
+  }
+  /* Tablo başlığı: ad kendi satırında, arama ve filtre düğmesi yan yana (filtre üçüncü satıra düşmesin). */
+  .cal-table-head h2 {
+    flex-basis: 100%;
+  }
+  .cal-search-table {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+  }
+}

@@ -1,0 +1,239 @@
+/*
+ * KAYIT PENCERESİ › gövde (`RecordWindow`): ilerleme kartının kilometre taşları ve masrafın iki
+ * sütunu (kalemler). Kart kabuğu, çubuk ve ayrıntı listesi ortakta (`components/record-window`).
+ * DÜZ CSS, tembel parçada.
+ */
+
+/* ── İlerleme kartı (ortak `RecordHero` + `RecordMeter`): kilometre taşları ─────────── */
+/* Alt boşluğu adım satırları verir (satır 44 px). */
+.rw-card.rw-progress {
+  padding-bottom: 0.375rem;
+}
+.rw-steps li {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}
+.rw-steps li + li {
+  box-shadow: 0 -1px 0 var(--rw-line);
+}
+.rw-mark {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+.rw-mark[data-state="done"] {
+  color: var(--done);
+}
+.rw-mark[data-state="current"],
+.rw-mark[data-state="stopped"] {
+  color: var(--tone);
+}
+.rw-mark[data-state="upcoming"] {
+  color: color-mix(in oklab, var(--foreground) 22%, transparent);
+}
+.rw-step-label {
+  min-width: 0;
+  flex: 1;
+}
+.rw-steps li[data-state="upcoming"] .rw-step-label {
+  color: var(--muted-foreground);
+}
+.rw-steps li[data-state="current"] .rw-step-label,
+.rw-steps li[data-state="stopped"] .rw-step-label {
+  font-weight: 600;
+}
+.rw-step-meta {
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+  font-size: var(--text-callout);
+  font-variant-numeric: tabular-nums;
+}
+.rw-now {
+  display: inline-flex;
+  height: 1.25rem;
+  align-items: center;
+  padding: 0 0.4375rem;
+  border-radius: 0.3125rem;
+  background: color-mix(in oklab, var(--tone) 15%, transparent);
+  color: var(--tone-ink);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+/* ── Masraf: iki sütun ─────────────────────────────────────────────────── */
+.rw-cols {
+  display: grid;
+  align-items: start;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+}
+.rw-col {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 56rem) {
+  .rw-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.rw-lines-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+/* macOS'un bölmeli denetimi: gri yuva, seçili parça beyaz ve hafif gölgeli. */
+.rw-segmented {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 2px;
+  border-radius: 0.5rem;
+  background: color-mix(in oklab, var(--foreground) 6%, transparent);
+}
+.rw-segmented button {
+  height: 1.625rem;
+  padding: 0 0.75rem;
+  border-radius: 0.375rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+.rw-segmented button[aria-checked="true"] {
+  background: var(--background);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.08),
+    0 0 0 0.5px var(--rw-line);
+  color: var(--foreground);
+}
+@media (pointer: coarse) {
+  .rw-segmented button {
+    height: 2.75rem;
+  }
+}
+.rw-mix {
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 0.75rem;
+  background: var(--rw-faint);
+}
+.rw-line-list {
+  margin-top: 0.25rem;
+}
+.rw-line {
+  display: grid;
+  align-items: start;
+  gap: 0.875rem;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  padding: 0.875rem 0;
+}
+.rw-line + .rw-line {
+  box-shadow: 0 -1px 0 var(--rw-line);
+}
+.rw-line-icon {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border-radius: 0.625rem;
+  background: var(--rw-faint);
+  color: color-mix(in oklab, var(--foreground) 62%, transparent);
+}
+.rw-line-icon svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.rw-line[data-match] .rw-line-icon {
+  background: color-mix(in oklab, var(--brand-text) 14%, transparent);
+  color: var(--brand-ink);
+}
+.rw-line-main {
+  min-width: 0;
+}
+.rw-line-title {
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: var(--text-body--line-height);
+}
+.rw-line-sub {
+  margin-top: 0.125rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+}
+.rw-line-note {
+  margin-top: 0.375rem;
+  color: color-mix(in oklab, var(--foreground) 85%, transparent);
+  font-size: var(--text-callout);
+  line-height: var(--text-callout--line-height);
+  overflow-wrap: anywhere;
+}
+.rw-line-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  margin-top: 0.5rem;
+  color: color-mix(in oklab, var(--foreground) 78%, transparent);
+  font-size: var(--text-footnote);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--text-footnote--line-height);
+}
+.rw-k {
+  color: var(--muted-foreground);
+}
+.rw-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  color: var(--brand-ink);
+  font-weight: 500;
+}
+.rw-more svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  transition: transform 0.2s;
+}
+.rw-more svg[data-open] {
+  transform: rotate(180deg);
+}
+.rw-line-amount {
+  font-size: var(--text-body);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--text-body--line-height);
+  text-align: end;
+  white-space: nowrap;
+}
+.rw-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  box-shadow: 0 -1px 0 var(--rw-line);
+  font-size: var(--text-body);
+}
+.rw-total span {
+  color: var(--muted-foreground);
+}
+.rw-total strong {
+  font-size: var(--text-section-title);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-more svg {
+    transition: none;
+  }
+}

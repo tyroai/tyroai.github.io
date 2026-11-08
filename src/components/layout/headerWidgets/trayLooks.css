@@ -1,0 +1,153 @@
+/* Tepsideki kapsülün görünümü (`useChipLook`) — tepsiyle birlikte tembel iner, ilk CSS'e girmez.
+   Standart çıplak ikon (bugünkü gibi); öteki görünümler kapsül: Açık, Koyu, Cam, Renkli. */
+
+/* Kapsüller bitişik değil: iki dolu kapsül arasında nefes payı. */
+.tray-chip[data-chip-look] {
+  margin-inline: 0.125rem;
+  border-radius: 9999px;
+  padding-inline: 0.625rem;
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease,
+    transform 0.3s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+@media (hover: hover) {
+  .tray-chip[data-chip-look]:hover {
+    transform: translateY(-1px);
+  }
+}
+.tray-chip[data-chip-look]:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Cam: yarı saydam, buzlu; ince kenar ve üst kenarda ışık. Kendi rengi varsa camın rengi o. */
+.tray-chip[data-chip-look="glass"] {
+  background: color-mix(in oklab, var(--card) 55%, transparent);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--foreground) 10%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.65),
+    0 6px 18px -12px rgb(15 23 42 / 0.45);
+}
+.tray-chip[data-chip-look="glass"][data-chip-own] {
+  background: color-mix(
+    in oklab,
+    var(--brand-via) 18%,
+    color-mix(in oklab, var(--card) 62%, transparent)
+  );
+}
+@media (hover: hover) {
+  .tray-chip[data-chip-look="glass"]:is(:hover, [aria-expanded="true"]) {
+    background: color-mix(in oklab, var(--card) 85%, transparent);
+  }
+}
+.dark .tray-chip[data-chip-look="glass"] {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 8px 20px -12px rgb(0 0 0 / 0.8);
+}
+
+/* Açık / Koyu: dolu kapsül — koyu temada da açık, açık temada da koyu (kartın Açık/Koyu adası). */
+.tray-chip[data-chip-look="light"] {
+  background: #fff;
+  color: #0b1220;
+  box-shadow:
+    inset 0 0 0 1px rgb(15 23 42 / 0.08),
+    0 4px 14px -10px rgb(15 23 42 / 0.5);
+}
+@media (hover: hover) {
+  .tray-chip[data-chip-look="light"]:is(:hover, [aria-expanded="true"]) {
+    background: #f4f6fa;
+  }
+}
+.tray-chip[data-chip-look="dark"] {
+  background: #10131c;
+  color: #f6f7fb;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 6px 18px -12px rgb(0 0 0 / 0.7);
+}
+@media (hover: hover) {
+  .tray-chip[data-chip-look="dark"]:is(:hover, [aria-expanded="true"]) {
+    background: #1b2030;
+  }
+}
+/* Koyu temada koyu kapsül header'ın zemininden ayrılsın: bir ton açık dolgu ve belirgin kenar. */
+.dark .tray-chip[data-chip-look="dark"] {
+  background: #1a1f2c;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.16),
+    0 8px 20px -12px rgb(0 0 0 / 0.8);
+}
+
+/* Renkli: paletin degradesi; yazı paletin açıklığına göre (koyu mürekkepli açık paletler). */
+.tray-chip[data-chip-look="palette"] {
+  background: linear-gradient(
+    135deg,
+    var(--brand-from),
+    var(--brand-via) 55%,
+    var(--brand-to, var(--brand-via))
+  );
+  color: #fff;
+  box-shadow: 0 8px 20px -12px color-mix(in oklab, var(--brand-via) 85%, transparent);
+}
+.tray-chip[data-chip-look="palette"][data-chip-ink="dark"] {
+  color: #0b1220;
+}
+@media (hover: hover) {
+  .tray-chip[data-chip-look="palette"]:is(:hover, [aria-expanded="true"]) {
+    filter: saturate(1.15) brightness(1.05);
+  }
+}
+
+/* Dolu kapsülde yüzün vurgu renkleri (yakın toplantı, gecikmiş iş) kapsülün yazısına uyar. */
+.tray-chip:is([data-chip-look="palette"], [data-chip-look="dark"])
+  :is(.text-brand, .text-warning-ink, .text-success-ink, .text-danger-ink) {
+  color: inherit;
+}
+
+/* Kur çipi seçiliyken marka dolgusu (katalog ve Piyasa penceresi). */
+.hc-chip[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--color-brand-fill-deep);
+  color: var(--color-brand-on-brand);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tray-chip[data-chip-look] {
+    transition: none;
+  }
+  .tray-chip[data-chip-look]:active {
+    transform: none;
+  }
+  @media (hover: hover) {
+    .tray-chip[data-chip-look]:hover {
+      transform: none;
+    }
+  }
+}
+
+/* Azaltılmış saydamlık ve yüksek karşıtlık: cam hap dolu, kenarı belirgin. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .tray-chip[data-chip-look="glass"],
+  .tray-chip[data-chip-look="glass"][data-chip-own] {
+    background: var(--card);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  @media (hover: hover) {
+    .tray-chip[data-chip-look="glass"]:is(:hover, [aria-expanded="true"]) {
+      background: var(--card);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+}
+@media (prefers-contrast: more) {
+  .tray-chip[data-chip-look] {
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 60%, transparent);
+  }
+}

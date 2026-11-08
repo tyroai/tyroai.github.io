@@ -1,0 +1,185 @@
+/* Denetim Merkezi'nin Microsoft 365 araçları (`control.css`ın devamı): Teams durumu, otomatik yanıt,
+   Odak modunun bağları. Panelin tembel parçasıyla iner. Durum renkleri paletten bağımsız tek dil
+   (success · warning · danger). */
+
+/* ── Teams durumu: simgenin köşesinde, satırın başında renkli nokta ─────────────────────── */
+.cc-presence {
+  position: relative;
+}
+.cc-presence[data-tone]::after {
+  position: absolute;
+  right: 0.125rem;
+  bottom: 0.125rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 999px;
+  background: var(--cc-dot);
+  box-shadow: 0 0 0 2px var(--cc-soft);
+  content: "";
+}
+.cc-presence[data-tone],
+.cc-dot[data-tone] {
+  --cc-dot: var(--muted-foreground);
+}
+:is(.cc-presence, .cc-dot)[data-tone="available"] {
+  --cc-dot: var(--success);
+}
+:is(.cc-presence, .cc-dot):is([data-tone="busy"], [data-tone="dnd"]) {
+  --cc-dot: var(--danger);
+}
+:is(.cc-presence, .cc-dot)[data-tone="away"] {
+  --cc-dot: var(--warning);
+}
+.cc-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  flex: none;
+  border-radius: 999px;
+  background: var(--cc-dot);
+}
+/* Rahatsız etmeyin: noktanın ortasında beyaz çizgi (Teams'in işareti). */
+.cc-dot[data-tone="dnd"] {
+  background-image: linear-gradient(#fff, #fff);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 60% 2px;
+}
+
+/* ── Süre seçenekleri: yan yana kapsüller ──────────────────────────────────────────────── */
+.cc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin: 0.625rem 0.25rem 0;
+}
+.cc-chip {
+  height: var(--spacing-control-sm, 1.75rem);
+  padding-inline: 0.75rem;
+  border-radius: 999px;
+  background: var(--cc-soft);
+  color: var(--foreground);
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  outline: none;
+}
+.cc-chip[aria-pressed="true"] {
+  background: color-mix(in oklab, var(--brand-text) 16%, var(--cc-soft));
+  color: var(--brand-text);
+  font-weight: 600;
+}
+.cc-chip:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+
+/* ── Anahtar (iOS gibi): satırın sonunda ─────────────────────────────────────────────────── */
+.cc-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.cc-form > .cc-switch {
+  padding: 0.25rem 0.25rem 0;
+  font-size: var(--text-callout);
+}
+.cc-switch input {
+  position: relative;
+  width: 2.375rem;
+  height: 1.4375rem;
+  flex: none;
+  margin: 0;
+  appearance: none;
+  border-radius: 999px;
+  background: var(--cc-well);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;
+}
+.cc-switch input::before {
+  position: absolute;
+  top: 0.125rem;
+  inset-inline-start: 0.125rem;
+  width: 1.1875rem;
+  height: 1.1875rem;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  content: "";
+  transition: translate 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.cc-switch input:checked {
+  background: var(--success);
+}
+.cc-switch input:checked::before {
+  translate: 0.9375rem 0;
+}
+[dir="rtl"] .cc-switch input:checked::before {
+  translate: -0.9375rem 0;
+}
+.cc-switch input:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+
+/* ── Otomatik yanıt: durum, tarihler, metinler, düğmeler ───────────────────────────────── */
+.cc-oof-status {
+  margin: 0 0.25rem;
+  font-size: var(--text-callout);
+  font-weight: 600;
+}
+.cc-oof-status[data-kind="on"],
+.cc-oof-status[data-kind="active"] {
+  color: var(--success-ink);
+}
+.cc-oof-status[data-kind="scheduled"] {
+  color: var(--brand-text);
+}
+.cc-sub[data-nudge] {
+  color: var(--brand-text);
+  font-weight: 600;
+}
+.cc-dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.cc-label-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: var(--text-footnote);
+  color: var(--muted-foreground);
+}
+.cc-label-field .cc-input {
+  color: var(--foreground);
+}
+.cc-area {
+  height: auto;
+  min-height: 5.5rem;
+  padding-block: 0.5rem;
+  line-height: 1.4;
+  resize: vertical;
+}
+.cc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+@media (pointer: coarse) {
+  .cc-chip {
+    height: 2.75rem;
+  }
+  .cc-area,
+  .cc-dates .cc-input {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-switch input,
+  .cc-switch input::before {
+    transition: none;
+  }
+}

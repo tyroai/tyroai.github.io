@@ -1,0 +1,66 @@
+/*
+ * Self Servis'in Yeni menüsü (`NewRequestWand`): Takvim'in Yeni menüsüyle aynı ölçü ve yüzey
+ * (`common/new-menu/newMenu.css`: buzlu cam + gölge, seçenek satırı). Burada yalnız ölçü ve
+ * seçeneklerin tonları. DÜZ CSS: Tailwind'e sınıf eklenmez (ilk yükleme stil bütçesi dolu).
+ */
+
+/* Takvim'in `.cal-pop.cal-pop-new`i ile aynı: geniş (Anlat'ın örnek cümleleri kesilmesin), sağ
+   kenarı Yeni düğmesinde, sola doğru açılır. Popover'ın varsayılan dolgusu ve boşluğu sıfır. */
+.ss-new {
+  width: min(30rem, calc(100vw - 1.5rem));
+  max-height: min(var(--radix-popover-content-available-height), 36rem);
+  padding: 0;
+  gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 1rem;
+  font-size: 0.8125rem;
+}
+.ss-new-body {
+  padding: 0.5rem;
+}
+.ss-new-ask {
+  padding-block: 0.25rem 0.5rem;
+  padding-inline: 0.25rem;
+}
+.ss-new-ask-field {
+  border-color: color-mix(in oklab, var(--foreground) 9%, transparent);
+}
+.ss-new-ask-more {
+  display: grid;
+  gap: 0.5rem;
+  padding-block: 0.625rem 0;
+  padding-inline: 0.25rem;
+}
+.ss-new-ask-hint {
+  margin: 0;
+  color: color-mix(in oklch, var(--foreground) 58%, var(--card));
+  font-size: 0.75rem;
+}
+
+/* Talep türlerinin tonları: izin Takvim'deki "İzin talebi" ile aynı yeşil. */
+.ss-new [data-tone="leave"] {
+  --t-dot: #10b981;
+  --t-bg: #d5f2e5;
+  --t-ink: #12603e;
+}
+.ss-new [data-tone="expense"] {
+  --t-dot: #f59e0b;
+  --t-bg: #ffe8cf;
+  --t-ink: #8a4b0f;
+}
+.ss-new [data-tone="advance"] {
+  --t-dot: #3b82f6;
+  --t-bg: #dcebff;
+  --t-ink: #1e4b8f;
+}
+.ss-new [data-tone="delegate"] {
+  --t-dot: #8b5cf6;
+  --t-bg: #eee5ff;
+  --t-ink: #5b21b6;
+}
+/* Koyu tema (Takvim'in kuralı): zemin noktanın %22'si şeffaf, yazı noktaya %70 beyaz. */
+.dark .ss-new [data-tone] {
+  --t-bg: color-mix(in oklab, var(--t-dot) 22%, transparent);
+  --t-ink: color-mix(in oklab, var(--t-dot) 30%, white);
+}

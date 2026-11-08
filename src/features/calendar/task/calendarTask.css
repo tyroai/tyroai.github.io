@@ -1,0 +1,182 @@
+/*
+ * Yeni görev penceresi (`TaskDialog`): kabuk, alan girdileri ve anahtar `meeting/calendarMeeting.css`ten
+ * (aynı sınıflar); burada yalnız göreve özgü parçalar: liste seçimi, son tarih, adım satırları.
+ * DÜZ CSS: Tailwind'e sınıf eklenmez (bütçe dolu). Renk ve çizgi değişkenleri `.cal-pop` ve
+ * `.cal-sheet-body` kökünden gelir (`calendar.css`); pencere portalda, sayfanın dışında.
+ */
+
+/* Boy sabit (adım eklenince ortalı pencere kaymasın) ama toplantıdan alçak: alanlar daha az. */
+.cal-pop.cal-meet.cal-task-dlg {
+  height: min(42rem, calc(100dvh - 2rem));
+  max-height: min(42rem, calc(100dvh - 2rem));
+}
+/* `fieldset` varsayılanları sıfırlanır (en küçük genişlik içeriğe kadar, çerçeve, boşluk). Tek
+   sütun kabın genişliğini aşmaz: çok uzun bir liste adı gibi kısaltılan metinler karoları (ve
+   pencereyi) genişletmesin. */
+.cal-task-fields {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.cal-task-fields > * {
+  min-width: 0;
+}
+.cal-task-fields:disabled {
+  opacity: 0.65;
+}
+/* Liste ve son tarih yan yana; sığmazsa (telefon, dar pencere) alt alta. */
+.cal-task-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.cal-task-row > * {
+  flex: 1 1 13rem;
+  min-width: 0;
+}
+
+/* ── Liste: görünmez seçim kutusu karonun tamamını örter ─────────────────────────────────────── */
+.cal-task-chev {
+  flex: none;
+  color: var(--cal-mute);
+}
+.cal-task-pick {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: inherit;
+  opacity: 0;
+  cursor: pointer;
+  /* 16 px: iOS odaklanınca yakınlaştırmasın. */
+  font: inherit;
+  font-size: 1rem;
+}
+.dark .cal-task-pick {
+  color-scheme: dark;
+}
+
+/* ── Son tarih: kaldır düğmesi karonun ucunda ────────────────────────────────────────────────── */
+.cal-task-due {
+  position: relative;
+}
+.cal-task-due[data-set] .req-tile {
+  padding-inline-end: 2.5rem;
+}
+.cal-task-clear {
+  position: absolute;
+  inset-inline-end: 0.5rem;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+}
+
+/* ── Adımlar ─────────────────────────────────────────────────────────────────────────────────── */
+.cal-task-tile {
+  align-items: flex-start;
+  padding-block: 0.625rem;
+  cursor: default;
+}
+.cal-steps {
+  display: grid;
+  gap: 0.125rem;
+  margin: 0.125rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.cal-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.875rem;
+}
+.cal-step-dot {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 1.5px solid color-mix(in oklch, var(--foreground) 30%, transparent);
+  border-radius: 999px;
+}
+.cal-step-input {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+.cal-step-input::placeholder {
+  color: var(--cal-mute);
+  font-weight: 400;
+}
+.cal-task-x {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  /* Hedef en az 24 px: kök yazı boyu alçak pencerede küçülür, rem tek başına 24'ün altına iner. */
+  width: max(1.5rem, 24px);
+  height: max(1.5rem, 24px);
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cal-mute);
+  cursor: pointer;
+}
+.cal-task-x .cal-ic {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+@media (hover: hover) {
+  .cal-task-x:hover {
+    background: color-mix(in oklch, var(--foreground) 8%, transparent);
+    color: var(--foreground);
+  }
+}
+.cal-task-x:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 70%, transparent);
+  outline-offset: 1px;
+}
+.cal-task-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-block-start: 0.125rem;
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .cal-task-add:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Dokunmatik: hedefler ≥ 44 px (satır, kaldır, ekle, tarihi kaldır). */
+@media (pointer: coarse) {
+  .cal-step {
+    min-height: 2.75rem;
+  }
+  .cal-step-input {
+    align-self: stretch;
+  }
+  .cal-task-x {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .cal-task-clear {
+    inset-inline-end: 0;
+  }
+  .cal-task-due[data-set] .req-tile {
+    padding-inline-end: 3rem;
+  }
+  .cal-task-add {
+    min-height: 2.75rem;
+  }
+}

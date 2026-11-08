@@ -1,0 +1,163 @@
+/* Görünümün tonu (Düzenle › Görünüm; `lookProps.js`): kartın içi hangi temanın token'larıyla
+   çizilir. Kart kabuğu ada olur — "Koyu" açık temada da `.dark` (+ `data-palette`: paletin koyu
+   mürekkebi), "Açık" koyu temada da `.look-light`. Tema varyantı (`theme.css`) açık adanın
+   içinde `dark:` sınıflarını işletmez. Ada yazı rengini kendisi verir: sayfanın rengi miras
+   kalsaydı koyu adada yazı koyu kalırdı. */
+[data-widget-look].dark,
+.look-light {
+  color: var(--foreground);
+}
+[data-widget-look].dark {
+  color-scheme: dark;
+}
+
+/* AÇIK ADA — temanın açık token'ları (`base.css` › `:root`); marka mürekkebi paletin koyu ucu. */
+.look-light {
+  color-scheme: light;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.5 0.134 242.749);
+  --primary-foreground: oklch(0.977 0.013 236.62);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --success: oklch(0.596 0.145 163.225);
+  --success-ink: oklch(0.508 0.118 165.612);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-ink: oklch(0.473 0.137 46.201);
+  --danger: oklch(0.577 0.245 27.325);
+  --danger-ink: oklch(0.505 0.213 27.518);
+  --brand-text: var(--brand-deep);
+  --brand-ink: var(--brand-deep);
+  --series-2: var(--chart-2);
+  --series-4: color-mix(in oklab, var(--chart-2) 55%, var(--background));
+  --series-5: color-mix(in oklab, var(--chart-1) 50%, var(--foreground));
+}
+/* Sayfanın koyu temasından kalan koyu kart kuralları adada açık hâline döner. */
+.dark .look-light .ms-surface {
+  border-color: color-mix(in oklch, var(--foreground) 8%, transparent);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.2),
+    0 12px 32px -16px rgb(0 0 0 / 0.6);
+}
+.dark .look-light .ms-skeleton {
+  --ms-sk-base: color-mix(in oklch, var(--foreground) 7%, transparent);
+  --ms-sk-light: color-mix(in oklch, var(--card) 88%, transparent);
+}
+.dark .look-light .radio-card[data-tone="light"] {
+  --hp-band: #2b303b;
+  --hp-cup: #1c2028;
+  --hp-cup-hi: #3d4350;
+  --hp-cushion: #5a6170;
+  --hp-shine: rgb(255 255 255 / 0.42);
+}
+
+/* RENKLİ — Apple Music'in kapak renkli zemini gibi: paletin koyulaştırılmış tabanı üstünde
+   üç renk ışığı (from sol üstte, via sağ ortada, to altta, sönük; başlık satırı koyu tabanda) ve yumuşak
+   gölge (`--look-veil`: koyu paletlerde hafif, orta tonlarda güçlü) — küçük ikincil yazı da AA. */
+[data-widget-look="palette"] .ms-surface {
+  border-color: rgb(255 255 255 / 0.16);
+  background-color: color-mix(in oklab, var(--brand-from), black 20%);
+  background-image:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(var(--look-veil, 0.8) * 0.14)),
+      rgb(0 0 0 / calc(var(--look-veil, 0.8) * 0.36))
+    ),
+    radial-gradient(90% 80% at 0% 0%, var(--brand-from), transparent 75%),
+    radial-gradient(
+      80% 75% at 100% 58%,
+      color-mix(
+        in oklab,
+        color-mix(in oklab, var(--brand-via), black calc(var(--look-veil, 0.8) * 34%)) 85%,
+        transparent
+      ),
+      transparent 72%
+    ),
+    radial-gradient(
+      85% 70% at 30% 118%,
+      color-mix(
+        in oklab,
+        color-mix(in oklab, var(--brand-to), black calc(var(--look-veil, 0.8) * 30%)) 55%,
+        transparent
+      ),
+      transparent 72%
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.2),
+    0 22px 44px -24px color-mix(in oklab, var(--brand-from) 70%, transparent);
+}
+[data-widget-look="palette"][data-palette].dark {
+  --foreground: #fff;
+  --card-foreground: #fff;
+  --muted-foreground: rgb(255 255 255 / 0.88);
+  --accent: rgb(255 255 255 / 0.16);
+  --accent-foreground: #fff;
+  /* İç kutular Apple'ın titreşimli malzemesi gibi zemini hafif koyulaştırır (yazı kontrastı artar). */
+  --muted: rgb(0 0 0 / 0.18);
+  --secondary: rgb(0 0 0 / 0.18);
+  --secondary-foreground: #fff;
+  --border: rgb(255 255 255 / 0.2);
+  --input: rgb(255 255 255 / 0.24);
+  --ring: rgb(255 255 255 / 0.7);
+  --card: transparent;
+  --background: color-mix(in oklab, var(--brand-via), black 45%);
+  --brand-text: #fff;
+  --brand-ink: #fff;
+  /* Durum yazısı renkli zeminde beyaza yakın: anlamı ikonu taşır, okunurluk korunur. */
+  --success-ink: oklch(0.93 0.08 163);
+  --warning-ink: oklch(0.94 0.1 91);
+  --danger-ink: oklch(0.93 0.06 20);
+}
+/* Açık paletlerde (Arctic Mint, Peach …) koyu mürekkep: paletin derin tonundan. */
+[data-widget-look="palette"].look-light {
+  --foreground: color-mix(in oklch, var(--brand-from), black 76%);
+  --card-foreground: var(--foreground);
+  --muted-foreground: color-mix(in oklch, var(--brand-from), black 64%);
+  --accent: rgb(255 255 255 / 0.4);
+  --muted: rgb(255 255 255 / 0.32);
+  --border: rgb(0 0 0 / 0.1);
+  --card: transparent;
+  --background: color-mix(in oklab, var(--brand-via), white 40%);
+  --brand-text: color-mix(in oklch, var(--brand-from), black 72%);
+  --brand-ink: var(--brand-text);
+}
+[data-widget-look="palette"].look-light .ms-surface {
+  border-color: rgb(255 255 255 / 0.6);
+  background-image:
+    radial-gradient(140% 160% at 0% 0%, rgb(255 255 255 / 0.42), transparent 72%),
+    linear-gradient(135deg, var(--brand-from), var(--brand-via) 55%, var(--brand-to));
+}
+
+/* Renkli kartta durum hapları beyaz zeminde (borsa uygulamaları gibi): yeşil/kırmızı okunur;
+   tatil ipucu ve brifingin "her şey yolunda" kutusu kartın mürekkebiyle, hafif bir katmanda. */
+[data-widget-look="palette"] .market-chg {
+  background-color: rgb(255 255 255 / 0.92);
+}
+[data-widget-look="palette"] .market-chg[data-trend="up"] {
+  color: oklch(0.48 0.12 160);
+}
+[data-widget-look="palette"] .market-chg[data-trend="down"] {
+  color: oklch(0.5 0.19 27);
+}
+[data-widget-look="palette"] .market-chg[data-trend="flat"] {
+  color: oklch(0.4 0 0);
+}
+[data-widget-look="palette"] :is(.holiday-tip, .brief-clear) {
+  background-color: rgb(0 0 0 / 0.18);
+  color: var(--foreground);
+}
+[data-widget-look="palette"].look-light :is(.holiday-tip, .brief-clear) {
+  background-color: rgb(255 255 255 / 0.38);
+}

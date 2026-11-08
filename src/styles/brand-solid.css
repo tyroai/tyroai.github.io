@@ -1,0 +1,71 @@
+/* Marka DOLGUSU, üstünde BEYAZ yazı: birincil düğme, seçili gün, sayı rozeti.
+   `bg-brand` bu iş için değil — o `--brand-text`, yani MÜREKKEP: koyu temada okunsun
+   diye açık tona dönüyor ve üstündeki beyaz yazı 1–4:1'e düşüyordu (17 paletin
+   hepsinde ölçüldü). Bu token iki temada da beyaz yazıya ≥ 4,5:1 veriyor; koyu temada
+   düğmenin kendisi de zeminden seçiliyor (≥ 2,2:1).
+   Açık temada mürekkebin aynısı (her paletin mürekkebi beyazda AA — `palettes.css`).
+   Koyu temada değerler paletin kendi renklerinden seçildi; yeni palet eklerken burada
+   bir koyu tema satırı gerekir (ölç: beyaz ≥ 4,5). */
+:root {
+  --brand-solid: var(--brand-text);
+}
+
+.dark {
+  --brand-solid: #0077b6;
+}
+
+.dark[data-palette="arctic-mint"] {
+  --brand-solid: #2563eb;
+}
+
+.dark[data-palette="rose-blush"] {
+  --brand-solid: #cc3c66;
+}
+
+.dark[data-palette="peach-sorbet"] {
+  --brand-solid: #b24e3b;
+}
+
+.dark[data-palette="sunset-gradient"] {
+  --brand-solid: #b34a00;
+}
+
+.dark[data-palette="pastel-lavender"] {
+  --brand-solid: #815ac0;
+}
+
+.dark[data-palette="green-garden"] {
+  --brand-solid: #4f772d;
+}
+
+.dark[data-palette="fiery-red"] {
+  --brand-solid: #bc3908;
+}
+
+.dark[data-palette="fiesta"] {
+  --brand-solid: #8134af;
+}
+
+.dark[data-palette="chocolate-delight"] {
+  --brand-solid: #934b00;
+}
+
+.dark[data-palette="midnight"] {
+  --brand-solid: #5a76a3;
+}
+
+.dark[data-palette="cobalt-sky"] {
+  --brand-solid: #3e6db8;
+}
+
+.dark[data-palette="evergreen"] {
+  --brand-solid: #2e7a57;
+}
+
+.dark[data-palette="black"] {
+  --brand-solid: #525252;
+}
+
+.dark[data-palette="periwinkle"] {
+  --brand-solid: #575d92;
+}

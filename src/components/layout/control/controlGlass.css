@@ -1,0 +1,71 @@
+/* Denetim Merkezi'nin cam görünümü (deneysel; Denetimleri düzenle › Cam görünüm): arkadaki sayfa
+   bulanık görünür, kutucuklar ışık geçiren yüzey (Apple'ın Liquid Glass'ı gibi). Camın içinde
+   sürekli hareket olmaz — bulanıklık her karede yeniden hesaplanırdı (`.claude/rules/performance.md`):
+   canlı yüzler durgun (dönen disk ve ses dalgası JS'te `still`, süs animasyonları burada).
+   "Saydamlığı azalt" ve "Daha fazla karşıtlık"ta düz; telefonda çekmece kendi yüzeyi (düz). */
+
+.cc-panel[data-look="glass"] {
+  --cc-soft: color-mix(in oklab, var(--popover) 52%, transparent);
+  --cc-soft-hover: color-mix(in oklab, var(--popover) 68%, transparent);
+  --cc-well: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+/* Cam yüzey pencerenin kabında (`ControlCenter` › `cc-glass`); panel üstünde saydam kalır. */
+[data-slot="popover-content"].cc-glass {
+  background: color-mix(in oklab, var(--popover) 60%, transparent);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+  backdrop-filter: blur(28px) saturate(1.8);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.32),
+    inset 0 1px 0 rgb(255 255 255 / 0.5),
+    0 28px 70px -24px rgb(15 23 42 / 0.45);
+}
+.dark [data-slot="popover-content"].cc-glass {
+  background: color-mix(in oklab, var(--popover) 52%, transparent);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 28px 70px -20px rgb(0 0 0 / 0.8);
+}
+.cc-panel[data-look="glass"]:not([data-mobile]) {
+  background: transparent;
+  box-shadow: none;
+}
+/* Kutucuğun kenarında ince ışık: cam yüzeyler birbirinden ayrılsın. */
+.cc-panel[data-look="glass"] .cc-tile {
+  box-shadow:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.4),
+    0 1px 2px rgb(15 23 42 / 0.06);
+}
+.dark .cc-panel[data-look="glass"] .cc-tile {
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.12);
+}
+/* Camda süs animasyonları durur (kutucukların içinde: halka, gök, çubuklar …). */
+.cc-panel[data-look="glass"] .cc-tile * {
+  animation-play-state: paused !important;
+}
+
+/* Düzenleme ekranındaki anahtarın "Deneysel" rozeti. */
+.cc-badge {
+  margin-inline-start: 0.5rem;
+  padding: 0.0625rem 0.4375rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--brand-text) 12%, transparent);
+  color: var(--brand-text);
+  font-size: var(--text-footnote);
+  font-weight: 600;
+  vertical-align: 0.0625rem;
+}
+.cc-look {
+  margin-top: 0.75rem;
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  [data-slot="popover-content"].cc-glass {
+    background: var(--popover);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .cc-panel[data-look="glass"] {
+    --cc-soft: color-mix(in oklab, var(--foreground) 5%, transparent);
+  }
+}

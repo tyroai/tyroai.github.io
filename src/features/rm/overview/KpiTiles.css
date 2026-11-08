@@ -1,0 +1,62 @@
+/*
+ * Genel Bakış göstergeleri tek kartta: hücreler arasında kenara değmeyen ince ayraçlar.
+ * Sütun sayısı kabın enine göre 2 · 3 · 5; satır başındaki hücrede dikey, ilk satırda yatay
+ * ayraç olmaz. Seçicilerin özgüllüğü eşit: sonraki kural kazanır.
+ */
+.rm-kpis > * {
+  position: relative;
+}
+.rm-kpis > *::before,
+.rm-kpis > *::after {
+  content: "";
+  position: absolute;
+  background: var(--border);
+  pointer-events: none;
+}
+.rm-kpis > *::before {
+  inset-block: 1.25rem;
+  inset-inline-start: 0;
+  width: 1px;
+}
+.rm-kpis > *::after {
+  inset-inline: 1.25rem;
+  top: 0;
+  height: 1px;
+}
+
+/* 2 sütun */
+.rm-kpis > :nth-child(odd)::before {
+  display: none;
+}
+.rm-kpis > :nth-child(-n + 2)::after {
+  display: none;
+}
+
+/* 3 sütun */
+@container rm (min-width: 44rem) {
+  .rm-kpis > :nth-child(n)::before {
+    display: block;
+  }
+  .rm-kpis > :nth-child(3n + 1)::before {
+    display: none;
+  }
+  .rm-kpis > :nth-child(n)::after {
+    display: block;
+  }
+  .rm-kpis > :nth-child(-n + 3)::after {
+    display: none;
+  }
+}
+
+/* 5 sütun: tek satır */
+@container rm (min-width: 64rem) {
+  .rm-kpis > :nth-child(n)::before {
+    display: block;
+  }
+  .rm-kpis > :nth-child(1)::before {
+    display: none;
+  }
+  .rm-kpis > :nth-child(n)::after {
+    display: none;
+  }
+}

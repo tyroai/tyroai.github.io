@@ -1,0 +1,79 @@
+/* Dünya saati widget'ının analog kadranı (`ClockDial`): yüz temadan değil şehrin gününden —
+   gündüz açık, gece koyu (iPhone'un dünya saati gibi). Göbek ve ana şehrin halkası paletin
+   renginde; gölge durağan (kadran dakikada bir değişir, sürekli hareket yok). */
+.clock-dial {
+  overflow: visible;
+  filter: drop-shadow(0 3px 8px rgb(15 23 42 / 0.14));
+}
+.clock-dial__face {
+  fill: #fbfbfa;
+  stroke: rgb(15 23 42 / 0.1);
+  stroke-width: 1;
+}
+.clock-dial__tick {
+  stroke: rgb(15 23 42 / 0.32);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.clock-dial__tick--major {
+  stroke: rgb(15 23 42 / 0.78);
+  stroke-width: 2.6;
+}
+.clock-dial__hour,
+.clock-dial__minute {
+  stroke: #111827;
+  stroke-linecap: round;
+}
+.clock-dial__hour {
+  stroke-width: 5;
+}
+.clock-dial__minute {
+  stroke-width: 3;
+}
+.clock-dial__cap {
+  fill: var(--brand-via);
+  stroke: #fbfbfa;
+  stroke-width: 1.2;
+}
+.clock-dial__ring {
+  fill: none;
+  stroke: var(--brand-via);
+  stroke-width: 1.8;
+}
+
+.clock-dial[data-night] .clock-dial__face {
+  fill: #16181d;
+  stroke: rgb(255 255 255 / 0.12);
+}
+.clock-dial[data-night] .clock-dial__tick {
+  stroke: rgb(255 255 255 / 0.35);
+}
+.clock-dial[data-night] .clock-dial__tick--major {
+  stroke: rgb(255 255 255 / 0.85);
+}
+.clock-dial[data-night] :is(.clock-dial__hour, .clock-dial__minute) {
+  stroke: #f8fafc;
+}
+.clock-dial[data-night] .clock-dial__cap {
+  stroke: #16181d;
+}
+
+/* Hafta sonu ve tatil noktası (widget): mesai dışı, soluk — pencerenin çizgili diliminin karşılığı. */
+.wc-dot-off {
+  background-color: color-mix(in oklab, var(--muted-foreground) 45%, transparent);
+}
+
+/* En dar kartta (içerik < 11rem) büyük saat ve kadran bir kademe küçük — "10:30" kadrana
+   biniyordu; şehir satırlarında fark ("−9 sa") düşer, şehir adı kesilmesin (saat yerinde). */
+@container widget (max-width: 11rem) {
+  .wc-time {
+    font-size: 2.125rem;
+  }
+  .wc-dial {
+    width: 3rem;
+    height: 3rem;
+  }
+  .wc-offset {
+    display: none;
+  }
+}

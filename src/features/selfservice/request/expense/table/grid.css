@@ -1,0 +1,307 @@
+/*
+ * Masraf ızgarası (masaüstü, çok kalem). Dinlenen satır düz bir liste gibi okunur: hücre çizgisiz
+ * ve şeffaf, dolu değer düz yazı, boş zorunlu hücre (kategori, tutar) hafif kırmızı çerçeveli.
+ * Üstüne gelinen satırda alanlar ince çizgiyle belirir (nereye yazılacağı belli); yazılan satır
+ * kalkar ve alanları kutu olur, odaktaki hücrede marka halkası. "Yazılan satır": odak içinde ya
+ * da tarih takvimi açık (`data-active`: takvim pencerenin dışında çizilir). Katmansız kural:
+ * Tailwind'in katmanlı sınıflarını ve `requestForm.css`in form alanı kuralını ezer — sıra önemli
+ * (dinlenme → satır üstü → yazılan satır → hücre üstü → odak → hata → zorunlu boş).
+ */
+.xg {
+  --xg-actions: max(6.75rem, 106px);
+  --xg-line: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --xg-field: color-mix(in oklab, var(--foreground) 12%, transparent);
+  --xg-hover: color-mix(in oklab, var(--foreground) 22%, transparent);
+  --xg-focus: color-mix(in oklab, var(--brand-text) 55%, transparent);
+  --xg-ring: color-mix(in oklab, var(--brand-text) 13%, transparent);
+  --xg-bad: color-mix(in oklab, var(--danger) 75%, transparent);
+  --xg-bad-ring: color-mix(in oklab, var(--danger) 12%, transparent);
+  --xg-need: color-mix(in oklab, var(--danger) 36%, transparent);
+  --xg-need-hover: color-mix(in oklab, var(--danger) 55%, transparent);
+  /* Zemin şeffaf tonda: dinlenen satırda kartın, yazılan satırda kalkan yüzeyin üstünde. */
+  --xg-lift: var(--background);
+  --xg-lift-line: color-mix(in oklab, var(--brand-text) 30%, transparent);
+}
+/* Koyu temada kalkan satır kartın biraz üstünde (açık temada beyaz: soluk yazılar AA kalsın). */
+.dark .xg {
+  --xg-lift: color-mix(in oklab, var(--foreground) 4%, var(--card));
+}
+/* Dokunmatik büyük ekranda (tablet) eylem düğmeleri 44 px: sütun genişler. */
+@media (pointer: coarse) {
+  .xg {
+    --xg-actions: 12rem; /* features/selfservice/lib/expenseColumns ACTIONS_COARSE ile aynı */
+  }
+}
+
+/*
+ * Yazılan satır kalkar: yüzey, ince marka çizgisi, yumuşak gölge — yirmi kalemde de odağın hangi
+ * kalemde olduğu ilk bakışta belli. Ayrıntı paneli açıksa o da bu yüzeyin içinde.
+ */
+.xg .xg-row:focus-within,
+.xg .xg-row[data-active] {
+  z-index: 2;
+  border-radius: 0.75rem;
+  background: var(--xg-lift);
+  box-shadow:
+    inset 0 0 0 1px var(--xg-lift-line),
+    0 14px 30px -20px rgb(0 0 0 / 0.4);
+}
+/* Başta ince marka çubuğu: odak yalnız renkle değil, biçimle de belli. */
+.xg .xg-row:focus-within::after,
+.xg .xg-row[data-active]::after {
+  content: "";
+  position: absolute;
+  inset-block: 0.875rem;
+  inset-inline-start: 0;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--brand-text);
+  pointer-events: none;
+}
+/* Kalkan satırın üstündeki ve altındaki ayraç gizlenir (çizgi yüzeye değmesin). */
+.xg .xg-line:focus-within::before,
+.xg .xg-line:focus-within + .xg-line::before,
+.xg .xg-line:has(> [data-active])::before,
+.xg .xg-line:has(> [data-active]) + .xg-line::before {
+  opacity: 0;
+}
+
+/* Odakla görünür olan hücre yapışık başlığın ve alt şeridin altında kalmasın. */
+.xg [data-cell] :is(input, button) {
+  scroll-margin-block: 3.25rem 4rem;
+}
+
+/* Dinlenme: çizgisiz, şeffaf. */
+.req-form .xg .xg-cell .req-ctl {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.req-form .xg .xg-cell [data-ms-root]:not([data-morph-open]) [data-ms-shape] {
+  background: transparent;
+  box-shadow: none;
+}
+.req-form .xg .xg-cell [data-ms-root]:not([data-morph-open]) [data-ms-shape]::after {
+  border-color: transparent;
+}
+
+/* Satırın üstünde: alanların sınırı belirir. */
+@media (hover: hover) {
+  .req-form .xg .xg-row:hover .xg-cell .req-ctl,
+  .req-form
+    .xg
+    .xg-row:hover
+    .xg-cell
+    [data-ms-root]:not([data-morph-open])
+    [data-ms-shape]::after {
+    border-color: var(--xg-line);
+  }
+}
+
+/* Yazılan satır: alanlar kutu olur. */
+.req-form .xg .xg-row:focus-within .xg-cell .req-ctl,
+.req-form .xg .xg-row[data-active] .xg-cell .req-ctl,
+.req-form .xg .xg-row:focus-within .xg-cell [data-ms-root]:not([data-morph-open]) [data-ms-shape],
+.req-form .xg .xg-row[data-active] .xg-cell [data-ms-root]:not([data-morph-open]) [data-ms-shape] {
+  background: var(--background);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+.req-form .xg .xg-row:focus-within .xg-cell .req-ctl,
+.req-form .xg .xg-row[data-active] .xg-cell .req-ctl,
+.req-form
+  .xg
+  .xg-row:focus-within
+  .xg-cell
+  [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]::after,
+.req-form
+  .xg
+  .xg-row[data-active]
+  .xg-cell
+  [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]::after {
+  border-color: var(--xg-field);
+}
+
+/* Hücrenin üstünde: beyaz alan. */
+@media (hover: hover) {
+  .req-form .xg .xg-row .xg-cell .req-ctl:hover,
+  .req-form .xg .xg-row .xg-cell [data-ms-root]:not([data-morph-open]) [data-ms-shape]:hover {
+    background: var(--background);
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.05),
+      0 4px 12px -6px rgb(0 0 0 / 0.14);
+  }
+}
+@media (hover: hover) {
+  .req-form .xg .xg-row .xg-cell .req-ctl:hover,
+  .req-form
+    .xg
+    .xg-row
+    .xg-cell
+    [data-ms-root]:not([data-morph-open])
+    [data-ms-shape]:hover::after {
+    border-color: var(--xg-hover);
+  }
+}
+
+/* Odak: marka çizgisi ve yumuşak halka (fareyle verilen odakta da: kişi nerede olduğunu görsün). */
+.req-form .xg .xg-row .xg-cell .req-ctl:focus,
+.req-form .xg .xg-row .xg-cell .req-ctl[aria-expanded="true"] {
+  background: var(--background);
+  border-color: var(--xg-focus);
+  box-shadow:
+    0 0 0 4px var(--xg-ring),
+    0 1px 2px rgb(0 0 0 / 0.05);
+}
+.req-form
+  .xg
+  .xg-row
+  .xg-cell
+  [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]:has([data-ms-trigger]:focus) {
+  background: var(--background);
+  box-shadow:
+    0 0 0 4px var(--xg-ring),
+    0 1px 2px rgb(0 0 0 / 0.05);
+}
+.req-form
+  .xg
+  .xg-row
+  .xg-cell
+  [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]:has([data-ms-trigger]:focus)::after {
+  border-color: var(--xg-focus);
+}
+
+/* Hata (gönderme denemesinden sonra): dinlenirken de görünür. */
+.req-form .xg .xg-row .xg-cell .req-ctl[aria-invalid="true"] {
+  background: var(--background);
+  border-color: var(--xg-bad);
+}
+.req-form .xg .xg-row .xg-cell .req-ctl[aria-invalid="true"]:focus {
+  box-shadow:
+    0 0 0 4px var(--xg-bad-ring),
+    0 1px 2px rgb(0 0 0 / 0.05);
+}
+.req-form .xg .xg-row .xg-cell [data-ms-root][data-invalid]:not([data-morph-open]) [data-ms-shape] {
+  background: var(--background);
+}
+.req-form
+  .xg
+  .xg-row
+  .xg-cell
+  [data-ms-root][data-invalid]:not([data-morph-open])
+  [data-ms-shape]::after {
+  border-color: var(--xg-bad);
+}
+/* Hatalı seçici odakta da kırmızı kalır (tutar alanı gibi): odak halkası hatanın rengini alır. */
+.req-form
+  .xg
+  .xg-row
+  .xg-cell
+  [data-ms-root][data-invalid]:not([data-morph-open])
+  [data-ms-shape]:has([data-ms-trigger]:focus) {
+  box-shadow:
+    0 0 0 4px var(--xg-bad-ring),
+    0 1px 2px rgb(0 0 0 / 0.05);
+}
+.req-form
+  .xg
+  .xg-row
+  .xg-cell
+  [data-ms-root][data-invalid]:not([data-morph-open])
+  [data-ms-shape]:has([data-ms-trigger]:focus)::after {
+  border-color: var(--xg-bad);
+}
+
+/*
+ * Dinlenen satırda takvim simgesi soluk, seçici oku görünmez (dokunmatikte soluk): yirmi satırda
+ * kırk ok gürültü olur, dolu değer düz yazı gibi okunsun. Ok sonda: gizlenince hiza bozulmaz;
+ * takvim simgesi başta, tarihi başlığının altında tutar. Satırın üstünde ya da yazılırken döner.
+ */
+@media (hover: hover) {
+  .req-form
+    .xg
+    .xg-row:not(:hover, :focus-within, [data-active])
+    .xg-cell
+    [data-ms-shape]
+    > div
+    > span,
+  .req-form .xg .xg-row:not(:hover, :focus-within, [data-active]) .xg-cell .req-ctl > svg {
+    opacity: 0.45;
+  }
+}
+@media (hover: hover) {
+  .req-form
+    .xg
+    .xg-row:not(:hover, :focus-within, [data-active])
+    .xg-cell
+    [data-ms-shape]
+    > div
+    > span {
+    opacity: 0;
+  }
+}
+
+/*
+ * Zorunlu ama boş hücre (`data-field="need"`: kategori, tutar; `field/fieldState`) — formların
+ * ortak dili: yalnız çerçeve hafif kırmızı (iç boyanmaz), satır dinlenirken de yazılırken de
+ * (her hücrede ✓ yok: kalemin tamamlandığını numaradaki ✓ söyler). Üstüne gelince çerçeve biraz
+ * koyulaşır, odakta marka çizgisi ezer. Gönderme denemesinden sonra hücre `need` değil: hatanın
+ * net kırmızısı görünür. Özgüllük bilerek yüksek: satır ve hücre kurallarını ezsin.
+ */
+.req-form .xg .xg-row .xg-cell[data-field="need"] .req-ctl:not(:focus),
+.req-form
+  .xg
+  .xg-row
+  .xg-cell[data-field="need"]
+  > [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]:not(:has([data-ms-trigger]:focus)) {
+  box-shadow: none;
+}
+.req-form .xg .xg-row .xg-cell[data-field="need"] .req-ctl:not(:focus),
+.req-form
+  .xg
+  .xg-row
+  .xg-cell[data-field="need"]
+  > [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]:not(:has([data-ms-trigger]:focus))::after {
+  border-color: var(--xg-need);
+}
+@media (hover: hover) {
+  .req-form .xg .xg-row .xg-cell[data-field="need"] .req-ctl:not(:focus):hover,
+  .req-form
+    .xg
+    .xg-row
+    .xg-cell[data-field="need"]
+    > [data-ms-root]:not([data-morph-open])
+    [data-ms-shape]:not(:has([data-ms-trigger]:focus)):hover::after {
+    border-color: var(--xg-need-hover);
+  }
+}
+@media (hover: hover) {
+  .req-form .xg .xg-row .xg-cell[data-field="need"] .req-ctl:not(:focus):hover,
+  .req-form
+    .xg
+    .xg-row
+    .xg-cell[data-field="need"]
+    > [data-ms-root]:not([data-morph-open])
+    [data-ms-shape]:not(:has([data-ms-trigger]:focus)):hover {
+    box-shadow: 0 4px 12px -6px rgb(0 0 0 / 0.14);
+  }
+}
+
+/* Para birimi tutarın sessiz eki: daha küçük ve soluk (seçici yine tam). */
+.req-form .xg [data-cell="currency"] [data-ms-trigger] {
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+}
+
+/* Yapışık başlık ve alt şerit camı: azaltılmış saydamlık ya da yüksek karşıtlıkta düz. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .xg .xg-glass {
+    background: var(--card);
+    backdrop-filter: none;
+  }
+}

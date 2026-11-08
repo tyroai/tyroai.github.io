@@ -1,0 +1,134 @@
+/* Keşfet'in dar ekran parçaları: başlığın çentik payı, kayan şeritlerin uç gölgesi, hikâye halkası. */
+
+.feed-head {
+  padding-top: 0.25rem;
+}
+/* Telefon ve tablet çentiği (< 1024 px) başlık çizgisinin ortasında asılı (22 px): yapışkan
+   başlık onun altında başlar, ortadaki sekme örtülmez. */
+@media (max-width: 1023px) {
+  main[data-notch="on"] .feed-head {
+    padding-top: 1.625rem;
+  }
+}
+
+/* Yatay kayan şerit (çipler, hikâyeler): kaydırma çubuğu yok, sağ uç solar — devamı olduğu
+   kesik uçtan anlaşılır. */
+.feed-strip {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+}
+.feed-strip::-webkit-scrollbar {
+  display: none;
+}
+[dir="rtl"] .feed-strip {
+  mask-image: linear-gradient(to left, #000 calc(100% - 2rem), transparent);
+}
+
+/* Bugünün hikâyesi: paletin üç durağıyla halka (Instagram'ın "yeni" halkası). */
+.feed-story-ring {
+  background: conic-gradient(
+    from 210deg,
+    var(--brand-from),
+    var(--brand-via),
+    var(--brand-to),
+    var(--brand-from)
+  );
+}
+
+/* Ekibinin hikâyesi: her palette paletten ayrı duran yeşil halka (Instagram'ın "Yakın Arkadaşlar"
+   halkası). Bugün değilse soluk — gri halkanın ekipteki karşılığı. */
+.feed-story-ring-team {
+  background: conic-gradient(
+    from 210deg,
+    var(--success-ink),
+    var(--success),
+    color-mix(in oklch, var(--success) 60%, white),
+    var(--success-ink)
+  );
+}
+.feed-story-ring-team-soft {
+  background: color-mix(in oklch, var(--success) 50%, transparent);
+}
+
+/* Telefonun araması (`PhoneSearch`): sekme satırının sonunda sade büyüteç, açılınca alan + Vazgeç.
+   Dokunma hedefi 44 px; çerçevesiz — sekmelerin yanında düğme yığını gibi durmasın. */
+.feed-phone-search-btn {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  color: color-mix(in oklch, var(--foreground) 75%, transparent);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+.feed-phone-search-btn:active {
+  background: var(--accent);
+  color: var(--foreground);
+}
+.feed-phone-search-btn:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--color-brand) 40%, transparent);
+  outline-offset: -2px;
+}
+.feed-phone-search {
+  display: grid;
+  gap: 0.375rem;
+  padding-top: 0.5rem;
+}
+.feed-phone-cancel {
+  flex-shrink: 0;
+  min-height: 2.75rem;
+  padding-inline: 0.5rem;
+  border-radius: 9999px;
+  font-size: var(--text-callout);
+  font-weight: 600;
+  color: var(--brand-ink);
+}
+.feed-phone-cancel:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--color-brand) 40%, transparent);
+  outline-offset: -2px;
+}
+
+/* Etik hattı: ortak yüzen düğme (`fab`, 56 px daire); farede üstüne gelince adı yana açılır —
+   genişlik içerikten, dolgu simgeyi daireye ortalar (16 + 24 + 16). Dokunmatikte yalnız simge; ad
+   metni DOM'da kalır (erişilebilir ad). Yeri sayfa kabının sağ altı, `Fab` ile aynı 16 px. */
+.fab.feed-fab {
+  display: flex;
+  align-items: center;
+  width: auto;
+  min-width: var(--spacing-fab);
+  padding-inline: 1rem;
+}
+.feed-fab-dock {
+  position: absolute;
+  inset-inline-end: max(1rem, env(safe-area-inset-right));
+  bottom: max(calc(1rem + env(safe-area-inset-bottom)), var(--float-stack-bottom, 0px));
+  z-index: 20;
+}
+@media (pointer: coarse) {
+  .feed-fab > span {
+    max-width: 0;
+  }
+}
+
+/* Dar kabın araç satırı (`NarrowTools`) her bölümde aynı boyda: Popüler'in çip şeridi (çip 2 rem,
+   dokunmatikte 2,25 rem + 0,25 rem pay) kadar. Sana özel'de yalnız arama var; satır kısalınca
+   içerik 4 px kayıyordu. */
+.feed-tools-row {
+  min-height: calc(0.5rem + max(2.5rem, var(--spacing-control)));
+}
+@media (pointer: coarse) {
+  .feed-tools-row {
+    min-height: calc(0.5rem + max(2.75rem, var(--spacing-control)));
+  }
+}
+/* Bul'da araç satırı yok, kendi arama satırı onun yerinde: dar kapta öteki bölümlerin araç satırıyla
+   aynı yükseklikte başlar (sekme çizgisinin 0,5 rem altında). Telefonda araç satırı hiç yok. */
+@container feed (max-width: 63.99rem) {
+  .feed-head:not([data-phone]) + .feed-grid[data-section="docs"] {
+    margin-top: 0;
+  }
+}

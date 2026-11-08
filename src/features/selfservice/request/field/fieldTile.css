@@ -1,0 +1,49 @@
+/*
+ * Alan karosu (`FieldTile`). Sıra önemli, sonraki ezer: dinlenme → üstünde → zorunlu boş (yalnız
+ * çerçeve hafif kırmızı, iç boyanmaz) → hata (net kırmızı) → odak ya da açık (marka). Katmansız kural: Tailwind'in varyant
+ * sırasına bağlı kalmasın.
+ */
+.req-tile {
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+  background: var(--card);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.04),
+    0 1px 1px rgb(0 0 0 / 0.02);
+  transition:
+    border-color 0.16s,
+    box-shadow 0.16s,
+    background-color 0.16s;
+}
+@media (hover: hover) {
+  .req-tile:hover {
+    border-color: color-mix(in oklab, var(--foreground) 20%, transparent);
+  }
+}
+.req-tile[data-field="need"] {
+  border-color: color-mix(in oklab, var(--danger) 36%, transparent);
+}
+@media (hover: hover) {
+  .req-tile[data-field="need"]:hover {
+    border-color: color-mix(in oklab, var(--danger) 55%, transparent);
+  }
+}
+.req-tile[data-field="error"] {
+  border-color: color-mix(in oklab, var(--danger) 75%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--danger) 12%, transparent);
+}
+.req-tile:focus-visible,
+.req-tile:has(:focus-visible),
+.req-tile[data-open],
+.req-tile[data-active] {
+  outline: none;
+  border-color: color-mix(in oklab, var(--brand-text) 55%, transparent);
+  background: var(--card);
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--brand-text) 12%, transparent),
+    0 1px 2px rgb(0 0 0 / 0.05);
+}
+@media (prefers-reduced-motion: reduce) {
+  .req-tile {
+    transition: none;
+  }
+}

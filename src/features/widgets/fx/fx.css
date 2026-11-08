@@ -1,0 +1,177 @@
+/* Döviz çevirici (FxWidget). Renkler temanın değişkenlerinden (--muted, --background, --border …):
+   kartın görünümü (Açık · Koyu · Cam · Renkli) onları yeniden tanımlar, çevirici kendiliğinden uyar.
+   Dar kartta iki taraf alt alta, değiştir düğmesi aralarında; büyük kartta yan yana, kutular büyür ve
+   dikeyde ortalanır, düğmenin iki yanında pay kalır (rakamın ve yuvanın üstüne binmesin). */
+.fx-pad {
+  position: relative;
+  display: grid;
+  gap: 0.375rem;
+}
+@container widget (min-width: 34rem) {
+  .fx-pad {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.5rem;
+    margin-block: auto;
+  }
+  .fx-pad > .fx-side {
+    padding: 0.875rem 1.125rem;
+  }
+  .fx-pad > .fx-side:first-child {
+    padding-inline-end: 1.875rem;
+  }
+  .fx-pad > .fx-side:last-child {
+    padding-inline-start: 1.875rem;
+  }
+  .fx-pad .fx-num {
+    font-size: 1.875rem;
+  }
+  .fx-swap svg {
+    rotate: 90deg;
+  }
+}
+
+/* Bir taraf: solda para birimi yuvası ve adı, sağda tutar. */
+.fx-side {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "pick num" "name num";
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.1875rem;
+  padding: 0.5rem 0.875rem 0.5625rem;
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--muted) 85%, transparent);
+  transition: box-shadow 150ms ease;
+}
+.fx-side:focus-within {
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--brand-text, var(--foreground)) 40%, transparent);
+}
+
+/* Yuva: kodu gösteren hap; üstünde görünmez yerel liste (klavye, ekran okuyucu ve telefonun kendi
+   seçicisi aynen çalışır). */
+.fx-pick {
+  position: relative;
+  grid-area: pick;
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 0.25rem;
+  height: 1.875rem;
+  padding-inline: 0.625rem 0.4375rem;
+  border-radius: 9999px;
+  background: var(--background);
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 1px 2px rgb(0 0 0 / 0.06);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+}
+.fx-pick:focus-within {
+  box-shadow:
+    0 0 0 2px color-mix(in oklch, var(--brand-text, var(--foreground)) 45%, transparent),
+    0 1px 2px rgb(0 0 0 / 0.06);
+}
+.fx-pick select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  font-size: 1rem;
+  cursor: pointer;
+  appearance: none;
+}
+.fx-chev {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--muted-foreground);
+}
+/* Gri kutunun üstünde küçük yazı: ikincil ton bir kademe koyu (AA, ölçüldü). */
+.fx-name {
+  grid-area: name;
+  max-width: 9rem;
+  overflow: hidden;
+  font-size: 0.6875rem;
+  color: color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Tutar ve sonuç: büyük, eşit genişlikte rakam; sığmazsa üç noktayla kesilir. */
+.fx-num {
+  grid-area: num;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: end;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  outline: none;
+}
+.fx-num::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* Değiştir: iki tarafın arasında yüzen yuvarlak düğme; dokunma alanı 44 px. */
+.fx-swap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  color: var(--foreground);
+  background: var(--background);
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 4px 12px -4px rgb(0 0 0 / 0.25);
+  transform: translate(-50%, -50%);
+  transition: transform 140ms ease-out;
+}
+.fx-swap::before {
+  content: "";
+  position: absolute;
+  inset: -0.25rem;
+  border-radius: inherit;
+}
+.fx-swap:active {
+  transform: translate(-50%, -50%) scale(0.92);
+}
+.fx-swap:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text, var(--foreground)) 45%, transparent);
+  outline-offset: 2px;
+}
+.fx-swap svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  transition: transform 320ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.fx-rate {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.71875rem;
+  color: var(--muted-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-swap svg {
+    transition: none;
+  }
+}

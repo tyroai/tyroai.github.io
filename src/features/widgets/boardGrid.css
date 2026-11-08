@@ -1,0 +1,31 @@
+/* Panonun ızgarası (`MainWidgets`): karşılama sütunu Anasayfa'nın baştaki genişliğinde — eski
+   0.74fr / 1.26fr payı, yani bölgeler arası eski 3rem'lik boşluk düşüldükten sonra kalanın %37'si
+   (ürün sahibi: sol sütunun genişliği değişmez). Ortadaki mini kartı köşedekiyle eşitlemek için
+   yer bölgeler arası boşluktan alınır: 3rem → 1rem (kartlarınki); ana ızgara üç eşit sütun.
+   Düz CSS: ilk CSS'e Tailwind sınıfı eklemez. */
+@container myspace (min-width: 60rem) {
+  .board-split {
+    grid-template-columns: calc((100% - 3rem) * 0.37) minmax(0, 1fr);
+    column-gap: 1rem;
+  }
+}
+
+@container myspace (min-width: 46rem) {
+  /* Çift sınıf: aynı kapsayıcı sorgusundaki iki sütunlu Tailwind kuralından önce gelsin. */
+  .board-main.board-main {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Basma tepkisi: dokunduğu an yüzey küçülür (110 ms), bırakınca geri gelir. Pano ve Anasayfa
+   kartlarının içindeki bağlantı ve düğmeler; açılır menü düğmeleri (açılışı kendisi söyler) hariç. */
+.ms-surface :is(a[href], button):not(:disabled, [aria-haspopup]):active {
+  scale: 0.975;
+  transition: scale 110ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ms-surface :is(a[href], button):not(:disabled, [aria-haspopup]):active {
+    scale: none;
+    opacity: 0.8;
+  }
+}

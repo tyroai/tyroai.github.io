@@ -1,0 +1,137 @@
+/* Çanın bekleyen sorusu (`BellOof`): sekmelerin üstünde. Denetim Merkezi'nin şeridiyle aynı dil
+   (`.cc-join`): palete hafif boyalı zemin, marka rampalı yuvarlak simge. Dar panelde düğmeler
+   metnin altına iner (metin 10rem'den daralmaz), sona yaslı. */
+.bell-oof-slot {
+  flex: none;
+}
+.bell-oof {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 0.625rem;
+  margin: 0.5rem 0.5rem 0;
+  padding-block: 0.625rem;
+  padding-inline: 0.75rem 0.5rem;
+  border-radius: var(--radius-tile);
+  background: color-mix(in oklab, var(--brand-from) 12%, var(--popover));
+}
+.bell-oof-ic,
+.bell-oof-dot {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+}
+.bell-oof-ic {
+  background-image: linear-gradient(135deg, var(--brand-from), var(--brand-via), var(--brand-to));
+  color: var(--brand-on-ramp);
+}
+.bell-oof-ic svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.bell-oof-text {
+  display: flex;
+  flex: 1 1 10rem;
+  flex-direction: column;
+  min-width: 0;
+}
+.bell-oof-title {
+  overflow-wrap: anywhere;
+  font-size: var(--text-callout);
+  line-height: var(--text-callout--line-height);
+  font-weight: 600;
+}
+.bell-oof-sub {
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  color: color-mix(in oklab, var(--muted-foreground) 72%, var(--foreground));
+}
+.bell-oof-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline-start: auto;
+}
+/* Şeridin hapları (`.cc-pill[data-tone="prominent"]`, `.cc-icon-btn`): aynı soru, aynı düğme. */
+.bell-oof-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--spacing-control-sm);
+  padding-inline: 0.875rem;
+  border-radius: 999px;
+  background-image: linear-gradient(135deg, var(--brand-from), var(--brand-via), var(--brand-to));
+  color: var(--brand-on-ramp);
+  font-size: var(--text-footnote);
+  line-height: 1;
+  font-weight: 600;
+  white-space: nowrap;
+  outline: none;
+  transition: transform 0.15s ease;
+}
+.bell-oof-pill:active {
+  transform: scale(0.97);
+}
+.bell-oof-x {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  outline: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.bell-oof-x svg {
+  width: 1rem;
+  height: 1rem;
+}
+@media (hover: hover) {
+  .bell-oof-x:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+    color: var(--foreground);
+  }
+}
+.bell-oof-pill:focus-visible,
+.bell-oof-x:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+.bell-oof-pill:disabled,
+.bell-oof-x:disabled {
+  opacity: 0.6;
+}
+/* Dokunmatikte 44 px: hap büyür, çarpının görünmez payı var. */
+@media (pointer: coarse) {
+  .bell-oof-pill {
+    height: 2.75rem;
+  }
+  .bell-oof-x::after {
+    content: "";
+    position: absolute;
+    inset: -0.375rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bell-oof-pill {
+    transition: none;
+  }
+  .bell-oof-pill:active {
+    transform: none;
+  }
+}
+/* Yüklenirken aynı boyda iki çubuk (ışık Anasayfa iskeletinden: `.ms-skeleton`). */
+.bell-oof-bar {
+  display: block;
+  height: 0.625rem;
+  border-radius: 999px;
+}
+.bell-oof-bar + .bell-oof-bar {
+  width: 60%;
+  margin-top: 0.4375rem;
+}

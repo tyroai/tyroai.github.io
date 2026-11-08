@@ -1,0 +1,422 @@
+/* Marka paletleri (data-palette) — index.css'ten bölündü; sıra index.css'teki @import sırasıdır. */
+
+/* Marka paleti — Ocean Breeze: varsayılan, giriş ve tanıtım sayfalarının paleti (eski v2). */
+:root,
+:root[data-palette="ocean-breeze"] {
+  --brand-from: #03045e;
+  --brand-via: #0077b6;
+  --brand-to: #48cae4;
+  --brand-soft: #caf0f8;
+  --brand-deep: #03045e;
+  /* Mürekkep açık gri ve tonlu zeminde AA: #0077b6 seçili menü satırında (#f5f5f5) 4,46:1 veriyordu. */
+  --brand-text: #0069a1;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #90e0ef;
+  --brand-orb-2: #48cae4;
+  --brand-orb-3: #00b4d8;
+  --brand-orb-4: #03045e;
+  --brand-logo-1: #48cae4;
+  --brand-logo-2: #00b4d8;
+  --brand-logo-3: #0077b6;
+  --brand-logo-4: #00b4d8;
+  --brand-logo-5: #03045e;
+  --chart-1: #00b4d8;
+  --chart-2: #03045e;
+}
+
+/* Marka paleti — Arctic Mint (Color Hunt: 2563EB · 22C1C3 · A7F3D0 · D1FAE5).
+   tyroTrade'den taşındı; iki uygulama aynı palet kümesini paylaşıyor ve
+   kullanıcı ikisini yan yana açıyor. Gradyan derin maviden mint yeşiline
+   iner, orb renkleri aşağıdaki `--voiceorb-*` bloğunda. */
+:root[data-palette="arctic-mint"] {
+  --brand-from: #2563eb;
+  --brand-via: #22c1c3;
+  --brand-to: #a7f3d0;
+  --brand-soft: #d1fae5;
+  --brand-deep: #1d4ed8;
+  --brand-text: #2563eb;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #a7f3d0;
+  --brand-orb-2: #5eead4;
+  --brand-orb-3: #22c1c3;
+  --brand-orb-4: #1d4ed8;
+  --brand-logo-1: #a7f3d0;
+  --brand-logo-2: #22c1c3;
+  --brand-logo-3: #2563eb;
+  --brand-logo-4: #22c1c3;
+  --brand-logo-5: #1d4ed8;
+  --chart-1: #22c1c3;
+  --chart-2: #2563eb;
+  --accent-grad-1: #a7f3d0;
+  --accent-grad-2: #22c1c3;
+  --accent-grad-3: #2563eb;
+}
+
+/* Marka paleti — Rose Blush (Color Hunt: FCF5EE · FFC4C4 · EE6983 · 850E35).
+   Gradyan KOYUDAN AÇIĞA iner: #a3164a → #cc3c66 → #ee6983. Beyaz metnin
+   kontrastı sırasıyla 7,58 / 4,77 / 3,01. İlk denemede gradyan kreme
+   açılıyordu ve düğmenin sonunda beyaz yazı yok oluyordu (ölçüldü: 1,08:1,
+   yani kontrastsız); ikinci denemede bordoya iniyordu ama bu kez rozet
+   kuralı kırılıyordu. Başlangıç bordodan bir tık açık (#a3164a) tutuldu.
+   Krem ve açık pembe yumuşak zemin, orb ve logo renklerinde yaşamaya
+   devam ediyor — oralarda üstlerine yazı gelmiyor. */
+:root[data-palette="rose-blush"] {
+  --brand-from: #a3164a;
+  --brand-via: #cc3c66;
+  --brand-to: #ee6983;
+  /* Rozet AÇIKÇA tanımlı. Varsayılan kural `--badge: var(--brand-soft)`;
+       bu palette yumuşak zemin krem ve üstündeki bordo rakamla 9,2:1
+       veriyor ama krem, beyaz başlıkla kaynaşıp rozeti rozet olmaktan
+       çıkarıyor — sayı boşlukta duruyor. Dolgu KOYU, rakam açık. */
+  --badge: #850e35;
+  --badge-foreground: #fcf5ee;
+  --brand-soft: #fcf5ee;
+  --brand-deep: #850e35;
+  --brand-text: #850e35;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #fcf5ee;
+  --brand-orb-2: #ffc4c4;
+  --brand-orb-3: #ee6983;
+  --brand-orb-4: #850e35;
+  /* Logonun İLK durağı krem (#fcf5ee) idi ve beyaz başlıkta kayboluyordu —
+       kontrast 1,06:1. Rampa bir kademe yukarı çekildi; en açık durak artık
+       pembe. */
+  --brand-logo-1: #ffc4c4;
+  --brand-logo-2: #f5899f;
+  --brand-logo-3: #ee6983;
+  --brand-logo-4: #b31a4b;
+  --brand-logo-5: #850e35;
+  --chart-1: #ee6983;
+  --chart-2: #850e35;
+}
+
+/* Marka paleti — Peach Sorbet (peach-dominant; lavender 3. renk accent) */
+:root[data-palette="peach-sorbet"] {
+  --brand-from: #ff835d;
+  --brand-via: #ffa583;
+  --brand-to: #ffd2c2;
+  --brand-soft: #fff0e8;
+  /* Beyaz yazılı dolgu (`--brand-fill-deep`) ve açık zemin mürekkebi (`--brand-on-soft`) AA:
+     #c25540 beyaza 4,499:1, soft'a 4,05:1 veriyordu. */
+  --brand-deep: #b44e3a;
+  /* Mürekkep beyaz zeminde AA: #c25540 4,499:1 veriyordu (aynı rengin koyusu). */
+  --brand-text: #b24e3b;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #ffd2c2;
+  --brand-orb-2: #ffa583;
+  --brand-orb-3: #ff835d;
+  --brand-orb-4: #db9df5;
+  --brand-logo-1: #ffd2c2;
+  --brand-logo-2: #ffa583;
+  --brand-logo-3: #ff835d;
+  --brand-logo-4: #c25540;
+  --brand-logo-5: #8c3a2c;
+  --chart-1: #ff835d;
+  --chart-2: #db9df5;
+}
+
+/* Marka paleti — Sunset Gradient */
+:root[data-palette="sunset-gradient"] {
+  /* Açık uç neon sarıydı (#ffea00; ürün sahibi: "açık rengi çok kötü"): rampa bir kademe koyu,
+     derin turuncudan kehribara — koyu temadaki hissi açıkta da verir. */
+  --brand-from: #ef5d0e;
+  --brand-via: #ff7b00;
+  --brand-to: #ffaa00;
+  --brand-soft: #fff0dd;
+  /* Beyaz yazılı dolgu ve açık zemin mürekkebi AA: #cc5500 beyaza 4,31:1, soft'a 3,94:1 veriyordu. */
+  --brand-deep: #b84c00;
+  /* Mürekkep beyaz zeminde AA: #cc5500 4,32:1 veriyordu (aynı rengin koyusu). */
+  --brand-text: #b34a00;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #ffc46b;
+  --brand-orb-2: #ffaa00;
+  --brand-orb-3: #ff7b00;
+  --brand-orb-4: #ef5d0e;
+  --brand-logo-1: #ffc46b;
+  --brand-logo-2: #ffaa00;
+  --brand-logo-3: #ff7b00;
+  --brand-logo-4: #ef5d0e;
+  --brand-logo-5: #b84c00;
+  --chart-1: #ff7b00;
+  --chart-2: #c94f00;
+}
+
+/* Marka paleti — Pastel Lavender */
+:root[data-palette="pastel-lavender"] {
+  --brand-from: #6247aa;
+  --brand-via: #b185db;
+  --brand-to: #c19ee0;
+  --brand-soft: #dec9e9;
+  --brand-deep: #6247aa;
+  --brand-text: #815ac0;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #c19ee0;
+  --brand-orb-2: #b185db;
+  --brand-orb-3: #a06cd5;
+  --brand-orb-4: #6247aa;
+  --brand-logo-1: #c19ee0;
+  --brand-logo-2: #b185db;
+  --brand-logo-3: #a06cd5;
+  --brand-logo-4: #815ac0;
+  --brand-logo-5: #6247aa;
+  --chart-1: #b185db;
+  --chart-2: #6247aa;
+}
+
+/* Marka paleti — Green Garden */
+:root[data-palette="green-garden"] {
+  --brand-from: #31572c;
+  --brand-via: #90a955;
+  --brand-to: #c5d566;
+  --brand-soft: #ecf39e;
+  --brand-deep: #132a13;
+  --brand-text: #4f772d;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #c5d566;
+  --brand-orb-2: #90a955;
+  --brand-orb-3: #4f772d;
+  --brand-orb-4: #132a13;
+  --brand-logo-1: #c5d566;
+  --brand-logo-2: #90a955;
+  --brand-logo-3: #4f772d;
+  --brand-logo-4: #31572c;
+  --brand-logo-5: #132a13;
+  --chart-1: #4f772d;
+  --chart-2: #132a13;
+}
+
+/* Marka paleti — Fiery Red */
+:root[data-palette="fiery-red"] {
+  --brand-from: #621708;
+  --brand-via: #bc3908;
+  --brand-to: #f6aa1c;
+  --brand-soft: #f6aa1c;
+  --brand-deep: #220901;
+  --brand-text: #941b0c;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #f6aa1c;
+  --brand-orb-2: #bc3908;
+  --brand-orb-3: #941b0c;
+  --brand-orb-4: #220901;
+  --brand-logo-1: #f6aa1c;
+  --brand-logo-2: #bc3908;
+  --brand-logo-3: #941b0c;
+  --brand-logo-4: #621708;
+  --brand-logo-5: #220901;
+  --chart-1: #bc3908;
+  --chart-2: #941b0c;
+}
+
+/* Marka paleti — Fiesta (Instagram gradient: blue-purple → pink → yellow) */
+:root[data-palette="fiesta"] {
+  --brand-from: #515bd4;
+  --brand-via: #dd2a7b;
+  --brand-to: #feda77;
+  --brand-soft: #fff3d0;
+  --brand-deep: #4f1d8f;
+  --brand-text: #8134af;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #feda77;
+  --brand-orb-2: #f58529;
+  --brand-orb-3: #dd2a7b;
+  --brand-orb-4: #515bd4;
+  --brand-logo-1: #feda77;
+  --brand-logo-2: #dd2a7b;
+  --brand-logo-3: #ad339d;
+  --brand-logo-4: #8134af;
+  --brand-logo-5: #8134af;
+  --brand-orb-1: #feda77;
+  --brand-orb-2: #dd2a7b;
+  --brand-orb-3: #8134af;
+  --brand-orb-4: #515bd4;
+  --chart-1: #dd2a7b;
+  --chart-2: #515bd4;
+}
+
+/* Marka paleti — Chocolate Delight (dark→light brown) */
+:root[data-palette="chocolate-delight"] {
+  --brand-from: #210f04;
+  --brand-via: #690500;
+  --brand-to: #bb6b00;
+  --brand-soft: #f5e0c0;
+  --brand-deep: #210f04;
+  --brand-text: #690500;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #bb6b00;
+  --brand-orb-2: #934b00;
+  --brand-orb-3: #690500;
+  --brand-orb-4: #210f04;
+  --brand-logo-1: #bb6b00;
+  --brand-logo-2: #934b00;
+  --brand-logo-3: #690500;
+  --brand-logo-4: #452103;
+  --brand-logo-5: #210f04;
+  --chart-1: #934b00;
+  --chart-2: #210f04;
+}
+
+/* Midnight — derin gece lacivertinden buza. Kaynak, başka bir ürünün YÜZEY
+   tarifiydi (#080D16 arka plan, #131E30 panel, #18243B seçili, #E7EDF7
+   başlık, #DFEBFF birincil eylem zemini, #17243C o eylemin mürekkebi,
+   #B7C9E3 kenarlık). Burada paletler yüzeye DOKUNMAZ — arka plan, kart ve
+   kenarlık dark/light temasının işi ve bir paletin onları ezmesi tema
+   düğmesini yalancı yapardı. Uyarlama şu: verilen aile bir MARKA RAMPASI
+   olarak okundu, ara tonlar (#2B3E62 · #31456B · #425C87 · #5A76A3 ·
+   #7E95BC) aynı hue üzerinde türetildi.
+
+   ⚠️ tyrotrade'deki aynı paletin `--accent-grad-*` override'ı BURAYA
+   ALINMADI: o token ailesi bu uygulamada hiç tanımlı değil (süzgeç/harita
+   işaretçisi tyrotrade'e ait), ve okunmayan bir değişken yazmak sonraki
+   okuyucuya var olmayan bir bağ gösterirdi. */
+:root[data-palette="midnight"] {
+  /* Rampa KOYU UÇTAN başlar ve bu bilinçli: `from/via/to` üçlüsü
+       uygulamada ağırlıkla BEYAZ METİN ALTINDA dolgu olarak kullanılıyor
+       (gönder düğmesi, avatar, ikon karoları, header hapı) — beyaz metin
+       #131E30 üzerinde 15,5:1. */
+  --brand-from: #131e30;
+  --brand-via: #31456b;
+  --brand-to: #7e95bc;
+  /* Kaynağın birincil eylem çifti olduğu gibi korunur: soluk zemin +
+       gece mürekkebi. */
+  --brand-soft: #dfebff;
+  --brand-deep: #17243c;
+  --brand-text: #31456b;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #dfebff;
+  --brand-orb-2: #b7c9e3;
+  --brand-orb-3: #5a76a3;
+  --brand-orb-4: #131e30;
+  /* Logo rampası kaynağın en soluk tonundan BAŞLAMAZ. Bu ailenin açık ucu
+       düşük doygunlukta (#DFEBFF/#B7C9E3): beyaz zeminde gri bir lekeye
+       dönüşüyor ve logonun ilk iki darbesi kayboluyor. Rampa bir kademe
+       koyudan başlar. */
+  --brand-logo-1: #7e95bc;
+  --brand-logo-2: #5a76a3;
+  --brand-logo-3: #425c87;
+  --brand-logo-4: #2b3e62;
+  --brand-logo-5: #17243c;
+  /* Açık temada beyaz üzerinde 6,75:1 ve 10,67:1, iki seri arası 3,51 —
+       ailenin denenen beş tonu içinde en iyi ayrım. */
+  --chart-1: #7e95bc;
+  --chart-2: #2b3e62;
+}
+
+/* Cobalt Sky — kart degradesi gök mavisinden kobalta (#8EB0E2 · #3E6DB8 · #2A58A4). Rampa
+   koyu uçtan başlar: beyaz yazı `from` üstünde 6,9:1, `via` üstünde 5,1:1; açık uç yalnız köşe
+   parıltısı (beyazda 2,2:1). Beyaz düğmenin lacivert yazısı `--brand-deep` (#1E4B96). */
+:root[data-palette="cobalt-sky"] {
+  --brand-from: #2a58a4;
+  --brand-via: #3e6db8;
+  --brand-to: #8eb0e2;
+  --brand-soft: #e1ecfc;
+  --brand-deep: #1e4b96;
+  --brand-text: #2a58a4;
+  /* Başlık degradesinin açık ucu (#8EB0E2) beyazda 2,2:1'di (büyük yazı eşiği 3:1);
+       logo açığıyla 3,1:1. */
+  --brand-text-to: #6793d8;
+  /* Rozet: varsayılan çift (açık uç + `--brand-deep`) 3,8:1 veriyordu; orta ton dolgu + beyaz
+       rakam 5,1:1 ve iki temada da sayfadan ayrışır. */
+  --badge: #3e6db8;
+  --badge-foreground: #ffffff;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #c6d8f1;
+  --brand-orb-2: #8eb0e2;
+  --brand-orb-3: #3e6db8;
+  --brand-orb-4: #1e4b96;
+  /* Logo açık ucu (#8EB0E2) beyazda 2,2:1'di; bir kademe koyusu 3,1:1. */
+  --brand-logo-1: #6793d8;
+  --brand-logo-2: #3e6db8;
+  --brand-logo-3: #2a58a4;
+  --brand-logo-4: #3e6db8;
+  --brand-logo-5: #15386f;
+  /* Açık uç beyazda 3,1:1, koyu uç 11,5:1; iki seri arası 3,7. */
+  --chart-1: #6793d8;
+  --chart-2: #15386f;
+}
+
+/* Evergreen — kart degradesi açık yeşilden koyu yeşile (#4F9C79 → #1F5E43). Rampa koyu uçtan
+   başlar (beyaz yazı `from` üstünde 7,7:1, `via` üstünde 5,2:1); #4F9C79 açık uç. İç kutuların
+   rengi (#1D5A40) `--brand-deep`, düz düğme (#2E7A57) `via` ve koyu temadaki dolgu. */
+:root[data-palette="evergreen"] {
+  --brand-from: #1f5e43;
+  --brand-via: #2e7a57;
+  --brand-to: #4f9c79;
+  --brand-soft: #ddf1e6;
+  --brand-deep: #1d5a40;
+  /* Mürekkep #2E7A57'nin bir kademe koyusu: aynı rengin kendi %12 tonunda 4,4:1 veriyordu. */
+  --brand-text: #2b7452;
+  /* Rozet: açık uç + `--brand-deep` 2,5:1 veriyordu; orta ton dolgu + beyaz rakam 5,2:1. */
+  --badge: #2e7a57;
+  --badge-foreground: #ffffff;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #b7dcc9;
+  --brand-orb-2: #4f9c79;
+  --brand-orb-3: #2e7a57;
+  --brand-orb-4: #1d5a40;
+  --brand-logo-1: #4f9c79;
+  --brand-logo-2: #2e7a57;
+  --brand-logo-3: #1f5e43;
+  --brand-logo-4: #2e7a57;
+  --brand-logo-5: #0d3022;
+  /* Çubuk ve onay rengi #2E7D5B beyazda 5,0:1; koyu seri onunla 2,9:1 ayrışır. */
+  --chart-1: #2e7d5b;
+  --chart-2: #0d3022;
+}
+
+:root[data-palette="black"] {
+  --brand-from: #000000;
+  --brand-via: #000000;
+  --brand-to: #000000;
+  --brand-soft: #ededed;
+  --brand-deep: #000000;
+  --brand-text: #000000;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #d4d4d4;
+  --brand-orb-2: #737373;
+  --brand-orb-3: #262626;
+  --brand-orb-4: #000000;
+  --brand-logo-1: #000000;
+  --brand-logo-2: #000000;
+  --brand-logo-3: #000000;
+  --brand-logo-4: #000000;
+  --brand-logo-5: #000000;
+  --chart-1: #404040;
+  --chart-2: #000000;
+  /* Single-hue palette: every gradient stop is the same colour, so the
+       default --badge rule would be invisible. Light tint + text tone. */
+  --badge: var(--brand-soft);
+  --badge-foreground: var(--brand-text);
+  /* Zemin koyu temada koyuya döndüğü için mürekkep de dönmek zorunda —
+       bkz. --brand-on-soft docblock'u. */
+  --brand-on-soft: var(--brand-text);
+}
+
+/* Kurumsal logo rengi (sign · office). Ana renk logonun açık tonu; logonun koyu gövdesi ve kıvrımı
+   ondan oklab'da türer (%77 / %50 siyah), sol parçanın açık ucu %78 beyaz. Mürekkep beyazda ve
+   kendi açık zemininde AA. */
+
+:root[data-palette="periwinkle"] {
+  --brand-from: #6970af;
+  --brand-via: #6970af;
+  --brand-to: #6970af;
+  --brand-soft: #eceef7;
+  --brand-deep: #575d92;
+  --brand-text: #575d92;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #c1c6e3;
+  --brand-orb-2: #8f96c8;
+  --brand-orb-3: #6d74b5;
+  --brand-orb-4: #262944;
+  --brand-logo-1: #8b92c6;
+  --brand-logo-2: #6d74b5;
+  --brand-logo-3: #4b507f;
+  --brand-logo-4: #6d74b5;
+  --brand-logo-5: #262944;
+  --chart-1: #6d74b5;
+  --chart-2: #262944;
+  /* Dolgu ana rengin bir tık koyusu: beyaz yazı #6d74b5'te 4,36:1, burada 4,63:1. */
+  /* Tek renk: gradyan durakları aynı, varsayılan rozet kuralı görünmez olurdu. */
+  --badge: var(--brand-soft);
+  --badge-foreground: var(--brand-text);
+  --brand-on-soft: var(--brand-text);
+}

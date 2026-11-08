@@ -1,0 +1,36 @@
+/* Keşfet'in masaüstü (sosyal) parçaları: hikâye şeridinin iki uçlu solması ve görüntüleyicinin ilerleme çubuğu. */
+
+/* Yatay şerit, iki ucu devamı olan yanda solar (`useStripScroll` payları kurar). */
+.feed-strip-x {
+  scrollbar-width: none;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade-start, 0px),
+    #000 calc(100% - var(--fade-end, 0px)),
+    transparent
+  );
+}
+.feed-strip-x::-webkit-scrollbar {
+  display: none;
+}
+
+/* Görüntüleyicide şimdiki hikâyenin ilerleme çubuğu: süre CSS animasyonu, duraklatma
+   `animation-play-state`; hareketi azalt'ta çubuk doludur, süre işlemez. */
+.feed-story-fill {
+  transform-origin: left center;
+  animation: feed-story-fill linear forwards;
+}
+@keyframes feed-story-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .feed-story-fill {
+    animation: none;
+  }
+}

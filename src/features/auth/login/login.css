@@ -1,0 +1,316 @@
+/* Giriş ekranı "TYRO ile tanış" (`/login`) — WorkOS Atlas açılışının düzeni. Ölçüler Atlas'tan
+   ölçüldü (1440 px: başlık 84/86 px, 600, -0.02em; alt yazı 18/28, 500, en çok 560 px, başlığın
+   24 px altında; üst şerit 40 px kenar payı). Sayfa hep beyaz (`lib/publicPages` › isLightOnlyPage):
+   renkler sabit, tema tokenı değil. Yeni Tailwind sınıfı yok — her kural burada, sayfanın parçasında. */
+.login-page {
+  position: relative;
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  overflow-x: hidden;
+  background: #fff;
+  color: #0a0a0a;
+}
+
+/* ── Üst şerit ───────────────────────────────────────────────────────────── */
+.login-head {
+  display: flex;
+  height: 5.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 max(2.5rem, env(safe-area-inset-right)) 0 max(2.5rem, env(safe-area-inset-left));
+}
+/* Marka bloğu önceki girişin sol üstüyle aynı ölçüde: 42 px işaret, 23 px "tyro", altında 10 px
+   aralıklı büyük harf alt satır (telefonda 34 px işaret, alt satır yok). */
+.login-brand-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 1rem;
+}
+.login-logo {
+  width: 2.625rem;
+  height: 2.625rem;
+  flex-shrink: 0;
+}
+.login-brand-text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
+}
+.login-wordmark {
+  height: 1.4375rem;
+}
+.login-subbrand {
+  margin-top: 0.625rem;
+  /* AA (4,5:1) küçük yazıda: açık zeminde ~5,5:1 (%50'de 3,4:1 kalıyordu). */
+  color: rgb(26 26 26 / 0.66);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media (min-width: 1024px) {
+  .login-head {
+    padding-inline: max(3.5rem, env(safe-area-inset-left)) max(3.5rem, env(safe-area-inset-right));
+  }
+}
+/* Girişin denetimleri bu sayfanın ölçüsünde: Atlas'ın şerit yazısı gibi 15 px, yarı kalın. */
+.login-nav {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+}
+.login-nav :is(a, button) {
+  height: 2.5rem;
+  color: rgb(0 0 0 / 0.72);
+}
+.login-nav a {
+  padding-inline: 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+@media (hover: hover) {
+  .login-nav :is(a, button):hover {
+    background: rgb(0 0 0 / 0.045);
+    color: #0a0a0a;
+  }
+}
+
+/* ── Sahne ───────────────────────────────────────────────────────────────── */
+.login-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1.5rem 1.5rem;
+  text-align: center;
+}
+/* Başlık ve alt yazı maskotun önünde: açılışta büyük maskot yerine çekilirken yazı onun
+   üstünden akar (Atlas'ta da yazı robotun önünde). */
+:is(.login-title, .login-sub) {
+  position: relative;
+  z-index: 1;
+}
+.login-title {
+  margin: 0;
+  /* Atlas'ın 84 px'inden bir kademe küçük (ürün sahibi): masaüstünde 72, telefonda 36. */
+  font-size: clamp(2.25rem, 1rem + 4.4vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+.login-line {
+  display: block;
+}
+/* Kelime kelime akar (`wordReveal`): dönüşüm satır içi kutuda çalışır. */
+.login-word {
+  display: inline-block;
+}
+/* "TYRO" paletin renginde: mor-maviden pembeye (sarı uç beyazda okunmaz, geçişte yok). */
+.login-name {
+  padding-inline-end: 0.03em;
+  background: linear-gradient(
+    95deg,
+    var(--brand-from) 0%,
+    var(--brand-logo-3) 55%,
+    var(--brand-via) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.login-sub {
+  max-width: 24rem;
+  margin: 1.5rem 0 0;
+  color: rgb(0 0 0 / 0.72);
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+/* Geniş ekranda alt yazı tek satır (ürün sahibi); dar ekranda dengeli iki satır. */
+@media (min-width: 48rem) {
+  .login-sub {
+    max-width: none;
+    white-space: nowrap;
+  }
+}
+.login-stage {
+  position: relative;
+  margin-top: 0.75rem;
+}
+/* Açılışta ve Bağlan'da hareket eden katman: maskot ve "CONNECTING TO TYRO" birlikte. Katman
+   sabit (`will-change`): açılış bitip dönüşüm kalkınca katman düşüp yeniden çizilir, maskot yarım
+   piksel sıçrardı. */
+.login-move {
+  position: relative;
+  will-change: transform;
+}
+.login-mascot {
+  display: grid;
+  place-items: center;
+}
+.login-scramble {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* ── Bağlan: Atlas'ın siyah kapsülü ──────────────────────────────────────── */
+.login-cta {
+  display: inline-flex;
+  min-width: 11rem;
+  height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  padding: 0 2rem 0 1.625rem;
+  border: 0;
+  border-radius: 999px;
+  background: #0a0a0a;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.12),
+    0 10px 24px -10px rgb(0 0 0 / 0.45);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s,
+    transform 0.12s ease-out;
+}
+.login-cta > svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+@media (hover: hover) {
+  .login-cta:hover {
+    background: #262626;
+  }
+}
+.login-cta:active {
+  transform: scale(0.97);
+}
+.login-cta:focus-visible {
+  outline: 2px solid var(--brand-via);
+  outline-offset: 3px;
+}
+.login-cta:disabled {
+  cursor: progress;
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-cta {
+    transition: none;
+  }
+  .login-cta:active {
+    transform: none;
+  }
+}
+
+/* ── Telif: girişin satırı, sayfanın dibinde sakin ───────────────────────── */
+.login-foot {
+  flex-shrink: 0;
+  padding: 0.75rem 1.5rem max(1rem, env(safe-area-inset-bottom));
+  /* AA küçük yazıda (~5,7:1); %45'te 3,4:1 kalıyordu (CI'nın tablet denetimi yakaladı). */
+  color: rgb(0 0 0 / 0.6);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* ── Telefon: Atlas'ın telefon ölçüleri (alt yazı 16/24) ────────────────── */
+@media (max-width: 640px) {
+  .login-head {
+    height: 4rem;
+    padding-inline: max(1rem, env(safe-area-inset-left)) max(0.5rem, env(safe-area-inset-right));
+  }
+  .login-brand-row {
+    gap: 0.625rem;
+  }
+  .login-logo {
+    width: 2.125rem;
+    height: 2.125rem;
+  }
+  .login-wordmark {
+    height: 1.0625rem;
+  }
+  .login-subbrand {
+    display: none;
+  }
+  .login-nav {
+    gap: 0;
+  }
+  .login-nav a {
+    padding-inline: 0.625rem;
+  }
+  /* Telefonda sahne başlıkla telif arasında dikeyde ortalı (ürün sahibi: altı boş kalıyordu). */
+  .login-main {
+    justify-content: center;
+    padding-top: 1rem;
+  }
+  .login-sub {
+    margin-top: 1rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+@media (max-width: 360px) {
+  .login-wordmark {
+    display: none;
+  }
+}
+/* Alçak pencere (dizüstü, yatay telefon): başlık bir kademe küçük, düğme ilk ekranda kalsın. */
+@media (max-height: 800px) and (min-width: 641px) {
+  .login-head {
+    height: 5rem;
+  }
+  .login-title {
+    font-size: clamp(2.25rem, 1rem + 3.6vw, 3.75rem);
+  }
+}
+@media (max-height: 520px) {
+  .login-head {
+    height: 3.5rem;
+  }
+  .login-main {
+    padding-top: 0.25rem;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  .login-title {
+    font-size: clamp(1.75rem, 1rem + 3vw, 2.5rem);
+  }
+  .login-sub {
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.375rem;
+  }
+  .login-stage {
+    margin-top: 0;
+  }
+  .login-cta {
+    height: 3rem;
+  }
+  .login-foot {
+    padding-block: 0.25rem max(0.5rem, env(safe-area-inset-bottom));
+  }
+}

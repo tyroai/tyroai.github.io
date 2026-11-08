@@ -1,0 +1,74 @@
+/*
+ * Takvim Anlat'ı (Yeni menüsünün ilk satırı): Self Servis'in yazı kutusu (`NarrateField`) ve altında
+ * "anladığım" çipleri. DÜZ CSS: Tailwind'e sınıf eklenmez (bütçe dolu). Renk ve çizgi değişkenleri ile
+ * tür tonları (`--t-bg`, `--t-ink`) `.cal-pop` (popover) ve `.cal-sheet-body` (telefon çekmecesi)
+ * kökünden gelir (`calendar.css`); yüzeyler portalda, sayfanın dışında.
+ */
+
+.cal-nar {
+  padding-block: 0.25rem 0.5rem;
+  padding-inline: 0.25rem;
+}
+/* Kutu menünün çizgi tonunda; odakta Self Servis'in halkası (marka tonu) aynen. */
+.cal-nar-field {
+  border-color: var(--cal-edge);
+}
+.cal-nar-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin: 0;
+  padding-block: 0.625rem 0;
+  padding-inline: 0.125rem;
+  list-style: none;
+}
+.cal-nar-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  max-width: 100%;
+  min-height: 1.75rem;
+  padding-block: 0.125rem;
+  padding-inline: 0.25rem 0.625rem;
+  border: 1px solid var(--cal-edge);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.cal-nar-chip > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Türün çipi: Yeni menüsündeki seçeneğin tonu (toplantı mavi, görev turuncu, izin yeşil). */
+.cal-nar-chip[data-kind] {
+  padding-inline: 0.5rem 0.75rem;
+  border-color: transparent;
+  background: var(--t-bg);
+  color: var(--t-ink);
+  font-weight: 600;
+}
+.cal-nar-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+  margin-block: 0.5rem 0;
+  margin-inline: 0.125rem;
+  color: var(--warning-ink);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+.cal-nar-warn .cal-ic {
+  margin-block-start: 0.125rem;
+}
+.cal-nar-note {
+  margin-block: 0.625rem 0;
+  margin-inline: 0.25rem;
+  color: var(--cal-mute);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}

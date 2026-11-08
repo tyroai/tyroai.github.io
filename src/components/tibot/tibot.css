@@ -1,0 +1,355 @@
+/* Tibot Talepler — talep penceresinin Self Servis kalıbına eklenenler (numara, notlar). Kalıbın
+   kendisi `components/record-window`. Düz CSS, tembel parçada. */
+
+@media (min-width: 40rem) {
+  .tb-window {
+    max-width: min(37rem, calc(100vw - 2rem));
+  }
+}
+
+/* Talep numarası: basınca kopyalanır (`TicketCode`); simge farede belirir, kopyalanınca yeşil tik. */
+.tb-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline-start: 0.375rem;
+  border-radius: 0.375rem;
+  padding: 0.0625rem 0.25rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  vertical-align: 0.15em;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+.tb-code svg {
+  width: 0.8125rem;
+  height: 0.8125rem;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+@media (hover: hover) {
+  .tb-code:hover {
+    background: color-mix(in oklab, var(--foreground) 6%, transparent);
+    color: var(--foreground);
+  }
+  .tb-code:hover svg {
+    opacity: 1;
+  }
+}
+.tb-code:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand-text) 45%, transparent);
+  outline-offset: 2px;
+}
+.tb-code[data-copied] svg {
+  opacity: 1;
+  color: #059669;
+}
+@media (pointer: coarse) {
+  .tb-code {
+    position: relative;
+  }
+  .tb-code::after {
+    content: "";
+    position: absolute;
+    inset: -0.75rem -0.25rem;
+  }
+}
+
+.tb-muted {
+  color: var(--muted-foreground);
+  font-size: var(--text-callout, 0.8125rem);
+}
+
+.tb-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.tb-note {
+  display: flex;
+  gap: 0.75rem;
+}
+.tb-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--muted);
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+.tb-note-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.5rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+.tb-note-name {
+  color: var(--foreground);
+  font-weight: 500;
+}
+.tb-internal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--warning-ink, #92400e);
+}
+.tb-internal svg,
+.tb-note-images svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.tb-note-text {
+  margin-top: 0.25rem;
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.tb-note-images {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+}
+/* Notun görselleri: notun sütununa sığar, uzun ekran görüntüsü 20rem'de durur (oran korunur);
+   basınca görüntüleyici (`ImageLightbox`). */
+.tb-note-shots {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.tb-note-shot {
+  display: block;
+  max-width: 100%;
+  cursor: zoom-in;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--foreground) 4%, transparent);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.tb-note-shot img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 20rem;
+}
+@media (hover: hover) {
+  .tb-note-shot:hover {
+    border-color: color-mix(in oklab, var(--foreground) 24%, transparent);
+  }
+}
+.tb-note-shot:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--ring);
+}
+/* Satır içi olmayan dosya ekleri: gri kapsül, ad · boyut. */
+.tb-note-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+.tb-note-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  max-width: 100%;
+  min-height: 1.75rem;
+  padding: 0 0.625rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 6%, transparent);
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  outline: none;
+  transition: background-color 0.15s ease;
+}
+.tb-note-file svg {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.tb-note-file-size {
+  flex: none;
+  color: var(--muted-foreground);
+  font-weight: 400;
+}
+@media (hover: hover) {
+  .tb-note-file:hover {
+    background: color-mix(in oklab, var(--foreground) 10%, transparent);
+  }
+}
+.tb-note-file:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+@media (pointer: coarse) {
+  .tb-note-file {
+    min-height: 2.75rem;
+  }
+}
+.tb-link {
+  color: var(--brand-text, currentColor);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+}
+
+/* ── Üzerine gelince açılan kart (`TicketPeek`) ───────────────────────────── */
+.tb-peek {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.tb-peek-subject {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tb-peek-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.375rem 0.75rem;
+}
+.tb-peek-fact {
+  min-width: 0;
+}
+.tb-peek-fact dt {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+}
+.tb-peek-fact dd {
+  overflow: hidden;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tb-peek-note {
+  border-top: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+  padding-top: 0.5rem;
+}
+.tb-peek-label {
+  margin-bottom: 0.25rem;
+  color: var(--muted-foreground);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.tb-avatar--sm {
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.5625rem;
+  align-self: center;
+}
+/* Son not tam okunur: uzunsa kart içinde kayar (fare karta geçince kart açık kalır), altta
+   kaydırılacak yer varken soluklaşır (sona gelince keskin). */
+@property --tb-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+.tb-peek-text {
+  max-height: 13.5rem;
+  margin-top: 0.25rem;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  scrollbar-width: thin;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - var(--tb-fade)), transparent);
+}
+@supports (animation-timeline: scroll()) {
+  .tb-peek-text {
+    animation: tb-fade linear both;
+    animation-timeline: scroll(self);
+  }
+}
+@keyframes tb-fade {
+  0%,
+  90% {
+    --tb-fade: 1rem;
+  }
+  100% {
+    --tb-fade: 0px;
+  }
+}
+
+/* Basılabilir kişi (`TicketPerson`: kişi kartını açar). Satır ya da yazı gibi durur, üstüne gelince
+   ve kart açıkken hafif zemin; zemin için iki yana taşar, payı içeriden geri alır (yazı ve
+   fotoğraf yerinde kalır). */
+.tb-owner {
+  max-width: calc(100% + 0.75rem);
+  margin: 0.75rem -0.375rem -0.25rem;
+  padding: 0.25rem 0.375rem;
+  border-radius: 0.625rem;
+  text-align: start;
+  transition: background-color 0.15s ease;
+}
+.tb-person {
+  margin: -0.125rem -0.25rem;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.375rem;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  transition: background-color 0.15s ease;
+}
+.tb-person.tb-note-name {
+  color: var(--foreground);
+  font-weight: 500;
+}
+.tb-owner[aria-expanded="true"],
+.tb-person[aria-expanded="true"] {
+  background: var(--rw-faint);
+}
+@media (hover: hover) {
+  .tb-owner:hover,
+  .tb-person:hover {
+    background: var(--rw-faint);
+  }
+}
+.tb-owner:focus-visible,
+.tb-person:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand-text) 45%, transparent);
+  outline-offset: 0;
+}
+/* Dokunmatikte 44 px: sahip satırı boyca, satır içi ad görünmez payla (satır sabit kalır). */
+@media (pointer: coarse) {
+  .tb-owner {
+    min-height: 2.75rem;
+  }
+  .tb-person {
+    position: relative;
+  }
+  .tb-person::after {
+    position: absolute;
+    inset: -0.75rem -0.25rem;
+    content: "";
+  }
+}

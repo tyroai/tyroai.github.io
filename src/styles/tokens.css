@@ -1,0 +1,91 @@
+/* ÜRETİLMİŞ DOSYA — elle düzenleme. Kaynak: docs/design-tokens.md (`npm run tokens`). */
+@theme static {
+  --spacing-control-lg: 2.5rem;
+  --spacing-control: 2.25rem;
+  --spacing-control-sm: 1.75rem;
+  --spacing-fab: 3.5rem;
+  --spacing-icon: 1rem;
+  --spacing-icon-lg: 1.25rem;
+  --spacing-controls: 0.5rem;
+  --spacing-groups: 1rem;
+  --spacing-gutter: 2rem;
+  --spacing-page: 2rem;
+  --spacing-toolbar: 1rem;
+  --spacing-header: 1.5rem;
+  --spacing-section: 2rem;
+  --spacing-cards: 1rem;
+  --spacing-card: 1.25rem;
+  --radius-card: 1.25rem;
+  --radius-tile: 0.75rem;
+  --container-page: 96rem;
+  --container-reading: 47.5rem;
+  --text-display: 2.125rem;
+  --text-display--line-height: 2.5rem;
+  --text-display--font-weight: 600;
+  --text-display--letter-spacing: -0.025em;
+  --text-lead: 1rem;
+  --text-lead--line-height: 1.375rem;
+  --text-lead--font-weight: 500;
+  --text-lead--letter-spacing: -0.01em;
+  --text-page-title: 1.75rem;
+  --text-page-title--line-height: 2.125rem;
+  --text-page-title--font-weight: 600;
+  --text-page-title--letter-spacing: -0.02em;
+  --text-section-title: 1.0625rem;
+  --text-section-title--line-height: 1.375rem;
+  --text-section-title--font-weight: 600;
+  --text-section-title--letter-spacing: -0.01em;
+  --text-card-title: 0.9375rem;
+  --text-card-title--line-height: 1.25rem;
+  --text-card-title--font-weight: 600;
+  --text-card-title--letter-spacing: -0.005em;
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.25rem;
+  --text-body--font-weight: 400;
+  --text-body--letter-spacing: 0em;
+  --text-callout: 0.8125rem;
+  --text-callout--line-height: 1.125rem;
+  --text-callout--font-weight: 500;
+  --text-callout--letter-spacing: 0em;
+  --text-footnote: 0.75rem;
+  --text-footnote--line-height: 1rem;
+  --text-footnote--font-weight: 400;
+  --text-footnote--letter-spacing: 0em;
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 0.875rem;
+  --text-eyebrow--font-weight: 600;
+  --text-eyebrow--letter-spacing: 0.12em;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --spacing-gutter: 1.5rem;
+    --spacing-page: 1.5rem;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --spacing-groups: 0.75rem;
+    --spacing-gutter: 1rem;
+    --spacing-page: 1rem;
+    --spacing-header: 1rem;
+    --spacing-section: 1.5rem;
+    --spacing-cards: 0.75rem;
+    --spacing-card: 1rem;
+    --text-display: 1.75rem;
+    --text-display--line-height: 2.125rem;
+    --text-lead: 0.9375rem;
+    --text-lead--line-height: 1.3125rem;
+    --text-page-title: 1.5rem;
+    --text-page-title--line-height: 1.875rem;
+  }
+}
+
+@media (pointer: coarse) {
+  :root {
+    --spacing-control-lg: 44px;
+    --spacing-control: 44px;
+    --spacing-control-sm: 44px;
+  }
+}

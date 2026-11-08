@@ -1,0 +1,144 @@
+/* Yapışkan notların kâğıt destesi (`StickyDeck`): tepsi, toplu tepsi ve çentik ortak.
+   Kâğıt tonları notların paletinden (`sticky.css`); küçük yüzeyde koyu temada da AÇIK kalır. */
+
+.stk-paper {
+  --st: oklch(0.95 0.075 95);
+  --st-edge: oklch(0.8 0.1 95);
+}
+.stk-paper[data-color="mint"] {
+  --st: oklch(0.94 0.05 165);
+  --st-edge: oklch(0.78 0.08 165);
+}
+.stk-paper[data-color="sky"] {
+  --st: oklch(0.94 0.04 240);
+  --st-edge: oklch(0.77 0.07 240);
+}
+.stk-paper[data-color="rose"] {
+  --st: oklch(0.94 0.045 15);
+  --st-edge: oklch(0.78 0.08 15);
+}
+.stk-paper[data-color="lilac"] {
+  --st: oklch(0.94 0.045 300);
+  --st-edge: oklch(0.78 0.08 300);
+}
+.dark .stk-paper {
+  --st: oklch(0.88 0.1 95);
+  --st-edge: oklch(0.7 0.1 95);
+}
+.dark .stk-paper[data-color="mint"] {
+  --st: oklch(0.86 0.07 165);
+  --st-edge: oklch(0.66 0.08 165);
+}
+.dark .stk-paper[data-color="sky"] {
+  --st: oklch(0.86 0.06 240);
+  --st-edge: oklch(0.66 0.08 240);
+}
+.dark .stk-paper[data-color="rose"] {
+  --st: oklch(0.86 0.07 15);
+  --st-edge: oklch(0.66 0.09 15);
+}
+.dark .stk-paper[data-color="lilac"] {
+  --st: oklch(0.86 0.07 300);
+  --st-edge: oklch(0.66 0.09 300);
+}
+
+/* Deste ikon boyunda (24 × 20): düğmeler onu ikon gibi yerleştirir. */
+.stk-deck {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.5rem;
+  height: 1.25rem;
+}
+/* Liste okunmadan: renkler soluk (gerçek notların rengi değil). */
+.stk-deck[data-idle] {
+  opacity: 0.55;
+}
+.stk-paper {
+  grid-area: 1 / 1;
+  width: 0.875rem;
+  height: 0.9375rem;
+  border-radius: 0.1875rem;
+  background: var(--st);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--st-edge) 75%, transparent),
+    0 1px 2px rgb(0 0 0 / 0.16);
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.stk-paper[data-pos="2"] {
+  transform: translate(-0.3125rem, 0.0625rem) rotate(-14deg);
+}
+.stk-paper[data-pos="1"] {
+  transform: translate(0.3125rem, 0.0625rem) rotate(12deg);
+}
+.stk-paper[data-pos="0"] {
+  transform: rotate(-2deg);
+  /* Satır çizgileri ve sağ alt kıvrık köşe — durağan degrade. */
+  background:
+    linear-gradient(
+        135deg,
+        transparent calc(100% - 0.25rem),
+        color-mix(in oklab, var(--st-edge) 70%, white) 0
+      )
+      no-repeat,
+    linear-gradient(var(--st-edge), var(--st-edge)) 0.1875rem 0.3125rem / 0.5rem 1.5px no-repeat,
+    linear-gradient(var(--st-edge), var(--st-edge)) 0.1875rem 0.5625rem / 0.3125rem 1.5px no-repeat,
+    var(--st);
+  animation: stk-drop 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* Yeni not destenin üstüne düşer (kimlik değişince yeniden oynar). */
+@keyframes stk-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) rotate(-10deg) scale(1.15);
+  }
+}
+@media (hover: hover) {
+  button:hover .stk-paper[data-pos="2"] {
+    transform: translate(-0.5rem, 0.0625rem) rotate(-20deg);
+  }
+  button:hover .stk-paper[data-pos="1"] {
+    transform: translate(0.5rem, 0.0625rem) rotate(18deg);
+  }
+  button:hover .stk-paper[data-pos="0"] {
+    transform: translateY(-0.0625rem) rotate(0deg) scale(1.08);
+  }
+}
+
+/* Sayı rozeti destenin sağ üstünde (çentiğin rozet dili); sayı değişince küçük pop. */
+.stk-count {
+  position: absolute;
+  top: -0.375rem;
+  inset-inline-end: -0.5rem;
+  display: grid;
+  place-items: center;
+  min-width: 1rem;
+  height: 1rem;
+  padding: 0 0.3125rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--brand-via) 75%, #17243c);
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.22);
+  animation: stk-pop 260ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+@keyframes stk-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stk-paper {
+    transition: none;
+  }
+  .stk-paper[data-pos="0"],
+  .stk-count {
+    animation: none;
+  }
+}

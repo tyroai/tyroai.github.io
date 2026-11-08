@@ -1,0 +1,396 @@
+/* Yapışkan notlar (StickyWidget). Kâğıt renkleri sakin, açıkta açık / koyuda koyu ton; yazı
+   her ikisinde sayfanın yazı rengi (AA). Düz CSS: widget tembel parçada. */
+
+.st-card {
+  --st: oklch(0.95 0.075 95);
+  --st-edge: oklch(0.86 0.09 95);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-tile);
+  background: var(--st);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--st-edge) 70%, transparent),
+    0 1px 2px rgb(0 0 0 / 0.05);
+  color: var(--foreground);
+}
+.st-card[data-color="mint"],
+.st-dot[data-color="mint"] {
+  --st: oklch(0.94 0.05 165);
+  --st-edge: oklch(0.84 0.07 165);
+}
+.st-card[data-color="sky"],
+.st-dot[data-color="sky"] {
+  --st: oklch(0.94 0.04 240);
+  --st-edge: oklch(0.83 0.06 240);
+}
+.st-card[data-color="rose"],
+.st-dot[data-color="rose"] {
+  --st: oklch(0.94 0.045 15);
+  --st-edge: oklch(0.84 0.07 15);
+}
+.st-card[data-color="lilac"],
+.st-dot[data-color="lilac"] {
+  --st: oklch(0.94 0.045 300);
+  --st-edge: oklch(0.84 0.07 300);
+}
+.st-dot[data-color="sun"] {
+  --st: oklch(0.95 0.075 95);
+  --st-edge: oklch(0.86 0.09 95);
+}
+.dark .st-card,
+.dark .st-dot[data-color="sun"] {
+  --st: oklch(0.34 0.05 95);
+  --st-edge: oklch(0.45 0.06 95);
+}
+.dark .st-card[data-color="mint"],
+.dark .st-dot[data-color="mint"] {
+  --st: oklch(0.33 0.04 165);
+  --st-edge: oklch(0.44 0.05 165);
+}
+.dark .st-card[data-color="sky"],
+.dark .st-dot[data-color="sky"] {
+  --st: oklch(0.33 0.045 245);
+  --st-edge: oklch(0.44 0.055 245);
+}
+.dark .st-card[data-color="rose"],
+.dark .st-dot[data-color="rose"] {
+  --st: oklch(0.34 0.05 15);
+  --st-edge: oklch(0.45 0.06 15);
+}
+.dark .st-card[data-color="lilac"],
+.dark .st-dot[data-color="lilac"] {
+  --st: oklch(0.34 0.05 300);
+  --st-edge: oklch(0.45 0.06 300);
+}
+
+/* Tepside ve çentikte pencere daha uzun: notlar okunur, yazma kartı sığar. */
+[data-panel="sticky"] {
+  height: min(26rem, calc(100dvh - 8rem));
+}
+
+/* Tepsi/çentik görünümü: tek sütun liste, notlar 4 satır; hızlı not hep açık. */
+.st-panel .st-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+.st-panel .st-text {
+  -webkit-line-clamp: 4;
+}
+.st-panel .st-card-body {
+  min-height: 0;
+}
+.st-quick {
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--st-edge) 80%, transparent);
+}
+.st-quick:focus-within {
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--st-edge) 95%, transparent),
+    0 6px 18px -8px rgb(0 0 0 / 0.18);
+}
+.st-quick .st-area {
+  min-height: 2.75rem;
+}
+.st-panel-empty {
+  margin: 0.75rem 0.25rem 0;
+  font-size: var(--text-eyebrow);
+  line-height: 1.45;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+/* ── Izgara: dar kartta tek, genişte iki/üç sütun (kabın enine göre) ───── */
+.st-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  margin-inline: -0.25rem;
+  padding: 0.25rem;
+}
+.st-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.625rem;
+  align-items: start;
+}
+@container widget (min-width: 19rem) {
+  .st-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@container widget (min-width: 34rem) {
+  .st-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.st-skeleton {
+  display: block;
+  height: 5.5rem;
+  border-radius: var(--radius-tile);
+}
+
+/* ── Kart: metin düğmesi + köşede ⋯ ─────────────────────────────────── */
+.st-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 5.5rem;
+  padding: 0.75rem 2rem 0.625rem 0.875rem;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  text-align: start;
+  cursor: text;
+}
+.st-card-body:focus-visible,
+.st-more:focus-visible,
+.st-dot:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand-ink) 55%, transparent);
+  outline-offset: 2px;
+}
+.st-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  overflow: hidden;
+  font-size: var(--text-callout);
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.st-text::first-line {
+  font-weight: 600;
+}
+.st-meta {
+  margin-top: auto;
+  font-size: var(--text-eyebrow);
+  color: color-mix(in oklab, var(--foreground) 58%, var(--st));
+}
+.st-card[aria-busy="true"] {
+  opacity: 0.7;
+}
+.st-more {
+  position: absolute;
+  top: 0.375rem;
+  inset-inline-end: 0.375rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in oklab, var(--foreground) 65%, var(--st));
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 150ms ease-out,
+    background-color 150ms ease-out;
+}
+.st-more svg {
+  width: 1rem;
+  height: 1rem;
+}
+.st-card:hover .st-more,
+.st-card:focus-within .st-more,
+.st-more[data-state="open"] {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .st-more:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+}
+/* Dokunmatikte üstüne gelme yok: ⋯ hep görünür, hedef 44 px (görünmez pay). */
+@media (pointer: coarse) {
+  .st-more {
+    opacity: 1;
+  }
+  .st-more::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem;
+  }
+}
+
+/* ── Yazma kartı ─────────────────────────────────────────────────────── */
+.st-compose {
+  padding: 0.625rem 0.75rem 0.625rem;
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--st-edge) 90%, transparent),
+    0 6px 18px -8px rgb(0 0 0 / 0.18);
+}
+.st-compose,
+.st-grid > .st-compose {
+  grid-column: 1 / -1;
+}
+.st-area {
+  width: 100%;
+  min-height: 5rem;
+  resize: none;
+  field-sizing: content;
+  max-height: 14rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: var(--text-callout);
+  line-height: 1.45;
+  outline: none;
+}
+.st-area::placeholder {
+  color: color-mix(in oklab, var(--foreground) 50%, var(--st));
+}
+.st-compose-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.375rem;
+}
+.st-compose-actions {
+  display: flex;
+  gap: 0.375rem;
+  margin-inline-start: auto;
+}
+
+/* ── Renk noktaları ──────────────────────────────────────────────────── */
+.st-dots {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+.st-dot {
+  position: relative;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--st);
+  box-shadow: inset 0 0 0 1.5px var(--st-edge);
+  cursor: pointer;
+}
+.st-dot[aria-checked="true"] {
+  box-shadow:
+    inset 0 0 0 1.5px var(--st-edge),
+    0 0 0 2px var(--background),
+    0 0 0 3.5px color-mix(in oklab, var(--foreground) 55%, transparent);
+}
+@media (pointer: coarse) {
+  .st-dots {
+    gap: 0.75rem;
+  }
+  .st-dot::after {
+    content: "";
+    position: absolute;
+    inset: -0.75rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .st-more {
+    transition: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .st-card {
+    box-shadow: 0 0 0 1.5px var(--foreground);
+  }
+}
+
+/* ── Geniş pencere (tepsi/çentik "Genişlet") ─────────────────────────────── */
+[data-slot="popover-content"]:has(.st-wide) {
+  width: min(38rem, calc(100vw - 1.5rem));
+}
+[data-panel="sticky"]:has(.st-wide) {
+  height: min(40rem, calc(100dvh - 6rem));
+}
+.st-panel.st-wide .st-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.st-panel.st-wide .st-text {
+  -webkit-line-clamp: 8;
+}
+.st-panel.st-wide .st-quick .st-area {
+  min-height: 5.5rem;
+}
+@container widget (max-width: 24rem) {
+  .st-panel.st-wide .st-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── Büyük yaz: yazma kartındaki düğme ve pencere ────────────────────────── */
+.st-compose {
+  position: relative;
+}
+.st-expand {
+  position: absolute;
+  top: 0.375rem;
+  inset-inline-end: 0.375rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in oklab, var(--foreground) 60%, var(--st));
+  cursor: pointer;
+}
+.st-expand svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+@media (hover: hover) {
+  .st-expand:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+}
+.st-expand:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand-ink) 55%, transparent);
+  outline-offset: 2px;
+}
+@media (pointer: coarse) {
+  .st-expand::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem;
+  }
+}
+.st-compose .st-area {
+  padding-inline-end: 1.75rem;
+}
+.st-focus-dialog {
+  width: min(42rem, calc(100vw - 2rem));
+  max-width: none;
+}
+.st-focus-title {
+  font-size: var(--text-card-title);
+  line-height: var(--text-card-title--line-height);
+  font-weight: 600;
+}
+.st-focus {
+  padding: 1rem 1.125rem;
+}
+.st-focus-area {
+  min-height: min(50dvh, 26rem);
+  max-height: 65dvh;
+  font-size: var(--text-body);
+  line-height: 1.55;
+}
+.st-focus-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.st-focus-count {
+  align-self: center;
+  font-size: var(--text-eyebrow);
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}

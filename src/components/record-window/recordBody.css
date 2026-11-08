@@ -1,0 +1,165 @@
+/*
+ * KAYIT PENCERESİ kalıbı › gövde (ortak): tek sayının kartı (`RecordHero`, `RecordMeter`) ve
+ * etiket | değer listesi (`RecordInfoList`). Çatı, şerit ve başlık `recordWindow.css`te.
+ * DÜZ CSS, yalnız kalıbı kullanan bileşenin parçasında.
+ */
+
+/* ── Kart: başlık solda, kaydın tek büyük sayısı sağda ─────────────────── */
+.rw-card {
+  --tone: var(--brand-text);
+  --tone-ink: var(--brand-ink);
+  --done: var(--success);
+  padding: 1.125rem 1.25rem;
+  border-radius: 0.875rem;
+  box-shadow: 0 0 0 1px var(--rw-line);
+}
+.rw-card[data-tone="success"] {
+  --tone: var(--success);
+  --tone-ink: var(--success-ink);
+}
+.rw-card[data-tone="warning"] {
+  --tone: var(--warning);
+  --tone-ink: var(--warning-ink);
+}
+.rw-card[data-tone="danger"] {
+  --tone: var(--danger);
+  --tone-ink: var(--danger-ink);
+}
+.rw-card[data-tone="neutral"] {
+  --tone: color-mix(in oklab, var(--foreground) 45%, transparent);
+  --tone-ink: var(--foreground);
+}
+/* Geçmişte kalan şey: dolu çubuk yeşil değil, sakin gri. */
+.rw-card[data-past] {
+  --done: color-mix(in oklab, var(--foreground) 32%, transparent);
+}
+.rw-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.rw-card-text {
+  min-width: 0;
+}
+.rw-card-title {
+  font-size: var(--text-card-title);
+  font-weight: 600;
+  letter-spacing: var(--text-card-title--letter-spacing);
+  line-height: var(--text-card-title--line-height);
+}
+.rw-card-sub {
+  margin-top: 0.25rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-callout);
+  line-height: var(--text-callout--line-height);
+}
+.rw-big {
+  flex-shrink: 0;
+  text-align: end;
+}
+.rw-big strong {
+  display: block;
+  font-size: 1.625rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 2rem;
+  overflow-wrap: anywhere;
+}
+.rw-big-more {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: var(--text-callout);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: var(--text-callout--line-height);
+  color: color-mix(in oklab, var(--foreground) 80%, transparent);
+}
+.rw-big small {
+  display: block;
+  margin-top: 0.125rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+}
+/* Dar sütunda değer başlığın altında, sola hizalı: uzun tutar başlığı ezmesin. */
+.rw-card[data-stacked] .rw-card-head {
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.rw-card[data-stacked] .rw-big {
+  text-align: start;
+}
+
+/* Parçalı çubuk: biten dolu, şimdiki çizgili (kartın tonunda), kalan kesikli. */
+.rw-meter {
+  display: flex;
+  height: 0.375rem;
+  gap: 3px;
+  margin: 1.125rem 0 0.625rem;
+}
+.rw-meter > span {
+  min-width: 0.375rem;
+  border-radius: 999px;
+}
+.rw-meter-done {
+  background: var(--done);
+}
+.rw-meter-now {
+  background: repeating-linear-gradient(90deg, var(--tone) 0 2px, transparent 2px 4px);
+}
+.rw-meter-rest {
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--foreground) 14%, transparent) 0 2px,
+    transparent 2px 4px
+  );
+}
+
+/* ── Etiket | değer listesi ────────────────────────────────────────────── */
+.rw-section {
+  color: var(--muted-foreground);
+  font-size: var(--text-callout);
+  font-weight: 500;
+  line-height: var(--text-callout--line-height);
+}
+.rw-rows {
+  margin-top: 0.25rem;
+}
+.rw-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.75rem 0;
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}
+.rw-row + .rw-row {
+  box-shadow: 0 -1px 0 var(--rw-line);
+}
+.rw-row dt {
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+.rw-row dd {
+  min-width: 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+  text-align: end;
+}
+.rw-row dd small {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: var(--text-footnote);
+  font-weight: 400;
+}
+.rw-row[data-wide] {
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.rw-row[data-wide] dd {
+  font-weight: 400;
+  text-align: start;
+}

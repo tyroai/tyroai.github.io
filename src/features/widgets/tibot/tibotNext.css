@@ -1,0 +1,299 @@
+/*
+ * Tibot · Sıra sende (`TibotNextWidget`). Renkler yalnız token'lardan (ön plan, marka mürekkebi, durum tonları): dört görünümde
+ * (Standart · Renkli · Cam · Açık) ve koyu temada doğru ada token'larıyla çizilir. Kart hücresi
+ * sabit boyda: her bölümün yüksekliği bütçeli, kırpılan satır yok. Geniş düzen kap sorgusuyla
+ * (≥ 22rem).
+ */
+
+/* ── Sıra sende ───────────────────────────────────────────────────────────────── */
+.tbn {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.tbn-main {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.625rem;
+}
+/* Yan kartlar ve "+n" yalnız genişte: dar kartta sayı konumu (1/4) ve noktalar yeter. */
+.tbn-side,
+.tbn-rest {
+  display: none !important;
+}
+@container widget (min-width: 22rem) {
+  .tbn-rest {
+    display: grid !important;
+  }
+  .tbn-main {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+  .tbn-side {
+    display: grid !important;
+    min-height: 0;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding-bottom: 6px;
+  }
+}
+/* Deste: başrolün altında iki kâğıdın kenarı görünür (kaç kart kaldığının sessiz işareti). */
+.tbn-stack {
+  position: relative;
+  min-height: 0;
+  padding-bottom: 6px;
+}
+.tbn-stack::before,
+.tbn-stack::after {
+  position: absolute;
+  bottom: 3px;
+  left: 5%;
+  right: 5%;
+  height: 1rem;
+  border-radius: 0 0 0.875rem 0.875rem;
+  background: color-mix(in oklab, var(--foreground) 7%, transparent);
+  content: "";
+}
+.tbn-stack::after {
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  background: color-mix(in oklab, var(--foreground) 4%, transparent);
+}
+.tbn-stack[data-depth="0"]::before,
+.tbn-stack[data-depth="0"]::after,
+.tbn-stack[data-depth="1"]::after {
+  display: none;
+}
+.tbn-slot {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  touch-action: pan-y;
+}
+.tbn-card,
+.tbn-mini {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--foreground) 5%, var(--card, transparent));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent);
+  text-align: start;
+  outline: none;
+  transition:
+    background-color 0.15s ease,
+    transform 0.12s ease;
+}
+.tbn-card {
+  gap: 0.375rem;
+  padding: 0.75rem 0.875rem;
+}
+.tbn-mini {
+  gap: 0.125rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--foreground) 3.5%, transparent);
+}
+@media (hover: hover) {
+  .tbn-card:hover,
+  .tbn-mini:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, var(--card, transparent));
+  }
+}
+.tbn-card:active,
+.tbn-mini:active {
+  transform: scale(0.98);
+}
+.tbn-card:focus-visible,
+.tbn-mini:focus-visible {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent),
+    0 0 0 2px var(--ring);
+}
+.tbn-when {
+  display: flex;
+  min-width: 0;
+  flex: none;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.tbn-when[data-tone="danger"] {
+  color: var(--danger-ink, var(--destructive));
+}
+.tbn-when[data-tone="warning"] {
+  color: var(--warning-ink, var(--foreground));
+}
+.tbn-when[data-tone="brand"] {
+  color: var(--brand-text);
+}
+.tbn-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in oklab, currentColor 18%, transparent);
+}
+.tbn-pos {
+  margin-inline-start: auto;
+  flex: none;
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+.tbn-subject,
+.tbn-mini-subject {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  color: var(--foreground);
+}
+.tbn-subject {
+  -webkit-line-clamp: 3;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.28;
+}
+.tbn-big {
+  font-size: 1.875rem;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.tbn-mini-subject {
+  -webkit-line-clamp: 2;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.tbn-meta {
+  display: flex;
+  min-width: 0;
+  flex: none;
+  margin-top: auto;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+.tbn-foot {
+  display: flex;
+  height: 1.75rem;
+  flex: none;
+  align-items: center;
+  gap: 0.375rem;
+}
+.tbn-nav,
+.tbn-rest {
+  position: relative;
+  display: grid;
+  height: 1.75rem;
+  min-width: 1.75rem;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  outline: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.tbn-nav svg {
+  width: 1rem;
+  height: 1rem;
+}
+.tbn-rest {
+  margin-inline-start: auto;
+  padding-inline: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.tbn-rest + .tbn-dots {
+  margin-inline-start: 0.25rem;
+}
+@media (hover: hover) {
+  .tbn-nav:hover,
+  .tbn-rest:hover {
+    background: color-mix(in oklab, var(--foreground) 7%, transparent);
+    color: var(--foreground);
+  }
+}
+.tbn-nav:focus-visible,
+.tbn-rest:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+/* Dokunmatikte görünmez pay: şerit sabit boyda kalır, hedef 44 px'e yaklaşır. */
+@media (pointer: coarse) {
+  .tbn-nav::after,
+  .tbn-rest::after {
+    position: absolute;
+    inset: -0.5rem;
+    content: "";
+  }
+}
+.tbn-dots {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+.tbn-rest ~ .tbn-dots {
+  flex: none;
+}
+.tbn-dots span {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 18%, transparent);
+  transition: width 0.25s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+.tbn-dots span[data-on] {
+  width: 1rem;
+  background: var(--brand-text);
+}
+.tbn-clear {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+.tbn-clear-line {
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.tbn-clear-foot {
+  border-radius: 0.375rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  outline: none;
+}
+.tbn-clear-foot:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+}
+.tbn-clear-foot:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tbn-card,
+  .tbn-mini,
+  .tbn-dots span {
+    transition: none;
+  }
+}

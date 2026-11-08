@@ -1,0 +1,4 @@
+// ÜRETİLMİŞ DOSYA — elle düzenleme. Kaynak: src/data/changelog.js (`npm run changelog:index`).
+// Açılışta karar için kayıtların yalnız kimliği, tarihi, türü, kitlesi, hedefi ve notify'ı —
+// metinler arşivde; pencere açılacaksa iner.
+export const CHANGELOG_INDEX = [{"id":"2026-11-08-demo-yayinda","date":"2026-11-08","kind":"feature","audience":"all","route":"/myspace"},{"id":"2026-11-07-sektor-veri-setleri","date":"2026-11-07","kind":"feature","audience":"all","route":"/myspace"},{"id":"2026-11-05-asistan-sohbeti","date":"2026-11-05","kind":"improvement","audience":"all","route":"/chat"},{"id":"2026-10-28-takvim","date":"2026-10-28","kind":"improvement","audience":"all","route":"/calendar"},{"id":"2026-10-20-gorevler","date":"2026-10-20","kind":"improvement","audience":"all","route":"/todo"}]

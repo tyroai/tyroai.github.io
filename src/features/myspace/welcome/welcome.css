@@ -1,0 +1,209 @@
+/* Telefonda karşılama çekmecesi (WelcomeDrawer). Boyu ekranın ~%58'i (ürün sahibinin örneği);
+   kısa telefonda en az 22rem, uzunda en çok 36rem. Örneğin dili: üstte yuvasız TYRO küresi ve cam
+   çan, orta-üstte üç büyük iki tonlu cümle, altta tutamak ve koyu cam kapsül (welcomeActions.css).
+   Yazı boyu JS'te kutuya sığdırılır (useFitText, 31 → 22 px); iki ton ve zeminin durakları paletten
+   ölçülür (useWelcomeInk → --welcome-base · --welcome-mark · --welcome-g0…6). Zemin
+   welcomeBackdrop.css'te, satır içi pullar welcomeTokens.css'te. Cam yüzeyde backdrop-filter yok:
+   altında ışık süzülüyor. */
+.welcome-root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overscroll-behavior: contain;
+}
+
+.welcome-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.26);
+}
+.dark .welcome-scrim {
+  background: rgb(0 0 0 / 0.5);
+}
+
+.welcome-sheet {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: clamp(22rem, 58svh, 36rem);
+  outline: none;
+}
+
+.welcome-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  isolation: isolate;
+  border-end-start-radius: 2.25rem;
+  border-end-end-radius: 2.25rem;
+  box-shadow:
+    0 30px 60px -30px color-mix(in oklch, var(--welcome-g6, var(--brand-via)) 75%, transparent),
+    0 10px 24px -18px rgb(0 0 0 / 0.45);
+}
+/* Alt kenarda ince ışık çizgisi: kalın bir camın kenarı gibi. */
+.welcome-panel::after {
+  content: "";
+  position: absolute;
+  inset-inline: 2.5rem;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.4), transparent);
+  pointer-events: none;
+}
+
+/* Üst sıra: solda TYRO'nun küresi (yuvasız, sohbet), sağda cam çan; ikisinin merkezi aynı çizgide,
+   kürenin sol kenarı yazının sol kenarıyla aynı hizada (örnekteki gibi). */
+.welcome-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(env(safe-area-inset-top) + 0.625rem) 1.3125rem 0;
+}
+.welcome-orb-slot {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  transition: transform 120ms ease-out;
+}
+.welcome-orb-slot:has(> .welcome-orb-hit:active) {
+  transform: scale(0.94);
+}
+/* Küre ortalanır. Maskotun çiziminde altta gölge payı var: görünen gövde (42 px) kutunun merkezinden
+   2,5 px yukarıda kalıyordu (ölçüldü) — çanla aynı çizgiye iner. Küre görünümü zaten tam merkezde. */
+.welcome-orb-in {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  transform: translate(-50%, calc(-50% + var(--orb-dy, 0px)));
+}
+.welcome-orb-slot[data-orb="mascot"] {
+  --orb-dy: 2.5px;
+}
+.welcome-orb-hit {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+}
+/* Cam çan küreden küçük (örnekte 35'e 42): görünen daire 36 px, dokunma alanı 44 px; görünen kenarı
+   sağ kenara, kürenin sol kenara uzaklığı kadar. */
+.welcome-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-inline-end: -0.25rem;
+  border-radius: 9999px;
+  color: #fff;
+  transition: transform 120ms ease-out;
+}
+.welcome-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0.25rem;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.22);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    inset 0 0 0 1px rgb(255 255 255 / 0.16),
+    0 8px 18px -10px rgb(0 0 0 / 0.3);
+  transition: background-color 150ms ease;
+}
+.welcome-btn:active {
+  transform: scale(0.92);
+}
+.welcome-btn svg {
+  position: relative;
+  width: 1.125rem;
+  height: 1.125rem;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.16));
+}
+@media (hover: hover) {
+  .welcome-btn:hover::before {
+    background: rgb(255 255 255 / 0.3);
+  }
+}
+.welcome-orb-hit:focus-visible,
+.welcome-btn:focus-visible,
+.welcome-grip:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: 2px;
+}
+
+/* Yazı üst sıra ile tutamağın arasında ortalı (örnekte yüksekliğin ~%40–70'i): üstte hava payı. */
+.welcome-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  padding: 0.25rem 1.375rem 0.75rem;
+}
+
+/* İki ton yalnız renkle (örnekteki gibi kalınlık aynı): normal yazı zeminin koyu tonunda
+   (--welcome-base, yarı saydam: zemin değiştikçe tonu da değişir), ad ve değerler beyaz
+   (--welcome-mark); değerin kesri yine koyu tonda ve küçük. Büyük yazı, sıkı satır, eksi harf
+   aralığı; cümleler arasında boşluk yok, tek blok okunur. */
+.welcome-text {
+  font-size: 31px;
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+  color: var(--welcome-base);
+  text-wrap: pretty;
+}
+.welcome-text :is(h2, p) {
+  margin: 0;
+  font: inherit;
+}
+.welcome-line + .welcome-line {
+  margin-top: 0.08em;
+}
+.welcome-mark {
+  color: var(--welcome-mark);
+}
+.welcome-nowrap {
+  white-space: nowrap;
+}
+/* Kesir küçük ve koyu tonda: saatin dakikası tabanda; derecenin işareti üstte, üst kenarı rakamın
+   üstüyle aynı hizada (ölçüldü: 0,52em'de 1,2 px yukarı taşıyordu). */
+.welcome-minor {
+  color: var(--welcome-base);
+  font-size: 0.6em;
+  letter-spacing: -0.01em;
+}
+.welcome-minor[data-deg] {
+  margin-inline: 0.02em -0.08em;
+  font-size: 0.62em;
+  vertical-align: 0.457em;
+}
+
+.welcome-skel {
+  display: block;
+  width: 72%;
+  height: 0.9em;
+  margin-top: 0.3em;
+  border-radius: 9999px;
+  background: color-mix(in oklch, var(--welcome-mark) 22%, transparent);
+}
+
+/* Tutamak kapsülün üstünde: çizilen çubuk sürüklenir (çekmecenin her yeri gibi), dokununca kapanır. */
+.welcome-grip {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  width: 4.5rem;
+  height: 2.75rem;
+  margin-bottom: 2.25rem;
+  border-radius: 9999px;
+}
+.welcome-grip span {
+  width: 3rem;
+  height: 0.3125rem;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.42);
+}

@@ -1,0 +1,129 @@
+/*
+ * "YENİ" MENÜLERİNİN ORTAK DİLİ — Takvim'in ve Self Servis'in Yeni menüsü aynı yüzeyi ve aynı
+ * seçenek satırını kullanır (`NewMenuOption`). DÜZ CSS: Tailwind'e sınıf eklenmez (ilk yükleme
+ * stil bütçesi dolu). Seçeneğin tonu (`--t-bg`, `--t-ink`) çağıranın kökünden gelir: Takvim'de
+ * `.cal-pop` (`calendar.css`), Self Servis'te `.ss-new` (`newRequestMenu.css`).
+ */
+
+/* Yüzey: sayfa bulanmaz, yalnız menünün ARKASI hafifçe buzlanır (yarı saydam zemin + bulanıklık)
+   ve menü yumuşak bir gölgeyle sayfanın üstünde durur. Popover'ın halka ve gölgesinin yerine geçer. */
+.nm-glass {
+  border: 1px solid color-mix(in oklab, var(--foreground) 9%, transparent);
+  background: color-mix(in oklab, var(--popover) 80%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    0 24px 48px -20px rgb(15 23 42 / 0.4),
+    0 8px 18px -10px rgb(15 23 42 / 0.18);
+}
+.dark .nm-glass {
+  border-color: rgb(255 255 255 / 0.1);
+  background: color-mix(in oklab, var(--popover) 74%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.08),
+    0 24px 48px -20px rgb(0 0 0 / 0.7),
+    0 8px 18px -10px rgb(0 0 0 / 0.45);
+}
+/* Bulanıklığı desteklemeyen tarayıcıda zemin opak: yazı arkadaki sayfanın üstünde okunur kalsın. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nm-glass {
+    background: var(--popover);
+  }
+}
+
+/* Seçenek: tonlu simge kutusu + ad ve tek satır açıklama. */
+.nm-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: 0.875rem;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .nm-opt:hover {
+    background: color-mix(in oklch, var(--foreground) 6%, transparent);
+  }
+}
+/* Klavye odağı yalnız ton değil halka da alır (menü kenarına taşmasın diye içeride). */
+.nm-opt:focus-visible {
+  background: color-mix(in oklch, var(--foreground) 6%, transparent);
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 70%, transparent);
+  outline-offset: -2px;
+}
+.nm-opt-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  background: var(--t-bg);
+  color: var(--t-ink);
+}
+.nm-opt-ic svg {
+  width: 1rem;
+  height: 1rem;
+}
+.nm-opt-text {
+  display: grid;
+  gap: 0.0625rem;
+  min-width: 0;
+}
+.nm-opt-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+/* Tonlu yüzeyde de AA kalan soluk yazı (`--muted-foreground` buzlu zeminde 4,5:1'in altına iner). */
+.nm-opt-sub {
+  color: color-mix(in oklch, var(--foreground) 58%, var(--card));
+  font-size: 0.75rem;
+}
+/* Yarım kalan taslak: form onunla açılır. */
+.nm-opt-badge {
+  padding: 0.0625rem 0.375rem;
+  border-radius: 999px;
+  background: var(--t-bg);
+  color: var(--t-ink);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+@media (pointer: coarse) {
+  .nm-opt {
+    min-height: 2.75rem;
+  }
+}
+
+/* Basma tepkisi: seçenek dokunduğu an koyulaşır ve hafifçe küçülür (90 ms). */
+.nm-opt:active {
+  background: color-mix(in oklch, var(--foreground) 11%, transparent);
+  scale: 0.985;
+  transition:
+    scale 90ms ease-out,
+    background-color 90ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nm-opt:active {
+    scale: none;
+  }
+}
+
+/* Azaltılmış saydamlık ve yüksek karşıtlık: menü yüzeyi buzlu değil dolu. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .nm-glass,
+  .dark .nm-glass {
+    background: var(--popover);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

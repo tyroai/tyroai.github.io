@@ -1,0 +1,50 @@
+/* Header'a yeni gelen widget (`headerFlash`): ikonun çevresinde bir halka belirip genişleyerek
+   söner — yalnız transform ve opacity, bir kez. Hareketi azalt tercihinde halka yerinde söner. */
+.tray-flash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--brand-text);
+  pointer-events: none;
+  animation: tray-flash 1.4s cubic-bezier(0.2, 0, 0, 1) both;
+}
+@keyframes tray-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tray-flash::before {
+    animation-name: tray-flash-still;
+  }
+  @keyframes tray-flash-still {
+    0%,
+    70% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 0;
+      transform: none;
+    }
+  }
+}
+
+/* Düzenlerken "−"nin üstüne gelince (ya da klavye odağında) silinecek ikonun çevresinde kırmızı
+   halka: rozet hangi widget'ı kaldıracak, basmadan görünsün. */
+@media (hover: hover) {
+  .tray-edit-item:has(> [data-remove]:hover, > [data-remove]:focus-visible) > [data-tray-icon] {
+    background-color: color-mix(in oklab, var(--danger) 8%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--danger) 60%, transparent);
+  }
+}

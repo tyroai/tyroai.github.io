@@ -1,0 +1,204 @@
+/*
+ * Yeni toplantı penceresinin katılımcı seçicisi (çipler, arama kutusu, öneri listesi) ve müsaitlik
+ * satırı. DÜZ CSS (Tailwind'e sınıf eklenmez, bütçe dolu); değişkenler `calendarMeeting.css`teki
+ * gibi `.cal-pop` ve `.cal-sheet-body` kökünden gelir. Pencerenin kabuğu ve alanları `calendarMeeting.css`te.
+ */
+
+/* ── Katılımcılar: çipler, arama kutusu, öneri listesi ───────────────────────────────────────── */
+.cal-who-tile {
+  align-items: flex-start;
+  padding-block: 0.625rem;
+  cursor: text;
+}
+.cal-who-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+}
+.cal-who-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  max-width: 100%;
+  padding-block: 0.125rem;
+  padding-inline: 0.125rem 0.25rem;
+  border: 1px solid var(--cal-edge);
+  border-radius: 999px;
+  background: var(--background);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+.cal-pav {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.cal-who-name {
+  min-width: 0;
+  max-width: 11rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cal-who-x {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  /* Hedef en az 24 px: kök yazı boyu alçak pencerede küçülür, rem tek başına 24'ün altına iner. */
+  width: max(1.5rem, 24px);
+  height: max(1.5rem, 24px);
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cal-mute);
+  cursor: pointer;
+}
+.cal-who-x .cal-ic {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+@media (hover: hover) {
+  .cal-who-x:hover {
+    background: color-mix(in oklch, var(--foreground) 8%, transparent);
+    color: var(--foreground);
+  }
+}
+.cal-who-x:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 70%, transparent);
+  outline-offset: 1px;
+}
+/* İsteğe bağlı çip: kesikli çerçeve, zorunludan bir bakışta ayrılır. */
+.cal-who-chip[data-optional] {
+  border-style: dashed;
+}
+.cal-who-input {
+  flex: 1 1 5rem;
+  width: auto;
+  min-width: 5rem;
+  min-height: 1.75rem;
+  font-weight: 500;
+}
+.cal-who-list {
+  display: grid;
+  gap: 0.0625rem;
+  margin: 0.375rem 0 0;
+  padding: 0.25rem;
+  list-style: none;
+  border: 1px solid var(--cal-edge);
+  border-radius: 0.875rem;
+  background: var(--card);
+  box-shadow: 0 10px 28px -16px color-mix(in oklch, var(--foreground) 40%, transparent);
+}
+.cal-who-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.625rem;
+  cursor: pointer;
+}
+.cal-who-opt[data-active] {
+  background: color-mix(in oklch, var(--foreground) 7%, transparent);
+}
+.cal-who-opt .cal-pav {
+  width: 2rem;
+  height: 2rem;
+}
+.cal-who-txt {
+  display: grid;
+  min-width: 0;
+  line-height: 1.25;
+}
+.cal-who-txt strong {
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cal-who-txt span {
+  overflow: hidden;
+  color: var(--cal-mute);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Zorunlu ve isteğe bağlı seçiciler: alt alta; ikincisi "+ İsteğe bağlı" ile açılır ───────── */
+.cal-who-second {
+  margin-block-start: 0.5rem;
+}
+.cal-who-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-block-start: 0.375rem;
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .cal-who-more:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ── Müsaitlik satırı: durum paletten bağımsız (yeşil boş, turuncu meşgul, gri bilinmiyor) ───── */
+.cal-avail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--t-dot) 11%, transparent);
+  color: var(--t-ink);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+/* Bilinmeyen müsaitlik (gri ton): `--muted-foreground` bu açık gri zeminde 4,5:1'in altında kalır. */
+:is(.cal-pop, .cal-sheet-body) .cal-avail[data-tone="mute"] {
+  --t-ink: var(--cal-mute);
+}
+.cal-avail .cal-ic {
+  width: 1rem;
+  height: 1rem;
+}
+.cal-avail .cal-link {
+  margin-inline-start: auto;
+  color: inherit;
+  font-weight: 600;
+}
+.cal-avail-note {
+  margin-inline-start: auto;
+  font-weight: 400;
+}
+
+/* Dokunmatik: hedefler ≥ 44 px (kişi çipi de 44 px boyunda, kaldır düğmesi çipin ucunda). */
+@media (pointer: coarse) {
+  .cal-who-input {
+    min-height: 2.75rem;
+    margin-block: 0;
+    padding-block: 0;
+  }
+  .cal-who-chip {
+    min-height: 2.75rem;
+    padding-inline-start: 0.375rem;
+    padding-inline-end: 0;
+  }
+  .cal-who-x {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .cal-who-opt {
+    min-height: 2.75rem;
+  }
+  .cal-avail .cal-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+}

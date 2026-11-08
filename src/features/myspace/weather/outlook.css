@@ -1,0 +1,38 @@
+/* Hava kartı › yağmur satırı (`OutlookChip`): konum hapının üçüncü bölümü, saat bölümüyle aynı
+   ayraç ve kalınlıkta. Kurallar burada — skyCard.css büyüyemez (kalite tabanı). */
+.sky-weather .sky-weather__outlook {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  margin-left: 4px;
+  padding-left: 8px;
+  border-left: 1px solid rgb(255 255 255 / 0.35);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sky-weather .sky-weather__outlook svg {
+  width: 12px;
+  height: 12px;
+}
+/* Dar kartta kısa hâl (şemsiye + saat); cümle yalnız ekran okuyucuya. */
+.sky-weather .sky-weather__outlook-full {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@container (min-width: 480px) {
+  .sky-weather .sky-weather__outlook-short {
+    display: none;
+  }
+  .sky-weather .sky-weather__outlook-full {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}

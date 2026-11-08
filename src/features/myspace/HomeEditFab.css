@@ -1,0 +1,43 @@
+/*
+ * Anasayfa düzenleme düğmesi (`HomeEditFab`) — görünüşü ortak yüzen düğme (`fab`: paletin koyu
+ * dolgusu, cam parıltı, 56 px, 24 px simge); burada yalnız yeri ve düzenleme hâli.
+ *
+ * Sayfa kökünde `absolute` (kaydırıcının kardeşi): sayfayla kaymaz, sohbet rıhtımı açıkken onun
+ * solunda kalır. Toplantı geri sayımı sağ altta `fixed`; yerini `--float-stack-bottom` ile
+ * bildirir, düğme onun üstüne çıkar. md'den itibaren sayfa kabının 0,5rem alt payı (`md:m-2`)
+ * düşülür. Seçici iki sınıflı: ortak `fab` kuralının önüne geçer (yükleme sırası belirsiz).
+ */
+.fab.home-edit-fab {
+  position: absolute;
+  inset-inline-end: 1rem;
+  bottom: max(calc(1rem + env(safe-area-inset-bottom)), var(--float-stack-bottom, 0px));
+  z-index: 30;
+  /* Alçak pencerede kök yazı küçülür (index.css); dokunma hedefi 44 px'in altına inmez. */
+  width: max(var(--spacing-fab), 44px);
+  height: max(var(--spacing-fab), 44px);
+}
+
+/* Düzenlerken: palet halesi — kipin açık olduğu bakışta okunur (simge onay işaretine döner). */
+.fab.home-edit-fab[data-editing] {
+  box-shadow:
+    0 0 0 0.3125rem color-mix(in oklch, var(--brand-via) 24%, transparent),
+    0 14px 30px -10px var(--brand-via),
+    inset 0 0 0 1px rgb(255 255 255 / 0.2);
+}
+
+@media (min-width: 640px) {
+  .fab.home-edit-fab {
+    inset-inline-end: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .fab.home-edit-fab {
+    bottom: max(1.5rem, calc(var(--float-stack-bottom, 0px) - 0.5rem));
+  }
+}
+/* Çentik rayı (90px) sağ kenarda: düğme rayın solunda, içeriğin oluğuyla hizalı. */
+@media (min-width: 1024px) {
+  main[data-notch="on"] .fab.home-edit-fab {
+    inset-inline-end: 6.5rem;
+  }
+}

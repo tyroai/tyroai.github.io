@@ -1,0 +1,317 @@
+/*
+ * Takvim özetinin yerinde açılan ayrıntı paneli (`DetailPanel`, yalnız özet ızgaranın sağındayken).
+ * Panel satırı uzatmaz (`contain: size`: boy ızgara sütunundan gelir); içerik kendi içinde kayar,
+ * eylem şeridi dipte. Izgara ekrandan uzunsa (ay görünümü, alçak pencere) panel sayfa kayarken
+ * ekranda kalır, boyu görünen alanla sınırlı. Ölçüler özetin başlığıyla aynı kenardan (1,5 rem).
+ */
+/* Zemin kartın beyazı (özetin gri tonu değil): ayrıntı örnekteki gibi düz kâğıt, Self Servis
+   kaydının renkli etiketleri de beyazda okunur (AA). */
+.cal-dp {
+  min-height: 28rem;
+  contain: size;
+  background: var(--card);
+}
+.cal-dp-in {
+  position: sticky;
+  top: 1rem;
+  display: flex;
+  flex-direction: column;
+  /* Uzun ızgarada boy, açıldığı anda da eylem şeridi ekranda kalacak kadar (header + sayfa başlığı). */
+  height: min(100%, calc(100dvh - 12rem));
+  animation: cal-dp-in 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes cal-dp-in {
+  from {
+    opacity: 0;
+    transform: translateX(0.5rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cal-dp-in {
+    animation: none;
+  }
+}
+.cal-dp-head {
+  flex: none;
+}
+.cal-dp-head h2:focus {
+  outline: none;
+}
+.cal-dp-close {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  margin-inline-end: -0.375rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cal-mute);
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+.cal-dp-close svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+@media (hover: hover) {
+  .cal-dp-close:hover {
+    background: color-mix(in oklch, var(--foreground) 6%, transparent);
+    color: var(--foreground);
+  }
+}
+.cal-dp-close:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 70%, transparent);
+  outline-offset: 1px;
+}
+/* Dokunmatikte 44 px basma alanı, düğme görünüşte büyümeden. */
+@media (pointer: coarse) {
+  .cal-dp-close::after {
+    content: "";
+    position: absolute;
+    inset: -0.375rem;
+  }
+}
+
+.cal-dp-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.5rem 1.5rem 1.5rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+/* ── Baş: simge kutusu · konu · gün (öteki türlerin kısa gövdesi de aynı ölçüde) ─────────────── */
+.cal-dp .cal-d {
+  padding: 0;
+}
+.cal-dp .cal-d-head {
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.cal-dp .cal-d-ic {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+}
+.cal-dp .cal-d-ic .cal-ic {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.cal-dp .cal-d-titles h3 {
+  font-size: var(--text-card-title);
+  line-height: 1.3;
+}
+.cal-dp .cal-d-titles p {
+  margin-top: 0.125rem;
+  font-size: var(--text-footnote);
+}
+.cal-dp .cal-d-row {
+  font-size: var(--text-footnote);
+}
+/* Öteki türlerin eylemleri de toplantınınki gibi dipte, çizgili şeritte; etiketler eşit pay alır. */
+.cal-dp-own {
+  display: flex;
+  flex-direction: column;
+}
+.cal-dp-own > .cal-d {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+}
+.cal-dp .cal-d-actions {
+  position: sticky;
+  bottom: -1.5rem;
+  margin: auto -1.5rem -1.5rem;
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid var(--cal-line);
+  background: var(--card);
+}
+.cal-dp .cal-d-actions > * {
+  flex: 1 1 0;
+  justify-content: center;
+}
+/* Önce içerik, sonra şerit: içerikle şerit arası en az bu kadar. */
+.cal-dp .cal-d > :nth-last-child(2) {
+  margin-bottom: 1rem;
+}
+.cal-dp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin: -0.25rem 0 0.25rem;
+}
+
+/* ── Alanlar: etiket üstte (soluk, küçük), değer altında ──────────────────────────────────────── */
+.cal-dp-field {
+  margin-top: 0.875rem;
+}
+.cal-dp-field h4 {
+  margin: 0 0 0.25rem;
+  color: var(--cal-mute);
+  font-size: max(var(--text-footnote), 12px);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.cal-dp-value {
+  margin: 0;
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.cal-dp-soft {
+  color: var(--cal-mute);
+  font-weight: 400;
+}
+.cal-dp-state {
+  margin: 0.25rem 0 0;
+  color: var(--cal-mute);
+  font-size: max(var(--text-footnote), 12px);
+  font-weight: 600;
+}
+.cal-dp-state[data-tone="success"] {
+  color: var(--success-ink);
+}
+.cal-dp-state[data-tone="brand"] {
+  color: var(--brand-text);
+}
+/* Sürerken geçen pay (kayıt kartının çubuğu; renkleri orada kartın tonundan gelir). */
+.cal-dp-field .rw-meter {
+  --done: var(--success);
+  --tone: var(--success);
+  margin: 0.625rem 0 0;
+}
+
+/* ── İkinci grup: "Toplantı bilgileri" (düzenleyen, yanıtınız, katılımcılar) ─────────────────── */
+.cal-dp-group {
+  margin-top: 1.125rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cal-line);
+}
+.cal-dp-group-title {
+  margin: 0;
+  font-size: var(--text-card-title);
+  font-weight: var(--text-card-title--font-weight);
+  line-height: var(--text-card-title--line-height);
+  letter-spacing: var(--text-card-title--letter-spacing);
+}
+.cal-dp-group .cal-dp-field:first-of-type {
+  margin-top: 0.625rem;
+}
+.cal-dp-people {
+  display: grid;
+  gap: 0.125rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Kişi satırı: fotoğraf · ad · yanıt. Düğmenin iç payı kenara taşar: fotoğraflar etiketle aynı hizada. */
+.cal-dp-person {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: calc(100% + 1rem);
+  min-height: 2.25rem;
+  margin: 0 -0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: var(--radius-tile);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+button.cal-dp-person {
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+@media (hover: hover) {
+  button.cal-dp-person:hover {
+    background: color-mix(in oklch, var(--foreground) 5%, transparent);
+  }
+}
+button.cal-dp-person:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 70%, transparent);
+  outline-offset: -2px;
+}
+@media (pointer: coarse) {
+  .cal-dp-person {
+    min-height: 2.75rem;
+  }
+}
+.cal-dp-av {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.6875rem;
+}
+.cal-dp-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.cal-dp-reply {
+  flex: none;
+  color: var(--cal-mute);
+  font-size: max(var(--text-footnote), 11px);
+}
+.cal-dp-more {
+  margin-top: 0.375rem;
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  color: var(--brand-text);
+  font: inherit;
+  font-size: max(var(--text-footnote), 12px);
+  font-weight: 600;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .cal-dp-more:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ── Dipte yapışık eylem şeridi: etiketli düğmeler eşit pay alır (örnekteki iki düğme gibi) ───── */
+.cal-dp-foot {
+  flex: none;
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid var(--cal-line);
+}
+.cal-dp-foot:empty {
+  display: none;
+}
+.cal-dp-foot .ev-actions > .rw-btn:not(.rw-btn--icon) {
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+/* ── Izgarada ayrıntısı açık blok ve çip ─────────────────────────────────────────────────────── */
+.cal-page :is(.cal-ev, .cal-chip)[data-active] {
+  z-index: 3;
+  outline: 2px solid var(--t-dot, var(--brand-text));
+  outline-offset: 1px;
+}
+
+/* Yanıt düğmeleri dar panelde: eşit pay yerine içerik kadar, sığmazsa alt satıra — "Kabul et"
+   üç noktayla kesilmesin. */
+.cal-dp .ev-rsvp {
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+.cal-dp .ev-rsvp .rw-btn {
+  flex: 1 0 auto;
+  padding: 0 0.625rem;
+  gap: 0.3125rem;
+}
+.cal-dp .ev-rsvp .rw-btn > span {
+  overflow: visible;
+}

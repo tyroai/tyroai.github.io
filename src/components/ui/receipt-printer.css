@@ -1,0 +1,175 @@
+/*
+ * Fiş yazıcısının (`receipt-printer.jsx`) kendine özgü renkleri, gölgeleri ve puntoları — EasyUI
+ * kaynağının değerleri birebir. Ayrı dosya, çünkü bu değerler uygulamanın hiçbir yerinde yok: Tailwind
+ * sınıfı olarak yazılsalar ilk yüklenen ortak CSS'e girerlerdi; burada yazıcıyla birlikte (tembel) iner.
+ * Yerleşim ve boşluklar Tailwind'de kalır. Katmansız kural: Tailwind'in katmanlı sınıflarını ezer.
+ */
+.rp {
+  font-family: "Inter Variable", Inter, sans-serif;
+  letter-spacing: -0.011em;
+  --rp-line: #1f1f1f;
+  --rp-hi: #fafafa;
+  --rp-mid: #a1a1a1;
+  --rp-lo: #525252;
+  --rp-slot: #050505;
+  max-width: 360px;
+}
+/* Sitedeki gibi: rakamlar ve etiketler JetBrains Mono, başlık ve cümleler Geist (yoksa Inter). */
+.rp-mono {
+  font-family: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+}
+.rp h3,
+.rp h4,
+.rp p {
+  font-family: Geist, "Geist Sans", "Inter Variable", Inter, sans-serif;
+}
+.rp-barcode {
+  max-width: 200px;
+}
+.rp-t8 {
+  font-size: 8px;
+}
+.rp-t9 {
+  font-size: 9px;
+}
+.rp-t10 {
+  font-size: 10px;
+}
+.rp-t11 {
+  font-size: 11px;
+}
+.rp-hi {
+  color: var(--rp-hi);
+}
+.rp-mid {
+  color: var(--rp-mid);
+}
+.rp-lo {
+  color: var(--rp-lo);
+}
+.rp-led-text {
+  color: #6b6b6b;
+}
+
+/* Durum kartı ve yazıcı gövdesi */
+.rp-status {
+  border: 1px solid var(--rp-line);
+  background: #0e0e0e;
+  border-radius: 19.6px;
+}
+.rp-body {
+  border: 1px solid var(--rp-line);
+  background: linear-gradient(to bottom, #141414, #0e0e0e, #0b0b0b);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+  border-radius: 25.2px;
+}
+.rp-bevel {
+  background: linear-gradient(to right, transparent, rgb(255 255 255 / 0.1), transparent);
+}
+.rp-rule {
+  border-color: var(--rp-line);
+}
+.rp-chip {
+  border: 1px solid var(--rp-line);
+  background: #0e0e0e;
+  border-radius: 11.2px;
+}
+.rp-pill {
+  border: 1px solid var(--rp-line);
+  background: var(--rp-slot);
+}
+.rp-slot {
+  border: 1px solid var(--rp-line);
+  background: var(--rp-slot);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.rp-roller {
+  background: linear-gradient(to right, transparent, var(--rp-line), transparent);
+}
+.rp-check {
+  border: 1px solid rgb(16 185 129 / 0.3);
+  background: rgb(16 185 129 / 0.1);
+  color: #34d399;
+}
+.rp-dot-idle {
+  background: #555555;
+}
+.rp-dot-busy {
+  background: #fbbf24;
+}
+.rp-dot-ok {
+  background: #34d399;
+}
+.rp-led-busy {
+  background: #34d399;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.8);
+}
+.rp-led-ok {
+  background: #10b981;
+  box-shadow: 0 0 5px rgba(52, 211, 153, 0.4);
+}
+.rp-led-off {
+  background: #444444;
+}
+
+/* Termal kâğıt */
+.rp-paper {
+  width: 92%;
+  border: 1px solid #e2e2e0;
+  background: #f9f9f8;
+  color: #111111;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border-radius: 0 0 11.2px 11.2px;
+}
+.rp-edge {
+  color: #f9f9f8;
+}
+.rp-edge-top {
+  transform: translateY(-100%);
+}
+.rp-edge-bottom {
+  transform: translateY(100%);
+}
+.rp-note {
+  font-style: italic;
+}
+.rp-notch {
+  top: 7rem;
+  background: var(--rp-slot);
+}
+.rp-notch-l {
+  border-right: 1px solid var(--rp-line);
+}
+.rp-notch-r {
+  border-left: 1px solid var(--rp-line);
+}
+.rp-dash {
+  border-bottom: 1px dashed color-mix(in oklab, currentColor 25%, transparent);
+}
+.rp-total-rule {
+  border-top: 1px solid color-mix(in oklab, currentColor 15%, transparent);
+}
+.rp-logo {
+  background: color-mix(in oklab, currentColor 5%, transparent);
+}
+
+/* Tekrar yazdır · Kopyala */
+.rp-action {
+  border: 1px solid var(--rp-line);
+  background: #0e0e0e;
+  color: var(--rp-mid);
+  border-radius: 14px;
+}
+@media (hover: hover) {
+.rp-action:hover:not(:disabled) {
+  border-color: #4a4a4a;
+  background: #141414;
+  color: var(--rp-hi);
+}
+}
+.rp-action-icon {
+  color: var(--rp-lo);
+}
+.rp-ok {
+  color: #34d399;
+}

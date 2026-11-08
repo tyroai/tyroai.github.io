@@ -1,0 +1,449 @@
+/* OneNote kartı ve okuyucusu (tembel parçayla iner; ilk CSS'e girmez).
+   Ölçü bütçesi: pano satırı 15rem (Anasayfa'nın ilk satırı 14.5rem) − kart iç payı 2×1.25rem −
+   başlık 1.75rem ≈ 10.25rem gövde. Üç satır × 3.125rem + 0.5rem üst pay = 9.875rem: her satırda sığar.
+   Motif: defter sırtı — minyatürün solunda marka renginde ince şerit (kâğıtta nokta). Renkli
+   görünümde (paletin degradesi) marka rengi zeminde kaybolur: sırt mürekkebin tonunda. */
+
+.on-body {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  --on-spine: var(--brand-ink);
+  --on-hair: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --on-paper: color-mix(in oklab, var(--foreground) 4%, transparent);
+  --on-hover: color-mix(in oklab, var(--foreground) 6%, transparent);
+  --on-ring: color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+[data-widget-look="palette"] .on-body {
+  --on-spine: color-mix(in oklab, var(--foreground) 62%, transparent);
+  --on-paper: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --on-hair: color-mix(in oklab, var(--foreground) 14%, transparent);
+  --on-hover: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+[data-widget-look="glass"] .on-body {
+  --on-paper: color-mix(in oklab, var(--card) 45%, transparent);
+}
+
+/* Başlık = defter seçici. Görünüşte başlık; dokunmatikte basılan alan 44px. */
+.on-heading {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  height: 1.75rem;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline: -0.375rem;
+  padding-inline: 0.375rem;
+  border-radius: 999px;
+  color: inherit;
+  font: inherit;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+.on-heading-chev {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+@media (hover: hover) {
+  .on-heading:hover {
+    background: var(--on-hover, color-mix(in oklab, var(--foreground) 6%, transparent));
+    color: var(--foreground);
+  }
+}
+.on-heading:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+@media (pointer: coarse) {
+  .on-heading::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem -0.25rem;
+  }
+}
+
+/* ── Liste ─────────────────────────────────────────────────────────── */
+.on-layout {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+.on-layout.has-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: 1rem;
+}
+.on-list > li {
+  position: relative;
+}
+/* İnce ayraç yazının hizasından başlar (Notlar'ın listesi gibi). */
+.on-list > li + li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 2.75rem 0;
+  height: 1px;
+  background: var(--on-hair);
+}
+.on-row {
+  display: flex;
+  width: calc(100% + 1rem);
+  min-height: 3.125rem;
+  align-items: center;
+  gap: 0.75rem;
+  margin-inline: -0.5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.875rem;
+  text-align: start;
+  transition: background-color 0.15s;
+}
+@media (hover: hover) {
+  .on-row:hover {
+    background: var(--on-hover);
+  }
+}
+.on-row:active {
+  background: var(--on-hover);
+}
+.on-row:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--on-ring);
+}
+.on-row-text {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+.on-row-title {
+  overflow: hidden;
+  font-size: var(--text-callout);
+  font-weight: 500;
+  line-height: var(--text-callout--line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.on-row-title.is-untitled,
+.on-hero-title.is-untitled {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.on-row-meta {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  color: var(--muted-foreground);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  white-space: nowrap;
+}
+.on-row-when {
+  flex-shrink: 0;
+}
+.on-row-crumb {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.on-row-crumb::before {
+  content: "·";
+  margin-inline: 0.3em;
+}
+/* Mini kartta bölüm adı düşer, defter kalır (zaman hiç kesilmez). */
+@container widget (max-width: 16rem) {
+  .on-row {
+    gap: 0.625rem;
+  }
+  .on-crumb-section {
+    display: none;
+  }
+  .on-list > li + li::before {
+    inset-inline-start: 2.5rem;
+  }
+}
+
+/* Sayfa minyatürü: kâğıt, solda sırt, üç çizgi. */
+.on-thumb {
+  position: relative;
+  display: flex;
+  width: 1.875rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  overflow: hidden;
+  padding-inline: 0.625rem 0.3125rem;
+  border: 1px solid var(--on-hair);
+  border-radius: 0.5rem;
+  background: var(--on-paper);
+}
+.on-thumb::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 0.1875rem;
+  background: var(--on-spine);
+}
+.on-thumb > i {
+  display: block;
+  height: 0.125rem;
+  border-radius: 1px;
+  background: color-mix(in oklab, var(--foreground) 20%, transparent);
+}
+.on-thumb > i:nth-child(2) {
+  width: 80%;
+}
+.on-thumb > i:nth-child(3) {
+  width: 55%;
+}
+
+/* ── Geniş kartın kâğıdı ─────────────────────────────────────────────── */
+.on-hero {
+  position: relative;
+  display: flex;
+  height: 9.375rem;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow: hidden;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--on-hair);
+  border-radius: 1rem;
+  background: var(--on-paper);
+  text-align: start;
+  transition:
+    background-color 0.15s,
+    transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+/* Kâğıdın üst kenarında ince ışık: kart üstünde hafifçe kalkık durur (gölge yok). */
+.on-hero::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: color-mix(in oklab, var(--card) 70%, transparent);
+}
+@media (hover: hover) {
+  .on-hero:hover {
+    background: color-mix(in oklab, var(--on-paper), var(--foreground) 4%);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .on-hero:active {
+    transform: scale(0.985);
+  }
+}
+.on-hero:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--on-ring);
+}
+.on-hero-eyebrow {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-eyebrow);
+  font-weight: 500;
+  line-height: var(--text-eyebrow--line-height);
+}
+.on-hero-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--on-spine);
+}
+.on-hero-crumb {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.on-hero-title {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 0.125rem;
+  font-size: var(--text-card-title);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: var(--text-card-title--line-height);
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.on-hero-excerpt {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .on-hero-excerpt {
+    animation: on-fade 0.3s ease-out;
+  }
+}
+.on-hero-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-top: 0.25rem;
+}
+.on-hero-skeleton > span {
+  display: block;
+  height: 0.625rem;
+  border-radius: 999px;
+}
+.on-hero-skeleton > span:last-child {
+  width: 70%;
+}
+.on-hero-when {
+  margin-top: auto;
+  color: var(--muted-foreground);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+}
+
+/* ── Bekleme iskeleti (satırlarla aynı boy: içerik gelince düzen oynamaz) ─ */
+.on-skeleton {
+  margin-top: 0.5rem;
+}
+.on-skeleton.has-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+}
+.on-skeleton-hero {
+  display: block;
+  height: 9.375rem;
+  border-radius: 1rem;
+}
+.on-skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-block: 0.25rem;
+}
+.on-skeleton-rows > span {
+  display: block;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+}
+
+[data-widget-look="palette"] .on-text-btn {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@keyframes on-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ── Defter filtresi ───────────────────────────────────────────────── */
+.on-menu {
+  padding: 0.375rem;
+}
+.on-menu-list {
+  display: flex;
+  max-height: min(18rem, 50vh);
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.on-menu-item,
+.on-menu-refresh {
+  display: flex;
+  width: 100%;
+  min-height: 2.25rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.5rem 0.625rem;
+  border-radius: 0.625rem;
+  font-size: var(--text-callout);
+  text-align: start;
+  transition: background-color 0.15s;
+}
+@media (pointer: coarse) {
+  .on-menu-item,
+  .on-menu-refresh {
+    min-height: 2.75rem;
+  }
+}
+@media (hover: hover) {
+  .on-menu-item:hover,
+  .on-menu-refresh:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--foreground) 6%, transparent);
+  }
+}
+.on-menu-item:focus-visible,
+.on-menu-refresh:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+.on-menu-item.is-on {
+  font-weight: 600;
+}
+.on-menu-check {
+  display: grid;
+  width: 1rem;
+  flex-shrink: 0;
+  place-items: center;
+  color: var(--brand-ink);
+}
+.on-menu-name {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.on-menu-count {
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+  font-size: var(--text-footnote);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+.on-menu-foot {
+  margin-top: 0.375rem;
+  padding-top: 0.375rem;
+  border-top: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+.on-menu-refresh {
+  gap: 0.5rem;
+  padding-inline-start: 0.5rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+.on-menu-refresh:disabled {
+  cursor: progress;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .on-spin {
+    animation: on-spin 0.9s linear infinite;
+  }
+}
+@keyframes on-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

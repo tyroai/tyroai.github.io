@@ -1,0 +1,44 @@
+/* Toplantı ritmi dar kartta (iç genişlik < 19rem: panonun tek sütunluk hücresi, 15rem'lik sabit
+   satır). Alt alta düzende sayı, alt yazı, en yoğun gün ve çubukların 6rem'lik alt sınırı satıra
+   sığmıyor, çubuklar ve gün adları kartın dışına taşıyordu: bilgi aynı, boşluklar ve sayı biraz
+   küçülür, çubuklar kalan yeri alır (en az 2,5rem). Telefonda kart katlı ya da tam genişlik: kural
+   orada işlemez. */
+@container rhythm (max-width: 18.99rem) {
+  .rhythm-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    min-height: 0;
+  }
+  .rhythm-num {
+    font-size: 1.75rem;
+  }
+  .rhythm-busiest {
+    padding-top: 0.5rem;
+  }
+  .rhythm-bars {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+  .rhythm-track {
+    min-height: 2.5rem;
+  }
+}
+
+/* Panonun mini kartında (iç genişlik < 16rem) başlık kısa adına geçer, hafta seçicinin iç payı
+   daralır: seçicinin yanında "Toplantı ritmin" "Toplan…", İngilizcede kısası da "Rhyt…" oluyordu. */
+.rhythm-title-short {
+  display: none;
+}
+@container rhythm (max-width: 16rem) {
+  .rhythm-title {
+    display: none;
+  }
+  .rhythm-title-short {
+    display: block;
+  }
+  .rhythm-week {
+    padding-inline: 0.5rem;
+  }
+}

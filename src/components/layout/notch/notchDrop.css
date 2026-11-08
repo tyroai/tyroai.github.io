@@ -1,0 +1,58 @@
+/* Panodan çentiğe sürükleme: çentik bırakma yeri olduğunu parlayarak söyler (yalnız sürüklerken;
+   düzenleme çubuğuyla iner). Parıltı paletin çentik tonundan, sabit — sürekli animasyon yok. */
+/* Dolu çentik de bırakma yeri: bırakılan yuvanın yerine geçer. */
+[data-notch-drop="ok"],
+[data-notch-drop="full"] {
+  filter: drop-shadow(
+    0 0 0.625rem color-mix(in oklch, var(--notch-hot-2, var(--brand-text)) 55%, transparent)
+  );
+  transition: filter 160ms ease-out;
+}
+[data-notch-drop="ok"][data-notch-over],
+[data-notch-drop="full"][data-notch-over] {
+  filter: drop-shadow(
+    0 0 1.125rem color-mix(in oklch, var(--notch-hot-2, var(--brand-text)) 85%, transparent)
+  );
+}
+[data-notch-drop="already"],
+[data-notch-drop="no"] {
+  opacity: 0.7;
+  transition: opacity 160ms ease-out;
+}
+
+.notch-drop-label {
+  position: fixed;
+  z-index: 60;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  background: var(--popover);
+  color: var(--brand-text);
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--brand-text) 30%, transparent),
+    0 12px 28px -14px rgb(15 23 42 / 0.45);
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  transition:
+    box-shadow 160ms ease-out,
+    color 160ms ease-out;
+}
+.notch-drop-label[data-over] {
+  box-shadow:
+    0 0 0 2px var(--brand-text),
+    0 12px 28px -14px rgb(15 23 42 / 0.45);
+}
+.notch-drop-label[data-tone="muted"] {
+  color: var(--warning-ink);
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--warning) 45%, transparent),
+    0 12px 28px -14px rgb(15 23 42 / 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-notch-drop],
+  .notch-drop-label {
+    transition: none;
+  }
+}

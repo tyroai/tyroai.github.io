@@ -1,0 +1,124 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════
+ *  İK DEĞER LİSTELERİ — Akışım'ın "Masraf gir" · "Avans gir" şablonları
+ * ═══════════════════════════════════════════════════════════════════════
+ *
+ * Kaynak: `tyro-hr-mcp` › `src/tyro_hr_mcp/tools/hr.py` (commit 07c839a) —
+ * `_EXPENSE_CATEGORY_PAIRS`, `_COMPANIES`, `_CASH_ADVANCE_PURPOSES`,
+ * `_PAYMENT_MODES` ve `create_cash_advance`in para birimi listesi. Tarayıcı
+ * MCP'ye doğrudan soramıyor (araç Copilot Studio'nun arkasında), o yüzden
+ * burada DONDURULMUŞ bir kopya duruyor — betikle üretildi, elle yazılmadı.
+ *
+ * ⚠️ **HR MCP İLE BİRLİKTE DEĞİŞİR.** Oraya bir kategori ya da şirket eklenirse
+ * buraya da eklenmeli. Eklenmezse seçici o değeri SUNMAZ, ama kalem düğmesiyle
+ * serbest metne geçen kullanıcı yine yazabilir — eksik liste bir ENGEL değil,
+ * bir KISAYOL kaybı. Tersi daha pahalı: burada olup MCP'de olmayan bir değer
+ * asistandan "tanınmadı" cevabı aldırır.
+ *
+ * ⚠️ **ADLAR ÇEVRİLMEZ.** Kategori başlıkları ve şirket unvanları ERP'nin kendi
+ * yazımı; MCP başlığı BİREBİR eşleyip ERP değerine çeviriyor
+ * (`_match_categories`) ve çevrilmiş bir ad o eşleşmeyi kırardı. Arayüzün
+ * kendi metinleri (amaç · ödeme · alan etiketleri) dört sözlükte.
+ *
+ * ⚠️ **ŞİRKET KOD İLE GİDER.** MCP adı da kabul ediyor ama iki çift aynı unvanı
+ * taşıyor (DANE/DTHY, EFES/LNUT): adla gönderim o çiftlerde "belirsiz" cevabı
+ * ve bir tur daha demekti. Kod her zaman tektir.
+ */
+
+/**
+ * Masraf kategorileri — `[başlık, ERP değeri]`, MCP'nin sırası (yurtiçi/yurtdışı seyahat başta).
+ * Sohbet şablonu BAŞLIĞI gönderir (MCP onu ERP değerine çevirir); ERP'den okunan masraf
+ * satırında ise DEĞER gelir (`mserp_costtype`) — Self Servis başlığı bu eşlemeyle bulur.
+ * Değerler tyroHR'nin kategori listesiyle (`TYROExpenseEntry` konusu) birebir.
+ */
+export const EXPENSE_CATEGORY_PAIRS = [
+  ["Konaklama (Yurtiçi)", "y.içi konaklama"],
+  ["Seyahat yemek (Yurtiçi)", "y.içi seyahat yemek"],
+  ["Ulaşım (Yurtiçi)", "y.içi ulaşım"],
+  ["Yemek (Yurtiçi)", "y.içi yemek"],
+  ["Kargo (Yurtiçi)", "Yurtiçi Kargo Giderleri"],
+  ["Götürü giderler (Yurtdışı)", "y.dışı götürü giderler"],
+  ["Konaklama (Yurtdışı)", "y.dışı konaklama"],
+  ["Ulaşım (Yurtdışı)", "y.dışı ulaşım"],
+  ["Yemek (Yurtdışı)", "y.dışı yemek"],
+  ["Çıkış ve pasaport harç (Yurtdışı)", "Yurtdışı Çıkış ve Pasaport Harç"],
+  ["Kargo (Yurtdışı)", "Yurtdışı Kargo Giderleri"],
+  ["Ağırlama ve konaklama", "Ağırlama ve Konaklama Gid."],
+  ["Analiz giderleri", "Analiz Giderleri"],
+  ["Bağış ve yardım", "Bağış ve Yardım Giderleri"],
+  ["Bilgisayar malzemeleri bakım o.", "Bilgisayar Malzemeleri Bakım O."],
+  ["Bina ve çevre bakım onarım", "Bina ve Çevre Bakım Onarım Gid"],
+  ["Demirbaşlar bakım onarım", "Demirbaşlar Bakım Onarım Gider"],
+  ["Departman yemek ekip", "Departman yemek ekip"],
+  ["Diğer çeşitli giderler", "Diğer Çeşitli Giderler"],
+  ["Diğer haberleşme", "Diğer Haberleşme"],
+  ["Diğer işlemler", "Diğer İşlemler"],
+  ["Diğer kkeg", "Diğer KKEG"],
+  ["Diğer temsil ağırlama", "Diğer Temsil Ağırlama Gid."],
+  ["Diğer vergiler", "Diğer Vergiler"],
+  ["Dışardan sağlanan pers. gider.", "Dışardan Sağlanan Pers. Gider."],
+  ["Eğitim giderleri", "Eğitim Giderleri"],
+  ["Fazla mesai ulaşım", "Fazla Mesai Ulaşım Gideri"],
+  ["Fazla mesai yemek", "Fazla Mesai Yemek Gideri"],
+  ["Gider kaydedilen küçük demirbaşlar", "Gider Kaydedilen Küçük Demirbaşlar"],
+  ["Giyim yardımı", "Giyim Yardımı"],
+  ["İlaç ve tedavi", "İlaç ve Tedavi Giderleri"],
+  ["Kayıt tescil", "Kayıt Tescil Giderleri"],
+  ["Kırtasiye", "Kırtasiye Gid."],
+  ["Lisans bakım güncelleme", "Lisans Bakım Güncelleme Giderl"],
+  ["Matbaa", "Matbaa Giderleri"],
+  ["Noter", "Noter Giderleri"],
+  ["Oda aidatları", "Oda Aidatları"],
+  ["Otel rezervasyon", "OTEL REZERVASYON"],
+  ["Sertifika", "Sertifika Giderleri"],
+  ["Sosyal aktivite", "Sosyal Aktivite Gd."],
+  ["Taşıt akaryakıt", "Taşıt Akaryakıt Gid."],
+  ["Taşıt bakım onarım", "Taşıt Bakım Onarım Gid."],
+  ["Taşıt hgs/ogs", "Taşıt HGS/OGS Gid."],
+  ["Taşıt kira", "Taşıt Kira Giderleri"],
+  ["Taşıt otopark", "Taşıt Otopark Gid."],
+  ["Temizlik", "Temizlik Giderleri"],
+  ["Temizlik malzemesi", "Temizlik Malzemesi Giderleri"],
+  ["Temsil ağırlama yemek", "Temsil Ağırlama Yemek Giderler"],
+  ["Tesis, makine ve cihazlar bakım", "Tesis, Makine ve Cihazlar Bakım"],
+  ["Ticaret odası", "Ticaret Odası Gideri"],
+  ["Toplantı ve organizasyon", "Toplantı ve Organizasyon Gider"],
+  ["Toplantı, fuar ve organizasyon", "Toplantı, Fuar ve Organizasyon"],
+  ["Uçuş rezervasyon", "UÇUŞ REZERVASYON"],
+  ["Vergi cezaları", "Vergi Cezaları"],
+]
+
+/** Kategori başlıkları — sohbet şablonunun seçicisi. */
+export const EXPENSE_CATEGORIES = EXPENSE_CATEGORY_PAIRS.map(([title]) => title)
+
+/** Yansıtma şirketleri — kod → ERP unvanı (HRMS ve DARA MCP'de de dışarıda). */
+export const COMPANIES = {
+  "TYAG": "TYRO TARIM ÜRÜNLERİ TİCARET ANONİM ŞİRKETİ",
+  "TYEN": "TYRO ENERJİ ÜRETİM ANONİM ŞİRKETİ",
+  "TYHL": "TYRO HOLDING A.Ş.",
+  "TYIN": "TYRO INTERNATIONAL FZE",
+  "TYLJ": "TYRO LOJİSTİK VE DEPOLAMA HİZMETLERİ ANONİM ŞİRKETİ",
+  "TYOT": "TYRO OTOMOTİV VE MAKİNE SANAYİ ANONİM ŞİRKETİ",
+  "TYRT": "TYRO PERAKENDE GIDA ÜRÜNLERİ SANAYİ VE TİCARET A.Ş.",
+  "TYTC": "TYRO TECH YAZILIM DANIŞMANLIK HİZMETLERİ TİCARET ANONİM ŞİRKETİ"
+}
+
+export const COMPANY_CODES = Object.keys(COMPANIES)
+
+/** Para birimleri — `create_cash_advance`in belgelediği dört birim. */
+export const CURRENCIES = ["TRY", "USD", "EUR", "GBP"]
+
+/**
+ * Avans amacı — anahtar → ERP değeri. Arayüz etiketi sözlükte
+ * (`myspace.purpose.<anahtar>`); TR etiketi ERP değerinin BİREBİR aynısı.
+ */
+export const ADVANCE_PURPOSES = {
+  business: "İş",
+  fair: "Fuar",
+  congress: "Kongre",
+  visit: "Müşteri Ziyareti",
+  other: "Diğer",
+}
+
+/** Ödeme yöntemi — anahtar → MCP'nin kabul ettiği değer (`_PAYMENT_MODES`). */
+export const PAYMENT_MODES = { bank: "Bank", cash: "Case" }

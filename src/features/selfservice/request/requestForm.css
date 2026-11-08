@@ -1,0 +1,93 @@
+/*
+ * Talep formları (izin · masraf · avans) — Apple düzeni. Katmansız kural, Tailwind'in katmanlı
+ * sınıflarını ezer (alan kutusu `req-ctl`, seçici `data-ms-shape`).
+ *
+ * Form alanları: içi beyaz, çok ince çizgi, minik gölge; odakta marka çizgisi + yumuşak halka.
+ * Masraf ızgarasının satır içi hücreleri kendi dosyasında (`expense/table/grid.css`).
+ */
+.req-form .req-ctl {
+  background: var(--background);
+  border-color: color-mix(in oklab, var(--foreground) 11%, transparent);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.05),
+    0 1px 1px rgb(0 0 0 / 0.02);
+  border-radius: 0.75rem;
+}
+@media (hover: hover) {
+  .req-form .req-ctl:hover {
+    border-color: color-mix(in oklab, var(--foreground) 20%, transparent);
+  }
+}
+.req-form .req-ctl:focus,
+.req-form .req-ctl[aria-expanded="true"] {
+  outline: none;
+  border-color: color-mix(in oklab, var(--brand-text) 55%, transparent);
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--brand-text) 12%, transparent),
+    0 1px 2px rgb(0 0 0 / 0.05);
+}
+.req-form .req-ctl[aria-invalid="true"] {
+  border-color: color-mix(in oklab, var(--destructive) 60%, transparent);
+}
+.req-form [data-ms-root]:not([data-morph-open]) [data-ms-shape] {
+  background: var(--background);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.05),
+    0 1px 1px rgb(0 0 0 / 0.02);
+}
+.req-form [data-ms-root]:not([data-morph-open]) [data-ms-shape]::after {
+  border-color: color-mix(in oklab, var(--foreground) 11%, transparent);
+}
+@media (hover: hover) {
+  .req-form [data-ms-root]:not([data-morph-open]) [data-ms-shape]:hover::after {
+    border-color: color-mix(in oklab, var(--foreground) 20%, transparent);
+  }
+}
+.req-form
+  [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]:has([data-ms-trigger]:focus-visible) {
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--brand-text) 12%, transparent),
+    0 1px 2px rgb(0 0 0 / 0.05);
+}
+.req-form
+  [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]:has([data-ms-trigger]:focus-visible)::after {
+  border-color: color-mix(in oklab, var(--brand-text) 55%, transparent);
+}
+
+/* Zorunlu ama boş alan (`data-field="need"`, `field/fieldState`): hafif kırmızı çerçeve; üstünde
+   biraz koyulaşır, odakta marka çizgisi ezer. Tutarın yanındaki para birimi seçicisi etkilenmez. */
+.req-form [data-field="need"] .req-ctl:not(:focus):not([aria-expanded="true"]) {
+  border-color: color-mix(in oklab, var(--danger) 36%, transparent);
+}
+@media (hover: hover) {
+  .req-form [data-field="need"] .req-ctl:not(:focus):not([aria-expanded="true"]):hover {
+    border-color: color-mix(in oklab, var(--danger) 55%, transparent);
+  }
+}
+.req-form
+  [data-field="need"]
+  > [data-ms-root]:not([data-morph-open])
+  [data-ms-shape]:not(:has([data-ms-trigger]:focus-visible))::after {
+  border-color: color-mix(in oklab, var(--danger) 36%, transparent);
+}
+
+/* Masrafın gözden geçirmesi: geniş formda solda fiş, sağda özet (imzala & gönder penceresinin
+   önizleme düzeni); dar formda yalnız özet. Kapsayıcı, formun kendisi (`@container/form`). */
+@container form (min-width: 60rem) {
+  .req-review {
+    display: grid;
+    max-width: 84rem;
+    grid-template-columns: minmax(22rem, 25rem) minmax(0, 1fr);
+    align-items: start;
+    gap: 2rem;
+  }
+  .req-review-receipt {
+    display: flex;
+  }
+  /* Özet fiş bölmesinin kaşıyla aynı hizadan başlasın, pencerenin tepesine yapışmasın. */
+  .req-review-main {
+    padding-top: 1.125rem;
+  }
+}

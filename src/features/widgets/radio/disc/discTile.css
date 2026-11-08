@@ -1,0 +1,90 @@
+/*
+ * Tyrofy'ın Denetim Merkezi kutucuğu (`DiscTile`): Disk kartının (`disc.css`) küçük hâli.
+ */
+/* Kutucuğun boyunda ve köşesinde, yazı biraz küçük; disk kartınkinden küçük (JS), altta dört
+   satıra yer kalır. */
+.disc-tile {
+  aspect-ratio: auto;
+  border-radius: inherit;
+  font-size: 11px;
+}
+.disc-tile .disc-card {
+  border-radius: inherit;
+  box-shadow: none;
+}
+.disc-tile .disc-info {
+  inset-inline: 10px;
+  bottom: 9px;
+  gap: 4px;
+}
+.disc-tile .disc-waves {
+  height: 12px;
+}
+/* Çal/duraklat: sağ üst köşede, diskin üstünde koyu yuvarlak (Disk kartının okları gibi). */
+.disc-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 4;
+  display: grid;
+  width: 28px;
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.5);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.disc-toggle::after {
+  position: absolute;
+  inset: -6px;
+  content: "";
+}
+@media (pointer: coarse) {
+  .disc-toggle::after {
+    inset: -8px;
+  }
+}
+.disc-toggle svg {
+  width: 14px;
+  height: 14px;
+}
+@media (hover: hover) {
+  .disc-toggle:hover {
+    background: rgb(0 0 0 / 0.68);
+  }
+}
+.disc-toggle:active {
+  transform: scale(0.92);
+}
+.disc-toggle:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: 2px;
+}
+
+/* Ortada (yatay kutucuk) disk soldan taşar (Disk kartının yatay düzeni): yanında yalnız ad ve tür,
+   çal/duraklat sağda ortalı. */
+.disc-tile[data-layout="row"] :is(.disc-waves, .disc-time) {
+  display: none;
+}
+.disc-tile[data-layout="row"] .disc-info {
+  gap: 2px;
+}
+.disc-tile[data-layout="row"]:has(.disc-toggle) .disc-info {
+  right: 44px;
+}
+.disc-tile[data-layout="row"] .disc-toggle {
+  top: 50%;
+  translate: 0 -50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disc-toggle {
+    transition: none;
+  }
+}

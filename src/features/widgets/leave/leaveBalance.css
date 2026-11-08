@@ -1,0 +1,145 @@
+/* İzin bakiyem (`LeaveBalanceWidget`). Düzen kartın genişliğine (`@container widget`) ve
+   yuvanın boyuna göre (`data-size`: mini · big; pano dışında yok → büyük gibi): mini kart tek
+   bilgi satırı, büyük kart hepsi. Kurallar burada, ilk CSS'te değil: yeni Tailwind sınıfı ilk
+   pakete girerdi. Satırlar 15rem: dar büyük kartta (yan yana değil, alt alta) iki satır sığar. */
+.lv-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 0.75rem;
+  margin-top: 0.625rem;
+}
+.lv-ring {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+.lv-num {
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.lv-unit {
+  margin-top: 0.125rem;
+  font-size: 0.625rem;
+  line-height: 1;
+  color: var(--muted-foreground);
+}
+
+/* Halka: iz soluk, onaydaki yay sarı (kullanılan yay paletin degradesi, `LeaveRing`). */
+.lv-track {
+  stroke: color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+.lv-pending {
+  stroke: var(--warning);
+}
+/* Renkli görünümde zemin zaten paletin degradesi: yaylar kartın mürekkebiyle. */
+[data-widget-look="palette"] .lv-track {
+  stroke: color-mix(in oklab, var(--foreground) 22%, transparent);
+}
+[data-widget-look="palette"] .lv-used {
+  stroke: var(--foreground);
+}
+[data-widget-look="palette"] .lv-pending {
+  stroke: color-mix(in oklab, var(--foreground) 55%, transparent);
+}
+
+.lv-facts {
+  display: grid;
+  gap: 0.375rem;
+  align-content: start;
+}
+.lv-fact {
+  display: flex;
+  min-width: 0;
+}
+.lv-fact-link {
+  min-height: 2.25rem;
+}
+.lv-fact-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Mini kart yalnız ilk bilgiyi gösterir; büyük kart dar hâlde ilk ikisini. */
+.lv-fact:nth-child(n + 2) {
+  display: none;
+}
+.lv-body:not([data-size="mini"]) .lv-fact:nth-child(2) {
+  display: flex;
+}
+.lv-body[data-size="mini"] .lv-after {
+  display: none;
+}
+
+/* Dokunmatikte bilgi satırı parmak boyunda; halka biraz küçülür, satır yine 15rem'e sığar. */
+@media (pointer: coarse) {
+  .lv-fact-link {
+    min-height: 2.75rem;
+  }
+  .lv-ring {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+/* Çok dar kart: halka üstte, yazı altında; bilgi satırı yok, başlık "İzin iste"ye yer açar
+   (halka zaten Self Servis'e gider). */
+@container widget (max-width: 12rem) {
+  .lv-action {
+    display: none;
+  }
+  .lv-sum {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .lv-ring {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  .lv-num {
+    font-size: 1.125rem;
+  }
+  .lv-facts {
+    display: none;
+  }
+}
+
+/* Geniş kart: solda halka ve bakiye, sağda bilgi satırları (büyükte üçü). */
+@container widget (min-width: 30rem) {
+  .lv-body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 1.5rem;
+    align-items: center;
+  }
+  .lv-body:not([data-size="mini"]) .lv-ring {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+  .lv-body:not([data-size="mini"]) .lv-num {
+    font-size: 1.75rem;
+  }
+  .lv-body:not([data-size="mini"]) .lv-fact {
+    display: flex;
+  }
+  /* Sağ sütun dar kalabilir: uzun bilgi (köprü) kesilmez, iki satıra iner. */
+  .lv-fact-value {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+  }
+}
+
+/* Başlıktaki "İzin iste" dokunmatikte parmak boyunda (görünmez pay; satır büyümez). */
+@media (pointer: coarse) {
+  .lv-action {
+    position: relative;
+  }
+  .lv-action::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem -0.25rem;
+  }
+}

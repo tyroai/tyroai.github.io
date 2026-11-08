@@ -1,0 +1,41 @@
+/* "Yeni sürüm hazır" kartının marka tonları (`UpdateCard.jsx`). Açık paletlerde (gün batımı,
+   şeftali) marka mürekkebi beyaz zeminde 4,3–4,5:1 kalıyordu; koyu temada bazıları (okyanus)
+   orta tonda. Etiket ve düğme açıklığı tavanlı/tabanlı: her palette AA. */
+.update-card__eyebrow {
+  color: var(--brand-text);
+}
+.update-card__cta {
+  background: var(--brand-fill-deep);
+  color: var(--brand-on-brand);
+}
+/* Üzerine gelince zemin açılır. `filter: brightness` düğmeyi ayrı katmana alıp yazıyı yeniden
+   çizdiriyordu: geçiş boyunca harfler yarım piksel kayıp titriyordu. */
+@media (hover: hover) {
+  .update-card__cta:hover:not(:disabled) {
+    background: color-mix(in oklch, var(--brand-fill-deep), #fff 12%);
+  }
+}
+@supports (color: oklch(from red l c h)) {
+  .update-card__eyebrow {
+    color: oklch(from var(--brand-text) min(l, 0.5) c h);
+  }
+  .dark .update-card__eyebrow {
+    color: oklch(from var(--brand-text) max(l, 0.78) c h);
+  }
+  .update-card__cta {
+    background: oklch(from var(--brand-fill-deep) min(l, 0.5) c h);
+    color: #fff;
+  }
+  @media (hover: hover) {
+    .update-card__cta:hover:not(:disabled) {
+      background: oklch(from var(--brand-fill-deep) calc(min(l, 0.5) + 0.04) c h);
+    }
+  }
+}
+
+/* Sonner bildirimin boyunu ölçüp üzerine gelince (yığın açılınca) o boya kilitliyor. Kart kendi
+   yığınında tek: boy hep içerikten gelsin; sonradan değişen içerik (sürüm notları, yazı tipi)
+   üzerine gelince kartı aşağı atıp titretmesin. `:root` öneki sonner'ın kuralını geçer. */
+:root [data-sonner-toast].update-toast[data-expanded="true"] {
+  height: auto;
+}

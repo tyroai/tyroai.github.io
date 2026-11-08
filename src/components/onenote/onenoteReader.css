@@ -1,0 +1,161 @@
+/* OneNote okuyucusu (sağdan bölme, telefonda tam ekran) — Apple Notlar/Mail gibi tek yüzey:
+   başlık bölümü, ince çizgi, altında temaya uyan okuma yüzeyi (çerçeve saydam). Sağdaki
+   araçlar araç çubuğu standardında tek boy (`control`). Ortak: OneNote kartı ve Keşfet › Bul. */
+
+@media (min-width: 640px) {
+  .on-reader[data-side="right"] {
+    width: min(48rem, calc(100vw - 1.5rem));
+    border-start-start-radius: 1rem;
+    border-end-start-radius: 1rem;
+  }
+}
+.on-reader-head {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 1rem;
+  padding: max(env(safe-area-inset-top), 1rem) 1.25rem 1rem;
+}
+@media (min-width: 640px) {
+  .on-reader-head {
+    padding: 1.25rem 1rem 1.125rem 1.5rem;
+  }
+}
+.on-reader-crumb {
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: var(--text-eyebrow);
+  font-weight: 500;
+  line-height: var(--text-eyebrow--line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.on-reader-title {
+  margin-top: 0.25rem;
+  font-size: var(--text-section-title);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--text-section-title--line-height);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+.on-reader-stamp {
+  margin-top: 0.25rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+}
+.on-reader-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--spacing-controls);
+}
+/* "OneNote'ta aç": masaüstünde başlığın yanında, telefonda altta tam genişlik. */
+.on-reader-foot {
+  display: none;
+  flex-shrink: 0;
+  padding: 0.75rem 1.25rem max(env(safe-area-inset-bottom), 0.75rem);
+  border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+}
+@media (max-width: 639px) {
+  .on-reader-open-top {
+    display: none;
+  }
+  .on-reader-foot {
+    display: flex;
+    gap: var(--spacing-controls);
+  }
+}
+.on-reader-body {
+  position: relative;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+}
+/* Saydam çerçeve: zemin bölmeninki. `color-scheme` çerçevenin içindekiyle AYNI olmalı
+   (`lib/onenote/onenoteFrame`), yoksa tarayıcı çerçeveye opak zemin boyar. */
+.on-reader-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color-scheme: light;
+}
+.dark .on-reader-frame {
+  color-scheme: dark;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .on-reader-frame {
+    animation: on-reader-in 0.25s ease-out;
+  }
+}
+.on-reader-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+}
+.on-reader-skeleton > span {
+  display: block;
+  height: 0.875rem;
+  border-radius: 999px;
+}
+.on-reader-skeleton > span:nth-child(1) {
+  width: 66%;
+}
+.on-reader-skeleton > span:nth-child(3) {
+  width: 83%;
+}
+.on-reader-skeleton > span.is-block {
+  height: 10rem;
+  border-radius: 0.75rem;
+}
+.on-reader-empty {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+.on-reader-empty-title {
+  max-width: 22rem;
+  color: color-mix(in oklab, var(--foreground) 80%, transparent);
+  font-size: var(--text-body);
+  font-weight: 500;
+}
+@keyframes on-reader-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Metin düğmesi (okuyucunun "Yeniden dene"si; kart da kullanır). */
+.on-text-btn {
+  min-height: 1.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  color: var(--brand-ink);
+  font-size: var(--text-callout);
+  font-weight: 500;
+  transition: background-color 0.15s;
+}
+@media (hover: hover) {
+  .on-text-btn:hover {
+    background: color-mix(in oklab, var(--foreground) 6%, transparent);
+  }
+}
+.on-text-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+@media (pointer: coarse) {
+  .on-text-btn {
+    min-height: 2.75rem;
+  }
+}

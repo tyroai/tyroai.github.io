@@ -1,0 +1,7 @@
+/* Sunum modu (`lib/presentMode`, Denetim Merkezi): ekran paylaşılırken kişisel bilgi
+   (`data-private`: posta, toplantı adları, İK rakamları, notlar) okunmaz. Hareketsiz bulanıklık
+   (her karede yeniden hesaplanmaz); yazı boyuna göre (`em`), seçilip kopyalanamaz. */
+:root[data-present] [data-private] {
+  filter: blur(0.42em);
+  user-select: none;
+}

@@ -1,0 +1,294 @@
+/*
+ * Toplantı ayrıntısı — kayıt penceresi kalıbının kâğıdı, açılır kart sıklığında (380 px popover,
+ * header'ın ve Anasayfa'nın 344 px'lik kartı, telefon çekmecesi). Ortak `rw-*` ölçüleri
+ * `record-window/`da; burası yalnız sıklığı daraltır, her kural `.ev-sheet` altında (yükleme
+ * sırasına güvenmez). Izgara TEK sol kenar: başlık, düzenleyen, NE ZAMAN, liste ve eylem alanı
+ * aynı çizgiden başlar. DÜZ CSS, kartın parçasında: ilk yükleme stil bütçesi dolu.
+ */
+
+/* Kâğıt çerçevesiz: kabı (popover, çekmece) zaten kenar ve köşe çiziyor. */
+.rw-sheet.ev-sheet {
+  container: ev-sheet / inline-size;
+  --ev-pad: 1.125rem;
+  --ev-surface: var(--popover);
+  gap: 1rem;
+  padding: 1rem var(--ev-pad) 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  /* Taban boy kartın kendisinde: yoksa açılan katılımcı listesi kabın boyunu alıyordu (header'da
+     15,5 px, Anasayfa'da 11,6 px). */
+  font-size: var(--text-callout);
+  line-height: var(--text-callout--line-height);
+}
+/* Telefon çekmecesinin zemini sayfa zemini (popover'ınki değil): yapışık alan aynı renkte kalsın. */
+[data-slot="sheet-content"] .rw-sheet.ev-sheet {
+  --ev-surface: var(--background);
+}
+
+/* Başlık: 20 → 17 px; simge kutusu yok, metin kâğıdın kenarından başlar. */
+.ev-sheet .rw-title {
+  font-size: var(--text-section-title);
+  line-height: var(--text-section-title--line-height);
+}
+.ev-sheet .rw-tags {
+  margin-top: 0.5rem;
+}
+
+/* Düzenleyen: fotoğraf solda, ad ve rolü alt alta — ad ne kadar uzun olursa olsun rol hep
+   adın altında, aynı hizada (ince ayraç sarınca yalnız kalıyordu). Ad kırpılmaz, sarar; yalnız
+   e-postalı düzenleyen (tek uzun parça) her yerden bölünebilir. */
+.ev-sheet .rw-owner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.625rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+.ev-sheet .rw-owner-avatar {
+  grid-row: span 2;
+  width: 2rem;
+  height: 2rem;
+}
+.ev-sheet .rw-owner-name {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.ev-sheet .rw-owner-role {
+  padding: 0;
+  border: 0;
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  white-space: normal;
+}
+/* Düzenleyen düğme: satır gibi durur, üstüne gelince hafif zemin. Zemin için iki yana 6 px taşar,
+   aynı payı içeriden geri alır: fotoğraf yine kâğıdın kenarında. */
+.ev-sheet .ev-owner {
+  width: calc(100% + 0.75rem);
+  margin-inline: -0.375rem;
+  padding: 0.25rem 0.375rem;
+  border-radius: 0.625rem;
+  text-align: start;
+  transition: background-color 0.15s;
+}
+@media (hover: hover) {
+  .ev-sheet button.ev-owner:hover {
+    background: var(--rw-faint);
+  }
+}
+.ev-sheet .ev-owner:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand-text) 45%, transparent);
+  outline-offset: 0;
+}
+
+/* NE ZAMAN kartı: saat 26 → 22 px, hep sağda; uzun gün adı (RU, AR) kendi sütununda alt satıra
+   iner, saati itmez. */
+.ev-sheet .rw-card {
+  padding: 0.875rem 1rem;
+}
+.ev-sheet .rw-card-head {
+  gap: 0.75rem;
+}
+.ev-sheet .rw-card-text {
+  flex: 1 1 0;
+}
+.ev-sheet .rw-card-title::first-letter {
+  text-transform: uppercase;
+}
+.ev-sheet .rw-big strong {
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  white-space: nowrap;
+}
+/* Header'ın ve Anasayfa'nın 344 px'lik kartında saat bir boy küçülür: yan yana sığsın. */
+@container ev-sheet (max-width: 21rem) {
+  .ev-sheet .rw-big strong {
+    font-size: 1.1875rem;
+    line-height: 1.5rem;
+  }
+}
+/* Durum yalnız sürerken ve yakında renkli: anlamı olan yerde renk. */
+.ev-sheet .rw-card:is([data-tone="success"], [data-tone="brand"]) .rw-big small {
+  color: var(--tone-ink);
+  font-weight: 500;
+}
+.ev-sheet .rw-meter {
+  margin: 0.75rem 0 0.125rem;
+}
+
+/* Bilgi listesi kartta 13 px: dar kartta etiket ve değer yan yana sığsın. Geniş satırların
+   (gündem, katılımcılar) başlığı da aynı gri etiket: bölüm başlıkları tek biçimde. */
+.ev-sheet .rw-rows {
+  margin-top: 0;
+}
+.ev-sheet .rw-row {
+  gap: 1rem;
+  padding: 0.625rem 0;
+  font-size: var(--text-callout);
+  line-height: var(--text-callout--line-height);
+}
+.ev-sheet .rw-row:first-child {
+  padding-top: 0;
+}
+.ev-sheet .rw-row:last-child {
+  padding-bottom: 0;
+}
+.ev-sheet .rw-row[data-wide] {
+  gap: 0.375rem;
+}
+/* Geniş satırın değeri tam satır: satır `align-items: baseline` ile içeriği sıkıştırıyordu, yanıt
+   kapsülleri ("Kabul et") daralıp kesiliyordu. */
+.ev-sheet .rw-row[data-wide] > dd {
+  align-self: stretch;
+}
+/* Yanıtım: takvim satırının şeridiyle aynı tonda nokta; bekleyen davette yazı da dikkat renginde. */
+.ev-resp::before {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-inline-end: 0.375rem;
+  border-radius: 999px;
+  background: var(--brand-text);
+  content: "";
+  vertical-align: 0.05em;
+}
+.ev-resp[data-tone="warning"] {
+  color: var(--warning-ink);
+}
+.ev-resp[data-tone="warning"]::before {
+  background: var(--warning);
+}
+.ev-resp[data-tone="neutral"]::before {
+  background: color-mix(in oklab, var(--foreground) 32%, transparent);
+}
+.ev-rsvp-link {
+  color: var(--brand-text);
+  font-weight: 600;
+}
+.ev-rsvp-link:hover {
+  text-decoration: underline;
+}
+.ev-agenda {
+  display: block;
+  max-height: 9rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: color-mix(in oklab, var(--foreground) 80%, transparent);
+  white-space: pre-line;
+}
+.ev-agenda:focus-visible {
+  border-radius: 0.25rem;
+  outline: 2px solid color-mix(in oklab, var(--brand-text) 45%, transparent);
+  outline-offset: 2px;
+}
+
+/* ── Eylem alanı: kartın TEK düğme yeri, dipte yapışık ──────────────────────
+   Kâğıdın iç boşluğuna taşar (zemin kenardan kenara), içeriği yine kâğıdın kenarında. Üstte
+   ince çizgi; uzun kartta içerik altından akar. Boşsa hiç çizilmez. */
+.ev-sheet .ev-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-inline: calc(var(--ev-pad) * -1);
+  padding: 0.75rem var(--ev-pad) 1rem;
+  background: var(--ev-surface);
+  box-shadow: 0 -1px 0 var(--rw-line);
+}
+.ev-sheet .ev-bar:empty {
+  display: none;
+}
+/* Boş eylem alanı yokken kâğıdın dibi yine nefes alsın. */
+.ev-sheet:not(:has(.ev-bar:not(:empty))) {
+  padding-bottom: var(--ev-pad);
+}
+
+/* Yanıt: üç eşit kapsül, simge durum renginde — Yanıtınız satırında durumun altında. */
+.ev-rsvp {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.625rem;
+}
+.ev-rsvp .rw-btn {
+  min-width: 0;
+  flex: 1 1 0;
+  padding: 0 0.5rem;
+}
+.ev-rsvp .rw-btn > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ev-rsvp .rw-btn[data-tone="success"] svg {
+  color: var(--success-ink);
+}
+.ev-rsvp .rw-btn[data-tone="warning"] svg {
+  color: var(--warning-ink);
+}
+.ev-rsvp .rw-btn[data-tone="danger"] svg {
+  color: var(--danger-ink);
+}
+.ev-rsvp .rw-btn:disabled {
+  opacity: 0.6;
+}
+
+/* Eylem satırı: sakinler baş kenarda, birincil son kenarda (`margin-inline-start: auto`);
+   sığmazsa sakinler simgeye iner (`EventActions`), yine sığmazsa birincil alt satırın sonuna. */
+.ev-actions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ev-actions > .rw-btn--primary {
+  margin-inline-start: auto;
+}
+/* Tam etiketli ölçü kopyası (`EventActions`): sıfır boylu ve taşanı kesik — kartı yana kaydırmaz,
+   `scrollWidth`i yine tam satırın genişliği. */
+.ev-actions-ghost {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: flex;
+  width: 0;
+  height: 0;
+  gap: 0.5rem;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+.ev-actions-ghost > * {
+  flex-shrink: 0;
+}
+
+/* Dokunmatikte 44 px (design-tokens kural 6): düzenleyen satırı, "tümünü göster" ve tam listenin
+   satırları boyca; yüzler avatarı büyütmeden görünmez kenar payıyla — aralık 16 px'e açılır ki
+   komşu basma alanları üst üste binmesin. Kapsüller `rw-btn`in kendi kuralıyla 44 px. */
+@media (pointer: coarse) {
+  .ev-sheet .ev-owner,
+  .ev-people button[aria-expanded],
+  .ev-people li > button {
+    min-height: 2.75rem;
+  }
+  .ev-faces {
+    gap: 1rem;
+  }
+  .ev-face {
+    position: relative;
+  }
+  .ev-face::after {
+    position: absolute;
+    inset: -0.5rem;
+    content: "";
+  }
+}
+
+/* Header takviminin üstüne gelince açılan kartı (`CalendarEventRow`): boy kalan alanla sınırlı. */
+.ev-hover {
+  max-height: var(--radix-hover-card-content-available-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

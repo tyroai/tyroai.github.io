@@ -1,0 +1,321 @@
+/*
+ * Takvim ızgaraları: hafta/gün (saat ızgarası), ay, telefonun hafta şeridi ve ajandası.
+ * Ölçüler `.cal-page` değişkenlerinde (`--cal-hour`, `--cal-gutter`); blok konumları `--top` ve
+ * `--h` (saat), `--x` ve `--w` (sütun payı) ile, yani saat yüksekliği tek yerde.
+ */
+
+/* ── Hafta ve gün ────────────────────────────────────────────────────────────────────────────── */
+.cal-scroll {
+  position: relative;
+  height: min(46rem, calc(100dvh - 24rem));
+  min-height: 24rem;
+  overflow-y: auto;
+  border-top: 1px solid var(--cal-line);
+  scrollbar-width: thin;
+}
+.cal-wk-head,
+.cal-allday,
+.cal-hours {
+  display: grid;
+  grid-template-columns: var(--cal-gutter) repeat(var(--cols), minmax(0, 1fr));
+}
+/* Hafta sonu katlama sütunu (`WeekGrid` › `fold`): sonda dar bir şerit — kapalıyken "›" ve dikey
+   soluk "Cumartesi – Pazar" (şeride basmak da açar), açıkken "‹". Kaydı olan hafta sonu katlanmaz. */
+.cal-week[data-fold] .cal-wk-head,
+.cal-week[data-fold] .cal-allday,
+.cal-week[data-fold] .cal-hours {
+  grid-template-columns: var(--cal-gutter) repeat(var(--cols), minmax(0, 1fr)) 2.5rem;
+}
+.cal-week[data-fold] .cal-allday-grid {
+  grid-column: 2 / -2;
+}
+.cal-fold {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-inline-start: 1px solid var(--cal-line);
+  background: transparent;
+  color: var(--cal-mute);
+  cursor: pointer;
+}
+.cal-fold:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 70%, transparent);
+  outline-offset: -2px;
+}
+.cal-fold-gap,
+.cal-fold-col {
+  border-inline-start: 1px solid var(--cal-line);
+}
+.cal-fold-col {
+  position: relative;
+  background: color-mix(in oklch, var(--foreground) 2.5%, transparent);
+}
+.cal-week[data-fold="closed"] .cal-fold-col {
+  cursor: pointer;
+}
+/* Görünen alanın ortasına yapışık: ızgara 08:00'e kaydırılmış açılır, şeridin tepesi görünmez; üstteki
+   yapışkan başlığın altında da kalmasın. */
+.cal-fold-label {
+  position: sticky;
+  top: 45%;
+  display: block;
+  margin: 0 auto;
+  writing-mode: vertical-rl;
+  font-size: max(0.75rem, 11px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--cal-mute);
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .cal-fold:hover,
+  .cal-week[data-fold="closed"] .cal-fold-col:hover {
+    background: color-mix(in oklch, var(--foreground) 5%, transparent);
+    color: var(--foreground);
+  }
+}
+
+/* Başlık ve tüm gün satırı kaydırma kabında yapışkan: ızgarayla aynı genişlikte. */
+.cal-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--card);
+  border-bottom: 1px solid var(--cal-line);
+}
+.cal-dh {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3.75rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-inline-start: 1px solid var(--cal-line);
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .cal-dh:hover {
+    background: color-mix(in oklch, var(--foreground) 3.5%, transparent);
+  }
+}
+/* Yazı boyunun px tabanı (11 px): kök yazı boyu alçak pencerede 0,8'e iner ve rem'li metin okunmaz olur. */
+.cal-dow {
+  font-size: max(0.75rem, 11px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cal-mute);
+}
+.cal-dnum {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.375rem;
+  border-radius: 0.625rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.cal-dh[data-today] .cal-dow {
+  color: var(--brand-ink);
+}
+.cal-dh[data-today] .cal-dnum,
+.cal-cnum[data-today],
+.cal-sd[data-today] .cal-dnum {
+  background: var(--brand-fill-deep);
+  color: var(--brand-on-brand);
+  font-weight: 600;
+}
+/* Koyu temada dolgu karttan seçilmeyen paletler var (gece mavisi, siyah, çikolata…): mürekkep
+   halkası bugünü ayırır; dolgu ve beyaz yazı aynı kalır. */
+.dark :is(.cal-dh[data-today] .cal-dnum, .cal-cnum[data-today], .cal-sd[data-today] .cal-dnum) {
+  box-shadow: inset 0 0 0 1.5px var(--brand-ink);
+}
+.cal-gut {
+  min-width: 0;
+}
+/* Etiket ilk çip satırının ortasında: üst boşluk = bant payı + (çip − yazı) / 2. */
+.cal-allday-label {
+  display: grid;
+  align-items: start;
+  padding: calc(0.625rem + (var(--cal-chip-lg) - 1.2em) / 2) 0.5rem 0 0;
+  color: var(--cal-mute);
+  font-size: 0.6875rem;
+  text-align: end;
+}
+.cal-allday-grid {
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  /* Şerit içindeki en uzun (sarılmış) çip kadar. Çipte sabit `min-height` yok: olsaydı ızgara şeridi
+     o boydan başlatıp tavana (max-height) kadar büyütür, sarılmış çipi kısaltırdı. */
+  grid-auto-rows: auto;
+  row-gap: 0.25rem;
+  min-height: 2.75rem;
+  /* Gün görünümünde tüm gün öğelerinin hepsi şerit olur: başlık yapışkan, o yüzden tavanı var. Haftada
+     üç satıra sarılmış üç şerit ve "+n" sığar; gün görünümünde tek satırlı yedinci şeridin bir kısmı
+     görünür, kaydırılabildiği belli olur. */
+  max-height: calc(var(--cal-chip-lg) * 7.25 + 1.25rem);
+  overflow-y: auto;
+  padding-block: 0.625rem;
+  /* Sütun çizgileri başlığınkiyle aynı. */
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--cal-line) 0 1px,
+    transparent 1px calc(100% / var(--cols))
+  );
+}
+/* Gün görünümünde sekiz tüm gün öğesi başlığı yüksekliğin üçte birine çıkarıp saat ızgarasını bir
+   iki satıra sıkıştırıyordu: tavan dört çip (üçü tam, dördüncüsü kaydırmayı belli eder). */
+.cal-week[data-single] .cal-allday-grid {
+  max-height: calc(var(--cal-chip-lg) * 4.25 + 1.25rem);
+}
+/* Hafta ve gün görünümünde çip iri ve yazısı sarar: başlık üç satıra kadar iner, kırpılmadan okunur.
+   13 px yarı kalın yazı (px tabanı), 16 px simge; dolgu tek satırlı çipi `--cal-chip-lg` boyunda tutar,
+   yazı ortada. Izgara şeritteki çipleri en uzunu kadar gerer; yazı üstte, komşuların ilk satırı aynı hizada. */
+.cal-allday-grid .cal-chip {
+  container: cal-chip / inline-size;
+  align-items: flex-start;
+  gap: 0.375rem;
+  height: auto;
+  margin-inline: 0.25rem;
+  padding: calc((var(--cal-chip-lg) - 1.35em - 2px) / 2) 0.5625rem;
+  border-radius: 0.625rem;
+  font-size: max(0.8125rem, 12.5px);
+  white-space: normal;
+}
+.cal-allday-grid .cal-chip-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  min-width: 0;
+  overflow: hidden;
+  /* Sütuna tek başına sığmayan uzun kelime bölünür, kesilmez. */
+  overflow-wrap: anywhere;
+}
+/* Simge ilk satırın ortasında. */
+.cal-allday-grid .cal-chip > .cal-ic {
+  margin-block-start: calc((1.35em - 1rem) / 2);
+}
+/* Dar çipte (7 gün, dar pencere) simge yazıya yer bırakır, "Cumhuriyet" gibi uzun kelime bölünmesin:
+   tür, rengi ve deseniyle zaten belli. Ölçü çipin iç genişliği (dolgusuz). */
+@container cal-chip (width < 7rem) {
+  .cal-allday-grid .cal-chip > .cal-ic {
+    display: none;
+  }
+}
+/* Daha darda (1440×900 ve 1366×768'de 7 gün) on harfli kelime normal boyda sığmaz: yazı bir tık küçülür
+   ve yan dolgunun bir kısmını kullanır. */
+@container cal-chip (width < 86px) {
+  .cal-allday-grid .cal-chip-text {
+    margin-inline: -0.25rem;
+    font-size: max(0.75rem, 11.5px);
+  }
+}
+/* "+n": iri çiplerin yanında ufak kalmasın. */
+.cal-allday-grid .cal-more {
+  align-self: center;
+  height: max(1.75rem, 28px);
+  font-size: max(0.75rem, 12px);
+}
+.cal-hours {
+  position: relative;
+}
+.cal-gutter {
+  position: relative;
+}
+.cal-hl {
+  position: absolute;
+  inset-inline: 0 0.625rem;
+  top: calc(var(--cal-hour) * var(--top));
+  transform: translateY(-50%);
+  color: var(--cal-mute);
+  font-size: max(0.8125rem, 11px);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+.cal-col {
+  position: relative;
+  height: calc(var(--cal-hour) * 24);
+  border-inline-start: 1px solid var(--cal-line);
+  /* Saat çizgisi (üstte) ve yarım saat çizgisi (daha soluk): tek parça arka plan. */
+  background-image:
+    linear-gradient(var(--cal-line) 1px, transparent 1px),
+    linear-gradient(var(--cal-line-soft) 1px, transparent 1px);
+  background-size:
+    100% var(--cal-hour),
+    100% calc(var(--cal-hour) / 2);
+  cursor: cell;
+}
+.cal-col[data-today] {
+  background-color: color-mix(in oklch, var(--brand-text) 4%, transparent);
+}
+.cal-now {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(var(--cal-hour) * var(--top));
+  z-index: 3;
+  height: 2px;
+  /* Mürekkep: koyu temada açık ton (dolgu koyu kartta görünmez kalıyordu). */
+  background: var(--brand-ink);
+  pointer-events: none;
+}
+.cal-now::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -0.25rem;
+  top: -0.1875rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: inherit;
+}
+
+/* ── Kap genişliğine göre ───────────────────────────────────────────────────────────────────── */
+@container cal (max-width: 47.99rem) {
+  /* Başlığın sağı (arama ve Yeni) kendi satırında, aramada kalan yer. */
+  .cal-heading > :last-child {
+    flex: 1 1 100%;
+  }
+  .cal-heading .cal-search {
+    flex: 1;
+    width: auto;
+  }
+  .cal-toolbar {
+    padding: 1rem 1rem 0.5rem;
+  }
+  .cal-layers {
+    padding: 0.25rem 1rem 0.75rem;
+  }
+  .cal-scroll {
+    height: min(36rem, calc(100dvh - 20rem));
+  }
+  .cal-dh {
+    padding: 0 0.5rem;
+  }
+}
+@media (max-height: 500px) {
+  /* Yatay telefonda yükseklik çok dar: katman satırının payı da kısa. */
+  .cal-layers {
+    padding: 0.25rem 1rem 0.75rem;
+  }
+  .cal-scroll {
+    height: calc(100dvh - 10rem);
+    min-height: 14rem;
+  }
+}
+
+/* En dar telefonda (320) araç düğmeleri kartın kenarını taşıyordu: yer aralıklardan alınır. */
+@container cal (max-width: 21rem) {
+  .cal-tools {
+    gap: 0.25rem;
+  }
+  .cal-toolbar {
+    padding-inline: 0.75rem;
+  }
+}

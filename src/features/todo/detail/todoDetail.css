@@ -1,0 +1,360 @@
+/*
+ * To-Do görev ayrıntısı — kayıt penceresi kalıbının (`components/record-window`) üstüne yalnız
+ * bu ekrana ait parçalar: şeritte liste adı ve yıldız, düzenlenebilir başlık, değer düğmeleri,
+ * adımlar, not ve bağlı içerik. Ortak `rw-*` ölçüleri değişmez (kalıp: docs/design-system.md).
+ * DÜZ CSS, To-Do'nun tembel parçasında: ilk yükleme stil bütçesi dolu.
+ */
+
+/* ── Şerit ─────────────────────────────────────────────────────────────── */
+.td-bar-list {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.375rem;
+}
+.td-bar-list svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+.td-bar-list-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rw-btn.td-star[data-on] {
+  color: var(--brand-ink);
+}
+.rw-btn.td-star[data-on] svg {
+  fill: currentColor;
+}
+/* Kayıt beklerken (görev yazılıyor) şerit düğmeleri soluk. */
+.td-detail .rw-btn:disabled {
+  opacity: 0.45;
+}
+
+/* ── Başlık: tamamla kutusu başlığın ilk satırına hizalı, ad yerinde düzenlenir ─ */
+.td-lead {
+  display: flex;
+  padding-top: 0.0625rem;
+}
+.td-title {
+  width: calc(100% + 0.75rem);
+  margin-inline: -0.375rem;
+  padding-inline: 0.375rem;
+  border-radius: 0.375rem;
+  font: inherit;
+  letter-spacing: inherit;
+  transition: background-color 0.15s;
+}
+.td-title:focus {
+  background: var(--rw-faint);
+}
+@media (hover: hover) {
+  .td-title:not(:disabled):hover {
+    background: var(--rw-faint);
+  }
+}
+.td-title.td-done {
+  color: var(--muted-foreground);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in oklab, var(--foreground) 30%, transparent);
+}
+
+/* ── Kart: sayı anlamın renginde (gecikme sarı, bitiş yeşil, bugün marka) ─ */
+.rw-card.td-hero .rw-big strong {
+  color: var(--tone-ink);
+}
+
+/* ── Değer düğmesi (satırın sağı): macOS açılır düğmesi gibi değer + küçük ok ─ */
+/* Yatay eksi boşluk değeri sağa yaslar; dd'nin içerik genişliği düğmeden 1rem dar ölçüldüğü için
+   üst sınır da o kadar geniş — yoksa kısa değer bile "26 Ek…" diye kesilir. */
+.td-pick {
+  display: inline-flex;
+  max-width: calc(100% + 1rem);
+  align-items: center;
+  gap: 0.25rem;
+  margin: -0.25rem -0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  color: var(--foreground);
+  font: inherit;
+  font-weight: 500;
+  transition: background-color 0.15s;
+}
+.td-pick[data-empty] {
+  color: var(--muted-foreground);
+  font-weight: 400;
+}
+.td-pick-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.td-pick svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+.td-pick:disabled {
+  opacity: 0.5;
+}
+/* Zemin koyulaşınca gri "Ekle" de koyulaşır: soluk zeminde gri yazı 4,5:1'in altına iner. */
+@media (hover: hover) {
+  .td-pick:not(:disabled):hover {
+    background: var(--rw-faint);
+    color: var(--foreground);
+  }
+}
+.td-pick[data-state="open"] {
+  background: var(--rw-faint);
+  color: var(--foreground);
+}
+@media (pointer: coarse) {
+  .td-pick {
+    min-height: 2.75rem;
+    margin-block: -0.75rem;
+  }
+}
+
+/* ── Bölüm: gri başlık + içerik (adımlar, not, bağlı içerik) ──────────── */
+.td-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.td-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.td-count {
+  color: var(--muted-foreground);
+  font-size: var(--text-footnote);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--text-footnote--line-height);
+}
+.td-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+.td-skeleton span {
+  display: block;
+  width: 75%;
+  height: 0.75rem;
+  border-radius: 999px;
+}
+.td-skeleton span + span {
+  width: 50%;
+}
+.td-error {
+  color: var(--muted-foreground);
+  font-size: var(--text-callout);
+  line-height: var(--text-callout--line-height);
+}
+
+/* Adımlar: ince ayırıcılı satırlar, sonda "Adım ekle". Uzun ad alt satıra kayar; kutu ve ×
+   ilk satıra hizalı (satır 20 px + 8 px üst boşluk). */
+.td-step,
+.td-step-add {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+.td-step-add {
+  align-items: center;
+}
+.td-step + .td-step,
+.td-steps + .td-step-add {
+  box-shadow: 0 -1px 0 var(--rw-line);
+}
+.td-step[data-pending] {
+  opacity: 0.6;
+}
+.td-step-check {
+  position: relative;
+  display: grid;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  place-items: center;
+  margin-top: 0.5625rem;
+  border: 1.5px solid color-mix(in oklab, var(--foreground) 30%, transparent);
+  border-radius: 999px;
+  transition: border-color 0.15s;
+}
+/* Görünen kutu 18 px, basılan alan 44 px. */
+.td-step-check::before {
+  position: absolute;
+  inset: -0.8125rem;
+  content: "";
+}
+.td-step-check[aria-checked="true"] {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--brand-from), var(--brand-via), var(--brand-to));
+  color: var(--brand-on-ramp);
+}
+.td-step-check svg {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+.td-step-input {
+  min-width: 0;
+  flex: 1;
+  padding: 0.5rem 0;
+  background: transparent;
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  overflow-wrap: anywhere;
+  outline: none;
+}
+.td-step-check[aria-checked="true"] + .td-step-input {
+  color: var(--muted-foreground);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in oklab, var(--foreground) 30%, transparent);
+}
+.td-step-remove {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  place-items: center;
+  margin-top: 0.25rem;
+  border-radius: 0.375rem;
+  color: var(--muted-foreground);
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    background-color 0.15s;
+}
+.td-step-remove svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.td-step:hover .td-step-remove,
+.td-step:focus-within .td-step-remove {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .td-step-remove:hover {
+    background: var(--rw-faint);
+    color: var(--foreground);
+  }
+}
+@media (pointer: coarse) {
+  .td-step-remove {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-top: -0.125rem;
+    opacity: 1;
+  }
+}
+.td-step-add > svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  color: var(--brand-text);
+}
+.td-step-add .td-step-input::placeholder {
+  color: var(--brand-ink);
+  opacity: 0.85;
+}
+
+/* Not: soluk zeminli alan, odakta marka halkası. */
+.td-note {
+  min-height: 4.5rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 0.75rem;
+  background: var(--rw-faint);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  transition: box-shadow 0.15s;
+}
+.td-note:focus {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand-text) 35%, transparent);
+}
+
+/* Bağlı içerik: satır başına bir bağlantı, sonda ↗. */
+.td-link {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.375rem;
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}
+.td-links li + li .td-link {
+  box-shadow: 0 -1px 0 var(--rw-line);
+}
+.td-link svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+.td-link-text {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .td-link:hover .td-link-text {
+    color: var(--brand-ink);
+  }
+}
+
+/* Klavye halkası: panelin tüm düğmelerinde aynı, zeminle 3:1 üstü (yarı saydam marka 2:1'de
+   kalıyordu; değer düğmelerinde tarayıcının soluk halkası vardı). */
+.td-pick:focus-visible,
+.td-step-check:focus-visible,
+.td-step-remove:focus-visible,
+.td-link:focus-visible {
+  outline: 2px solid var(--brand-text);
+  outline-offset: 2px;
+}
+
+/* ── Dokunmatik: her hedef 44 px (design-tokens kural 6) ─────────────────
+   DOSYANIN SONUNDA: aynı özgüllükteki taban kuralları (`.td-note` yazı boyu dahil) ezsin diye. */
+@media (pointer: coarse) {
+  /* Tamamla dairesi 24 px görünür, basılan alan 44 px. */
+  .td-lead button {
+    position: relative;
+  }
+  .td-lead button::before {
+    position: absolute;
+    inset: -0.625rem;
+    content: "";
+  }
+  .td-step,
+  .td-step-add,
+  .td-link {
+    min-height: 2.75rem;
+  }
+  /* `no-ios-zoom` ile aynı: 16 px altı girişe odakta iOS sayfayı büyütür. Satır 24 px + 10 px
+     üst/alt = 44 px; kutu ve × ilk satıra yeniden hizalı. */
+  .td-step-input,
+  .td-note {
+    font-size: 16px;
+  }
+  .td-step-input {
+    padding-block: 0.625rem;
+    line-height: 1.5rem;
+  }
+  .td-step-check {
+    margin-top: 0.8125rem;
+  }
+  .td-step-remove {
+    margin-top: 0;
+  }
+}

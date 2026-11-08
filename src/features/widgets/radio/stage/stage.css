@@ -1,0 +1,517 @@
+/*
+ * TYROFY SAHNESİ (`RadioStage`) — Spotify'ın "Daily Mix" kartının dili: büyük köşeli kart,
+ * bulanık müzik görseli + gren; header penceresinde arkasında aynı görselin halesi.
+ *
+ * Ölçüler 360 × 396 birimlik tasarımdan (`stageModel.ts`); bir birim `--u`. Dikey düzende
+ * (`pairs`) birim tasarımı karta SIĞDIRIR (en ve boydan küçüğü): header penceresinde birebir,
+ * panonun mini kartında ortalanmış. Yatay düzende (`row`) birim kartın boyundan.
+ * Kart `container-type: size`: birim alt öğelerde çözülür (kartın kendisinde değil).
+ */
+.stage {
+  --r-edge: rgb(255 255 255 / 0.14);
+  --r-tile: #fff;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  aspect-ratio: 360 / 396;
+  container-type: size;
+  color: #fff;
+}
+/* Header penceresi Anasayfa'nın mini kartı boyunda (16 × 15): tasarım ortalanır, kenardaki küçük
+   halkalar tam görünür. */
+.stage[data-variant="panel"] {
+  aspect-ratio: 16 / 15;
+}
+/* Pano kartı hücreyi doldurur; hücrenin boyu belli değilse (telefon) tasarımın oranı. */
+.stage[data-variant="card"] {
+  height: 100%;
+}
+.stage-card {
+  --u: min(calc(100cqw / 360), calc(100cqh / 396));
+  /* Tasarımın merkezine göre yer: kart tasarımdan uzunsa içerik dikeyde ortalanır. */
+  --head-top: calc(50% - 154 * var(--u));
+  --ring-y: calc(50% + 46 * var(--u));
+  --dial-bottom: calc(50% - 198 * var(--u));
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: calc(59 * var(--u));
+  background: #0c0c13;
+  box-shadow:
+    0 26px 54px -26px rgb(0 0 0 / 0.7),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+@supports (corner-shape: squircle) {
+  .stage[data-variant="panel"] .stage-card {
+    border-radius: calc(83 * var(--u));
+    corner-shape: squircle;
+  }
+}
+/* Pano kartı: panonun köşesi ve sakin gölgesi (öteki kartlarla aynı dil). */
+.stage[data-variant="card"] .stage-card {
+  border-radius: 1.75rem;
+  box-shadow:
+    0 12px 28px -18px rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+/* Yatay sahne: birim kartın boyundan; başlık üstte tek satır, halka ortada, kadran dipte. */
+.stage[data-layout="row"] .stage-card {
+  --u: calc(100cqh / 310);
+  --head-top: 5%;
+  --ring-y: 52%;
+  --dial-bottom: 0%;
+}
+
+/* Kartın dışına taşan ışık (yalnız header penceresinde): aynı görsel, çok bulanık. */
+.stage-halo {
+  position: absolute;
+  inset: 2% -5% -8%;
+  z-index: -1;
+  pointer-events: none;
+}
+.stage-halo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30%;
+  filter: blur(34px) saturate(1.5);
+  opacity: 0.7;
+}
+/* Zemin: görsel kartı boşluksuz kaplar, yalnız gerektiği kadar kesilir (görseller özgün
+   oranında, taşırma payı yok); kesimin odağı satır içi `object-position` (`stageArt.js`). */
+.stage-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+}
+/* Perde: üstte başlık okunsun diye hafif koyu, ortada görsel, altta kadranın koyu zemini. */
+.stage-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(6 6 12 / 0.58) 0%,
+      rgb(6 6 12 / 0.3) 34%,
+      rgb(6 6 12 / 0.16) 52%,
+      rgb(4 4 8 / 0.72) 80%,
+      rgb(3 3 6 / 0.94) 100%
+    ),
+    radial-gradient(130% 80% at 50% 45%, transparent 45%, rgb(0 0 0 / 0.38) 100%);
+}
+/* Film greni: tek seferlik çizilen gürültü dokusu (hareket yok). */
+.stage-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 180px;
+  mix-blend-mode: overlay;
+  opacity: 0.3;
+}
+
+/* Başlık: aralıklı TYROFY, altında iki tonlu büyük ad (yatay sahnede tek satır). */
+.stage-head {
+  position: absolute;
+  inset-inline: 0;
+  top: var(--head-top);
+  padding-inline: 7%;
+  text-align: center;
+}
+.stage-eyebrow {
+  margin: 0;
+  padding-inline-start: 0.42em;
+  color: rgb(255 255 255 / 0.86);
+  font-size: max(0.5625rem, calc(11.9 * var(--u)));
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  line-height: 1;
+}
+.stage-title-box {
+  position: relative;
+  margin-top: calc(7.9 * var(--u));
+}
+.stage-title {
+  margin: 0;
+  font-size: calc(var(--title-n, 10.6) * 3.6 * var(--u));
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.93;
+  text-shadow: 0 2px 18px rgb(0 0 0 / 0.28);
+}
+.stage-title-line {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stage-title-line + .stage-title-line {
+  color: rgb(255 255 255 / 0.6);
+}
+.stage[data-layout="row"] .stage-title {
+  overflow: hidden;
+  font-size: min(calc(var(--line-n, 9) * 1cqw), calc(30 * var(--u)));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stage[data-layout="row"] .stage-title-line {
+  display: inline;
+}
+.stage-title-skeleton {
+  display: block;
+  width: calc(165.6 * var(--u));
+  height: calc(32.4 * var(--u));
+  margin: calc(8.6 * var(--u)) auto 0;
+  border-radius: calc(7.2 * var(--u));
+  background: rgb(255 255 255 / 0.1);
+}
+.stage-note {
+  margin: calc(5.8 * var(--u)) 0 0;
+  color: rgb(255 214 214 / 0.92);
+  font-size: max(0.625rem, calc(11.2 * var(--u)));
+  font-weight: 500;
+}
+
+/* İstasyon halkaları: büyük halka kutusu (124 birim) yuvasına göre kayar ve küçülür. */
+.stage-ring {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(var(--ring-y) - 90 * var(--u));
+  height: calc(180 * var(--u));
+  touch-action: pan-y;
+  user-select: none;
+}
+.stage-ring-track {
+  position: absolute;
+  inset: 0;
+}
+.stage-orb {
+  position: absolute;
+  top: calc(50% - 62 * var(--u));
+  left: calc(50% - 62 * var(--u));
+  width: calc(124 * var(--u));
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+.stage-orb[aria-hidden] {
+  pointer-events: none;
+}
+.stage-orb:focus-visible {
+  outline: calc(2.5 * var(--u)) solid rgb(255 255 255 / 0.85);
+  outline-offset: calc(4.3 * var(--u));
+}
+.stage-art {
+  box-shadow: 0 calc(8.6 * var(--u)) calc(21.6 * var(--u)) calc(-7.2 * var(--u)) rgb(0 0 0 / 0.62);
+}
+/* Üzerine gelinmezken yan halkalar saydam (arkadaki görsel içlerinden görünsün), ÇALARKEN hiç
+   görünmez: ortada yalnız dönen plak kalır. Ortadaki hep net. Üstüne gelince ya da KLAVYEYLE
+   içindeyken hepsi net (`:focus-visible`; fareyle tıklanan halkada kalan odak saymaz — yoksa
+   kanal seçip fareyi çekince halkalar net kalıyordu). Dokunmatikte üzerine gelme yok: hep net. */
+@media (hover: hover) {
+  .stage-art {
+    transition: opacity 0.4s ease;
+  }
+  .stage-orb:not([data-center]) .stage-art {
+    opacity: 0.3;
+  }
+  .stage:not(:hover, :has(:focus-visible)):has(.stage-orb[data-state="playing"])
+    .stage-orb:not([data-center])
+    .stage-art {
+    opacity: 0;
+  }
+  .stage:hover .stage-art,
+  .stage:has(:focus-visible) .stage-art {
+    opacity: 1;
+  }
+}
+/* Çalarken ortadaki halkanın arkasında nefes alan ışık (yalnız opaklık ve ölçek). */
+.stage-orb[data-state="playing"]::before {
+  position: absolute;
+  inset: -8%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0) 72%);
+  content: "";
+  animation: stage-breathe 3.4s ease-in-out infinite;
+}
+@keyframes stage-breathe {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+.stage-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.34), rgb(0 0 0 / 0.12));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.stage-play > span {
+  display: grid;
+  width: 30%;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.94);
+  color: #0b0b0d;
+  box-shadow: 0 6px 18px -6px rgb(0 0 0 / 0.55);
+}
+.stage-play-icon {
+  width: 44%;
+  height: 44%;
+}
+.stage-orb[data-state="paused"] .stage-play {
+  opacity: 1;
+}
+/* Üçgenin gözle ortası. */
+.stage-orb[data-state="paused"] .stage-play-icon {
+  translate: 7% 0;
+}
+@media (hover: hover) {
+  .stage-orb[data-center]:hover .stage-play {
+    opacity: 1;
+  }
+}
+.stage-orb[data-center]:focus-visible .stage-play {
+  opacity: 1;
+}
+.stage-spin {
+  position: absolute;
+  inset: -5%;
+  border: calc(2.2 * var(--u)) solid rgb(255 255 255 / 0.16);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: stage-spin 0.9s linear infinite;
+}
+@keyframes stage-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+.stage-ring--skeleton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(12.2 * var(--u));
+}
+.stage-skel {
+  display: block;
+  flex: none;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.1);
+}
+.stage-skel--big {
+  width: calc(124 * var(--u));
+}
+.stage-skel--mid {
+  width: calc(75.6 * var(--u));
+}
+.stage-empty {
+  position: absolute;
+  inset: 40% 10% 24%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10.8 * var(--u));
+  color: rgb(255 255 255 / 0.86);
+  font-size: max(0.75rem, calc(13 * var(--u)));
+  text-align: center;
+}
+.stage-pill {
+  min-height: max(2rem, calc(32.4 * var(--u)));
+  padding-inline: calc(16.2 * var(--u));
+  border-radius: 999px;
+  background: #fff;
+  color: #0b0b0d;
+  font-size: max(0.75rem, calc(12.2 * var(--u)));
+  font-weight: 600;
+}
+
+/* SES KADRANI: tasarımın alt şeridi (360 × 80 birim), altta ortalı; yaydaki çentikler döner, beyaz
+   gösterge sabit; kenarlara doğru solar. Şerit hem çizim hem dokunma alanı. */
+.stage-dial {
+  position: absolute;
+  bottom: var(--dial-bottom);
+  left: 50%;
+  width: calc(360 * var(--u));
+  height: calc(80 * var(--u));
+  translate: -50% 0;
+  cursor: ew-resize;
+  outline: none;
+  touch-action: none;
+}
+.stage-dial-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mask-image: linear-gradient(90deg, transparent 1%, #000 24%, #000 76%, transparent 99%);
+}
+.stage-ticks {
+  transform-box: view-box;
+  transform-origin: 180px 551px;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.stage-ticks[data-dragging] {
+  transition: none;
+}
+.stage-tick {
+  stroke: rgb(255 255 255 / 0.2);
+  stroke-linecap: round;
+  stroke-width: 2.2;
+}
+.stage-tick[data-lit] {
+  stroke: rgb(255 255 255 / 0.48);
+}
+.stage-needle {
+  fill: #fff;
+}
+.stage-mark {
+  stroke: rgb(255 255 255 / 0.28);
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+/* Değer göstergenin üstünde (gösterge şeridin üstünden %27,5 aşağıda başlar). */
+.stage-dial-value {
+  position: absolute;
+  bottom: calc(72.5% + 4 * var(--u));
+  left: 50%;
+  translate: -50% 0;
+  padding: calc(1.8 * var(--u)) calc(7.9 * var(--u));
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.4);
+  font-size: max(0.625rem, calc(11.2 * var(--u)));
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.stage-dial[data-show] .stage-dial-value,
+.stage-dial:focus-visible .stage-dial-value {
+  opacity: 1;
+}
+.stage-dial:focus-visible .stage-dial-value {
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.8);
+}
+
+/* Yuvarlak buzlu düğmeler: istasyon listesi ve listenin kapatması. */
+.stage-round {
+  display: grid;
+  width: calc(32.4 * var(--u));
+  min-width: 1.75rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.14);
+  color: #fff;
+  backdrop-filter: blur(12px);
+  transition: background-color 0.15s ease;
+}
+.stage-round svg {
+  width: 52%;
+  height: 52%;
+}
+@media (hover: hover) {
+  .stage-round:hover {
+    background: rgb(255 255 255 / 0.24);
+  }
+}
+.stage-round:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.85);
+  outline-offset: 2px;
+}
+.stage-list-btn {
+  position: absolute;
+  top: calc(25.2 * var(--u));
+  inset-inline-end: calc(25.2 * var(--u));
+}
+@media (pointer: coarse) {
+  .stage-round {
+    position: relative;
+  }
+  .stage-list-btn {
+    position: absolute;
+  }
+  /* Görünüşte ~30px, dokunmatikte görünmez payla ≥ 44px. */
+  .stage-round::after {
+    position: absolute;
+    inset: -0.5rem;
+    content: "";
+  }
+}
+
+/* İstasyon listesi katmanı: kartın içinde buzlu cam. */
+.stage-sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: calc(8.6 * var(--u));
+  padding: calc(28.8 * var(--u)) calc(19.8 * var(--u)) calc(21.6 * var(--u));
+  background: rgb(14 14 20 / 0.62);
+  backdrop-filter: blur(24px) saturate(1.5);
+}
+.stage-sheet-head {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: calc(5.8 * var(--u));
+  padding-inline: calc(5.4 * var(--u)) 0;
+}
+.stage-sheet-title {
+  margin: 0;
+  margin-inline-end: auto;
+  font-size: max(0.875rem, calc(16.6 * var(--u)));
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.stage-list {
+  height: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+@media (pointer: coarse) {
+  .stage-list {
+    overflow-y: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-orb[data-state="playing"]::before,
+  .stage-spin {
+    animation: none;
+  }
+  .stage-ticks {
+    transition: none;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .stage-sheet {
+    background: rgb(14 14 20 / 0.96);
+    backdrop-filter: none;
+  }
+}

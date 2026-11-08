@@ -1,0 +1,71 @@
+/* Telefonun üç değeri (`PhoneSummary`) — tembel CSS: tek kartta üç eşit hücre, ince bölücüler;
+   hücre yalnız ad + büyük değer, dokununca ayrıntı çekmecesi. Ölçüler docs/design-tokens.md'den. */
+.ss-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Alt pay: kartın gölgesi yapışkan sekme şeridinin zeminine kesilmesin. */
+  margin-block: 0.5rem 0.75rem;
+  padding: 0.25rem;
+  border-radius: var(--radius-card);
+}
+.ss-stat {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 4.5rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: calc(var(--radius-card) - 0.25rem);
+  text-align: start;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 150ms ease-out,
+    scale 150ms ease-out;
+}
+/* İnce bölücü: ikinci ve üçüncü hücrenin başında, kenarlara değmez. */
+.ss-stat + .ss-stat::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.875rem;
+  inset-inline-start: 0;
+  width: 1px;
+  background: color-mix(in oklch, var(--foreground) 9%, transparent);
+}
+.ss-stat:active {
+  background: color-mix(in oklch, var(--foreground) 5%, transparent);
+  scale: 0.97;
+}
+.ss-stat:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-brand) 45%, transparent);
+}
+.ss-stat-label {
+  overflow: hidden;
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  font-weight: 500;
+  color: color-mix(in oklch, var(--foreground) 62%, transparent);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ss-stat-value {
+  overflow: hidden;
+  font-size: var(--text-section-title);
+  line-height: var(--text-section-title--line-height);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ss-stat {
+    transition: none;
+  }
+  .ss-stat:active {
+    scale: none;
+  }
+}

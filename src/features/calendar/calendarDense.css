@@ -1,0 +1,48 @@
+/* Yoğun takvim araçları ve liste görünümü (`ViewTools`, `AgendaWeek`). */
+.cal-tool-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.cal-btn.cal-tool[data-icon] {
+  padding: 0;
+  width: var(--spacing-control);
+}
+.cal-btn.cal-tool[aria-pressed="true"] {
+  background: color-mix(in oklch, var(--brand-text) 14%, var(--muted));
+  color: var(--brand-text);
+}
+
+.cal-agw {
+  display: grid;
+  gap: 1.25rem;
+  padding: 0.5rem 0 1.5rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+  max-height: min(70vh, 56rem);
+}
+.cal-agw-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0 0.75rem;
+  font-size: var(--text-callout);
+  font-weight: 600;
+}
+.cal-agw-day[data-today] .cal-agw-head {
+  color: var(--brand-text);
+}
+.cal-agw-sum {
+  color: var(--muted-foreground);
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+/* Liste görünümünde günün ajandası kartın içinde: üst çizgi ve fazla boşluk yok. */
+.cal-agw .cal-agenda {
+  border-top: 0;
+  padding-top: 0.25rem;
+}

@@ -1,0 +1,68 @@
+/* Hava kartının boyu, boydan türeyen yay kutusu ve telefondaki kısa düzeni (`SkyCard`).
+   `skyCard.css`ten SONRA içe aktarılır (`WeatherPill.jsx`): aynı katmanda, sonra gelen kazanır.
+   Ayrıntı ve ölçümler: docs/features/anasayfa-hava-kart.md › Telefonda kısa kart. */
+@layer components {
+  /* Yay ve işaret `__sky` kutusunda; kutu kartın boyundan türer. Tepe
+     üstten SABİT `--sky-arc-top` (110 px; selamlama ve konum hapının altında), ayaklar alttan
+     39 px (doğuş/batış ikonlarının hemen üstü). Tepe kutunun 1/3'ünde, ayaklar 5/6'sında: kutu
+     2 × (boy − 39 − tepe) yüksek, üstü tepeden onun 1/3'ü kadar yukarıda. Kart satırla uzarsa
+     yay da uzar; yatay konumlar sabit. Dikey denge: anasayfa-hava-kart.md. */
+  .sky-weather__sky {
+    --span: calc(100% - 39px - var(--sky-arc-top, 110px));
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--sky-arc-top, 110px) - var(--span) * 2 / 3);
+    height: calc(var(--span) * 2);
+    pointer-events: none;
+  }
+
+  /* En az boy satırla aynı birimde (14.5rem = 16 px kökte 232 px): alçak pencerede kök küçülünce
+     satır da küçülüyor; pikselde kalan kart satırdan taşıp soru kutusunun altına giriyordu. */
+  .sky-weather {
+    min-height: 14.5rem;
+  }
+
+  /* KISA KART: telefonda (dar pano, tek kolon) ve kısa ekranda (yatay telefon) kart 13rem.
+     1,5rem üç yerden: selamlama 5 px yukarı, yayın tepesi 110 → 96 px (konum satırıyla tepe
+     arasındaki boşluk), derece bir kademe küçük, tavanı 42 px (bulut ve yağmur izi dereceye
+     binmesin; geniş kısa kartta — yatay telefon, dikey tablet — öğlen arası ≥ 10 px). Degradenin
+     durakları da 1,5rem yukarı: alttan bağlı yazıların zemini aynı kalır.
+     Selamlama iki satıra kırılırsa (`data-wrap`, `useLineWrap`: uzun ad, akşam, İngilizce)
+     yer yok: kart bugünkü düzeninde kalır. Kısa kartın selamlaması her genişlikte normalinden
+     büyük değil (360 px'e kadar 21, üstünde 24 px), yoksa iki düzen arasında gidip gelirdi. */
+  @container myspace (width < 34rem) {
+    .sky-weather:not([data-wrap]) {
+      min-height: 13rem;
+      --sky-arc-top: 96px;
+      --sky-shift: 1.5rem;
+    }
+    /* İlk satır ve göz geniş karttaki gibi aşağıda (ürün sahibi: masaüstündeki hizayı telefona
+       da uyarla) — `skyCard.css` › `.sky-weather__welcome` ile aynı hesap. */
+    .sky-weather:not([data-wrap]) .sky-weather__welcome {
+      top: calc(2.125rem + 1px - 0.65 * var(--sky-insight-size, 14.5px));
+    }
+    .sky-weather:not([data-wrap]) .sky-weather__greeting {
+      font-size: clamp(18px, 5.8cqi, 24px);
+    }
+    .sky-weather:not([data-wrap]) .sky-weather__temperature {
+      font-size: clamp(38px, 11.5cqi, 42px);
+    }
+  }
+  @media (max-height: 500px) {
+    .sky-weather:not([data-wrap]) {
+      min-height: 13rem;
+      --sky-arc-top: 96px;
+      --sky-shift: 1.5rem;
+    }
+    .sky-weather:not([data-wrap]) .sky-weather__welcome {
+      top: calc(2.125rem + 1px - 0.65 * var(--sky-insight-size, 14.5px));
+    }
+    .sky-weather:not([data-wrap]) .sky-weather__greeting {
+      font-size: clamp(18px, 5.8cqi, 24px);
+    }
+    .sky-weather:not([data-wrap]) .sky-weather__temperature {
+      font-size: clamp(38px, 11.5cqi, 42px);
+    }
+  }
+}

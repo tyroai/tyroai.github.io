@@ -1,0 +1,375 @@
+/* ── Düzenle kipi (`OneNoteEditor`): okuma yüzeyinin yazı düzeni, öğeler yerinde düzenlenir ── */
+.on-ed {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  color: var(--foreground);
+  font-size: 15px;
+  line-height: 1.6;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .on-ed {
+    animation: on-reader-in 0.2s ease-out;
+  }
+}
+.on-ed-scroll {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.25rem clamp(1rem, 4vw, 2.5rem) 2.5rem;
+}
+.on-ed-scroll > * {
+  max-width: 46rem;
+}
+/* Biçim çubuğu: içerik kayarken üstte sabit; dar ekranda yatay kayar (sonu kesik görünür). */
+.on-ed-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.375rem clamp(0.75rem, 4vw, 2.25rem);
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.on-ed-bar::-webkit-scrollbar {
+  display: none;
+}
+.on-ed-bar-sep {
+  flex: none;
+  width: 1px;
+  height: 1.25rem;
+  margin-inline: 0.375rem;
+  background: var(--border);
+}
+.on-ed-btn {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--spacing-control);
+  height: var(--spacing-control);
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--muted-foreground);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    transform 0.1s ease-out;
+}
+.on-ed-btn svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+@media (hover: hover) {
+  .on-ed-btn:not(:disabled):hover {
+    background: color-mix(in oklch, var(--foreground) 6%, transparent);
+    color: var(--foreground);
+  }
+}
+.on-ed-btn:not(:disabled):active {
+  transform: scale(0.94);
+}
+.on-ed-btn[aria-pressed="true"] {
+  background: color-mix(in oklch, var(--brand-text) 12%, transparent);
+  color: var(--brand-text);
+}
+.on-ed-btn:disabled {
+  opacity: 0.35;
+}
+.on-ed-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--brand-text) 45%, transparent);
+}
+.on-ed .on-ed-title {
+  display: block;
+  width: 100%;
+  margin: 0 0 1rem;
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  line-height: 1.25;
+}
+.on-ed-doc {
+  display: grid;
+  gap: 0.125rem;
+  counter-reset: on-ol;
+}
+/* Numaralı maddeler art arda sayılır; araya giren her öğe sayacı sıfırlar. */
+.on-ed-doc > :not(.on-ed-ol) {
+  counter-reset: on-ol;
+}
+.on-ed-ol {
+  counter-increment: on-ol;
+}
+/* Düzenlenebilir öğe: dinlenirken düz yazı; üstüne gelince hafif zemin, odakta ince marka halkası. */
+.on-ed-text,
+.on-ed-li,
+.on-ed-title {
+  outline: none;
+  transition: background-color 0.15s;
+}
+.on-ed-text,
+.on-ed-li {
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (hover: hover) {
+  .on-ed-text:not(.on-ed-locked):hover,
+  .on-ed-li:hover,
+  .on-ed-title:hover {
+    background: color-mix(in oklch, var(--foreground) 4%, transparent);
+  }
+}
+.on-ed-text:focus,
+.on-ed-li:focus,
+.on-ed-title:focus {
+  background: color-mix(in oklch, var(--brand-text) 6%, transparent);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklch, var(--brand-text) 45%, transparent);
+}
+.on-ed h1,
+.on-ed h2,
+.on-ed h3,
+.on-ed h4,
+.on-ed h5,
+.on-ed h6 {
+  margin-top: 0.75rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+.on-ed h1 {
+  font-size: 1.4em;
+  font-weight: 700;
+}
+.on-ed h2 {
+  font-size: 1.22em;
+}
+.on-ed h3 {
+  font-size: 1.1em;
+}
+.on-ed-li {
+  position: relative;
+  padding-inline-start: 1.5rem;
+}
+.on-ed-li::before {
+  content: "";
+  position: absolute;
+  top: 0.95em;
+  inset-inline-start: 0.65rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.on-ed-ol::before {
+  content: counter(on-ol) ".";
+  top: 0.25rem;
+  width: auto;
+  height: auto;
+  inset-inline-start: 0.4rem;
+  border-radius: 0;
+  background: none;
+  font-variant-numeric: tabular-nums;
+}
+/* Yapılacaklar işareti (OneNote `data-tag`): kutucuk çizilir, metin düzenlenir. */
+.on-ed-text[data-tag*="to-do"] {
+  position: relative;
+  padding-inline-start: 1.75rem;
+}
+.on-ed-text[data-tag*="to-do"]::before,
+.on-ed-li[data-tag*="to-do"]::before,
+.on-ed-new [data-tag*="to-do"]::before {
+  content: "";
+  position: absolute;
+  top: 0.55em;
+  inset-inline-start: 0.5rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1.5px solid color-mix(in oklch, var(--foreground) 45%, transparent);
+  border-radius: 0.25rem;
+  background: none;
+  opacity: 1;
+}
+.on-ed-li[data-tag*="to-do"] {
+  padding-inline-start: 1.75rem;
+}
+.on-ed-text[data-tag*="to-do:completed"]::before,
+.on-ed-li[data-tag*="to-do:completed"]::before {
+  border-color: var(--brand-text);
+  background: var(--brand-text);
+}
+.on-ed-locked {
+  color: var(--muted-foreground);
+}
+.on-ed-ro {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.375rem 0;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.625rem;
+  background: color-mix(in oklch, var(--foreground) 4%, transparent);
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+.on-ed-ro svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+.on-ed-append-label {
+  display: block;
+  margin: 1.75rem 0 0.375rem;
+  padding-inline: 0.5rem;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 600;
+}
+/* "Not ekle": biçim çubuğuyla çalışan yazı alanı (başlık, liste, yapılacak). */
+.on-ed-new {
+  min-height: 5.5rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+  border-radius: 0.75rem;
+  background: var(--card);
+  outline: none;
+  /* iOS odakta yakınlaştırmasın: en az 16 px. */
+  font-size: max(16px, 1em);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.on-ed-new:focus {
+  border-color: color-mix(in oklch, var(--brand-text) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--brand-text) 14%, transparent);
+}
+.on-ed-new:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+.on-ed-new p,
+.on-ed-new div {
+  margin: 0;
+}
+.on-ed-new h1,
+.on-ed-new h2 {
+  margin: 0.5rem 0 0.25rem;
+}
+.on-ed-new ul,
+.on-ed-new ol {
+  margin: 0.25rem 0;
+  padding-inline-start: 1.5rem;
+}
+.on-ed-new ul {
+  list-style: disc;
+}
+.on-ed-new ol {
+  list-style: decimal;
+}
+.on-ed-new [data-tag*="to-do"] {
+  position: relative;
+  padding-inline-start: 1.5rem;
+  list-style: none;
+}
+.on-ed-new [data-tag*="to-do"]::before {
+  top: 0.35em;
+  inset-inline-start: 0.125rem;
+}
+
+/* Eklenen resim: öğenin altında önizleme (kaydedilmedi), sağ üstte kaldır. */
+.on-ed-img {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0.375rem 0.5rem;
+}
+.on-ed-img img,
+.on-ed-new img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.625rem;
+}
+.on-ed-new img {
+  margin: 0.375rem 0;
+}
+.on-ed-img-x {
+  position: absolute;
+  top: 0.375rem;
+  inset-inline-end: 0.375rem;
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in oklch, black 55%, transparent);
+  color: white;
+  touch-action: manipulation;
+}
+.on-ed-img-x svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+/* Dokunmatikte görünmez pay: hedef 44 px. */
+.on-ed-img-x::after {
+  content: "";
+  position: absolute;
+  inset: -0.5rem;
+}
+@media (hover: hover) {
+  .on-ed-img-x:hover {
+    background: color-mix(in oklch, black 72%, transparent);
+  }
+}
+.on-ed-img-x:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 4px var(--brand-text);
+}
+
+/* Yeni sayfa (`OneNoteNewPage`): bölüm seçici satırı; gövde çerçevesiz, sayfanın kendisi gibi. */
+.on-new-where {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  padding-inline: 0.5rem;
+}
+.on-new-where-label {
+  flex: none;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 600;
+}
+.on-new-select {
+  min-width: 0;
+  max-width: 22rem;
+  flex: 1 1 auto;
+}
+.on-ed-new--page {
+  min-height: max(14rem, 40vh);
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+}
+.on-ed-new--page:focus {
+  border: 0;
+  box-shadow: none;
+}

@@ -1,0 +1,46 @@
+/* Erişilebilirlik tercihleri (sistem ayarı): azaltılmış saydamlık ve yüksek karşıtlık. Katmansız:
+   Tailwind sınıflarının üstüne çıkar. Yüzeye özgü kurallar yüzeyin kendi dosyasında (widget camı,
+   Takvim çipleri, header hapı); burada yalnız her yerde ortak olanlar. */
+@media (prefers-reduced-transparency: reduce) {
+  /* Karartı bulanmaz, koyu ve düz; açılır yüzeyler buzlu değil dolu. */
+  [data-slot$="-overlay"],
+  [data-scrim] {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: rgb(0 0 0 / 0.8);
+  }
+  :is(
+    [data-slot="popover-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="hover-card-content"],
+    [data-slot="select-content"]
+  ) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: var(--popover);
+  }
+  /* Asılı çentiğin camı: dolgu opak, bulanıklığa gerek kalmaz. */
+  :is(.dark, :root) .notch-skin[data-design^="glass"] {
+    --notch-glass-fill: var(--background);
+  }
+}
+
+@media (prefers-contrast: more) {
+  /* Kartlar tanımlı kenarlı (zemine dokunulmaz: renkli kartlarda yazı beyaz); açılır yüzeyler
+     ayrıca dolu zeminli. */
+  :root .ms-surface {
+    border-color: color-mix(in oklab, var(--foreground) 60%, transparent);
+  }
+  :is(
+    [data-slot="popover-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="hover-card-content"],
+    [data-slot="select-content"]
+  ) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: var(--popover);
+    outline: 1px solid color-mix(in oklab, var(--foreground) 60%, transparent);
+    outline-offset: -1px;
+  }
+}

@@ -1,0 +1,394 @@
+/*
+ * DOSYALARIM — panonun küçük hareketleri (2026-10-01).
+ *
+ * Yenile'den sonra YENİ ya da DEĞİŞMİŞ satırın kısa marka ışığı. To-Do'nun
+ * `todo-fresh`inin aynısı; renk `--brand-text` (`--brand` diye bir değişken
+ * yok — Tailwind yalnız `--color-brand`ı basıyor).
+ * Hareketi azalt tercihinde ışık yok: sonucu bildirim zaten söylüyor.
+ */
+@keyframes files-fresh {
+  0% {
+    background-color: color-mix(in oklch, var(--brand-text) 14%, transparent);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .files-fresh {
+    animation: files-fresh 1.6s ease-out 1;
+  }
+}
+
+/*
+ * BUL — sakin üst blok: arama satırı (kutu · Filtreler · Yenile), kapsam şeridi, etkin süzgeç
+ * çipleri ve panonun hapları. Yeni Tailwind sınıfı yerine burada (ilk CSS bütçesi dolu; bu dosya
+ * Bul'la birlikte tembel iner). Ölçüler `docs/design-tokens.md` değişkenlerinden.
+ */
+.files-search-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+@container files (min-width: 34rem) {
+  .files-search-row {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin-inline: -0.25rem;
+    padding: 0.375rem 0.25rem;
+    background: color-mix(in oklch, var(--background) 95%, transparent);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Kayan şeritlerin kesik kenarı solar (sonu görünür, devamı olduğu anlaşılır). */
+.find-scope,
+.files-type-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.find-scope::-webkit-scrollbar,
+.files-type-row::-webkit-scrollbar {
+  display: none;
+}
+:is(.find-scope, .files-type-row)[data-fade="end"] {
+  mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+}
+:is(.find-scope, .files-type-row)[data-fade="start"] {
+  mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+}
+:is(.find-scope, .files-type-row)[data-fade="both"] {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 2.5rem,
+    #000 calc(100% - 2.5rem),
+    transparent
+  );
+}
+[dir="rtl"] :is(.find-scope, .files-type-row)[data-fade="end"] {
+  mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+}
+[dir="rtl"] :is(.find-scope, .files-type-row)[data-fade="start"] {
+  mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+}
+
+/* Kapsam şeridi: ray ve çerçeve yok, seçili dilim yumuşak marka zemininde. */
+.find-scope {
+  gap: 0.25rem;
+  margin-inline: -0.25rem;
+  padding: 0.125rem 0.25rem;
+}
+.find-scope-btn {
+  flex: none;
+  height: var(--spacing-control);
+  padding-inline: 0.875rem;
+  border-radius: 9999px;
+  font-size: var(--text-callout);
+  font-weight: 500;
+  white-space: nowrap;
+  color: color-mix(in oklch, var(--foreground) 70%, transparent);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+.find-scope-btn[aria-pressed="true"] {
+  background: color-mix(in oklch, var(--brand-text) 11%, transparent);
+  color: var(--brand-ink);
+  font-weight: 600;
+}
+.find-scope-sep {
+  flex: none;
+  width: 1px;
+  height: 1.25rem;
+  margin-inline: 0.25rem;
+  background: var(--border);
+}
+
+/* Filtreler düğmesi: darda yalnız simge (köşede rozet), genişte simge + ad + satır içi rozet. */
+.files-filter-btn {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  /* Araç çubuğu standardı: arama ve Yenile'yle aynı boy (`control`). */
+  height: var(--spacing-control);
+  min-width: var(--spacing-control);
+  border-radius: 9999px;
+  font-size: var(--text-callout);
+  font-weight: 500;
+  color: var(--muted-foreground);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+.files-filter-btn.is-active,
+.files-filter-btn[data-state="open"] {
+  color: var(--foreground);
+}
+.files-filter-btn-label {
+  display: none;
+}
+.files-filter-badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  display: grid;
+  place-items: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding-inline: 0.25rem;
+  border-radius: 9999px;
+  background: var(--brand-fill-deep);
+  color: var(--brand-on-brand);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+@container files (min-width: 34rem) {
+  /* Etiketli (geniş) hâli gri kapsül; dar hâli zeminsiz simge. */
+  .files-filter-btn {
+    padding-inline: 0.875rem;
+    background: var(--muted);
+    color: var(--foreground);
+  }
+  .files-filter-btn-label {
+    display: inline;
+  }
+  .files-filter-badge {
+    position: static;
+  }
+}
+
+/* Süzgeç içeriği — açılır kutuda ve çekmecede aynı. */
+.files-filter-pop {
+  width: min(23rem, calc(100vw - 2rem));
+  gap: 0;
+  padding: 1rem;
+  border-radius: var(--radius-card);
+  font-size: var(--text-callout);
+}
+.files-filter-panel {
+  display: grid;
+  gap: 1.125rem;
+}
+.files-filter-title {
+  margin-bottom: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.files-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.375rem;
+}
+.files-filter-grid[data-cols="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.files-filter-opt {
+  display: flex;
+  min-width: 0;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-tile);
+  background: var(--card);
+  font-size: var(--text-callout);
+  font-weight: 500;
+  text-align: start;
+  color: color-mix(in oklch, var(--foreground) 82%, transparent);
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+.files-filter-opt[aria-checked="true"] {
+  border-color: color-mix(in oklch, var(--brand-text) 32%, transparent);
+  background: color-mix(in oklch, var(--brand-text) 9%, transparent);
+  color: var(--foreground);
+  font-weight: 600;
+}
+.files-filter-dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
+.files-filter-count {
+  flex: none;
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground);
+}
+.files-filter-note {
+  margin-top: -0.625rem;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--muted-foreground);
+}
+.files-filter-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+}
+.files-filter-clear,
+.files-filter-done {
+  height: var(--spacing-control);
+  padding-inline: 0.875rem;
+  border-radius: 9999px;
+  font-size: var(--text-callout);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 150ms ease;
+}
+.files-filter-clear {
+  color: var(--muted-foreground);
+}
+.files-filter-done {
+  margin-inline-start: auto;
+  padding-inline: 1.25rem;
+  background: var(--brand-fill-deep);
+  color: var(--brand-on-brand);
+  font-weight: 600;
+}
+.files-active-chip {
+  display: inline-flex;
+  height: 2rem;
+  align-items: center;
+  gap: 0.375rem;
+  padding-inline: 0.75rem;
+  border: 1px solid color-mix(in oklch, var(--brand-text) 30%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in oklch, var(--brand-text) 9%, transparent);
+  font-size: var(--text-footnote);
+  font-weight: 600;
+}
+
+/* Panonun hapları: çerçevesiz, yumuşak zemin — kapı olduklarını söyler, göz yormaz. */
+.files-chip {
+  display: inline-flex;
+  max-width: 100%;
+  height: var(--spacing-control);
+  align-items: center;
+  gap: 0.375rem;
+  padding-inline: 0.75rem;
+  border-radius: 9999px;
+  background: color-mix(in oklch, var(--muted) 75%, transparent);
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  color: color-mix(in oklch, var(--foreground) 82%, transparent);
+  outline: none;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+/* Hapın ikincil yazısı (kök, sayı) yumuşak zeminde de AA: soluk gri yerine mürekkebin %62'si. */
+.files-chip .text-muted-foreground {
+  color: color-mix(in oklch, var(--foreground) 62%, transparent);
+}
+.files-type-row {
+  gap: 0.125rem;
+  margin-inline: -0.5rem;
+  padding-inline: 0.5rem;
+}
+.files-type-lead {
+  flex: none;
+  margin-inline-end: 0.25rem;
+  font-size: var(--text-footnote);
+  color: var(--muted-foreground);
+}
+.files-type-link {
+  display: inline-flex;
+  flex: none;
+  height: 2rem;
+  align-items: center;
+  gap: 0.375rem;
+  padding-inline: 0.5rem;
+  border-radius: 9999px;
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  white-space: nowrap;
+  color: color-mix(in oklch, var(--foreground) 80%, transparent);
+  transition: background-color 150ms ease;
+}
+.files-type-link > .files-filter-count {
+  font-size: var(--text-footnote);
+}
+
+@media (hover: hover) {
+  .find-scope-btn:not([aria-pressed="true"]):hover,
+  .files-filter-btn:hover {
+    background: var(--accent);
+    color: var(--foreground);
+  }
+  .files-filter-clear:hover,
+  .files-type-link:hover {
+    background: color-mix(in oklch, var(--accent) 70%, transparent);
+    color: var(--foreground);
+  }
+  .files-chip:hover {
+    background: var(--accent);
+    color: var(--foreground);
+  }
+  .files-filter-opt[aria-checked="false"]:hover {
+    border-color: color-mix(in oklch, var(--foreground) 20%, transparent);
+  }
+}
+:is(
+  .find-scope-btn,
+  .files-filter-btn,
+  .files-filter-opt,
+  .files-filter-clear,
+  .files-filter-done,
+  .files-active-chip,
+  .files-chip,
+  .files-type-link
+):focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--brand-text) 45%, transparent);
+  outline-offset: 1px;
+}
+@media (pointer: coarse) {
+  .find-scope-btn,
+  .files-filter-opt,
+  .files-filter-clear,
+  .files-filter-done,
+  .files-active-chip,
+  .files-chip,
+  .files-type-link {
+    height: 2.75rem;
+    min-height: 2.75rem;
+  }
+  .files-chip {
+    min-width: 2.75rem;
+    justify-content: center;
+  }
+}
+
+/* Panonun başlığı: başlık solda, tür kapıları sağda; dar kapsayıcıda kapılar alta, tam genişlik. */
+.files-home-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+.files-home-head > .files-type-row {
+  flex: 0 1 auto;
+}
+@container files (max-width: 40rem) {
+  .files-home-head > .files-type-row {
+    flex-basis: 100%;
+  }
+}

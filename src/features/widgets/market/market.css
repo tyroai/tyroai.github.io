@@ -1,0 +1,45 @@
+/* Kur değişince satır bir an yönünün renginde parlar (borsa ekranlarının "tik"i): tek seferlik
+   sönüm, metnin altında; rakam aynı anda kayar (`RollText`). Azaltılmış harekette yok. */
+.market-flash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: market-flash 1.2s ease-out both;
+}
+.market-flash[data-dir="up"] {
+  --flash: color-mix(in oklab, var(--success) 22%, transparent);
+}
+.market-flash[data-dir="down"] {
+  --flash: color-mix(in oklab, var(--danger) 22%, transparent);
+}
+@keyframes market-flash {
+  from {
+    background-color: var(--flash);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .market-flash {
+    display: none;
+  }
+}
+
+/* En dar kartta (içerik < 10.5rem: 1366'da mini kart) değişim hapı yalnız ok; yüzde ekran okuyucuda
+   kalır. Ad ("USD", "Gram") ve değer kesilmesin diye. */
+@container widget (max-width: 10.5rem) {
+  .market-chg {
+    padding-inline: 0.25rem;
+  }
+  .market-chg-num {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

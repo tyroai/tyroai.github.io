@@ -1,0 +1,33 @@
+/* Pencere içi ipucunun hedefi (`CoachTour`): paletin mürekkep renginde halka (her palette okunur),
+   yavaş nabız. Halka dış çizgi (outline): kutunun boyunu ve dizilişi değiştirmez; köşesi öğenin
+   kendi yuvarlaklığını izler. */
+[data-tour-on] {
+  outline: 2px solid color-mix(in oklch, var(--brand-ink) 75%, transparent);
+  outline-offset: 3px;
+  animation: tour-on-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes tour-on-pulse {
+  50% {
+    outline-color: color-mix(in oklch, var(--brand-ink) 30%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-tour-on] {
+    animation: none;
+  }
+}
+
+/* Balonun oku: kartın zemini (bg-neutral-900, koyu temada 800). */
+.coach-arrow {
+  fill: var(--color-neutral-900, oklch(20.5% 0 0));
+}
+.dark .coach-arrow {
+  fill: var(--color-neutral-800, oklch(26.9% 0 0));
+}
+
+/* Koyu temada balon koyu pencerenin üstünde duruyor: kenar halkası biraz daha belirgin. */
+.dark [data-coach] {
+  --tw-ring-color: rgb(255 255 255 / 0.22);
+}

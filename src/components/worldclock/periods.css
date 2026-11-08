@@ -1,0 +1,10 @@
+/* Dünya saati penceresi — tembel CSS. Hafta sonu ve resmî tatil dilimi: kapalı gün çizgisi. */
+.wc-off {
+  background-color: color-mix(in oklab, var(--foreground) 4%, transparent);
+  background-image: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--foreground) 11%, transparent) 0 2px,
+    transparent 2px 6px
+  );
+  color: var(--muted-foreground);
+}

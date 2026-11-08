@@ -1,0 +1,327 @@
+/* Küre kartının sahneleri (`OrbScene`): maskotun uzattığı beyaz kart ve içindeki satırlar. Kart
+   cam DEĞİL, düz zemin: canlı kürenin yanında ve dolan halkayı taşırken bulanıklık her karede
+   yeniden hesaplanırdı (docs/performance.md). Sonsuz animasyon yok; yalnız bir kez çizilenler. */
+
+.orb-scene-pos {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.orb-scene-lift {
+  display: block;
+  transition: translate 200ms ease-out;
+}
+@media (hover: hover) {
+  .group:hover .orb-scene-lift {
+    translate: 0 -4px;
+  }
+}
+/* Karta sabit bakış (boş zaman): yüz imleci değil kartı izler. Maskotun kendi takibi `[data-look]`a
+   satır içi yazabildiği için `!important`; birim maskot tuvalinin birimi. */
+.orb-scene-look [data-look] {
+  transform: translate(var(--look-x), var(--look-y)) !important;
+}
+
+.orb-card-wrap {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+}
+.orb-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.25rem;
+  padding: 0.875rem;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow:
+    0 20px 40px -20px rgb(0 0 0 / 0.5),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 6%, transparent);
+  pointer-events: none;
+}
+/* Yığının arkadaki iki yaprağı: önündeki kartla aynı zemin ve boy. */
+.orb-ghost {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.25rem;
+  background: var(--popover);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--foreground) 6%, transparent);
+}
+/* Konuşma kartının kuyruğu: kürenin tepesini gösterir. */
+.orb-tail {
+  position: absolute;
+  top: 100%;
+  width: 8px;
+  height: 6px;
+  margin-left: -4px;
+  margin-top: -1px;
+  fill: var(--popover);
+}
+
+.orb-kicker-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2rem;
+}
+.orb-kicker {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.6875rem;
+  line-height: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-brand);
+  text-wrap: balance;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.orb-lead {
+  margin-top: 0.375rem;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 1);
+  overflow: hidden;
+}
+.orb-lead[data-nowrap] {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.orb-num {
+  font-variant-numeric: tabular-nums;
+}
+.orb-unit {
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+.orb-sup {
+  margin-top: 0.25rem;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 1);
+  overflow: hidden;
+}
+.orb-sup[data-tone="callout"] {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+}
+.orb-sup[data-tone="footnote"] {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--muted-foreground);
+}
+.orb-chips {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  height: 1.125rem;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground);
+}
+.orb-chips > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.orb-card-wrap > .orb-card {
+  height: 100%;
+}
+.orb-card > div {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+/* Düğme kartın dibinde (kurulum kartıyla aynı): içerik üstte, arada kalan boşluk. */
+.orb-act {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+/* Raptiye: kartın sağ üst köşesinde, tamamen beyaz kartın üstünde; kartla birlikte eğilir. */
+.orb-pin {
+  position: absolute;
+  top: 0.4rem;
+  inset-inline-end: 1rem;
+  z-index: 2;
+  width: 1rem;
+  height: 1.4375rem;
+  overflow: visible;
+  filter: drop-shadow(0 1px 0.5px rgb(0 0 0 / 0.22));
+}
+.orb-act[data-align="end"] {
+  justify-content: flex-end;
+}
+/* Dokunmatikte eylem düğmesine görünmez pay: hedef 44 px (görünen boy aynı). */
+@media (pointer: coarse) {
+  .orb-act > button {
+    position: relative;
+  }
+  .orb-act > button::after {
+    content: "";
+    position: absolute;
+    inset: -0.375rem -0.125rem;
+  }
+}
+
+/* Görseller: 12 px'lik tek satır. */
+.orb-vis {
+  position: relative;
+  margin-top: 0.375rem;
+  height: 0.75rem;
+  --orb-soft: color-mix(in oklab, var(--color-brand) 35%, transparent);
+  --orb-track: color-mix(in oklab, var(--muted-foreground) 22%, transparent);
+}
+.orb-bars {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.orb-bars > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+.orb-bars i {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+}
+.orb-delta {
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+}
+.orb-line {
+  position: absolute;
+  inset-inline: 0;
+  top: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--orb-track);
+}
+.orb-line > i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 2px;
+}
+.orb-line > i[data-tone="busy"] {
+  background: color-mix(in oklab, var(--muted-foreground) 45%, transparent);
+}
+.orb-line > i[data-tone="block"] {
+  background: var(--color-brand);
+}
+.orb-line > i[data-tone="rest"] {
+  background: var(--orb-soft);
+}
+.orb-now {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 12px;
+  margin-inline-start: -1px;
+  border-radius: 1px;
+  background: color-mix(in oklab, var(--foreground) 60%, transparent);
+}
+.orb-days {
+  display: flex;
+  gap: 3px;
+}
+.orb-days > i {
+  flex: 0 1 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+.orb-days > i[data-tone="holiday"] {
+  background: var(--color-brand);
+}
+.orb-days > i[data-tone="weekend"] {
+  background: var(--orb-track);
+}
+.orb-days > i[data-tone="bridge"] {
+  box-shadow: inset 0 0 0 1.5px var(--color-brand);
+}
+.orb-week {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.375rem;
+}
+.orb-week > i {
+  width: 0.5rem;
+  min-height: 2px;
+  border-radius: 2px;
+  background: var(--orb-soft);
+}
+.orb-week > i[data-today] {
+  background: var(--color-brand);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .orb-draw {
+    transform-origin: left center;
+    animation: orb-draw 260ms cubic-bezier(0.2, 0.9, 0.25, 1) 300ms backwards;
+  }
+  [dir="rtl"] .orb-draw {
+    transform-origin: right center;
+  }
+  .orb-draw-y > i {
+    transform-origin: bottom;
+    animation: orb-draw-y 260ms cubic-bezier(0.2, 0.9, 0.25, 1) 300ms backwards;
+  }
+  .orb-days > i {
+    animation: orb-fade 200ms ease-out backwards;
+    animation-delay: calc(300ms + var(--i, 0) * 40ms);
+  }
+  .orb-wobble {
+    transform-origin: 50% 100%;
+    animation: orb-wobble 500ms ease-out 450ms;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orb-scene-pos,
+  .orb-scene-lift {
+    transition: none;
+  }
+}
+@keyframes orb-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes orb-draw-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes orb-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes orb-wobble {
+  40% {
+    transform: rotate(-1.5deg);
+  }
+}

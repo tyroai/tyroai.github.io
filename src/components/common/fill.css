@@ -1,0 +1,47 @@
+/* Halka ve çubuk açılışta dolar (Apple'ın halkaları gibi): yay sıfırdan kendi boyuna, çubuk
+   başından. Değer sonra değişirse yumuşak geçer. Azaltılmış harekette düz. Bileşenle birlikte
+   tembel parçada (`TodoKpiBar`, `TodoProgress`, `LeaveRing`, `RmPulseWidget`,
+   Ufukta'nın `MilestoneMeta`sı, `RhythmBar`). */
+@keyframes fx-ring-fill {
+  from {
+    stroke-dasharray: 0 1000;
+  }
+}
+/* Sütun yüksekliği değil kırpma açılır (yerleşim değişmez); yuvarlak uç ezilmez. */
+@keyframes fx-col-grow {
+  from {
+    clip-path: inset(100% 0 0 0 round 9999px);
+  }
+  to {
+    clip-path: inset(0 round 9999px);
+  }
+}
+@keyframes fx-bar-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+.fx-ring {
+  animation: fx-ring-fill 0.9s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  transition: stroke-dasharray 0.6s ease;
+}
+.fx-bar {
+  transform-origin: left;
+  animation: fx-bar-fill 0.9s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+/* Sütun (Toplantı ritmi): tabandan kendi boyuna; sırayı `animation-delay` satır içinde verir. */
+.fx-col {
+  animation: fx-col-grow 0.45s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+[dir="rtl"] .fx-bar {
+  transform-origin: right;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-ring,
+  .fx-bar,
+  .fx-col {
+    animation: none;
+    transition: none;
+  }
+}

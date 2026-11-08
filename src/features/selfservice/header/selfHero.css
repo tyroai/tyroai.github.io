@@ -1,0 +1,214 @@
+/* Self Servis kartı To-Do'nun kartıyla AYNI boyda (ürün sahibi). En zaten aynı (iki sayfa aynı
+   kapta); boy To-Do'nun içeriğinden doğar ve her kırılımda rem'de sabittir. Değerler ve kırılımlar
+   tek tabloda: docs/design-tokens.md › Gradyan kart boyu. To-Do'nun kartı değişirse tablo ve
+   buradaki değişkenler birlikte değişir; tests/e2e/heroParity.spec.js iki kartı ölçer.
+   Boy kaba (dokunmatik) işaretçide 33,5–48rem arasında 0,5rem artar: To-Do'nun ekleme hapı orada
+   daha yüksek. Düzen (`data-band`) `layout/phone.js`ten: tepsi `wide` ve `mid`de yanda, `narrow`
+   ve `short`ta kartın altında. Boy sabit olunca içerik tek satırlara iner; uzun değerin tamamı
+   ipucunda ve kişi kartında. */
+.ss-hero {
+  --ss-hero-coarse: 0rem;
+  --ss-hero-h: 11.5625rem;
+  height: var(--ss-hero-h);
+}
+@media (pointer: coarse) {
+  .ss-hero {
+    --ss-hero-coarse: 0.5rem;
+  }
+}
+@container ss (min-width: 33.5rem) {
+  .ss-hero {
+    --ss-hero-h: calc(10.57rem + var(--ss-hero-coarse));
+  }
+}
+@container ss (min-width: 40rem) {
+  .ss-hero {
+    --ss-hero-h: calc(11.07rem + var(--ss-hero-coarse));
+  }
+}
+@container ss (min-width: 48rem) {
+  .ss-hero {
+    --ss-hero-h: 14.46rem;
+  }
+}
+@container ss (min-width: 64rem) {
+  .ss-hero {
+    --ss-hero-h: 13.35rem;
+  }
+}
+/* Kısa ekran (yatay telefon, alçak pencere): To-Do'nun kartı 40rem'den geniş kapta tek sıra. */
+@media (max-height: 500px) {
+  .ss-hero {
+    --ss-hero-h: 10.02rem;
+    padding-block: 0.75rem;
+  }
+  @container ss (min-width: 40rem) {
+    .ss-hero {
+      --ss-hero-h: 6rem;
+    }
+  }
+}
+
+.ss-hero-grid,
+.ss-hero-main {
+  height: 100%;
+}
+
+/* ── Tepsi yanda (`wide` ≥ 64rem, `mid` 48–64rem) ─────────────────────── */
+.ss-hero:is([data-band="wide"], [data-band="mid"]) .ss-hero-grid[data-tray] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  column-gap: 1.5rem;
+}
+.ss-hero[data-band="mid"] .ss-hero-grid[data-tray] {
+  column-gap: 1.25rem;
+}
+/* Tepsi kartın boyunu doldurur (To-Do'nun tepsisi gibi). */
+.ss-hero:is([data-band="wide"], [data-band="mid"]) .ss-hero-tray {
+  align-self: stretch;
+  min-height: 0;
+}
+.ss-hero[data-band="wide"] .ss-hero-main {
+  justify-content: center;
+  gap: 0.75rem;
+}
+/* Bilgiler tek sırada, eşit pay: kısa değer tam görünür, artan yeri uzunlar paylaşır ve kısalır. */
+.ss-hero[data-band="wide"] .ss-hero-chips {
+  flex-wrap: nowrap;
+}
+.ss-hero[data-band="wide"] .ss-hero-chips > * {
+  flex: 1 1 0;
+  max-width: max-content;
+}
+/* Kişi hapları tek sıra; sığmazsa yalnız bağlı olunan kişinin adı kısalır. */
+.ss-hero[data-band="wide"] .ss-hero-people {
+  flex-wrap: nowrap;
+}
+.ss-hero[data-band="mid"] .ss-hero-main {
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+/* Tepsinin içi: dönem çubuğu + üç kutu To-Do'nun tepsisiyle aynı boya sığar — kutuların iç payı
+   ve değer yazısı küçülür, alt satır en çok iki satır (tamamı ipucunda ve ayrıntı kartında).
+   Dokunmatikteki "ayrıntıları aç" satırı burada yok: kutunun alt satırı aynı bilgiyi veriyor,
+   kutulara basınca çekmece yine açılır. */
+.ss-hero .ss-tray-bar {
+  padding-top: 0;
+}
+.ss-hero .ss-tray-bar + * {
+  margin-top: 0;
+}
+.ss-hero .ss-tile {
+  padding-block: 0.5rem;
+}
+.ss-hero .ss-tile::before {
+  inset-block: 0.75rem;
+}
+.ss-hero .ss-tile-value {
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+}
+.ss-hero .ss-tile-line {
+  margin-top: 0.375rem;
+}
+.ss-hero .ss-tile-note {
+  -webkit-line-clamp: 2;
+}
+.ss-hero .ss-tiles-more {
+  display: none;
+}
+/* Kartın altındaki tepside (dar kap) kutuların alt satırı görünüyorsa dokunmatiğin alt satırı
+   aynı notu ikinci kez yazardı: yok, kutulara basınca çekmece yine açılır. */
+@container ss (min-width: 44rem) {
+  .ss-tray-below .ss-tiles-more {
+    display: none;
+  }
+}
+/* 48–64rem'de tepsi dar (üç kutu ~ 8rem): kutunun yan payı ve değer bir kademe daha küçük. */
+.ss-hero[data-band="mid"] .ss-tile {
+  padding-inline: 0.75rem;
+}
+.ss-hero[data-band="mid"] .ss-tile-value {
+  font-size: 1.25rem;
+}
+/* Kutu adı yılsız (dönem çubuğu yılı zaten söylüyor): dar kutuda ad kesilmesin. */
+.ss-hero[data-band="mid"] .ss-tile-short {
+  display: inline;
+}
+.ss-hero[data-band="mid"] .ss-tile-full {
+  display: none;
+}
+
+/* Telefon: kartın boyu içerikten; sabit boy kısa içerikte ortada boşluk bırakıyordu. Satırlar sabit
+   aralıkla üstten dizilir. To-Do'nun telefon kartı (`todo/todoPhoneCard.css`) bu kabuğu ve satır
+   ölçülerini bire bir yineler: burada ölçü değişirse orada da (docs/design-tokens.md › Telefon kartı). */
+.ss-hero[data-phone] {
+  height: auto;
+}
+.ss-hero[data-phone] :is(.ss-hero-grid, .ss-hero-main) {
+  height: auto;
+}
+.ss-hero[data-phone] .ss-hero-main {
+  justify-content: flex-start;
+  gap: 0.875rem;
+}
+
+/* ── Kart yalnız kişi (`narrow`, `short`): kişi · bilgiler · şerit kartın boyuna eşit aralıkla ── */
+.ss-hero:is([data-band="narrow"], [data-band="short"]) .ss-hero-main {
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0;
+}
+@container ss (min-width: 33.5rem) {
+  /* Kart burada kısa ama geniş: bilgiler iki sıra yerine tek sırada, her biri bir sütun. */
+  .ss-hero:is([data-band="narrow"], [data-band="short"]) .ss-hero-chips {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+}
+@container ss (min-width: 40rem) {
+  /* Kişi satırı şeritle aynı boyda (48 px): üç sıra kartın boyuna sığar. */
+  .ss-hero:is([data-band="narrow"], [data-band="short"]) .ss-hero-avatar {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+/* Kısa ekranda geniş kap: tek sıra — solda fotoğraf, yanında ad · unvan · bilgiler; sağda şerit. */
+@media (max-height: 500px) {
+  @container ss (min-width: 40rem) {
+    .ss-hero[data-band="short"] .ss-hero-main {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      align-content: center;
+      column-gap: 0.875rem;
+      row-gap: 0.125rem;
+    }
+    .ss-hero[data-band="short"] .ss-hero-id {
+      display: contents;
+    }
+    .ss-hero[data-band="short"] .ss-hero-id > :first-child {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
+    .ss-hero[data-band="short"] .ss-hero-id > :last-child {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .ss-hero[data-band="short"] .ss-hero-name {
+      font-size: 1.25rem;
+    }
+    .ss-hero[data-band="short"] .ss-hero-chips {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .ss-hero[data-band="short"] .ss-hero-main > :last-child {
+      grid-column: 3;
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
+  }
+}

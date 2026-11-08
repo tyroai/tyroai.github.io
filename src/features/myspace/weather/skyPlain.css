@@ -1,0 +1,34 @@
+/* Selamlamasız hava kartı (Pano'nun "Hava durumu"su, `data-greeting="off"`): göz konum satırının
+   ucunda durur — satır iki yanda gözün yerini ayırır, yazı gözün altına girmez. Mini kartta
+   (< 16rem) satır ikiye bölünür: üstte yer, altta saat ve yağmur; hiçbiri kesilmez. */
+.sky-weather[data-greeting="off"] .sky-weather__location {
+  max-width: calc(100% - 40px);
+  margin-inline: auto;
+}
+@container (max-width: 16rem) {
+  .sky-weather[data-greeting="off"] .sky-weather__location {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+  .sky-weather[data-greeting="off"] .sky-weather__location::before {
+    content: "";
+    order: 1;
+    flex-basis: 100%;
+    height: 0;
+  }
+  .sky-weather[data-greeting="off"] :is(.sky-weather__clock, .sky-weather__outlook) {
+    order: 2;
+  }
+  .sky-weather[data-greeting="off"] .sky-weather__clock {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+/* Dar kartta (≤ 15rem) dipteki gün doğumu ve batımı düşer: ortadaki hava durumu ("Kuvvetli
+   yağmur") iki saatin arasına sığmıyor, üstlerine biniyordu. Yay güneşin yolunu yine gösterir. */
+@container (max-width: 15rem) {
+  .sky-weather[data-greeting="off"] .sky-weather__daylight {
+    display: none;
+  }
+}

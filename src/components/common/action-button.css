@@ -1,0 +1,8 @@
+/* Ana eylemin üzerine gelme hali: zemin açılır. `filter: brightness` kullanılmaz — düğmeyi ayrı
+   katmana alıp yazıyı yeniden çizdiriyor, geçişte harfler titriyordu (bkz. UpdateCard). */
+@media (hover: hover) {
+  .action-button--prominent:hover:not(:disabled) {
+    /* %6: açık paletlerde beyaz yazı AA'da kalsın (dolgu sınırda). */
+    background-color: color-mix(in oklch, var(--brand-fill-deep), #fff 6%);
+  }
+}

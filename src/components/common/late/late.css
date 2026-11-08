@@ -1,0 +1,21 @@
+/* "Geç kalıyorum" (`LateMenu`). Kurallar burada: ilk CSS'e yeni Tailwind sınıfı girmesin. */
+
+/* Seçenek tam cümle: menünün küçük satırından iri, parmak boyunda. */
+.late-option.late-option {
+  min-height: 2.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+@media (pointer: coarse) {
+  .late-option.late-option {
+    min-height: 2.75rem;
+  }
+}
+
+/* Sıradaki toplantı kartı çok darsa (içerik ≤ 12rem) düğme yok — Katıl okunur kalsın; aynı
+   seçenek geri sayım penceresinde var. Ölçü kopyası da aynı kuralla düşer. */
+@container meet (max-width: 12rem) {
+  .late-card {
+    display: none;
+  }
+}

@@ -1,0 +1,47 @@
+/* Kartın üstündeki soru (`CardChoice`): ölçüler kartın genişliğine göre (kendi kabı, `card-choice`).
+   Dar kartta açıklama gizli, seçenekler alt alta ve tam genişlik. Kısa kartta (telefonda 100 px'lik
+   boş durum) katman kırpılmaz, aşağı doğru büyür: seçenekler ve Vazgeç hep görünür.
+   Bileşenle birlikte tembel iner (ilk CSS'e girmez). */
+.card-choice {
+  container: card-choice / inline-size;
+  bottom: auto;
+  min-height: 100%;
+}
+.card-choice__body {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  text-align: center;
+}
+.card-choice__detail {
+  display: none;
+}
+.card-choice__options {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.375rem;
+}
+.card-choice__options > button {
+  justify-content: center;
+}
+@container card-choice (min-width: 15rem) {
+  .card-choice__body {
+    padding: 1rem;
+  }
+  .card-choice__detail {
+    display: block;
+  }
+  .card-choice__options {
+    width: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+}
