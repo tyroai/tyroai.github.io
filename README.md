@@ -2,9 +2,15 @@
 
 **https://tyroai.github.io**
 
-TYRO AI kurumsal çalışma alanının, **tamamen kurgusal veriyle** çalışan ve hiçbir canlı sisteme
-bağlanmayan demosu. Anasayfa, Keşfet, Takvim, To-Do, Sohbet (asistanlar), Self Servis ve Tibotlar
+TYRO AI kurumsal çalışma alanının, **tamamen kurgusal veriyle** çalışan ve hiçbir kurum sistemine
+bağlanmayan demosu. Anasayfa, Keşfet, Takvim, To-Do, Sohbet (asistanlar), Self Servis ve Ticket
 sayfaları çalışır; posta, takvim, görev, dosya ve İK verilerinin hepsi tarayıcıda üretilir.
+
+**Canlı olan tek şey, herkese açık ve anahtarsız kaynaklardır:** header'daki Tyrofy radyosu
+([Radio Browser](https://www.radio-browser.info) istasyon dizini + istasyonların kendi akışları) ve
+Piyasa widget'ı (kurlar ve altın: [Truncgil](https://finans.truncgil.com), TCMB/AB kurları:
+[Frankfurter](https://frankfurter.dev), CFTC pozisyon raporu). Bu kaynaklara ulaşılamazsa Piyasa
+kurgusal rakamlara döner. Hava durumu kurgusaldır.
 
 > **Tüm kişi, firma, rakam ve içerik uydurmadır.** Gerçek bir şirket, kişi ya da sistemle ilgisi yoktur.
 > Kullanıcı: Ömer Gümüş, Satış Yöneticisi, TYRO Tech (kurgusal).

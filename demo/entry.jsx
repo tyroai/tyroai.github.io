@@ -18,6 +18,16 @@ try {
   if (!ls.getItem("tyro-tours-v1")) ls.setItem("tyro-tours-v1", JSON.stringify({ off: true, seen: {} }))
   // Dil: seçim yoksa Türkçe (kaynakta giriş sayfası İngilizce açılır; içerik Türkçe olduğu için tutarsız dururdu).
   if (!ls.getItem("tyro-locale-v2")) ls.setItem("tyro-locale-v2", "tr")
+  // Takvim: "rahat saat ölçeği" açık başlasın (saat başı 64 px). Kapalıyken hafta tek ekrana sığdırılır
+  // ve küçük pencerede toplantılar okunmayacak kadar daralır.
+  if (!ls.getItem("tyro-calendar-tools-v1")) {
+    ls.setItem("tyro-calendar-tools-v1", JSON.stringify({ comfort: true, hidePending: false }))
+  }
+  // Header: Tyrofy (radyo) ve Piyasa açık gelsin. İkisi de canlı çalışır (Radio Browser + gerçek akışlar;
+  // Truncgil/Frankfurter kurları); kullanıcı kaldırır ya da başkasını ekler, o zaman bu tohum bir daha yazmaz.
+  if (!ls.getItem("tyro-header-widgets-v1")) {
+    ls.setItem("tyro-header-widgets-v1", JSON.stringify({ v: 1, items: ["radio", "market"], looks: {}, faces: {} }))
+  }
   // Kişi fotoğrafları sonradan eklendi: uygulamanın 7 günlük "fotoğrafı yok" önbelleği eski ziyaretlerden
   // kalmış olabilir; sürüm damgası yoksa bir kez temizle (yeni ziyaretçide zaten boş).
   if (!ls.getItem("demo-people-photos-v1")) {

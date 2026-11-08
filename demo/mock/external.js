@@ -1,6 +1,7 @@
-// Microsoft dışı herkese açık servislerin KURGUSAL karşılıkları: hava (MET Norway), yer adı
-// (BigDataCloud), kurlar ve piyasa (Truncgil, Frankfurter, currency-api), CFTC raporu.
-// Radyo dizini ve diğerleri gerçek ağa geçer (null = araya girme).
+// Microsoft dışı herkese açık servisler. Hava (MET Norway) ve yer adı (BigDataCloud) KURGUSALDIR (veri
+// setinin havası, hep İstanbul). Kurlar, altın, BIST ve CFTC raporu (Truncgil, Frankfurter, currency-api,
+// CFTC) önce CANLI açık kaynaktan gelir; ağ yoksa ya da servis yanıt vermezse aşağıdaki kurgusal
+// karşılıklara düşülür. Radyo dizini (Radio Browser) ve akışlar zaten gerçek ağa geçer (null = araya girme).
 import { json } from "./util.js"
 import { addDays, isoWeekday, seeded, startOfDay, ymd } from "../time.js"
 
@@ -150,7 +151,25 @@ function cftc(url) {
 
 // ───────────────────────── yönlendirici ─────────────────────────
 
-export async function handleExternal({ url, ctx }) {
+// Anahtarsız, CORS açık servisler: canlı veri çekilir. Kısa zaman aşımı: yavaş/engelli ağda uygulama
+// beklemesin, kurgusal veriye dönsün. Yalnız GET; başarısızlıkta `null` (çağıran kurguyu verir).
+const LIVE_TIMEOUT_MS = 5000
+async function live({ url, method, ctx }) {
+  if (method !== "GET") return null
+  const ctl = new AbortController()
+  const timer = setTimeout(() => ctl.abort(), LIVE_TIMEOUT_MS)
+  try {
+    const res = await ctx.realFetch(url.href, { signal: ctl.signal, headers: { Accept: "application/json" } })
+    return res.ok ? res : null
+  } catch {
+    return null
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+export async function handleExternal(req) {
+  const { url, ctx } = req
   const host = url.hostname
   const ds = ctx.dataset
 
@@ -172,8 +191,10 @@ export async function handleExternal({ url, ctx }) {
       countryName: "Türkiye",
     })
   }
-  if (host === "finans.truncgil.com") return json(truncgil(ds.market))
+  if (host === "finans.truncgil.com") return (await live(req)) ?? json(truncgil(ds.market))
   if (host === "api.frankfurter.dev") {
+    const real = await live(req)
+    if (real) return real
     if (/\/v1\/latest/.test(url.pathname)) {
       return json({
         amount: 1,
@@ -185,8 +206,10 @@ export async function handleExternal({ url, ctx }) {
     return json(frankfurterRange(url))
   }
   if (host === "cdn.jsdelivr.net" && /currency-api/.test(url.pathname)) {
+    const real = await live(req)
+    if (real) return real
     return json({ date: ymd(startOfDay()), try: { ngn: 33.4, ghs: 0.262, ves: 0.9 } })
   }
-  if (host === "publicreporting.cftc.gov") return json(cftc(url))
+  if (host === "publicreporting.cftc.gov") return (await live(req)) ?? json(cftc(url))
   return null
 }
