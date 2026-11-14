@@ -85,7 +85,7 @@ export function CardChoice({ label, title, detail, options, cancelLabel, onChoos
               className={cn(
                 BTN,
                 i === 0
-                  ? "bg-brand-fill-deep text-brand-on-brand hover:brightness-110"
+                  ? "bg-brand-fill-deep text-brand-on-brand"
                   : "border border-border bg-background text-foreground/85 hover:bg-accent",
               )}
             >

@@ -1,7 +1,7 @@
 import { addDays, isWeekend, startOfDay } from "@/lib/leaveDays"
 
 /**
- * Günün brifingi — saf hesap (`features/widgets/BriefWidget`).
+ * TYRO brifingi — saf hesap (`features/widgets/BriefWidget`).
  *
  * Kart bir LİSTE değil, bir EYLEM PANELİ: her madde bir sayım ve tek bir
  * eylem; sıra önceliğe göre (yanıt bekleyen insanlar önce, bilgi en son).

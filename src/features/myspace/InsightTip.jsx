@@ -11,6 +11,7 @@ import { useHoverPopover } from "@/hooks/useHoverPopover"
 import { useLocale } from "@/hooks/useLocale"
 import { alignFor } from "@/lib/placement"
 import { cn } from "@/lib/utils"
+import "./insightTip.css"
 
 /**
  * Akışım'ın ipucu kartı — koyu zemin: başlık · paletten renkli üst etiket ·
@@ -26,6 +27,11 @@ import { cn } from "@/lib/utils"
  * basınca; sayfada aynı anda tek ipucu. `children` TEK bir odaklanabilir
  * eleman olmalı (Radix `asChild`) — kancanın olayları ve `data-state` ona
  * takılır.
+ */
+/**
+ * `look`: `"dark"` (varsayılan, koyu kart) ya da `"glass"` (yarı saydam cam, kartın mürekkebi, canlı
+ * palet renkleri; `insightTip.css`). Cam yalnız içeriği kartın mürekkebiyle çizilen ipuçlarında:
+ * bugün günün okuması (`InsightBody`).
  */
 /**
  * `valueLang`: satır değerlerinin dili. Varsayılan `"tr"` (toplantı ve iş
@@ -144,7 +150,19 @@ function TipRows({ rows, limit, valueLang }) {
 }
 
 /** İpucunun içeriği — açılır kutuda ve telefondaki alt panelde aynı. */
-function TipBody({ title, kicker, rows, limit, list, more, note, action, valueLang, close }) {
+function TipBody({
+  title,
+  kicker,
+  rows,
+  limit,
+  list,
+  more,
+  note,
+  action,
+  valueLang,
+  glass,
+  close,
+}) {
   const { locale } = useLocale()
   return (
     <>
@@ -156,7 +174,10 @@ function TipBody({ title, kicker, rows, limit, list, more, note, action, valueLa
       {kicker && (
         <p
           lang={locale}
-          className="mt-0.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-[color-mix(in_oklch,var(--brand-to)_62%,white)]"
+          className={cn(
+            "mt-0.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em]",
+            glass ? "text-brand" : "text-[color-mix(in_oklch,var(--brand-to)_62%,white)]",
+          )}
         >
           {kicker}
         </p>
@@ -187,6 +208,7 @@ export function InsightTip({
   side = "top",
   align = "center",
   valueLang = "tr",
+  look = "dark",
   children,
 }) {
   // Yön açılışta seçilir: tercih `side`, sığmazsa en geniş boşluk (`lib/placement`).
@@ -201,7 +223,8 @@ export function InsightTip({
   const { contentRef, overlayRef, grip } = useSheetDrag(() => setSheetOpen(false))
   // Geri tuşu paneli kapatır, sayfadan çıkmaz (öteki çekmecelerle aynı).
   useBackToClose(sheetOpen && isMobile, () => setSheetOpen(false))
-  const bodyProps = { title, kicker, rows, limit, list, more, note, action, valueLang }
+  const glass = look === "glass"
+  const bodyProps = { title, kicker, rows, limit, list, more, note, action, valueLang, glass }
 
   // Telefonda uzun liste (davetler) açılır kutuya sığmıyor, ekranın üstünde
   // kırpılıyordu: dokununca alttan panel açılır.
@@ -215,10 +238,19 @@ export function InsightTip({
           side="bottom"
           showCloseButton={false}
           aria-describedby={undefined}
-          className="max-h-[85dvh] gap-0 overflow-y-auto overscroll-contain rounded-t-3xl [scrollbar-gutter:auto]! border-0 bg-neutral-900 px-4 pb-[max(env(safe-area-inset-bottom),1.25rem)] pt-2.5 text-white dark:bg-neutral-800"
+          className={cn(
+            "max-h-[85dvh] gap-0 overflow-y-auto overscroll-contain rounded-t-3xl [scrollbar-gutter:auto]! border-0 px-4 pb-[max(env(safe-area-inset-bottom),1.25rem)] pt-2.5",
+            glass ? "insight-glass" : "bg-neutral-900 text-white dark:bg-neutral-800",
+          )}
         >
           <div {...grip} className="-mx-4 -mt-2.5 shrink-0 px-4 pb-3 pt-2.5">
-            <span aria-hidden="true" className="mx-auto block h-1 w-10 rounded-full bg-white/25" />
+            <span
+              aria-hidden="true"
+              className={cn(
+                "mx-auto block h-1 w-10 rounded-full",
+                glass ? "bg-foreground/20" : "bg-white/25",
+              )}
+            />
           </div>
           <SheetTitle className="sr-only">{title}</SheetTitle>
           <TipBody {...bodyProps} close={() => setSheetOpen(false)} />
@@ -240,7 +272,10 @@ export function InsightTip({
         {...tip.contentProps}
         aria-label={title}
         className={cn(
-          "max-h-[var(--radix-popover-content-available-height)] max-w-[calc(100vw-1.5rem)] gap-0 overflow-y-auto overscroll-contain rounded-2xl bg-neutral-900 [scrollbar-gutter:auto]! p-4 text-white shadow-2xl ring-1 ring-white/10 dark:bg-neutral-800",
+          "max-h-[var(--radix-popover-content-available-height)] max-w-[calc(100vw-1.5rem)] gap-0 overflow-y-auto overscroll-contain [scrollbar-gutter:auto]! p-4",
+          glass
+            ? "insight-glass rounded-[1.25rem] border-0"
+            : "bg-neutral-900 text-white shadow-2xl ring-1 ring-white/10 dark:bg-neutral-800",
           list ? "w-[22rem]" : "w-72",
         )}
       >

@@ -45,7 +45,7 @@ export function CardHandle({
   const label = t("widgets.handle", { name })
   // Gruplar arasında ayraç: yalnız var olanlar (boş grubun ayracı menünün başında kalırdı).
   const groups = [
-    info && <InfoMenuItem text={info} label={t("widgets.info.what")} className={ITEM} />,
+    looks.length > 1 && <LookChoices looks={looks} look={look} onLook={onLook} />,
     toggle && (
       <DropdownMenuCheckboxItem
         checked={toggle.checked}
@@ -56,7 +56,6 @@ export function CardHandle({
         {toggle.label}
       </DropdownMenuCheckboxItem>
     ),
-    looks.length > 1 && <LookChoices looks={looks} look={look} onLook={onLook} />,
     (onHeader || onRemove) && (
       <>
         {onHeader && (
@@ -73,6 +72,8 @@ export function CardHandle({
         )}
       </>
     ),
+    // Ayarlar önce; bilgi satırı en altta, sakin.
+    info && <InfoMenuItem text={info} label={t("widgets.info.what")} className={ITEM} />,
   ].filter(Boolean)
   if (!groups.length) return null
   return (
@@ -107,7 +108,11 @@ export function CardHandle({
         </button>
       </DropdownMenuTrigger>
       {used && (
-        <DropdownMenuContent align="center" className="w-52 pointer-coarse:w-64">
+        <DropdownMenuContent
+          align="center"
+          sideOffset={8}
+          className="w-auto min-w-60 max-w-[calc(100vw-1.5rem)]"
+        >
           {groups.map((group, i) => (
             <Fragment key={i}>
               {i > 0 && <DropdownMenuSeparator />}

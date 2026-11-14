@@ -103,7 +103,7 @@ export function RecipientField({
             "inline-flex items-center",
             inline
               ? "gap-1.5 rounded-full border border-border/80 bg-background py-0.5 pe-1.5 ps-0.5 text-[0.8125rem] font-medium text-foreground shadow-xs"
-              : "gap-1 rounded-md bg-brand/10 px-1.5 py-0.5 text-[0.71875rem] text-brand-ink",
+              : "gap-1 rounded-md bg-brand/10 px-1.5 py-0.5 text-[0.75rem] text-brand-ink",
           )}
         >
           {inline &&
@@ -117,7 +117,7 @@ export function RecipientField({
             ) : (
               <span
                 aria-hidden="true"
-                className="grid size-6 place-items-center rounded-full bg-brand/[0.14] text-[0.625rem] font-semibold text-brand-ink"
+                className="grid size-6 place-items-center rounded-full bg-brand/[0.14] text-[0.6875rem] font-semibold text-brand-ink"
               >
                 {initials(p.name || p.address)}
               </span>
@@ -155,7 +155,7 @@ export function RecipientField({
         placeholder={value.length ? "" : placeholder}
         className={cn(
           "flex-1 bg-transparent outline-none placeholder:text-muted-foreground/70",
-          inline ? "min-w-[5rem] text-[0.8125rem]" : "min-w-[8rem] text-[0.78125rem]",
+          inline ? "min-w-[5rem] text-[0.8125rem]" : "min-w-[8rem] text-[0.8125rem]",
         )}
       />
     </div>
@@ -176,7 +176,7 @@ export function RecipientField({
         </div>
       ) : (
         <>
-          <Label htmlFor={id} className="text-[0.71875rem] text-muted-foreground">
+          <Label htmlFor={id} className="text-[0.75rem] text-muted-foreground">
             {label}
           </Label>
           {row}
@@ -198,7 +198,7 @@ export function RecipientField({
                 className="flex w-full flex-col items-start rounded-md px-2 py-1 text-left hover:bg-accent/60"
               >
                 <span className="text-[0.75rem] font-medium leading-tight">{p.name}</span>
-                <span className="text-[0.65625rem] leading-tight text-muted-foreground">
+                <span className="text-[0.6875rem] leading-tight text-muted-foreground">
                   {p.address}
                 </span>
               </button>

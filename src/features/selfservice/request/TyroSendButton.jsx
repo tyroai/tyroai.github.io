@@ -23,7 +23,7 @@ export function TyroSendButton({ onClick, busy = false, placement = "header" }) 
       className={cn(
         "grid shrink-0 place-items-center rounded-full text-brand-ink transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:opacity-60",
         foot
-          ? "size-12 border border-border bg-background shadow-xs hover:bg-brand/[0.06]"
+          ? "size-12 bg-muted shadow-xs hover:bg-brand/[0.06]"
           : "relative me-1 size-8 bg-brand/[0.08] hover:bg-brand/[0.13] pointer-coarse:after:absolute pointer-coarse:after:-inset-1.5",
       )}
     >

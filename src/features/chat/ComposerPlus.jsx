@@ -56,7 +56,7 @@ export function ComposerPlus({ onAttach, onRefToggle, refDisabled, onOpenPromptL
         side="top"
         align="start"
         sideOffset={8}
-        className="w-60 rounded-xl p-1.5"
+        className="w-60 p-1.5"
         onCloseAutoFocus={(e) => {
           const run = after.current
           if (!run) return

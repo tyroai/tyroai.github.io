@@ -32,10 +32,11 @@ export function contrast(a, b) {
 }
 
 /** Kök elemandaki marka tokenlarını `[r, g, b]` olarak okur; okuyamazsa `null`. */
-export function readBrandStops(tokens = ["--brand-from", "--brand-via"]) {
+export function readBrandStops(tokens = ["--brand-from", "--brand-via"], el = null) {
   if (typeof document === "undefined") return null
   try {
-    const root = getComputedStyle(document.documentElement)
+    // `el`: kartın kendi paleti (görünüm seçeneği) öğenin üstünde tanımlıysa ondan okunur.
+    const root = getComputedStyle(el ?? document.documentElement)
     const canvas = document.createElement("canvas")
     canvas.width = 1
     canvas.height = 1

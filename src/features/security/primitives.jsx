@@ -38,7 +38,7 @@ export function ValueChip({ children, className, title }) {
       title={title}
       className={cn(
         "inline-block max-w-full rounded-md bg-foreground/[0.045] px-1.5 py-0.5",
-        "text-[0.71875rem] leading-relaxed text-foreground/[0.82]",
+        "text-[0.75rem] leading-relaxed text-foreground/[0.82]",
         "tracking-[0.015em] tabular-nums [font-variant-ligatures:none]",
         "break-words dark:bg-white/[0.06]",
         className,
@@ -128,7 +128,7 @@ export function Eyebrow({ children, className }) {
   return (
     <span
       className={cn(
-        "text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground",
+        "text-[0.6875rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground",
         className,
       )}
     >

@@ -31,6 +31,17 @@ export const TOAST_GLYPH_BOX = cn(
 export const TOAST_GLYPH_GLOW = "absolute -inset-1 rounded-2xl blur-md"
 
 /**
+ * Soru bildiriminin onay düğmesi (`notify.ask`): dolu beyaz kapsül — tek gri düğmeli bilgi
+ * kartından bir bakışta ayrılsın ("soru sorduğunu anlamıyorum", ürün sahibi).
+ */
+export const TOAST_BUTTON_PRIMARY = cn(
+  "inline-flex items-center justify-center rounded-full bg-white px-4",
+  "text-[0.75rem] font-semibold text-[oklch(0.19_0.02_250)] transition",
+  "hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
+  "[min-height:max(1.75rem,28px)] pointer-coarse:min-h-11",
+)
+
+/**
  * Bildirimdeki eylem düğmesi ("Tekrar dene", "Geri al"). Yüzey temadan bağımsız koyu;
  * uygulamanın `Button`ı tema token'larıyla çalıştığı için burada kullanılmaz.
  * `min-h`: yoğunluk ayarı kök yazıyı kısınca bile tıklanabilir boy; dokunmatikte 44px.
@@ -40,4 +51,15 @@ export const TOAST_BUTTON_GHOST = cn(
   "text-[0.75rem] font-semibold text-white transition",
   "hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
   "[min-height:max(1.75rem,28px)] pointer-coarse:min-h-11",
+)
+
+/**
+ * Kapatma çarpısı: kartın sağ üst köşesinde 28 px zeminsiz daire (köşeden 8 px); üstüne gelince
+ * hafif zemin. Dokunmatikte görünmez pay hedefi 44 px'e tamamlar.
+ */
+export const TOAST_CLOSE = cn(
+  "absolute end-2 top-2 grid size-7 place-items-center rounded-full text-white/55 outline-none",
+  "transition-colors hover:bg-white/10 hover:text-white",
+  "focus-visible:ring-2 focus-visible:ring-white/50",
+  "pointer-coarse:after:absolute pointer-coarse:after:-inset-2",
 )

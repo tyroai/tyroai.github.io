@@ -110,6 +110,7 @@ export default function TibotRunwayWidget({ className }) {
 
   return (
     <WidgetFrame
+      personal
       id="tibot-rhythm"
       title={t("widgets.tibotRhythm.title")}
       shortTitle={t("widgets.tibotRhythm.short")}

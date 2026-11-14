@@ -125,12 +125,7 @@ export function UserMenuContent({
   )
 
   return (
-    <DropdownMenuContent
-      side={side}
-      align="end"
-      sideOffset={6}
-      className="w-[15.5rem] rounded-[10px] p-1"
-    >
+    <DropdownMenuContent side={side} align="end" sideOffset={6} className="w-[15.5rem]">
       <DropdownMenuLabel className="p-0 font-normal">
         <div className="flex items-center gap-2.5 p-2">
           {/* Ad hemen yanında: avatar süs (menünün çocuğu olarak "img" rolü taşımasın). */}

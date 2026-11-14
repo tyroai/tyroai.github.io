@@ -67,7 +67,7 @@ export function MailCompose({
       // Sohbet rıhtımı pencerede Escape dinliyor: kutuyu kapatan Escape rıhtımı da kapatmasın.
       onEscapeKeyDown={(e) => e.stopPropagation()}
       className={cn(
-        "flex max-h-[calc(100dvh-1.5rem)] w-[calc(100vw-1.5rem)] max-w-none flex-col gap-0 overflow-hidden rounded-[1.75rem] border-border/60 bg-muted p-0 sm:max-h-[calc(100dvh-1.5rem)] sm:w-full sm:max-w-[34rem] sm:pb-0",
+        "flex max-h-[calc(100dvh-1.5rem)] w-[calc(100vw-1.5rem)] max-w-none flex-col gap-0 overflow-hidden border-border/60 bg-muted p-0 sm:max-h-[calc(100dvh-1.5rem)] sm:w-full sm:max-w-[34rem] sm:pb-0",
         preview &&
           !full &&
           "lg:h-[min(54rem,calc(100dvh-2rem))] lg:w-[calc(100vw-2rem)] lg:max-w-[82rem]",
@@ -220,10 +220,7 @@ export function MailCompose({
             type="button"
             disabled={secondary.disabled}
             onClick={secondary.onClick}
-            className={cn(
-              PILL,
-              "ms-auto border border-border bg-background text-foreground shadow-xs hover:bg-foreground/[0.04]",
-            )}
+            className={cn(PILL, "ms-auto bg-muted text-foreground shadow-xs hover:bg-accent")}
           >
             <HugeiconsIcon
               icon={secondary.icon}
@@ -242,7 +239,7 @@ export function MailCompose({
           onClick={send.onClick}
           className={cn(
             PILL,
-            "bg-brand-solid px-5 text-brand-on-brand shadow-sm hover:brightness-110",
+            "bg-brand-solid px-5 text-brand-on-brand shadow-sm",
             !secondary && "ms-auto",
           )}
         >

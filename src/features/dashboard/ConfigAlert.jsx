@@ -40,7 +40,7 @@ export function ConfigAlert({ error }) {
   return (
     <div
       role="status"
-      className="col-span-full flex items-start gap-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 px-3 py-3 text-[0.78125rem] leading-snug"
+      className="col-span-full flex items-start gap-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 px-3 py-3 text-[0.8125rem] leading-snug"
     >
       <HugeiconsIcon
         icon={Alert02Icon}

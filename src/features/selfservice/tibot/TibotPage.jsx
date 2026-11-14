@@ -3,7 +3,7 @@ import "@/lib/i18n/tibot"
 import { useCallback, useRef } from "react"
 import { useSearchParams } from "react-router-dom"
 import { PageShell } from "@/components/layout/PageShell"
-import { SectionHeading } from "@/components/common/SectionHeading"
+import { PageHeading } from "@/components/common/SectionHeading"
 import { useLocale } from "@/hooks/useLocale"
 import { useSelfServiceProfile } from "@/hooks/useSelfServiceProfile"
 import { useTibotTickets } from "@/hooks/useTibotTickets"
@@ -74,8 +74,17 @@ export function TibotPage() {
           )}
         >
           <PageShell className="pb-28">
-            <div ref={box} className="@container/ss">
-              <h1 className="sr-only">{t("nav.tibot")}</h1>
+            <div ref={box} className="@container/ss" data-private="">
+              {/* Sayfa başlığı en üstte (öteki sayfalar gibi); telefonda üst çubuk sayfanın adını taşır. */}
+              {phone ? (
+                <h1 className="sr-only">{t("nav.tibot")}</h1>
+              ) : (
+                <PageHeading
+                  eyebrow={t("tibot.pt.eyebrow")}
+                  title={t("tibot.pt.records")}
+                  className="mb-6"
+                />
+              )}
               <SelfHero
                 profile={profile}
                 team={null}
@@ -93,20 +102,11 @@ export function TibotPage() {
               {!trayInside && tray}
               <section
                 aria-labelledby="tb-records"
-                className={cn("min-w-0", phone ? "mt-6" : "mt-10 @[56rem]/ss:mt-12")}
+                className={cn("min-w-0", phone ? "mt-6" : "mt-8")}
               >
-                {phone ? (
-                  <h2 id="tb-records" className="sr-only">
-                    {t("tibot.pt.records")}
-                  </h2>
-                ) : (
-                  <SectionHeading
-                    id="tb-records"
-                    eyebrow={t("tibot.pt.eyebrow")}
-                    title={t("tibot.pt.records")}
-                    className="mb-4"
-                  />
-                )}
+                <h2 id="tb-records" className="sr-only">
+                  {t("tibot.pt.records")}
+                </h2>
                 <TicketsPanel />
               </section>
             </div>

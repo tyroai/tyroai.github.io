@@ -119,7 +119,7 @@ function OfficeRow({ office, query, onOpen }) {
             </span>
             <span
               lang={locale}
-              className="shrink-0 rounded-full bg-muted px-1.5 py-px text-[0.625rem] font-semibold text-foreground/75"
+              className="shrink-0 rounded-full bg-muted px-1.5 py-px text-[0.6875rem] font-semibold text-foreground/75"
             >
               {t(`find.office.kind.${office.kind}`)}
             </span>

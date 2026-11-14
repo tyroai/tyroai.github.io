@@ -18,7 +18,7 @@ import { showResultToast } from "@/lib/refreshToast"
 import { localDayKey } from "@/lib/todo"
 import { VIEWS, boardSummary } from "@/lib/todoInsights"
 import { cn } from "@/lib/utils"
-import { SectionHeading } from "@/components/common/SectionHeading"
+import { PageHeading } from "@/components/common/SectionHeading"
 import { PageShell } from "@/components/layout/PageShell"
 import "./ChecklistOrb.css"
 import { FlaggedLeftovers } from "./FlaggedLeftovers"
@@ -188,7 +188,16 @@ export function TodoPage() {
       <div ref={scrollRef} className="ms-scroll flex min-h-0 flex-1 flex-col overflow-y-auto">
         <PageShell className={phone ? "pb-28" : "pb-16"}>
           <div className="@container/todo">
-            <h1 className="sr-only">{t("nav.todo")}</h1>
+            {/* Sayfa başlığı en üstte (öteki sayfalar gibi); telefonda üst çubuk sayfanın adını taşır. */}
+            {phone ? (
+              <h1 className="sr-only">{t("nav.todo")}</h1>
+            ) : (
+              <PageHeading
+                eyebrow={t("todo.board.eyebrow")}
+                title={t("todo.board.title")}
+                className="mb-6"
+              />
+            )}
 
             {/* ── Tek kart: karşılama + durum (düzen `TodoSummaryCard`ta) ─── */}
             {!phone && (
@@ -210,19 +219,12 @@ export function TodoPage() {
               aria-labelledby="todo-board-title"
               className={cn(
                 "scroll-mt-6",
-                phone
-                  ? listShown
-                    ? ""
-                    : "mt-4"
-                  : "mt-7 @[40rem]/todo:mt-10 lg:mt-12 shortest:mt-6",
+                phone ? (listShown ? "" : "mt-4") : "mt-8 shortest:mt-6",
               )}
             >
-              <SectionHeading
-                id="todo-board-title"
-                eyebrow={t("todo.board.eyebrow")}
-                title={t("todo.board.title")}
-                className={phone ? "sr-only" : "mb-4 @[40rem]/todo:mb-6"}
-              />
+              <h2 id="todo-board-title" className="sr-only">
+                {t("todo.board.title")}
+              </h2>
 
               {/* Eksik tabloyu SÖYLE — "soramadık ≠ veri yok". */}
               {ready && (board.skipped > 0 || board.doneMissing || board.truncated) && (
@@ -274,7 +276,7 @@ export function TodoPage() {
                   <button
                     type="button"
                     onClick={onRefresh}
-                    className="mt-4 rounded-full border border-border px-4 py-2 text-[0.8125rem] font-medium transition hover:bg-accent"
+                    className="bg-muted mt-4 rounded-full px-4 py-2 text-[0.8125rem] font-medium transition hover:bg-accent"
                   >
                     {t("todo.retry")}
                   </button>

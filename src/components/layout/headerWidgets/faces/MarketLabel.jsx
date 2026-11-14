@@ -53,7 +53,7 @@ export function MarketLabel({ codes }) {
               <span
                 aria-hidden="true"
                 className={cn(
-                  "text-[0.625rem]",
+                  "text-[0.6875rem]",
                   dir === "up" ? "text-success-ink" : "text-danger-ink",
                 )}
               >

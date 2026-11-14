@@ -66,7 +66,7 @@ export default function EditBarPanel() {
             aria-disabled={!layout.hidden.length || undefined}
             title={t("widgets.add")}
             onClick={() => layout.hidden.length && actions.openCatalog()}
-            className="board-edit-bar__btn"
+            className="board-edit-bar__btn board-edit-bar__add"
           >
             <HugeiconsIcon icon={Add01Icon} strokeWidth={2} aria-hidden="true" />
             <span className="board-edit-bar__label">{t("widgets.add")}</span>

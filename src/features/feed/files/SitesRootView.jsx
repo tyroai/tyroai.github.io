@@ -156,7 +156,7 @@ function TeamsGroup({ teams, pendingFolder, onOpenGroup, t, locale }) {
         <button
           type="button"
           onClick={() => setAll(true)}
-          className="mt-2.5 rounded-full px-3 py-2 text-[0.78125rem] font-medium text-brand-ink transition hover:bg-brand/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 [@media(pointer:coarse)]:min-h-11"
+          className="mt-2.5 rounded-full px-3 py-2 text-[0.8125rem] font-medium text-brand-ink transition hover:bg-brand/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 [@media(pointer:coarse)]:min-h-11"
         >
           {t("myfiles.group.showAll", { count: pool.length })}
         </button>

@@ -1,0 +1,127 @@
+/* Kartlar düzeninin kimlik kartı (`IdentityCard`): üstte kişi, ortada üç karo, altta simgeli
+   satırlar. Karolar nötr zeminli (seçili kayıt paneliyle aynı ton); palet yalnız simgelerde. */
+.ssc-id {
+  gap: 1rem;
+}
+/* Ad ve sicil aynı satırda: ad kısalır, "#sicil" hep görünür. */
+.ssc-id-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375rem;
+  min-width: 0;
+}
+.ssc-id-line h2 {
+  min-width: 0;
+}
+.ssc-id-no {
+  display: inline-flex;
+  flex: none;
+  align-items: baseline;
+  font-size: var(--text-footnote);
+}
+.ssc-id-no::before {
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-weight: 500;
+  content: "#";
+}
+.ssc-id-name .ssc-id-org {
+  margin-top: 0;
+}
+.ssc-id-no button {
+  min-height: 0;
+  padding-inline-start: 0.0625rem;
+  font-weight: 500;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+
+/* Karolar esnek sıra: kaç karo varsa (ekibi olmayanda iki) sırayı onlar doldurur, boş sütun
+   kalmaz; sığmayınca alta inen karo sırayı kaplar. Yönetici bir kademe geniş (ad çoğu zaman en
+   uzun değer), ekip bir kademe dar. */
+.ssc-id-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.ssc-id-tile {
+  flex: 1.25 1 7.5rem;
+}
+.ssc-id-tile--wide {
+  flex: 1.5 1 9rem;
+}
+.ssc-id-tile--slim {
+  flex: 0.95 1 6rem;
+}
+.ssc-id-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  min-height: 4.75rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-tile);
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+  text-align: start;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.ssc-id-tile b,
+.ssc-id-tile small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ssc-id-tile b {
+  font-size: var(--text-card-title);
+  font-weight: 600;
+  line-height: 1.25rem;
+  letter-spacing: -0.01em;
+}
+.ssc-id-tile small {
+  font-size: var(--text-footnote);
+  line-height: 1rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+button.ssc-id-tile:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+@media (hover: hover) {
+  button.ssc-id-tile:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+}
+/* Yöneticinin adı iki satıra kadar iner (kesilmeden okunur); fotoğraf ilk satırın hizasında. */
+.ssc-id-person b {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+}
+.ssc-id-person {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+  min-width: 0;
+}
+.ssc-id-mini {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.ssc-id-mini > span:first-of-type {
+  font-size: 0.5625rem;
+}
+.ssc-id-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.ssc-id-go svg {
+  flex: none;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+[dir="rtl"] .ssc-id-go svg {
+  rotate: 180deg;
+}

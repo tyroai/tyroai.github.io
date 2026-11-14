@@ -42,7 +42,7 @@ const homeLabel = (t, c) => (c.isLocal ? t("widgets.worldClock.local") : t("worl
 
 function CityRow({ c, t }) {
   return (
-    <li className="flex min-h-6 items-center gap-2 py-1 text-[0.8125rem]">
+    <li className="flex min-h-6 items-center gap-2 py-0.5 text-[0.8125rem]">
       <span
         aria-hidden="true"
         title={t(`worldClock.legend.${c.period}`)}
@@ -79,7 +79,7 @@ function Compact({ home, others, shown, t }) {
           <p className="wc-time mt-0.5 text-[2.5rem] font-semibold leading-none tracking-[-0.03em] tabular-nums">
             {home.time}
           </p>
-          <p className="mt-1.5 truncate text-[0.71875rem] text-muted-foreground [&::first-letter]:uppercase">
+          <p className="mt-1.5 truncate text-[0.75rem] text-muted-foreground [&::first-letter]:uppercase">
             <span className="@max-[16rem]/widget:hidden">{home.date}</span>
             <span className="hidden @max-[16rem]/widget:inline">{home.dateShort}</span> · {home.utc}
           </p>

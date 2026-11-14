@@ -10,6 +10,7 @@ import { usePresence } from "@/hooks/usePresence"
 import { useSelfServiceTeam } from "@/hooks/useSelfServiceTeam"
 import { useTeamDates } from "@/hooks/useTeamDates"
 import { memberKey } from "@/lib/selfServiceTeamQuery"
+import { yearEndLeave } from "@/features/selfservice/lib/yearEndLeave"
 import { selfMember } from "@/lib/teamCircle"
 import { cn } from "@/lib/utils"
 import { AskPopover } from "../ask/AskPopover"
@@ -20,6 +21,7 @@ import { TeamList } from "./TeamList"
 import { TextTabs } from "../board/TextTabs"
 import { ErrorCause } from "@/components/common/ErrorCause"
 import { TeamNotice } from "./TeamNotice"
+import { TeamCards, TeamRank } from "./TeamCards"
 import { TeamSummary } from "./TeamSummary"
 import { YearEndLeave } from "./YearEndLeave"
 import { TeamTimeline } from "./TeamTimeline"
@@ -59,7 +61,7 @@ function TeamSkeleton() {
  * başında): `me` = `{ profile, leaves, balance }` — kendi Self Servis verisi, ekip sorgusuna
  * girmez; izin türü ve bakiyesiyle. Ekip sayısına girmez.
  */
-export function TeamView({ onAsk, me = null }) {
+export function TeamView({ onAsk, me = null, cards = false, lead = null }) {
   const { t, locale } = useLocale()
   const phone = usePhone()
   // Test görünümü (`?as=<upn>`): yalnız uygulama yöneticisinde geçerli; ekip o kişinin gözünden,
@@ -137,10 +139,20 @@ export function TeamView({ onAsk, me = null }) {
   // Graph'tan okunamayan parça: liste eksik — not söyler, Yenile ve "Tekrar dene" yeniden sorar.
   const missing = (team.failed?.length ?? 0) > 0
 
-  if (team.status === "loading") return <TeamSkeleton />
+  // Kartlar düzeninde görünüm anahtarı ekibin çubuğunda: yüklenirken ve ekip boşken de görünür
+  // (Bilgilerim'e dönüş yolu).
+  const leadBar = lead && <div className="flex min-h-9 items-center">{lead}</div>
+  if (team.status === "loading")
+    return (
+      <>
+        {leadBar}
+        <TeamSkeleton />
+      </>
+    )
   if (!team.people.length) {
     return (
       <>
+        {leadBar}
         {/* Test görünümünde kişi bulunamasa da çıkış yolu görünür. */}
         <ViewAsBanner asUpn={asUpn} subject={team.subject} onClear={() => setAs(null)} />
         <div className="mt-5 rounded-2xl border border-dashed border-border px-6 py-8 text-center text-[0.8125rem] text-muted-foreground">
@@ -156,14 +168,98 @@ export function TeamView({ onAsk, me = null }) {
       </>
     )
   }
+  // Yan sütunun listesi çizelgeyle aynı hizada bitsin: çizelgenin yaklaşık boyundan (satır 54,
+  // bölüm başlığı 45 px) sıralama kartı düşülür, kalan yer liste satırlarına (72 px) bölünür.
+  const ranked = status.balance === "ready" && yearEndLeave(view.rows).length > 0
+  const sideRows = Math.max(
+    3,
+    Math.floor(
+      (90 + 54 * people.length + (split ? 45 * view.groups.length : 0) - (ranked ? 272 : 0)) / 72,
+    ),
+  )
+  // Çizelge ve liste alt alta sayfayı çok uzatıyordu: iki sekme, biri görünür.
+  const tabs = (
+    <TextTabs
+      kind="tabs"
+      label={t("selfService.team.tabs.label")}
+      options={[
+        { value: "timeline", label: t("selfService.team.tabs.timeline") },
+        { value: "members", label: t("selfService.team.tabs.members"), count: view.summary.size },
+      ]}
+      value={pane}
+      onChange={setPane}
+      idPrefix="ss-team-tab"
+      controls="ss-team-panel"
+      rail
+      className={cards ? "px-4 pt-1" : "mt-6"}
+    />
+  )
+  const panel = (
+    <div
+      id="ss-team-panel"
+      role="tabpanel"
+      aria-labelledby={`ss-team-tab-${pane}`}
+      className={cn("min-w-0", !cards && "mt-4")}
+    >
+      {pane === "timeline" ? (
+        <>
+          {status.leaves === "loading" && (
+            // Çizelgenin (genişte; iki bölümde bölüm satırları da) ya da yaklaşan izinlerin
+            // (telefonda) yaklaşık boyu: zıplama olmasın.
+            <span
+              aria-hidden="true"
+              style={{ "--rows": people.length, "--groups": split ? view.groups.length : 0 }}
+              className={cn(
+                "ms-skeleton block h-[calc(2.75rem+min(var(--rows),5)*3.5rem)] rounded-2xl",
+                !phone && "@[48rem]/ss:h-[calc(5.25rem+var(--rows)*2.5rem+var(--groups)*2rem)]",
+              )}
+            />
+          )}
+          {status.leaves === "ready" &&
+            (phone ? (
+              // Telefonda (yatayda da) geniş çizelge yok: yaklaşanlar listesi.
+              <TeamUpcoming upcoming={view.soon} window={view.window} onNav={onNav} {...shared} />
+            ) : (
+              <>
+                <TeamTimeline
+                  timeline={view.timeline}
+                  marks={view.marks}
+                  window={view.window}
+                  onNav={onNav}
+                  onWeeks={onWeeks}
+                  groups={view.groups}
+                  // Kartlar düzeninde çizelge sekmelerle aynı kartta: kendi çerçevesi yok.
+                  className={cn("hidden @[48rem]/ss:block", cards && "rounded-none border-0")}
+                  {...shared}
+                />
+                <TeamUpcoming
+                  upcoming={view.soon}
+                  window={view.window}
+                  onNav={onNav}
+                  className={cn("@[48rem]/ss:hidden", cards && "rounded-none border-0")}
+                  {...shared}
+                />
+              </>
+            ))}
+        </>
+      ) : (
+        <div className={cards ? "p-3" : undefined}>
+          <TeamList groups={view.groups} status={status} {...shared} />
+        </div>
+      )}
+    </div>
+  )
   return (
-    <section aria-labelledby="ss-team" className="mt-5 min-w-0 @[56rem]/ss:mt-8">
+    <section aria-labelledby="ss-team" className={cn("min-w-0", !lead && "mt-5 @[56rem]/ss:mt-8")}>
       <div className="flex min-w-0 items-center gap-2">
+        {lead}
         <h2
           id="ss-team"
           className={cn(
             "flex min-w-0 flex-1 items-center gap-2 text-[0.9375rem] font-semibold",
             !phone && "px-1",
+            // Kartlar düzeninde ad ve sayı anahtarın kendisinde: başlık yalnız okuyucuya.
+            lead && "sr-only",
           )}
         >
           {/* Telefonda süs ikonu yok: ekip adı kesilmesin (anahtarda da aynı ad). */}
@@ -179,19 +275,28 @@ export function TeamView({ onAsk, me = null }) {
             · {peopleText(team.people.length, t, locale)}
           </span>
         </h2>
+        {lead && <span className="flex-1" />}
         {updated && (
           <span className="hidden shrink-0 whitespace-nowrap text-[0.6875rem] tabular-nums text-muted-foreground @[56rem]/ss:inline">
             {t("selfService.updated", { time: updated })}
           </span>
         )}
+        {/* Kartlar düzeninde üst çubuğun düğmeleri yazılı gri kapsül (prototip). */}
         <RefreshButton
-          iconOnly
-          label={t("selfService.team.refresh")}
+          iconOnly={!lead}
+          label={t(lead ? "toolbar.refresh" : "selfService.team.refresh")}
           busy={team.busy}
           onRefresh={team.refresh}
+          className={lead ? "ssc-refresh" : undefined}
         />
         {isAppAdmin && <ViewAsControl asUpn={asUpn} subject={team.subject} onChange={setAs} />}
-        <AskPopover tab={askTab} onAsk={onAsk} compact={phone} />
+        {lead ? (
+          <span className="ssc-ask">
+            <AskPopover tab={askTab} onAsk={onAsk} compact={phone} />
+          </span>
+        ) : (
+          <AskPopover tab={askTab} onAsk={onAsk} compact={phone} />
+        )}
       </div>
       <ViewAsBanner asUpn={asUpn} subject={team.subject} onClear={() => setAs(null)} />
       <TeamNotice
@@ -203,73 +308,47 @@ export function TeamView({ onAsk, me = null }) {
         onConnect={team.connect}
         className="mt-3"
       />
-      <TeamSummary summary={view.summary} rows={view.rows} status={status} className="mt-4" />
-      {status.balance === "ready" && <YearEndLeave rows={view.rows} className="mt-3" />}
-      {/* Çizelge ve liste alt alta sayfayı çok uzatıyordu: iki sekme, biri görünür. */}
-      <TextTabs
-        kind="tabs"
-        label={t("selfService.team.tabs.label")}
-        options={[
-          { value: "timeline", label: t("selfService.team.tabs.timeline") },
-          { value: "members", label: t("selfService.team.tabs.members"), count: view.summary.size },
-        ]}
-        value={pane}
-        onChange={setPane}
-        idPrefix="ss-team-tab"
-        controls="ss-team-panel"
-        rail
-        className="mt-6"
-      />
-      <div
-        id="ss-team-panel"
-        role="tabpanel"
-        aria-labelledby={`ss-team-tab-${pane}`}
-        className="mt-4 min-w-0"
-      >
-        {pane === "timeline" ? (
-          <>
-            {status.leaves === "loading" && (
-              // Çizelgenin (genişte; iki bölümde bölüm satırları da) ya da yaklaşan izinlerin
-              // (telefonda) yaklaşık boyu: zıplama olmasın.
-              <span
-                aria-hidden="true"
-                style={{ "--rows": people.length, "--groups": split ? view.groups.length : 0 }}
-                className={cn(
-                  "ms-skeleton block h-[calc(2.75rem+min(var(--rows),5)*3.5rem)] rounded-2xl",
-                  !phone && "@[48rem]/ss:h-[calc(5.25rem+var(--rows)*2.5rem+var(--groups)*2rem)]",
-                )}
-              />
-            )}
-            {status.leaves === "ready" &&
-              (phone ? (
-                // Telefonda (yatayda da) geniş çizelge yok: yaklaşanlar listesi.
-                <TeamUpcoming upcoming={view.soon} window={view.window} onNav={onNav} {...shared} />
-              ) : (
-                <>
-                  <TeamTimeline
-                    timeline={view.timeline}
-                    marks={view.marks}
-                    window={view.window}
-                    onNav={onNav}
-                    onWeeks={onWeeks}
-                    groups={view.groups}
-                    className="hidden @[48rem]/ss:block"
-                    {...shared}
-                  />
+      {cards ? (
+        // Kartlar düzeni (Profil › Görünüm): solda özet, sağında göstergeler; altında solda yıl
+        // sonu sıralaması, sağında sekmeler ve çizelge tek kartta.
+        <>
+          <TeamCards
+            summary={view.summary}
+            rows={view.rows}
+            status={status}
+            photos={photos}
+            className="mt-3"
+          />
+          <div className="ssc-body">
+            {/* Yan sütun: yıl sonu sıralaması (varsa) ve dönemin yaklaşanları; boyu çizelgeyle eşit. */}
+            <div className="ssc-side">
+              <TeamRank rows={view.rows} status={status} />
+              {status.leaves === "ready" && (
+                <div className="ssc-card ssc-board ssc-side-list">
                   <TeamUpcoming
                     upcoming={view.soon}
                     window={view.window}
-                    onNav={onNav}
-                    className="@[48rem]/ss:hidden"
+                    first={sideRows}
+                    className="rounded-none border-0"
                     {...shared}
                   />
-                </>
-              ))}
-          </>
-        ) : (
-          <TeamList groups={view.groups} status={status} {...shared} />
-        )}
-      </div>
+                </div>
+              )}
+            </div>
+            <div className="ssc-card ssc-board">
+              {tabs}
+              {panel}
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <TeamSummary summary={view.summary} rows={view.rows} status={status} className="mt-4" />
+          {status.balance === "ready" && <YearEndLeave rows={view.rows} className="mt-3" />}
+          {tabs}
+          {panel}
+        </>
+      )}
       <MemberSheet
         row={open}
         rows={view.rows}

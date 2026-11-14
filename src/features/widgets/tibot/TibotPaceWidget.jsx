@@ -42,7 +42,7 @@ function ScopeSelect({ value, onChange }) {
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger
         aria-label={t("tibot.pace.scopeAria")}
-        className="gap-1 rounded-full border-border/70 bg-background/60 px-3 text-[0.71875rem] font-medium text-muted-foreground shadow-none transition hover:border-foreground/20 hover:text-foreground data-[state=open]:border-foreground/25 data-[state=open]:text-foreground dark:bg-background/40 [@media(pointer:coarse)]:data-[size=default]:h-9"
+        className="gap-1 rounded-full border-border/70 bg-background/60 px-3 text-[0.75rem] font-medium text-muted-foreground shadow-none transition hover:border-foreground/20 hover:text-foreground data-[state=open]:border-foreground/25 data-[state=open]:text-foreground dark:bg-background/40 [@media(pointer:coarse)]:data-[size=default]:h-9"
       >
         <SelectValue />
       </SelectTrigger>
@@ -52,10 +52,10 @@ function ScopeSelect({ value, onChange }) {
         sideOffset={6}
         // Escape RIHTIMA KAÇMAZ (sohbet rıhtımı pencerede Escape dinliyor).
         onEscapeKeyDown={(e) => e.stopPropagation()}
-        className="min-w-[9.5rem] rounded-xl p-1"
+        className="min-w-[9.5rem]"
       >
         {["me", "team"].map((id) => (
-          <SelectItem key={id} value={id} className="min-h-8 rounded-lg pr-8 text-[0.78125rem]">
+          <SelectItem key={id} value={id} className="pr-8">
             {t(`tibot.pace.scope.${id}`)}
           </SelectItem>
         ))}
@@ -179,6 +179,7 @@ export default function TibotPaceWidget({ className }) {
 
   return (
     <WidgetFrame
+      personal
       id="tibot-intro"
       title={t("widgets.tibotIntro.title")}
       shortTitle={t("widgets.tibotIntro.short")}

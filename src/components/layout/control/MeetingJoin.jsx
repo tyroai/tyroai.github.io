@@ -11,7 +11,7 @@ import { joinableMeeting, minutesUntil } from "./joinModel"
 
 /**
  * Toplantıya katıl (ızgaranın üstünde, yalnız gerektiğinde): çevrim içi toplantı 15 dakika
- * içinde başlıyorsa ya da sürüyorsa konusu (kişisel: Sunum modunda bulanık), kalan süre ve
+ * içinde başlıyorsa ya da sürüyorsa konusu (kişisel: Sunum modunda rakamları gizli), kalan süre ve
  * "Katıl" — Teams'te açar (`joinInTeams`), pencere kapanır. Takvim verisi header'ın yüzleriyle
  * ortak (yeni istek yok); katılma linki listede yoksa davetten okunur (`useJoinUrl`).
  */

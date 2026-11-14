@@ -179,7 +179,7 @@ export function FeedPostDialog({ post, photoFor, open, onOpenChange, list, onNav
                     {post.address && post.address !== post.author?.toLowerCase() && (
                       <span
                         data-private=""
-                        className="min-w-0 truncate text-[0.78125rem] text-muted-foreground"
+                        className="min-w-0 truncate text-[0.8125rem] text-muted-foreground"
                       >
                         {"<"}
                         {post.address}

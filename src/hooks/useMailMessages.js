@@ -4,6 +4,7 @@ import { isMsalConfigured } from "@/lib/msal"
 import { graphGet, STATUS } from "@/lib/graph"
 import { worstMail } from "@/dev/worstCase/home"
 import { onSessionClear } from "@/lib/sessionCache"
+import { keepStale, mailSnapshot, saveMailSnapshot } from "@/lib/homeSnapshots"
 
 function startOfTodayIso() {
   const d = new Date()
@@ -35,7 +36,16 @@ onSessionClear(clearMailCache)
 export function useMailMessages(count = 10) {
   const { instance, accounts } = useMsal()
   const account = accounts[0]
-  const [state, setState] = useState({ status: "loading", messages: [], unread: 0 })
+  // Sayfa açılınca son görüntüyle başlar, ağdan gelince tazelenir (`lib/homeSnapshots`; önizleme
+  // metni saklanmaz).
+  const [state, setState] = useState(
+    () =>
+      (isMsalConfigured && account ? mailSnapshot(account.homeAccountId, String(count)) : null) ?? {
+        status: "loading",
+        messages: [],
+        unread: 0,
+      },
+  )
   const [nonce, setNonce] = useState(0)
   const seq = useRef(0)
 
@@ -93,13 +103,15 @@ export function useMailMessages(count = 10) {
       if (cancelled || mySeq !== seq.current) return
 
       if (listRes.status !== STATUS.ready) {
-        setState({
+        const failed = {
           status: listRes.status,
           messages: [],
           unread: 0,
           error: listRes.error,
           detail: listRes.detail,
-        })
+        }
+        // Elde bugünün görüntüsü varsa kart onunla kalır (`keepStale`).
+        setState((prev) => keepStale(prev, failed, (p) => p.messages.length > 0))
         return
       }
 
@@ -128,6 +140,7 @@ export function useMailMessages(count = 10) {
 
       const value = { status: STATUS.ready, messages, unread }
       cache.set(key, { at: Date.now(), value, nonce })
+      saveMailSnapshot(account.homeAccountId, String(count), value)
       setState(value)
     })()
 

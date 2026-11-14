@@ -52,6 +52,13 @@ export const PERSONAL_STORAGE = Object.freeze({
   oofAsk: { area: "local", key: "tyro-oof-ask-v1" },
   // Çanın bekleyen sorusu (otomatik yanıt): sorunun özeti — başka hesaba kalmasın.
   bellNotice: { area: "local", key: "tyro-oof-notice-v1" },
+  // TYRO'dan seçilen Teams durumu ve bitişi: başka hesaba "senin seçimin" diye kalmasın.
+  presenceChoice: { area: "local", key: "tyro-presence-choice-v1" },
+  // Karşılama kapsülünde bugün yapılan öneriler: başka hesaba "yapıldı" diye kalmasın.
+  welcomeDone: { area: "local", key: "tyro-welcome-done-v1" },
+  // Anasayfa kartlarının son görüntüsü (takvim, posta başlıkları, bugünün görevleri; gövde yok,
+  // hesaba bağlı, yalnız aynı gün — `lib/snapshot`, ADR 0012).
+  snapshots: { area: "local", prefix: "tyro-snap-" },
 } satisfies Record<string, PersonalEntry>)
 
 function storeOf(area: StorageArea): Storage | null {

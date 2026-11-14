@@ -106,7 +106,11 @@ export function weatherTip(
 
 /** Çekmecede yer kazandıran kısaltmalar (dil başına; Anasayfa'daki cümle uzun kalır). */
 const SHORT: Record<string, [RegExp, string][]> = {
-  tr: [[/\bortalama(nın|sının|sı|ya)?(?=\s)/gu, "ort."]],
+  tr: [
+    [/\bortalama(nın|sının|sı|ya)?(?=\s)/gu, "ort."],
+    // "9 saat" → "9s" (ürün sahibi: "saat yazmana gerek yok 9s yazabilirsin"); "saatlik" dokunulmaz.
+    [/(\p{Nd}+(?:,\p{Nd}+)?) saat(?!\p{L})/gu, "$1s"],
+  ],
 }
 
 /** Günün okumasının parçalarını kısaltır (ürün sahibi: "ortalamanın derken ort. yazabilirsin"). */

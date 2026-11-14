@@ -6,7 +6,7 @@ import { placeToastStack } from "@/lib/toastAvoid"
  * Bildirimlerin tek çizim yolu: veri yenilemesi (`startRefreshToast`) ve tek atımlık
  * sonuçlar (`showResultToast`; düz çağrılar için `notify`, `@/lib/notify`). Hepsi aynı
  * kartı (`DataRefreshToast`) çizer: her yer kendi bildirimini çizdiğinde ifade, yer ve
- * davranış zamanla ayrışıyordu.
+ * davranış zamanla ayrışıyordu. Her kartta kapatma çarpısı var (`onClose` → `toast.dismiss`).
  *
  * Sağ altta, uygulamanın tek yığını (`Toaster` da sağ altta; güncelleme kartı aynı yığında).
  * Sağ panel ya da besteci oradaysa yığın onlardan kaçar: `placeToastStack`, lib/toastAvoid.js.
@@ -19,10 +19,13 @@ const OPTS = { position: "bottom-right", unstyled: true, duration: Infinity }
 
 /** Durum başına varsayılan süre (ms): uyarı ve hata okunacak metin taşıyor. */
 export const RESULT_DURATION = { success: 5000, info: 5000, warning: 7000, error: 9000 }
+/** Soru cevap bekler: bir dakika durur (kişi okuyup karar versin). */
+export const ASK_DURATION = 60000
 /** Eylemli bildirim daha uzun yaşar: kullanıcı okuyup düğmeye basacak. */
 export const ACTION_DURATION = 15000
 
 export function resultDuration(state, hasAction = false) {
+  if (state === "ask") return ASK_DURATION
   if (hasAction) return ACTION_DURATION
   return RESULT_DURATION[state] ?? RESULT_DURATION.success
 }
@@ -42,7 +45,14 @@ function closingAction(action, id) {
 
 export function startRefreshToast({ title }) {
   placeToastStack()
-  const id = toast.custom(() => <DataRefreshToast state="loading" title={title} />, OPTS)
+  // Çarpı her aşamada: takılan bir yenileme bildirimi de kapatılabilsin.
+  const id = toast.custom(
+    (toastId) => (
+      <DataRefreshToast state="loading" title={title} onClose={() => toast.dismiss(toastId)} />
+    ),
+    OPTS,
+  )
+  const onClose = () => toast.dismiss(id)
 
   return {
     id,
@@ -55,17 +65,17 @@ export function startRefreshToast({ title }) {
             detail={label}
             current={step}
             total={totalSteps}
+            onClose={onClose}
           />
         ),
         { ...OPTS, id },
       )
     },
     success({ title: t, detail }) {
-      toast.custom(() => <DataRefreshToast state="success" title={t} detail={detail} />, {
-        ...OPTS,
-        id,
-        duration: 4500,
-      })
+      toast.custom(
+        () => <DataRefreshToast state="success" title={t} detail={detail} onClose={onClose} />,
+        { ...OPTS, id, duration: 4500 },
+      )
     },
     /** @param {{ title: string, detail?: string, action?: { label: string, onClick: Function } }} opts */
     error({ title: t, detail, action }) {
@@ -76,6 +86,7 @@ export function startRefreshToast({ title }) {
             title={t}
             detail={detail}
             action={closingAction(action, id)}
+            onClose={onClose}
           />
         ),
         { ...OPTS, id, duration: action ? ACTION_DURATION : 8000 },
@@ -88,16 +99,27 @@ export function startRefreshToast({ title }) {
  * Tek atımlık sonuç bildirimi — yükleme aşaması olmayan işler için. Dönüş: toast kimliği.
  *
  * @param {{
- *   state?: "success" | "info" | "warning" | "error",
+ *   state?: "success" | "info" | "warning" | "error" | "ask",
  *   title: string,
  *   detail?: string,
  *   action?: { label: string, onClick: Function },
+ *   secondary?: { label: string, onClick?: Function },
+ *   icon?: object,
  *   duration?: number,
  *   id?: string | number,
  * }} opts `id` verilirse aynı kimlikli bildirim yığılmaz, yerinde tazelenir; `duration`
  *   durumun varsayılan süresini ezer.
  */
-export function showResultToast({ state = "success", title, detail, action, duration, id } = {}) {
+export function showResultToast({
+  state = "success",
+  title,
+  detail,
+  action,
+  secondary,
+  icon,
+  duration,
+  id,
+} = {}) {
   placeToastStack()
   return toast.custom(
     (toastId) => (
@@ -106,6 +128,9 @@ export function showResultToast({ state = "success", title, detail, action, dura
         title={title}
         detail={detail}
         action={closingAction(action, toastId)}
+        secondary={closingAction(secondary, toastId)}
+        icon={icon}
+        onClose={() => toast.dismiss(toastId)}
       />
     ),
     { ...OPTS, id, duration: duration ?? resultDuration(state, Boolean(action)) },

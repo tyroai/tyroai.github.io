@@ -1,20 +1,39 @@
 import { useId, useMemo } from "react"
+import { Link } from "react-router-dom"
 import { HugeiconsIcon } from "@hugeicons/react"
+import AirplaneTakeOff01Icon from "@hugeicons/core-free-icons/AirplaneTakeOff01Icon"
 import ArrowRight01Icon from "@hugeicons/core-free-icons/ArrowRight01Icon"
+import Beach02Icon from "@hugeicons/core-free-icons/Beach02Icon"
+import Calendar03Icon from "@hugeicons/core-free-icons/Calendar03Icon"
+import ChartColumnIcon from "@hugeicons/core-free-icons/ChartColumnIcon"
+import CheckmarkCircle02Icon from "@hugeicons/core-free-icons/CheckmarkCircle02Icon"
+import Clock01Icon from "@hugeicons/core-free-icons/Clock01Icon"
 import Target03Icon from "@hugeicons/core-free-icons/Target03Icon"
 import Tick02Icon from "@hugeicons/core-free-icons/Tick02Icon"
 import { useLocale } from "@/hooks/useLocale"
-import { workday } from "@/lib/focusWindow"
-import { timeFormat } from "../dayInsightText"
+import { usePageAccess } from "@/hooks/usePageAccess"
+import { DayStrip } from "./DayStrip"
 import { insightRows } from "./insightRows"
 import { useInsightAction } from "./useInsightAction"
 import "./insightBody.css"
 
+const ICONS = {
+  load: Calendar03Icon,
+  gaps: Clock01Icon,
+  week: ChartColumnIcon,
+  tasks: CheckmarkCircle02Icon,
+  away: Beach02Icon,
+  trip: AirplaneTakeOff01Icon,
+  bridge: Beach02Icon,
+}
+
 /**
- * Günün okumasının ipucu gövdesi (tembel parça): önce bakılan günün resmi — mesai şeridinde
- * toplantılar dolu, boşluklar açık, en uzun boşluk paletin mürekkebinde; altında en çok dört
- * satır, kaynak notu ve tek eylem. Eylem ne yapacağını kendisi anlatır: farede üstüne gelince
- * ya da klavyeyle odaklanınca açıklama açılır, dokunmatikte hep görünür (`insightBody.css`).
+ * Günün okumasının gövdesi (tembel parça) — hikâyeyi adım adım keşfettirir: önce günün şeridi
+ * (`DayStrip`: dilimlere dokununca hikâyesi), sonra en çok dört hikâye satırı (Yük · Boşluk · Hafta
+ * · İşler; izin, yolculuk, köprüde o satır başta). Satır tam genişlikte bir satır: başında simge
+ * kutusu, etiket, değer ve açıklaması; bir yere götürüyorsa (takvim, To-Do) sağda ok, üstüne
+ * gelince zemin tonu, basınca basma hissi — tıklanabildiği ilk bakışta belli. Sonda tek eylem (paletin
+ * düz dolgusu; ne yapacağı altında) ve kaynak notu. Renkler kabın görünümünden (`--ib-*`).
  */
 export default function InsightBody({ insight, events, tasks, now, onChanged, close }) {
   const { t, locale } = useLocale()
@@ -23,22 +42,63 @@ export default function InsightBody({ insight, events, tasks, now, onChanged, cl
   const whyId = useId()
   const f = insight.facts
   const highlight = text.action?.kind === "focus" ? text.action : f.window
+  // Satır bir yere götürür (işlevsel ipucu): yük, boşluk ve hafta takvime, işler To-Do'ya — sayfa
+  // kişiye açıksa.
+  const access = usePageAccess()
+  const routeOf = (key) =>
+    key === "tasks"
+      ? access.todo && "/todo"
+      : ["load", "gaps", "week"].includes(key) && access.calendar && "/calendar"
   return (
     <div className="insight-body">
       {(f.meetings > 0 || f.windows.length > 0) && !f.away && (
-        <DayStrip day={insight.date} f={f} highlight={highlight} locale={locale} t={t} />
+        <DayStrip
+          day={insight.date}
+          f={f}
+          highlight={highlight}
+          events={events}
+          locale={locale}
+          t={t}
+        />
       )}
-      <dl className="insight-body__rows">
-        {text.rows.map((r) => (
-          <div key={r.key} className="insight-body__row">
-            <dt>{r.label}</dt>
-            <dd>
-              {r.value}
-              {r.sub && <span className="insight-body__sub">{r.sub}</span>}
-            </dd>
-          </div>
-        ))}
-      </dl>
+      <ul className="ib-rows">
+        {text.rows.map((r) => {
+          const to = routeOf(r.key)
+          const inner = (
+            <>
+              <span aria-hidden="true" className="ib-icon" data-key={r.key}>
+                <HugeiconsIcon icon={ICONS[r.key] ?? Calendar03Icon} strokeWidth={1.8} />
+              </span>
+              <span className="ib-text">
+                <span className="ib-label">{r.label}</span>
+                <span data-private="" className="ib-value">
+                  {r.value}
+                </span>
+                {r.sub && <span className="ib-sub">{r.sub}</span>}
+              </span>
+              {to && (
+                <HugeiconsIcon
+                  icon={ArrowRight01Icon}
+                  strokeWidth={2}
+                  aria-hidden="true"
+                  className="ib-chev rtl:rotate-180"
+                />
+              )}
+            </>
+          )
+          return (
+            <li key={r.key}>
+              {to ? (
+                <Link to={to} className="ib-row" data-go="" onClick={() => close?.()}>
+                  {inner}
+                </Link>
+              ) : (
+                <div className="ib-row">{inner}</div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
       {text.action && (
         <div className="insight-body__act">
           <button
@@ -69,47 +129,6 @@ export default function InsightBody({ insight, events, tasks, now, onChanged, cl
         </div>
       )}
       <p className="insight-body__note">{text.note}</p>
-    </div>
-  )
-}
-
-/**
- * Mesai şeridi: boş zaman taralı iz, toplantılar dolu açık blok, önerilen pencere palet renginde
- * ("Odak" yazılı, sığarsa); bugünse şimdi çizgisi. Altında renklerin açıklaması — üç ton ilk
- * bakışta ayırt edilmiyordu (ürün sahibi).
- */
-function DayStrip({ day, f, highlight, locale, t }) {
-  const { start, end } = workday(day)
-  const span = end - start
-  const x = (d) => Math.min(100, Math.max(0, ((d - start) / span) * 100))
-  const at = (s) => ({ insetInlineStart: `${x(s.start)}%`, width: `${x(s.end) - x(s.start)}%` })
-  const time = timeFormat(locale)
-  const noon = new Date(day)
-  noon.setHours(12, 0, 0, 0)
-  const now = f.from && f.from > start && f.from < end ? f.from : null
-  return (
-    <div aria-hidden="true" className="insight-strip">
-      <div className="insight-strip__track">
-        {f.blocks.map((b) => (
-          <span key={`b${b.start.getTime()}`} className="insight-strip__busy" style={at(b)} />
-        ))}
-        {highlight && (
-          <span className="insight-strip__focus" style={at(highlight)}>
-            {x(highlight.end) - x(highlight.start) >= 16 ? t("insight.strip.focusShort") : null}
-          </span>
-        )}
-        {now && <span className="insight-strip__now" style={{ insetInlineStart: `${x(now)}%` }} />}
-      </div>
-      <div className="insight-strip__ticks">
-        <span>{time.format(start)}</span>
-        <span style={{ insetInlineStart: `${x(noon)}%` }}>{time.format(noon)}</span>
-        <span>{time.format(end)}</span>
-      </div>
-      <ul className="insight-strip__legend">
-        <li data-key="busy">{t("insight.strip.busy")}</li>
-        <li data-key="free">{t("insight.strip.free")}</li>
-        {highlight && <li data-key="focus">{t("insight.strip.focus")}</li>}
-      </ul>
     </div>
   )
 }

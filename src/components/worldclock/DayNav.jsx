@@ -46,7 +46,7 @@ export function DayNav({ base, selected, today, onBase, onSelect, locale, t }) {
               )}
             >
               <span
-                className={cn("text-[0.625rem] font-medium", !isSel && !weekend && "opacity-70")}
+                className={cn("text-[0.6875rem] font-medium", !isSel && !weekend && "opacity-70")}
               >
                 {weekday.format(date)}
               </span>

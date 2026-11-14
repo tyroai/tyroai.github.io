@@ -173,7 +173,7 @@ msalInstance.addEventCallback((event) => {
   // Bir token alınamadı: oturumun süresi dolmuş olabilir — sınanır, dolduysa her sayfada tek
   // uyarı (`lib/sessionHealth`, `layout/SessionExpiredBanner`).
   if (event.eventType === EventType.ACQUIRE_TOKEN_FAILURE && isInteractionRequired(event.error)) {
-    suspectSession(msalInstance)
+    suspectSession(msalInstance, Date.now(), undefined, event.error)
   }
   if (event.eventType === EventType.LOGOUT_SUCCESS) {
     msalInstance.setActiveAccount(null)

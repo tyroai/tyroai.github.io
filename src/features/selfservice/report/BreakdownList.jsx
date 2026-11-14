@@ -190,7 +190,7 @@ export function BreakdownList({
       {counted.length > 0 && <div className={title ? "mt-1.5" : undefined}>{list(counted)}</div>}
       {excluded.length > 0 && (
         <>
-          <p className="mt-2.5 px-1 text-[0.625rem] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+          <p className="mt-2.5 px-1 text-[0.6875rem] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("selfService.report.excludedGroup")}
           </p>
           <div className="mt-1">{list(excluded, counted.length)}</div>

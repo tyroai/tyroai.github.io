@@ -84,9 +84,27 @@ export function clearEntry(entry) {
   entry.keys.forEach(removeRaw)
 }
 
-/** Bu tarayıcıdaki bütün TYRO kayıtları, sistem kayıtları hariç: oturum açık kalır. */
+/**
+ * "Tümünü temizle"de KALAN kayıtlar: ilk ziyaret ekranlarının "gördüm" işaretleri. Silinince sayfa
+ * yenilenince Yenilikler penceresi, rehber turu ve karşılama yeniden açılıyor, Anasayfa'ya geçiş
+ * başka bir ekrandan geliyormuş gibi görünüyordu (ürün sahibi). Tek tek silinebilirler (döküm satırı).
+ */
+const FIRST_RUN = [
+  "tyro-tours-v1",
+  "tyro-myspace-tour-v2",
+  "tyro-changelog-seen-v1",
+  "tyro-whatsnew-*",
+  "tyro-welcome-done-v1",
+  "tyro-welcome-off",
+  "tyro-login-initialized",
+]
+const isFirstRun = (key) => FIRST_RUN.some((p) => matches(p, key))
+
+/** Bu tarayıcıdaki bütün TYRO kayıtları; sistem kayıtları (oturum açık kalır) ve ilk ziyaret işaretleri hariç. */
 export function clearAllEntries() {
-  tyroKeys().forEach(removeRaw)
+  tyroKeys()
+    .filter((k) => !isFirstRun(k))
+    .forEach(removeRaw)
 }
 
 /** Döküm sırası: dolu kayıtlar büyükten küçüğe (iPhone Depolama), boşlar ayrı (açılırda). */

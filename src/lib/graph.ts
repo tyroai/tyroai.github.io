@@ -1,6 +1,7 @@
 import type { AccountInfo, IPublicClientApplication } from "@azure/msal-browser"
 import type { ThrownLike } from "@/lib/errorCause"
 import { ensureMsalInitialized } from "@/lib/msal"
+import { isSessionExpired } from "@/lib/sessionHealth"
 import { graphRequest } from "@/lib/graphRequest"
 import type {
   GraphRequestOptions,
@@ -172,6 +173,14 @@ export async function requestGraphScopes(
   account: AccountInfo | undefined,
   scopes: string[],
 ): Promise<boolean> {
+  // Oturumun süresi dolduysa (her sayfadaki şerit açık) izin penceresi bir şey çözmez: aynı tek
+  // çare çalışır — çoğu zaman şifresiz, aynı sayfaya dönüş (`lib/reconnect`). Takvim, posta,
+  // To-Do, Keşfet, çentik… bütün "Bağlan" düğmeleri buradan geçer.
+  if (isSessionExpired()) {
+    const { reconnectSession } = await import("@/lib/reconnect")
+    await reconnectSession(instance)
+    return false
+  }
   try {
     await ensureMsalInitialized()
     await instance.acquireTokenPopup({ scopes, account })

@@ -171,6 +171,11 @@ export const strings = {
   "settings.general.storage.cot": "Trader masası: son COT verisi",
   "settings.general.storage.savedSearch": "Kayıtlı arama: iğnelediğin aramalar",
   "settings.general.storage.regionWeather": "Bölge havası: bölgeler ve son yağış verisi",
+  "settings.general.storage.pageLayout": "Sayfa düzeni",
+  "settings.general.storage.homeLayouts": "Anasayfa sahneleri ve TYRO'nun seçimi",
+  "settings.general.storage.sceneStrip": "Sahne şeridi",
+  "settings.general.storage.snapshots":
+    "Anasayfa'nın son hâli (takvim, posta başlıkları, görevler)",
   "settings.catalog.navLabel": "Katalog türleri",
   "settings.catalog.tab.agents": "Asistanlar",
   "settings.catalog.tab.aiApps": "AI ürünleri",

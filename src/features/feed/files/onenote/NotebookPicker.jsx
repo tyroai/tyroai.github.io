@@ -17,10 +17,8 @@ import { stopEscape } from "../menuEscape"
 import { SECTION_ACTION } from "../chipStyle"
 
 // Sıralama menüsünün (`FilesToolbar` › `SortMenu`) giysisi: başlığın sağında sakin hap.
-const ITEM = "gap-2 rounded-lg px-2 py-1.5 text-[0.78125rem] [@media(pointer:coarse)]:min-h-10"
 // Seçim işareti sağda (radyo öğesinin kendi payı): sayı onun altında kalmasın.
-const RADIO =
-  "gap-2 rounded-lg py-1.5 pl-2 pr-8 text-[0.78125rem] [@media(pointer:coarse)]:min-h-10"
+const RADIO = "gap-2 rounded-lg py-1.5 pl-2 pr-8 text-[0.8125rem] [@media(pointer:coarse)]:min-h-10"
 
 /**
  * Defter seçici — Tüm defterler · listedeki defterler (sayfa sayısıyla), altta Yenile (OneNote'a
@@ -75,7 +73,7 @@ export function NotebookPicker({ notebooks, value, total, onPick, onRefresh }) {
           ))}
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={onRefresh} className={ITEM}>
+        <DropdownMenuItem onSelect={onRefresh}>
           <HugeiconsIcon icon={RefreshIcon} className="size-3.5" strokeWidth={1.9} />
           {t("onenote.refresh")}
         </DropdownMenuItem>

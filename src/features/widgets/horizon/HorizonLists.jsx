@@ -62,7 +62,7 @@ export default function HorizonLists({ horizon }) {
         })}
       </ul>
       {full && (
-        <p className="px-1 text-[0.71875rem] text-muted-foreground">
+        <p className="px-1 text-[0.75rem] text-muted-foreground">
           {t("widgets.horizon.listsFull", { n: HORIZON_MAX_LISTS })}
         </p>
       )}

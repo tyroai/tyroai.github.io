@@ -40,9 +40,9 @@ export function CelebrateMenu({ person, kind, years, align = "start", children }
   const given = person.givenName || profile.profile?.givenName || firstName(person.name)
   const message = celebrateMessage(t, { kind, name: given, years })
   const hasPhone = Boolean(waNumber(mobile))
-  const item = "gap-2.5 py-2 text-[0.8125rem]"
+  const item = "min-h-11"
   const icon = (glyph, tone) => (
-    <span className={`grid size-7 shrink-0 place-items-center rounded-lg ${tone}`}>
+    <span className={`grid size-8 shrink-0 place-items-center rounded-full ${tone}`}>
       <HugeiconsIcon icon={glyph} className="size-4" strokeWidth={2} aria-hidden="true" />
     </span>
   )
@@ -50,10 +50,8 @@ export function CelebrateMenu({ person, kind, years, align = "start", children }
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent align={align} sideOffset={6} className="w-60 p-1.5">
-        <DropdownMenuLabel className="px-2 pb-1 pt-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-          {t("person.celebrateVia")}
-        </DropdownMenuLabel>
+      <DropdownMenuContent align={align} sideOffset={6} className="w-60">
+        <DropdownMenuLabel>{t("person.celebrateVia")}</DropdownMenuLabel>
         <DropdownMenuItem asChild className={item}>
           <a
             href={teamsChat(person.upn || person.address, message)}
@@ -74,7 +72,7 @@ export function CelebrateMenu({ person, kind, years, align = "start", children }
             {t("person.via.outlook")}
           </a>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild className={`${item} items-start`}>
+        <DropdownMenuItem asChild className={item}>
           <a href={whatsApp(mobile, message)} target="_blank" rel="noopener noreferrer">
             {icon(WhatsappIcon, "bg-[#25d366]/15 text-[#128c7e] dark:text-[#4ade80]")}
             <span className="min-w-0">

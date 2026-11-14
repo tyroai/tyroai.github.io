@@ -21,8 +21,6 @@ import { cn } from "@/lib/utils"
 import { AttachmentPreviewDialog } from "./AttachmentPreviewDialog"
 import { ROW_MENU_REVEAL } from "./FileRow"
 
-const ITEM = "gap-2 rounded-lg px-2 py-1.5 text-[0.78125rem] [@media(pointer:coarse)]:min-h-11"
-
 /**
  * E-posta ekinin ⋯ menüsü (dosya satırının menüsüyle aynı yerde ve davranışta): Önizle, İndir,
  * Postayı Outlook'ta aç. Tetik ince işaretçide satırın üstüne gelince / odakta görünür,
@@ -55,16 +53,16 @@ function AttachmentMenu({ item, busy, onPreview, onDownload }) {
         // Sohbet rıhtımı Escape'i pencerede dinliyor: menüyü kapatan Escape rıhtımı kapatmasın.
         onEscapeKeyDown={(e) => e.stopPropagation()}
       >
-        <DropdownMenuItem onSelect={onPreview} className={ITEM}>
+        <DropdownMenuItem onSelect={onPreview}>
           <HugeiconsIcon icon={ViewIcon} strokeWidth={1.9} />
           {t("myfiles.row.preview")}
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => onDownload(item)} disabled={busy} className={ITEM}>
+        <DropdownMenuItem onSelect={() => onDownload(item)} disabled={busy}>
           <HugeiconsIcon icon={Download04Icon} strokeWidth={1.9} />
           {t("files.download")}
         </DropdownMenuItem>
         {item.webLink && (
-          <DropdownMenuItem asChild className={ITEM}>
+          <DropdownMenuItem asChild>
             <a href={item.webLink} target="_blank" rel="noopener noreferrer">
               <HugeiconsIcon icon={ArrowUpRight01Icon} strokeWidth={1.9} />
               {t("myfiles.mail.openMail")}

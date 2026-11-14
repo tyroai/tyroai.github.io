@@ -12,7 +12,7 @@ function Eyebrow({ children, className }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground",
+        "inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground",
         className,
       )}
     >

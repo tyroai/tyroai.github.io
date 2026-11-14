@@ -101,7 +101,7 @@ export function ReceiptThumb({ item, tab, broken, read, onPreview, onBroken, onR
           {read === "done" ? (
             <HugeiconsIcon icon={MagicWand01Icon} className="size-2.5" strokeWidth={2.2} />
           ) : (
-            <span className="text-[0.625rem] font-bold leading-none">!</span>
+            <span className="text-[0.6875rem] font-bold leading-none">!</span>
           )}
         </span>
       )}

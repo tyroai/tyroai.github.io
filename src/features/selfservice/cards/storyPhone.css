@@ -1,0 +1,51 @@
+/* Kartlar düzeni, telefon (`StoryPhone`). Ortak kart ve yazı kuralları `cards.css`te. */
+/* Telefon: özet tek satır (küre + en önemli cümle + ok); tamamı çekmecede. */
+.ssc-phone-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.625rem;
+  border-radius: var(--radius-card);
+  /* Düz, paletin hafif tonu (geçiş yok). */
+  background: color-mix(in oklab, var(--brand-text) 7%, var(--card));
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent);
+  text-align: start;
+  outline: none;
+}
+.ssc-phone-bar:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+.ssc-phone-bar:active {
+  background: color-mix(in oklab, var(--foreground) 5%, var(--card));
+}
+.ssc-phone-text {
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--text-callout);
+  line-height: 1.125rem;
+  color: color-mix(in oklab, var(--foreground) 82%, transparent);
+}
+.ssc-phone-text b {
+  font-weight: 600;
+  color: var(--foreground);
+}
+.ssc-phone-go {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+.ssc-sheet-actions {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+.ssc-sheet-actions .ssc-btn {
+  justify-content: center;
+}

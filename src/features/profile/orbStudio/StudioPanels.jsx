@@ -336,7 +336,7 @@ export function MotionPanel({ t, state, onState, speed, onSetting, demoStep, dem
                   4,39'da kaldı (marka zemininin üstünde). Artık satırın KENDİ
                   mürekkebini miras alıyor — hiyerarşiyi mono yazı ve punto
                   taşıyor, renk değil. Ölçüldü: 4,5 altı 0. */}
-              <span className="shrink-0 font-mono text-[0.625rem] text-current opacity-80">
+              <span className="shrink-0 font-mono text-[0.6875rem] text-current opacity-80">
                 {String(i + 1).padStart(2, "0")}
               </span>
               {/* Kaynağın kendi Türkçe durum adı — bkz. İfade panelindeki not. */}

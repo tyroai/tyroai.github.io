@@ -236,7 +236,7 @@ export function NextMeetingCard({ cal, now, className }) {
           collisionPadding={12}
           {...preview.contentProps}
           aria-label={current.subject || t("calendar.noSubject")}
-          className="max-h-[var(--radix-popover-content-available-height)] w-[21.5rem] gap-0 overflow-y-auto overscroll-contain rounded-xl p-0 shadow-lg"
+          className="max-h-[var(--radix-popover-content-available-height)] w-[21.5rem] gap-0 overflow-y-auto overscroll-contain p-0"
         >
           <EventDetailCard event={current} live={isImminent(current, now)} />
         </PopoverContent>

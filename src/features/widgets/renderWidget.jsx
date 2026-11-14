@@ -10,9 +10,9 @@ import { HolidayWidget } from "./HolidayWidget"
 import { FocusTimerWidget } from "./focustimer/FocusTimerWidget"
 import { WorldClockWidget } from "./worldclock/WorldClockWidget"
 import { HorizonWidget } from "./horizon/HorizonWidget"
-import { IntroWidget } from "./IntroWidget"
 import { LeaveBalanceWidget } from "./leave/LeaveBalanceWidget"
 import { MarketWidget } from "./MarketWidget"
+import { WelcomeGate } from "./WelcomeGate"
 import { OutcomesWidget } from "./OutcomesWidget"
 import { ReportDayWidget } from "./reports/ReportDayWidget"
 import { TraderWidget } from "./trader/TraderWidget"
@@ -39,8 +39,7 @@ import { TibotGate } from "./tibot/TibotGate"
  * çizilir. Bilinmeyen kimlik `null`.
  */
 export function renderWidgetFor(env) {
-  // `greeted`: sayfa kendi selamlamasını çiziyor (Anasayfa) — Karşılama kartı tekrarlamaz.
-  const { weather, now, firstName, celebration, ctx, briefCta, onNewChat, load, greeted } = env
+  const { weather, now, firstName, celebration, ctx, briefCta, onNewChat, load } = env
   const { cal, focus, pageAccess, board } = ctx
   // Kartın görünümü (Düzenle › Görünüm) çiziciye geçmez: widget'lar CSS'le (`data-widget-look`) okur.
   return function renderWidget(id, className) {
@@ -56,14 +55,16 @@ export function renderWidgetFor(env) {
         )
       case "weather-plain":
         return <WeatherWidget key={id} plain weather={weather} className={className} />
-      case "intro":
+      case "tyro-welcome":
         return (
-          <IntroWidget
+          <WelcomeGate
             key={id}
             ctx={ctx}
+            weather={weather}
             firstName={firstName}
             celebration={celebration}
-            greeted={greeted}
+            rangeStart={env.rangeStart}
+            rangeEnd={env.rangeEnd}
             className={className}
           />
         )

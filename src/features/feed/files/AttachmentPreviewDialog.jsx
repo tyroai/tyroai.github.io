@@ -90,13 +90,13 @@ function TextView({ text, cut }) {
   return (
     <div className="flex h-full flex-col bg-background">
       {cut && (
-        <p className="shrink-0 border-b border-border/60 bg-card px-4 py-1.5 text-[0.71875rem] text-muted-foreground">
+        <p className="shrink-0 border-b border-border/60 bg-card px-4 py-1.5 text-[0.75rem] text-muted-foreground">
           {t("myfiles.mail.previewCut")}
         </p>
       )}
       <pre
         tabIndex={0}
-        className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words p-4 font-mono text-[0.78125rem] leading-relaxed outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/40"
+        className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words p-4 font-mono text-[0.8125rem] leading-relaxed outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/40"
       >
         {text}
       </pre>
@@ -163,7 +163,7 @@ function Body({ item, onClose }) {
           >
             {item.name}
           </DialogTitle>
-          <DialogDescription className="mt-0.5 truncate text-[0.71875rem] leading-tight">
+          <DialogDescription className="mt-0.5 truncate text-[0.75rem] leading-tight">
             {meta || t("files.preview")}
             {item.subject && (
               <>

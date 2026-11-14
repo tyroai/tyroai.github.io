@@ -11,7 +11,7 @@ import { AppOptions } from "./AppFilter"
 import { useBulkRun } from "./useBulkRun"
 
 const PRIMARY =
-  "h-9 bg-brand-fill-deep px-3.5 text-[0.8125rem] text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110"
+  "h-9 bg-brand-fill-deep px-3.5 text-[0.8125rem] text-brand-on-brand hover:bg-brand-fill-deep"
 const SECONDARY = "h-9 px-3 text-[0.8125rem]"
 
 function Line({ label, value, tone }) {

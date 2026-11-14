@@ -54,7 +54,7 @@ export function PersonRow({ person, photo, presence, query = "", field, phone, t
                   <Highlighted text={person.name} query={query} />
                 </span>
                 {tag && (
-                  <span className="shrink-0 rounded-full bg-brand/[0.09] px-1.5 py-px text-[0.625rem] font-semibold text-brand-ink">
+                  <span className="shrink-0 rounded-full bg-brand/[0.09] px-1.5 py-px text-[0.6875rem] font-semibold text-brand-ink">
                     {tag}
                   </span>
                 )}
@@ -68,7 +68,7 @@ export function PersonRow({ person, photo, presence, query = "", field, phone, t
                 </span>
               )}
               {(phone || extraValue) && (
-                <span className="mt-0.5 flex min-w-0 items-center gap-1 text-[0.71875rem] leading-snug text-foreground/75 [&_mark]:text-foreground">
+                <span className="mt-0.5 flex min-w-0 items-center gap-1 text-[0.75rem] leading-snug text-foreground/75 [&_mark]:text-foreground">
                   <HugeiconsIcon
                     icon={phone ? TelephoneIcon : extra.icon}
                     className="size-3 shrink-0 text-muted-foreground"

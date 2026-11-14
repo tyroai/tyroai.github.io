@@ -55,7 +55,8 @@ export function FacetMenu({
       className={cn(
         // Sade açılır menü: boşken çerçevesiz yazı, seçiliyken hafif vurgu zemini (tek vurgu rengi).
         // Düğmeler kabın tam boyunu alır, dokunmatikte hedef 44 px.
-        "inline-flex h-9 min-w-0 max-w-full shrink-0 items-stretch overflow-hidden rounded-full text-[0.8125rem] transition pointer-coarse:h-11",
+        // `facet-menu`: düzenin kendi giysisi için kanca (Kartlar düzeni gri kapsül yapar).
+        "facet-menu inline-flex h-9 min-w-0 max-w-full shrink-0 items-stretch overflow-hidden rounded-full text-[0.8125rem] transition pointer-coarse:h-11",
         current
           ? "bg-brand/[0.1] font-semibold text-foreground"
           : "text-foreground/75 hover:bg-foreground/[0.05] hover:text-foreground",

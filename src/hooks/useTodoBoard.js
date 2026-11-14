@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
+import { fetchBoard } from "@/lib/todoScan"
 import { useMsal } from "@azure/msal-react"
 import { useLocale } from "@/hooks/useLocale"
 import { STATUS, requestGraphScopes } from "@/lib/graph"
@@ -12,7 +13,6 @@ import {
   deleteBoardList,
   deleteBoardTask,
   deleteStep,
-  fetchBoard,
   fetchLinks,
   fetchSteps,
   renameBoardList,
@@ -21,6 +21,8 @@ import {
   updateStep,
 } from "@/lib/todoBoard"
 import { notifyTodoChanged, onTodoChanged } from "@/lib/todoSync"
+import { useTodoChangeRefresh } from "@/hooks/useTodoChangeRefresh"
+import { accountOf, tempId } from "@/lib/todoIds"
 import { onSessionClear } from "@/lib/sessionCache"
 
 /**
@@ -54,20 +56,14 @@ export function clearTodoBoardCache() {
 onSessionClear(clearTodoBoardCache)
 
 // Akışım yazdıysa bu önbellek bayat — bir sonraki açılış yeniden okusun.
-onTodoChanged((source) => {
-  if (source !== "board" && cache) cache = { ...cache, at: 0 }
-})
-
-const accountOf = (instance, key) =>
-  key ? (instance.getAllAccounts().find((a) => a.homeAccountId === key) ?? null) : null
-
-const tempId = () => `tmp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
+onTodoChanged((source) => source !== "board" && cache && (cache = { ...cache, at: 0 }))
 
 export function useTodoBoard() {
   const { t } = useLocale()
   const { instance, accounts } = useMsal()
   const key = isMsalConfigured ? (accounts[0]?.homeAccountId ?? null) : null
   const [nonce, setNonce] = useState(0)
+  const bump = useCallback(() => setNonce((n) => n + 1), [])
   const [refreshing, setRefreshing] = useState(false)
   const pendingRefresh = useRef(null)
   const [state, setState] = useState(() =>
@@ -155,6 +151,9 @@ export function useTodoBoard() {
       cancelled = true
     }
   }, [key, nonce, instance])
+
+  // Başka yüzey yazdıysa açık kart hemen yeniden okur (`useTodoChangeRefresh`).
+  useTodoChangeRefresh("board", bump, 800)
 
   // Sekmeye dönüşte bayatsa tazele.
   useEffect(() => {

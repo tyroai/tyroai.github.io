@@ -74,7 +74,7 @@ function Row({ icon, label, tone = "brand", children }) {
         <HugeiconsIcon icon={icon} className="size-3.5" strokeWidth={1.9} />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground">
+        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground">
           {label}
         </p>
         <div className="mt-0.5 text-[0.8125rem] leading-relaxed text-foreground">{children}</div>

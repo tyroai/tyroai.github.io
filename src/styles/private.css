@@ -1,7 +1,17 @@
-/* Sunum modu (`lib/presentMode`, Denetim Merkezi): ekran paylaşılırken kişisel bilgi
-   (`data-private`: posta, toplantı adları, İK rakamları, notlar) okunmaz. Hareketsiz bulanıklık
-   (her karede yeniden hesaplanmaz); yazı boyuna göre (`em`), seçilip kopyalanamaz. */
-:root[data-present] [data-private] {
-  filter: blur(0.42em);
+/* Sunum modu (`lib/presentMode`, Denetim Merkezi): ekran paylaşılırken kişisel bilgide
+   (`data-private`: İK ve ERP rakamları, Self Servis, Ticket, posta, toplantı, notlar) RAKAMLAR yuvarlak
+   noktaya döner, yazı okunur kalır (ürün sahibi: "yazıları değil rakamları sansürle … metinlerde
+   filtreye gerek yok"). DOM'a dokunulmaz: yalnız rakamları kapsayan küçük yazı tipi (`unicode-range`,
+   `scripts/redact_font.py`), sayfa yeniden çizilince de geçerli. Yazı tipi yalnız Sunum modunda iner;
+   `block`: inene dek rakam görünmez, gerçeği hiç sızmaz. Seçilip kopyalanamaz. */
+@font-face {
+  font-family: "TyroRedact";
+  src: url("../assets/fonts/tyro-redact.ttf") format("truetype");
+  unicode-range: U+0030-0039, U+0660-0669, U+06F0-06F9;
+  font-display: block;
+}
+/* İç öğe kendi yazı tipini taşısa da (eşit genişlikli rakam, başlık) rakam gizlenir. */
+:root[data-present] :is([data-private], [data-private] *) {
+  font-family: "TyroRedact", var(--font-sans) !important;
   user-select: none;
 }

@@ -65,7 +65,7 @@ export function Attachments({ post, enabled }) {
               />
             )}
             <span data-private="" className="min-w-0 flex-1">
-              <span className="block truncate text-[0.78125rem] font-medium leading-tight">
+              <span className="block truncate text-[0.8125rem] font-medium leading-tight">
                 {att.name}
               </span>
               <span className="mt-0.5 block truncate text-[0.6875rem] leading-tight text-muted-foreground">

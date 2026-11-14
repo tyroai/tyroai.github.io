@@ -1,0 +1,488 @@
+/* Self Servis › Kartlar düzeni (`cards/CardsTop`, `team/TeamCards`). Ölçüler onaylanan prototipten
+   (kart payı 18, köşe 20, aralık 16–18, gösterge rakamı 30, özet yazısı 17, düğme 34 px); düzen
+   kabın eninden (`@container ss`); renk nötr — palet yalnız ana düğmede, vurgularda ve çubuklarda. */
+.ssc {
+  display: grid;
+  gap: 1.125rem;
+  min-width: 0;
+}
+.ssc-phone {
+  margin-top: 0.75rem;
+}
+
+/* Üst çubuk: görünüm · dönem (bölmeli seçimler) … güncellendi · Yenile · Dışa aktar · Yeni. */
+.ssc-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  min-width: 0;
+}
+.ssc-switch {
+  flex: none;
+  min-width: 0;
+}
+.ssc-top-gap {
+  flex: 1 1 0;
+}
+.ssc-updated {
+  font-size: var(--text-footnote);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+/* Gri kapsül (Yenile, Dışa aktar, TYRO'ya sor): prototipin küçük hapı. */
+/* Yenile'nin kabı durum yazıları için yer tutar (`InlineAction`): kapsül içteki düğmedir. */
+.ssc-pill,
+.ssc-refresh button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.375rem;
+  height: var(--spacing-control-sm);
+  padding-inline: 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+  color: var(--foreground);
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  white-space: nowrap;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.ssc-pill svg,
+.ssc-refresh button svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.ssc-pill:disabled {
+  opacity: 0.45;
+}
+.ssc-pill:focus-visible,
+.ssc-refresh button:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+@media (hover: hover) {
+  .ssc-pill:not(:disabled):hover,
+  .ssc-refresh button:not(:disabled):hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+}
+.ssc-new {
+  flex: none;
+}
+/* Ana eylem (özet kartının ilk düğmesi) düz palet renginde — geçiş yok (ürün sahibi); "Yeni" ile
+   aynı dolgu (`ActionButton tone="prominent"`: koyu palet tonu, beyaz yazı). */
+.ssc-btn.ssc-btn--main {
+  background: var(--brand-fill-deep);
+  color: var(--brand-on-brand);
+  font-weight: 600;
+}
+/* Dar kapta üst çubuk iki sıra: üstte anahtar ve Yeni, altında dönem ile eylemler. */
+@container ss (max-width: 46rem) {
+  .ssc-top .ssc-top-gap {
+    order: 2;
+    flex-basis: 100%;
+    height: 0;
+  }
+  .ssc-top .ssc-new {
+    order: 1;
+    margin-inline-start: auto;
+  }
+  .ssc-top .ssc-years,
+  .ssc-top .ssc-updated,
+  .ssc-top .ssc-refresh,
+  .ssc-top .ssc-pill {
+    order: 3;
+  }
+  .ssc-top .ssc-updated {
+    margin-inline-start: auto;
+  }
+}
+@container ss (max-width: 34rem) {
+  .ssc-top .ssc-updated {
+    display: none;
+  }
+  .ssc-top .ssc-years {
+    margin-inline-end: auto;
+  }
+}
+
+.ssc-row,
+.ssc-kpis,
+.ssc-team {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+/* Üst kart TEK kart (ürün sahibi): solda kimlik, sağda TYRO anlatıyor; aralarında ince çizgi.
+   İki bölüm kendi kart giysisini bırakır, kabuk sıranın kendisidir. */
+.ssc-row {
+  gap: 0;
+  border-radius: var(--radius-card);
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 9%, transparent);
+}
+.ssc-row > .ssc-card {
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+.ssc-row > .ssc-card + .ssc-card {
+  border-block-start: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+@container ss (min-width: 50rem) {
+  .ssc-row {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+  .ssc-row > .ssc-card + .ssc-card {
+    border-block-start: 0;
+    border-inline-start: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+}
+@container ss (min-width: 30rem) {
+  .ssc-kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Kart: beyaz, düz; çerçeve yerine içten ince çizgi. Yükselmez. */
+.ssc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: 0;
+  padding: 1.125rem;
+  border-radius: var(--radius-card);
+  background: var(--card);
+  color: var(--card-foreground, var(--foreground));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 9%, transparent);
+  text-align: start;
+}
+.ssc-eyebrow {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+
+/* Kimlik kartı: büyük fotoğraf, ad ve unvan; altında tek sütun etiketli bilgiler. */
+.ssc-id-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.875rem;
+}
+.ssc-id-avatar {
+  width: 4rem;
+  height: 4rem;
+}
+.ssc-id-avatar > span:first-of-type {
+  font-size: 1.25rem;
+}
+.ssc-id-name h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.375rem;
+  letter-spacing: -0.015em;
+}
+.ssc-id-name p {
+  margin-top: 0.125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-footnote);
+  line-height: 1rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+.ssc-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.25rem 0.75rem;
+  min-width: 0;
+  font-size: var(--text-footnote);
+  line-height: 1.125rem;
+}
+.ssc-facts > div {
+  display: contents;
+}
+.ssc-facts dt {
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+.ssc-facts dd {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ssc-link {
+  position: relative;
+  max-width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 0.375rem;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--foreground) 28%, transparent);
+  text-underline-offset: 3px;
+  outline: none;
+}
+.ssc-link:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+@media (hover: hover) {
+  .ssc-link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+@media (pointer: coarse) {
+  .ssc-link::after {
+    content: "";
+    position: absolute;
+    inset: -0.75rem -0.25rem;
+  }
+}
+
+/* TYRO anlatıyor: küre + kaş, 17 px cümle, sayılar paletin tonunda vurgulu, altında düğmeler. */
+.ssc-story-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.ssc-orb {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.ssc-story-text {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  color: var(--foreground);
+  text-wrap: pretty;
+}
+.ssc-story-text mark,
+.ssc-phone-text mark {
+  padding: 0.0625rem 0.375rem;
+  border-radius: 0.5rem;
+  background: color-mix(in oklab, var(--brand-text) 9%, transparent);
+  color: var(--brand-text);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.ssc-story-skel {
+  display: grid;
+  gap: 0.625rem;
+}
+.ssc-story-skel span {
+  height: 1rem;
+  border-radius: 999px;
+}
+.ssc-story-skel span:last-child {
+  width: 55%;
+}
+.ssc-actions {
+  /* Düğmeler kartın dibinde: kart komşusuyla eş boyda uzasa da hiza tutar. */
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+/* Kart düğmesi: 34 px kapsül; ikincil gri, ilki (bekleyen iş varsa) paletin rampasında. */
+.ssc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 2.125rem;
+  padding-inline: 0.875rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+  font-size: var(--text-callout);
+  font-weight: 600;
+  white-space: nowrap;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.ssc-btn svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+.ssc-btn:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+@media (hover: hover) {
+  .ssc-btn:not(.ssc-btn--main):hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+  .ssc-btn.ssc-btn--main:hover {
+    background: color-mix(in oklab, var(--brand-fill-deep) 88%, var(--foreground));
+  }
+}
+@media (pointer: coarse) {
+  .ssc-btn {
+    height: 2.75rem;
+  }
+}
+
+/* Gösterge kartı: solda kaş, sağda büyük rakam; altında kalın çubuk ve notlar. Tıklanır (ayrıntı). */
+.ssc-kpi {
+  gap: 0.625rem;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+button.ssc-kpi:focus-visible {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--foreground) 9%, transparent),
+    0 0 0 3px color-mix(in oklab, var(--ring) 55%, transparent);
+}
+@media (hover: hover) {
+  button.ssc-kpi:hover {
+    background: color-mix(in oklab, var(--foreground) 2.5%, var(--card));
+  }
+}
+.ssc-kpi-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+  min-width: 0;
+}
+.ssc-kpi-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+.ssc-kpi-unit {
+  margin-inline-start: 0.375rem;
+  font-size: var(--text-footnote);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+.ssc-kpi-note,
+.ssc-kpi-strong {
+  font-size: var(--text-footnote);
+  line-height: 1.125rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+.ssc-kpi-strong {
+  color: var(--foreground);
+}
+.ssc-bar-track,
+.ssc-status {
+  display: flex;
+  gap: 2px;
+  height: 0.625rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 7%, transparent);
+}
+.ssc-status {
+  height: 0.5rem;
+  background: none;
+}
+.ssc-bar-fill {
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand-from), var(--brand-via));
+  transform: scaleX(var(--share, 0));
+  transform-origin: left;
+  animation: ssc-fill 520ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+[dir="rtl"] .ssc-bar-fill {
+  transform-origin: right;
+}
+@keyframes ssc-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+.ssc-status i {
+  flex: 1 0 0.375rem;
+  border-radius: 999px;
+}
+.ssc-status i,
+.ssc-legend i {
+  background: color-mix(in oklab, var(--foreground) 14%, transparent);
+}
+.ssc-status [data-kind="approved"],
+.ssc-legend [data-kind="approved"] i {
+  background: var(--success);
+}
+.ssc-status [data-kind="pending"],
+.ssc-legend [data-kind="pending"] i {
+  background: var(--warning);
+}
+.ssc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  font-size: var(--text-footnote);
+  line-height: 1.125rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+.ssc-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  white-space: nowrap;
+}
+.ssc-legend i {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+}
+/* Dar kapta (tablet, yan panel açık) üç kart yan yana kalır: iç pay ve rakam bir kademe küçülür. */
+@container ss (max-width: 46rem) {
+  .ssc-card.ssc-kpi {
+    padding: 0.875rem;
+  }
+  .ssc-kpi .ssc-kpi-value {
+    font-size: 1.375rem;
+  }
+  .ssc-kpi .ssc-legend {
+    gap: 0.125rem 0.5rem;
+  }
+}
+
+.ssc-skel-line {
+  display: block;
+  width: 9rem;
+  max-width: 100%;
+  height: 0.75rem;
+  margin-top: 0.375rem;
+  border-radius: 999px;
+}
+.ssc-skel-value {
+  display: block;
+  width: 5rem;
+  height: 1.875rem;
+  border-radius: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ssc-bar-fill {
+    animation: none;
+  }
+}

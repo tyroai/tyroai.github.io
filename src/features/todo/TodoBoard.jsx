@@ -267,7 +267,7 @@ export function TodoBoard({
                   )}
                 </h3>
                 {activeList?.isShared && (
-                  <p className="mt-0.5 text-[0.71875rem] text-muted-foreground">
+                  <p className="mt-0.5 text-[0.75rem] text-muted-foreground">
                     {t("todo.lists.shared")}
                   </p>
                 )}

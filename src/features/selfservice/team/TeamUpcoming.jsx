@@ -45,7 +45,9 @@ function Detail({ item }) {
  * yönetici ve ekip arkadaşında türsüz "İzinde"; gün satırı simgesiyle "Doğum günü · 12 Kas"); bugün
  * sürenler "Şu an", bugünkü günler "Bugün" rozetli. Basınca kişi bölmesi. Beşten fazlası "Tümünü
  * göster" ile. `window`/`onNav`: dönem gezinmesi (‹ Bugün ›; çizelgeyle aynı dönem,
- * `timelineWindow`) — varsayılan dönemde başlıkta "6 hafta", gezinince tarih aralığı.
+ * `timelineWindow`) — varsayılan dönemde başlıkta "6 hafta", gezinince tarih aralığı. `first`:
+ * "Tümünü göster"den önce görünen satır sayısı (Kartlar düzeninin yan sütununda çizelgenin boyuna
+ * göre); `onNav` yoksa gezinme düğmeleri çizilmez (dönemi çizelge yönetir).
  */
 export function TeamUpcoming({
   upcoming,
@@ -56,6 +58,7 @@ export function TeamUpcoming({
   presence,
   onOpen,
   className,
+  first = FIRST,
 }) {
   const { t, locale } = useLocale()
   // Telefon düzeninde kart yok: başlık bölüm adı, satırlar ayraçlı.
@@ -64,7 +67,7 @@ export function TeamUpcoming({
   const [all, setAll] = useState(false)
   const byKey = useMemo(() => new Map(rows.map((r) => [r.key, r])), [rows])
   const list = upcoming.filter((it) => byKey.has(it.key))
-  const shown = all ? list : list.slice(0, FIRST)
+  const shown = all ? list : list.slice(0, first)
   // Varsayılan dönem (bugünden 6 hafta) değilse başlık ve boş durum tarih aralığını söyler.
   const home = !win || (win.home && win.weeks === 6)
   return (
@@ -142,7 +145,7 @@ export function TeamUpcoming({
                   </span>
                   <span className="flex shrink-0 flex-col items-end gap-0.5">
                     {badge && (
-                      <span className="rounded-full bg-brand/[0.12] px-1.5 py-px text-[0.625rem] font-bold uppercase tracking-[0.04em] text-brand-ink">
+                      <span className="rounded-full bg-brand/[0.12] px-1.5 py-px text-[0.6875rem] font-bold uppercase tracking-[0.04em] text-brand-ink">
                         {badge}
                       </span>
                     )}
@@ -165,7 +168,7 @@ export function TeamUpcoming({
           {t(home ? "selfService.team.upcoming.empty" : "selfService.team.timeline.emptyronge")}
         </p>
       )}
-      {list.length > FIRST && (
+      {list.length > first && (
         <button
           type="button"
           onClick={() => setAll((v) => !v)}

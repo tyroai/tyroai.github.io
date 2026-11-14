@@ -133,7 +133,7 @@ export function MailDetailCard({ m, photo, footer, onExpand }) {
         fallback={
           m.preview ? (
             <div className="h-full overflow-y-auto overscroll-contain p-3.5 py-3">
-              <p className="whitespace-pre-line text-[0.71875rem] leading-relaxed text-muted-foreground">
+              <p className="whitespace-pre-line text-[0.75rem] leading-relaxed text-muted-foreground">
                 {m.preview}
               </p>
             </div>
@@ -150,7 +150,7 @@ export function MailDetailCard({ m, photo, footer, onExpand }) {
             href={m.webLink ?? "https://outlook.office.com/mail/"}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-brand-solid px-3 text-[0.75rem] font-semibold text-white transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 pointer-coarse:h-11"
+            className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-brand-solid px-3 text-[0.75rem] font-semibold text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 pointer-coarse:h-11"
           >
             <HugeiconsIcon icon={Mail01Icon} className="size-3.5" strokeWidth={2} />
             {t("mail.openOutlook")}

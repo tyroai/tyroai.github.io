@@ -1,0 +1,217 @@
+/* Profil › Görünüm › Sayfa düzeni: şemalı seçim karoları (`PageLayoutPicker`). */
+.plp {
+  display: grid;
+  gap: 1rem;
+}
+.plp-name {
+  padding-inline: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: var(--text-callout, 0.8125rem);
+  font-weight: 600;
+  color: var(--foreground);
+}
+.plp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  align-items: stretch;
+  gap: 0.625rem;
+}
+.plp-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.5rem 0.5rem 0.625rem;
+  border-radius: var(--radius-card);
+  background: color-mix(in oklab, var(--foreground) 3.5%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent);
+  text-align: start;
+  outline: none;
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+@media (hover: hover) {
+  .plp-tile:hover {
+    background: color-mix(in oklab, var(--foreground) 6%, transparent);
+  }
+}
+.plp-tile[aria-checked="true"] {
+  background: color-mix(in oklab, var(--brand-text) 7%, transparent);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--brand-text) 55%, transparent);
+}
+.plp-tile:focus-visible {
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in oklab, var(--brand-text) 55%, transparent),
+    0 0 0 3px color-mix(in oklab, var(--ring) 45%, transparent);
+}
+
+/* Şema: sayfanın iskeleti. Renk sayfadan — nötr kutular, palet yalnız vurgu parçasında. */
+.plp-sketch {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3125rem;
+  aspect-ratio: 16 / 10;
+  padding: 0.5rem;
+  border-radius: var(--radius-tile);
+  background: var(--background);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 6%, transparent);
+  overflow: hidden;
+}
+.plp-band {
+  flex: 0 0 38%;
+  border-radius: 0.375rem;
+  background: linear-gradient(135deg, var(--brand-from), var(--brand-via), var(--brand-to));
+}
+.plp-line {
+  flex: 0 0 0.3125rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+.plp-line:last-child {
+  width: 62%;
+}
+.plp-pair,
+.plp-trio {
+  display: grid;
+  gap: 0.25rem;
+  min-height: 0;
+}
+.plp-pair {
+  flex: 0 0 34%;
+  grid-template-columns: 5fr 7fr;
+}
+.plp-trio {
+  flex: 0 0 22%;
+  grid-template-columns: repeat(3, 1fr);
+}
+.plp-box {
+  border-radius: 0.3125rem;
+  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+.plp-tint {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--brand-from) 55%, transparent),
+    color-mix(in oklab, var(--brand-to) 55%, transparent)
+  );
+}
+
+/* Anasayfa şemaları */
+.plp-home {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 2fr 3fr;
+  gap: 0.25rem;
+  min-height: 0;
+  min-width: 0;
+}
+.plp-col {
+  display: grid;
+  grid-template-rows: 3fr 2fr;
+  gap: 0.25rem;
+}
+.plp-cells {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.25rem;
+}
+.plp-wide {
+  grid-column: span 2;
+}
+.plp-side {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) 26%;
+  gap: 0.3125rem;
+  min-height: 0;
+}
+.plp-shelf {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.3125rem;
+  border-radius: 0.3125rem;
+  background: color-mix(in oklab, var(--brand-text) 12%, transparent);
+}
+.plp-shelf .plp-line {
+  flex: 0 0 0.25rem;
+  width: 100%;
+  background: color-mix(in oklab, var(--brand-text) 40%, transparent);
+}
+.plp-sketch[data-page="home"] .plp-trio,
+.plp-stack > * {
+  flex: 1;
+}
+/* Sahneler: şeridin altında pano (geniş karşılama + kart, üçlü sıra) ve yanda panel. */
+.plp-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 0;
+}
+.plp-hero {
+  grid-template-columns: 2fr 1fr;
+}
+.plp-tabs {
+  display: flex;
+  flex: 0 0 0.4375rem;
+  gap: 0.25rem;
+}
+.plp-tab {
+  width: 16%;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+.plp-on {
+  background: var(--brand-solid);
+}
+
+.plp-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+  min-height: 1.25rem;
+  padding-inline: 0.25rem;
+}
+.plp-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-callout, 0.8125rem);
+  font-weight: 500;
+  color: var(--foreground);
+}
+.plp-hint {
+  padding-inline: 0.25rem;
+  font-size: var(--text-footnote, 0.75rem);
+  line-height: 1rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+.plp-tile[aria-checked="true"] .plp-label {
+  font-weight: 600;
+}
+.plp-trial {
+  flex: none;
+  padding: 0.0625rem 0.375rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 7%, transparent);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+.plp-tick {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  margin-inline-start: auto;
+  color: var(--brand-ink, var(--foreground));
+}
+@media (pointer: coarse) {
+  .plp-foot {
+    min-height: 1.75rem;
+  }
+}

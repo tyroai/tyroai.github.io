@@ -87,7 +87,7 @@ export function HeatGrid({ months, rows, caption, onRow, rowLabel }) {
                     <TeamMark
                       name={row.label}
                       index={row.tone ?? 0}
-                      className="size-7 rounded-lg text-[0.625rem]"
+                      className="size-7 rounded-lg text-[0.6875rem]"
                     />
                     <span className="min-w-0">
                       <span className="block truncate text-sm font-semibold transition-colors group-hover/row:text-brand">

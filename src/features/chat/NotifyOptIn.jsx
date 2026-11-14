@@ -110,7 +110,7 @@ export function NotifyOptIn({ visible }) {
             onClick={remember}
             aria-label={t("chat.notify.dismiss", "Şimdi değil")}
             title={t("chat.notify.dismiss", "Şimdi değil")}
-            className="grid size-6 shrink-0 place-items-center rounded-md text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground"
+            className="grid size-6 shrink-0 place-items-center rounded-md text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground relative pointer-coarse:after:absolute pointer-coarse:after:-inset-2"
           >
             <HugeiconsIcon icon={Cancel01Icon} className="size-3.5" strokeWidth={2} />
           </button>
@@ -174,7 +174,7 @@ export function NotifyOptIn({ visible }) {
             <button
               type="button"
               onClick={remember}
-              className="rounded-full border border-border px-2.5 py-1 text-[0.6875rem] font-medium transition hover:bg-foreground/5"
+              className="bg-muted rounded-full px-2.5 py-1 text-[0.6875rem] font-medium transition hover:bg-accent"
             >
               {t("chat.notify.help.done", "Tamam")}
             </button>

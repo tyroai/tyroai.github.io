@@ -7,7 +7,8 @@ import { TileShell } from "./TileShell"
 import { TileTip } from "./TileTip"
 
 /**
- * Teams durumu: simgenin köşesinde durumun rengi, altında durum ("Müsait", "Toplantıda meşgul" …);
+ * Teams durumu: simgenin köşesinde durumun rengi, altında durum — Teams'in kendi etkinliği varsa
+ * onun adı ("Toplantıda", "Görüşmede"), yoksa durum ("Müsait", "Meşgul" …);
  * izin yoksa "Bağlan". Dokununca seçenekler panelin içinde (`PresenceDetail`).
  */
 export function PresenceTile({ onOpen, ...shell }) {
@@ -15,7 +16,7 @@ export function PresenceTile({ onOpen, ...shell }) {
   const p = usePresence()
   const sub =
     p.status === "ready"
-      ? t(presenceLabelKey(p.availability))
+      ? t(presenceLabelKey(p.availability, p.activity))
       : p.status === "consent"
         ? t("control.presence.connect")
         : p.status === "error"

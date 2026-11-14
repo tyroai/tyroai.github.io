@@ -1,4 +1,5 @@
 import { graphGet, STATUS } from "@/lib/graph"
+import { readSnapshot, writeSnapshot } from "@/lib/snapshot"
 import { onSessionClear } from "@/lib/sessionCache"
 
 /**
@@ -90,17 +91,46 @@ export function circleOf(circle, mail) {
   return null
 }
 
-/** Tek istek, paylaşılan söz: aynı oturumda ikinci çağıran yeni istek atmaz. */
+const SNAPSHOT = "my-circle"
+
+/** Cihazdaki bugünün çevresi (adres kümeleri) ya da `null` (`lib/snapshot`: hesaba bağlı, aynı gün). */
+function savedCircle(key) {
+  const saved = readSnapshot(SNAPSHOT, key)?.value
+  if (!saved || !Array.isArray(saved.team) || !Array.isArray(saved.colleagues)) return null
+  return {
+    status: STATUS.ready,
+    department: saved.department ?? null,
+    team: new Set(saved.team),
+    colleagues: new Set(saved.colleagues),
+  }
+}
+
+/**
+ * Tek istek, paylaşılan söz: aynı oturumda ikinci çağıran yeni istek atmaz. Çevre GÜNDE BİR KEZ
+ * okunur: günün ilk açılışından sonra cihazdaki kayıttan gelir (ekip ve departman gün içinde
+ * değişmez; açılışta 4 istek kazanılır).
+ */
 export function loadMyCircle(instance, account) {
   const key = account?.homeAccountId
   if (!key) return Promise.resolve({ status: STATUS.unauthenticated })
   if (cache?.key === key) return cache.promise
+  const saved = savedCircle(key)
+  if (saved) {
+    cache = { key, value: saved, promise: Promise.resolve(saved) }
+    return cache.promise
+  }
   const entry = { key, value: null, promise: null }
   entry.promise = fetchMyCircle(instance, account).then((value) => {
     // "Soramadık" önbelleğe girmez: izin verilince bir sonraki açılış denesin.
     if (cache === entry) {
-      if (value.status === STATUS.ready) entry.value = value
-      else cache = null
+      if (value.status === STATUS.ready) {
+        entry.value = value
+        writeSnapshot(SNAPSHOT, key, {
+          department: value.department,
+          team: [...value.team],
+          colleagues: [...value.colleagues],
+        })
+      } else cache = null
     }
     return value
   })

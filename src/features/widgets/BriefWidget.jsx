@@ -1,14 +1,11 @@
-import { useRef } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { motion, useReducedMotion } from "motion/react"
 import CheckmarkBadge01Icon from "@hugeicons/core-free-icons/CheckmarkBadge01Icon"
 import CheckmarkBadge03Icon from "@hugeicons/core-free-icons/CheckmarkBadge03Icon"
-import { ListenButton } from "@/components/common/ListenButton"
 import { useLocale } from "@/hooks/useLocale"
 import { getDateTimeFormat } from "@/lib/intl-cache"
-import { spokenText } from "@/features/widgets/lib/spokenText"
 import { BriefRows } from "./BriefRows"
-import { useBrief } from "./useBrief"
+import { useBrief } from "@/hooks/useBrief"
 import { useBriefOof } from "./useBriefOof"
 import { useBriefLines } from "./useBriefLines"
 import { useBriefTips } from "./useBriefTips"
@@ -23,7 +20,7 @@ const OPTS_DATE = { weekday: "long", day: "numeric", month: "long" }
 const OPTS_DATE_SHORT = { weekday: "short", day: "numeric", month: "short" }
 
 /**
- * Günün brifingi — eylem paneli: öncelik sırasıyla maddeler (yanıt bekleyen
+ * TYRO brifingi — eylem paneli: öncelik sırasıyla maddeler (yanıt bekleyen
  * insanlar önce), her birinde sayı ve TEK eylem; davetler kartta yanıtlanır.
  * Başlık günün bölümüne göre (sabah · öğleden sonra · akşam kapanış), hafta
  * sonunda bir sonraki iş gününe hazırlık. Cümlelerdeki toplantı ifadeleri vurgulu
@@ -46,22 +43,6 @@ export function BriefWidget({ ctx, className }) {
   const shown = items.length > max ? items.slice(0, max - 1) : items
   const rest = items.length > max ? items.slice(max - 1) : []
   const loading = brief.loading
-  const linesRef = useRef(null)
-  // "Dinle": görünen cümleler (toplantı vurguları dahil) + satırlar, ekrandaki sırayla.
-  const speech = () =>
-    spokenText([
-      ...Array.from(linesRef.current?.children ?? [], (line) => line.textContent),
-      oof && t("widgets.brief.oof"),
-      ...items.map((x) =>
-        [
-          `${t(`widgets.brief.item.${x.id}`)}: ${x.n}`,
-          x.id === "mail" && x.important > 0 && t("widgets.brief.important", { n: x.important }),
-        ]
-          .filter(Boolean)
-          .join(", "),
-      ),
-    ])
-
   return (
     <WidgetFrame
       id="brief"
@@ -72,7 +53,7 @@ export function BriefWidget({ ctx, className }) {
       className={className}
       action={
         <>
-          <span className="text-[0.71875rem] text-muted-foreground [&::first-letter]:uppercase">
+          <span className="text-[0.75rem] text-muted-foreground [&::first-letter]:uppercase">
             <span className="@max-[16rem]/widget:hidden">
               {getDateTimeFormat(locale, OPTS_DATE).format(date)}
               {weekend && ` · ${t("widgets.brief.weekendTag")}`}
@@ -81,10 +62,6 @@ export function BriefWidget({ ctx, className }) {
               {getDateTimeFormat(locale, OPTS_DATE_SHORT).format(date)}
             </span>
           </span>
-          {/* Dar kartta başlık satırında yer yok: "Dinle" geniş kartta. */}
-          {!loading && (
-            <ListenButton getText={speech} className="-me-1.5 @max-[16rem]/widget:hidden" />
-          )}
         </>
       }
     >
@@ -100,7 +77,7 @@ export function BriefWidget({ ctx, className }) {
         </div>
       ) : (
         <>
-          <div ref={linesRef} className="ds-tones">
+          <div className="ds-tones">
             <p className="mt-1.5 truncate text-[1rem] font-semibold leading-snug tracking-[-0.01em]">
               {shortHeadline === headline ? (
                 headline

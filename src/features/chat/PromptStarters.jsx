@@ -286,7 +286,7 @@ export function PromptStarters({ agentName, onPick, onOpenLab, collapsed = false
               aria-controls="prompt-tab-panel"
               onClick={() => pickTab(tab.id)}
               className={cn(
-                "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[0.8125rem] font-medium transition @max-lg/chat:h-8 @max-lg/chat:px-3 @max-lg/chat:text-[0.78125rem]",
+                "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[0.8125rem] font-medium transition @max-lg/chat:h-8 @max-lg/chat:px-3 @max-lg/chat:text-[0.8125rem]",
                 RING,
                 selected
                   ? "border-brand/40 bg-brand/10 text-brand-ink"
@@ -325,7 +325,7 @@ export function PromptStarters({ agentName, onPick, onOpenLab, collapsed = false
               showAll ? t("prompts.lessTopicsLabel") : t("prompts.moreTopicsLabel", { n: hidden })
             }
             className={cn(
-              "inline-flex h-9 shrink-0 items-center rounded-full border border-border/70 bg-background px-3 text-[0.8125rem] font-medium text-foreground/70 transition hover:text-foreground @max-lg/chat:h-8 @max-lg/chat:px-2.5 @max-lg/chat:text-[0.78125rem]",
+              "inline-flex h-9 shrink-0 items-center rounded-full border border-border/70 bg-background px-3 text-[0.8125rem] font-medium text-foreground/70 transition hover:text-foreground @max-lg/chat:h-8 @max-lg/chat:px-2.5 @max-lg/chat:text-[0.8125rem]",
               RING,
             )}
           >
@@ -341,7 +341,7 @@ export function PromptStarters({ agentName, onPick, onOpenLab, collapsed = false
           onClick={onOpenLab}
           aria-label={t("prompts.allPrompts")}
           className={cn(
-            "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-dashed border-border bg-background px-3.5 text-[0.8125rem] font-medium text-foreground/70 transition hover:border-brand/40 hover:text-foreground @max-lg/chat:h-8 @max-lg/chat:px-3 @max-lg/chat:text-[0.78125rem]",
+            "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-dashed border-border bg-background px-3.5 text-[0.8125rem] font-medium text-foreground/70 transition hover:border-brand/40 hover:text-foreground @max-lg/chat:h-8 @max-lg/chat:px-3 @max-lg/chat:text-[0.8125rem]",
             RING,
           )}
         >

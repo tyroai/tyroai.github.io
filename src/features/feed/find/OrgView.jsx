@@ -63,7 +63,7 @@ export function OrgView({ id, titleRef }) {
             onClick={close}
             aria-label={t("find.org.close")}
             title={t("find.org.close")}
-            className="grid size-9 place-items-center rounded-full border border-border bg-card text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:size-11"
+            className="grid size-9 place-items-center rounded-full bg-muted hover:bg-accent text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:size-11"
           >
             <HugeiconsIcon
               icon={Cancel01Icon}

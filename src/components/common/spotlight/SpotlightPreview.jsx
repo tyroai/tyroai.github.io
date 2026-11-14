@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils"
 
 const BUTTON =
   "inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl px-3 text-[0.75rem] font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-11 [@media(pointer:coarse)]:min-w-11"
-const PRIMARY = cn(BUTTON, "bg-brand-fill-deep text-brand-on-brand shadow-sm hover:brightness-110")
+const PRIMARY = cn(BUTTON, "bg-brand-fill-deep text-brand-on-brand shadow-sm")
 const SECONDARY = cn(BUTTON, "border border-border bg-card text-foreground/85 hover:bg-accent/60")
 
 /**

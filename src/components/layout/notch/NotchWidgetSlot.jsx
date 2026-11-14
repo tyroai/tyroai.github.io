@@ -79,6 +79,9 @@ function WidgetSlot({ id, side, mobile, delay }) {
       title={title}
       side={side}
       sideOffset={side === "left" ? 14 : 8}
+      // Çentikte sıvı açılış yok: ray kendi yığın bağlamında (`isolate`), düğme şeklin üstüne
+      // çıkamaz ve opak kapsül simgeyi örter (Notlar'a basınca simge beyaz yuvarlağın altında kalıyordu).
+      goo={false}
       className={panelClass(id)}
       trigger={button()}
     >

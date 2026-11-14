@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils"
 import { prefetchRoute } from "@/lib/routeChunks"
 import { NAV_GROUPS } from "@/lib/navGroups"
 
-const GROUP_LABEL = "text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+const GROUP_LABEL = "text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
 
 // Gruplar `lib/navGroups`ta (çentiğin varsayılanı da onu okur). Listede olmayan yeni bir sayfa
 // ilk gruba düşer (kaybolmasın); boş grup çizilmez (kapalı sayfa, kitle).
@@ -159,7 +159,7 @@ function NavMainRow({ item, active, onSelect, t, count = 0 }) {
             sordururdu. */}
         {count > 0 && (
           <>
-            <span className="ml-auto inline-flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-brand-solid px-1 text-[0.625rem] font-bold tabular-nums text-white group-data-[collapsible=icon]:hidden">
+            <span className="ml-auto inline-flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-brand-solid px-1 text-[0.6875rem] font-bold tabular-nums text-white group-data-[collapsible=icon]:hidden">
               {count > 9 ? "9+" : count}
             </span>
             <span

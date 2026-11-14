@@ -52,7 +52,7 @@ export function BentoTitle({ as: Tag = "h3", children, icon, action, className }
 }
 
 const KPI =
-  "ms-surface group/kpi relative flex min-w-0 flex-col rounded-[1.75rem] p-5 text-left outline-none transition hover:shadow-md motion-safe:hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-brand/40"
+  "ms-surface group/kpi relative flex min-w-0 flex-col rounded-[1.75rem] p-5 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-brand/40 hover:bg-accent/30"
 
 /**
  * Kartın tamamı bir düğme (içinde başka etkileşimli öğe YOK). `aria-pressed`
@@ -155,7 +155,7 @@ export function Eyebrow({ children, className, lang }) {
     <span
       lang={lang ?? locale}
       className={cn(
-        "inline-flex items-center gap-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground",
+        "inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground",
         className,
       )}
     >

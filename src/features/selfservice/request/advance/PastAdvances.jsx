@@ -49,7 +49,7 @@ export function PastAdvances({ trip, past, onTrip, onPast, filled, onUndo }) {
         sideOffset={8}
         collisionPadding={12}
         aria-label={label}
-        className="w-[min(24rem,calc(100vw-2.5rem))] gap-0.5 rounded-2xl p-1.5"
+        className="w-[min(24rem,calc(100vw-2.5rem))] gap-0.5 p-1.5"
       >
         {trip && (
           <button type="button" className={ROW} onClick={() => pick(onTrip)}>

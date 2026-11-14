@@ -191,7 +191,7 @@ export function EthicsHotline() {
             <PopoverTitle className="text-[0.8125rem] font-semibold leading-tight">
               {t("ethics.title")}
             </PopoverTitle>
-            <PopoverDescription className="mt-1 text-[0.71875rem] leading-snug">
+            <PopoverDescription className="mt-1 text-[0.75rem] leading-snug">
               {t("ethics.subtitle")}
             </PopoverDescription>
           </div>
@@ -208,13 +208,13 @@ export function EthicsHotline() {
             maxLength={ETHICS_LINE.maxChars}
             rows={4}
             placeholder={t("ethics.placeholder")}
-            className="max-h-44 min-h-22 text-[0.78125rem] leading-relaxed"
+            className="max-h-44 min-h-22 text-[0.8125rem] leading-relaxed"
           />
           {/* Sayaç yalnız SON 200 karakterde çıkar: kalıcı bir sayaç, kısa
               bir cümle yazan herkese olmayan bir sınırı hatırlatırdı; hiç
               olmaması ise tavanı sessiz bir duvara çevirirdi. */}
           {remaining <= 200 && (
-            <p className="text-right text-[0.65625rem] text-muted-foreground">
+            <p className="text-right text-[0.6875rem] text-muted-foreground">
               {t("ethics.remaining", { count: remaining })}
             </p>
           )}
@@ -222,7 +222,7 @@ export function EthicsHotline() {
 
         {error && (
           <>
-            <p className="rounded-lg bg-destructive/10 px-2.5 py-2 text-[0.71875rem] leading-snug text-destructive">
+            <p className="rounded-lg bg-destructive/10 px-2.5 py-2 text-[0.75rem] leading-snug text-destructive">
               {error}
             </p>
             <ErrorCause detail={cause} className="mt-0" />
@@ -231,13 +231,13 @@ export function EthicsHotline() {
 
         {/* Hattın ANONİM OLMADIĞINI söyleyen tek satır. Gerekçesi
             `features/feed/lib/ethicsLine.js`te: vermediğimiz bir sözü vermiş olmamak. */}
-        <p className="text-[0.65625rem] leading-snug text-muted-foreground">{t("ethics.note")}</p>
+        <p className="text-[0.6875rem] leading-snug text-muted-foreground">{t("ethics.note")}</p>
 
         <div className="flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="h-9 rounded-lg border border-border bg-background px-3 text-[0.78125rem] font-medium text-foreground/85 transition hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-11"
+            className="h-9 rounded-lg border border-border bg-background px-3 text-[0.8125rem] font-medium text-foreground/85 transition hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-11"
           >
             {t("ethics.cancel")}
           </button>
@@ -250,7 +250,7 @@ export function EthicsHotline() {
             onClick={send}
             aria-disabled={!canSend}
             className={cn(
-              "flex h-9 items-center gap-1.5 rounded-lg px-3 text-[0.78125rem] font-semibold [@media(pointer:coarse)]:min-h-11",
+              "flex h-9 items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-semibold [@media(pointer:coarse)]:min-h-11",
               "bg-brand-fill-deep text-brand-on-brand ring-1 ring-foreground/15",
               "shadow-sm transition hover:brightness-110",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",

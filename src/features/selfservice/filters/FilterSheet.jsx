@@ -119,7 +119,7 @@ export function FilterSheet({ open, onOpenChange, tab, view, query, onApply }) {
           <button
             type="button"
             onClick={() => close(false)}
-            className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-brand-fill-deep px-5 text-[0.875rem] font-semibold text-brand-on-brand transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
+            className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-brand-fill-deep px-5 text-[0.875rem] font-semibold text-brand-on-brand transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
           >
             {t("selfService.filter.apply")}
             <span className="tabular-nums opacity-80">({number(preview.shown, locale)})</span>

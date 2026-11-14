@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils"
 import PanelRightIcon from "@hugeicons/core-free-icons/PanelRightIcon"
 import { NotchEditButton } from "@/components/layout/notch/NotchEdit"
 import { EdgeNotchDesignPicker } from "../EdgeNotchDesignPicker"
-import { OrbStylePicker } from "../OrbStylePicker"
+import { PageLayoutPicker } from "../PageLayoutPicker"
+import { SceneStripPicker } from "../SceneStripPicker"
 import { GROUP_LABEL, Group, Row } from "./rows"
 import { paletteFamilies } from "@/features/profile/lib/colorFamily"
 import { Swatches } from "./PaletteSwatches"
@@ -36,7 +37,7 @@ function PickerBlock({ label, footer, children }) {
 }
 
 /**
- * Görünüm — dil, tema, palet, orb, çentik. Header'daki düğmelerle aynı sağlayıcılara yazar
+ * Görünüm — dil, tema, palet, çentik, sayfa düzeni. Header'daki düğmelerle aynı sağlayıcılara yazar
  * (ikinci durum yok); seçim anında uygulanır, "Kaydet" yok: sonuç ekranın kendisi.
  * Dil en üstte, çünkü altındaki her etiket o dilde yeniden okunur.
  */
@@ -143,10 +144,6 @@ export function AppearanceSection({ onOpenSection }) {
 
       <WordColorPicker />
 
-      <PickerBlock label={t("profile.prefs.orbStyle")} footer={t("profile.prefs.orbStyleHint")}>
-        <OrbStylePicker />
-      </PickerBlock>
-
       <PickerBlock
         label={t("profile.prefs.notchDesign")}
         footer={t("profile.prefs.notchDesignHint")}
@@ -164,6 +161,14 @@ export function AppearanceSection({ onOpenSection }) {
             {t("notch.edit")}
           </NotchEditButton>
         </div>
+      </PickerBlock>
+
+      <PickerBlock label={t("profile.prefs.pageLayout")} footer={t("profile.prefs.pageLayoutHint")}>
+        <PageLayoutPicker />
+      </PickerBlock>
+
+      <PickerBlock label={t("profile.prefs.sceneStrip")} footer={t("profile.prefs.sceneStripHint")}>
+        <SceneStripPicker />
       </PickerBlock>
 
       <p className="px-4 text-xs leading-relaxed text-muted-foreground">

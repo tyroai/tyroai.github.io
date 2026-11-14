@@ -24,7 +24,7 @@ function Thumb({ file, index, label, onOpen }) {
       title={file.file.name}
       onClick={(e) => onOpen(file, e.currentTarget)}
       className={cn(
-        "relative grid size-7 shrink-0 place-items-center overflow-hidden rounded-[0.4375rem] bg-muted ring-2 ring-background shadow-[0_0_0_3px_rgb(0_0_0/0.07)] transition hover:z-10 hover:-translate-y-0.5 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-brand/60 dark:shadow-[0_0_0_3px_rgb(255_255_255/0.08)] pointer-coarse:after:absolute pointer-coarse:after:-inset-2",
+        "relative grid size-7 shrink-0 place-items-center overflow-hidden rounded-[0.4375rem] bg-muted ring-2 ring-background shadow-[0_0_0_3px_rgb(0_0_0/0.07)] transition hover:z-10 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-brand/60 dark:shadow-[0_0_0_3px_rgb(255_255_255/0.08)] pointer-coarse:after:absolute pointer-coarse:after:-inset-2 hover:bg-accent/30",
         index > 0 && "-ms-2.5",
         !file.url && "bg-[color-mix(in_oklab,var(--destructive)_10%,var(--background))]",
       )}

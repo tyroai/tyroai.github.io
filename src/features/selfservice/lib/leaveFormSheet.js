@@ -76,8 +76,8 @@ export function renderLeaveForm(d) {
   const v = (k) => esc(d[k])
   const at = (date, time) => [date, time].filter(Boolean).join("  ")
   const personnel =
-    field("Ad Soyad", v("name")) +
-    field("İşe Giriş Tarihi", v("hireDate")) +
+    field("Ad Soyad", v("name"), { key: "name" }) +
+    field("İşe Giriş Tarihi", v("hireDate"), { key: "hire" }) +
     field("Şirketi", v("company"), { key: "company" }) +
     field("Bölümü", v("department"), { key: "department" }) +
     field("Pozisyon", v("position"), { key: "position" })

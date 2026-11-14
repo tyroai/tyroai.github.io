@@ -119,7 +119,7 @@ export function HelpOrbCard({ className, anchorRef, scene = null, ctx = null }) 
       className={cn(
         "group relative isolate flex min-h-[15rem] min-w-0 flex-col overflow-hidden rounded-[1.75rem]",
         takeover ? "p-3" : "p-5",
-        "shadow-[0_18px_40px_-24px_var(--brand-via)] transition-transform duration-150 ease-out hover:-translate-y-0.5 active:scale-[0.98]",
+        "shadow-[0_18px_40px_-24px_var(--brand-via)] transition-transform duration-150 ease-out active:scale-[0.98]",
         className,
       )}
     >

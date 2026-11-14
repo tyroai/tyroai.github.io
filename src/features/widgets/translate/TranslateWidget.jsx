@@ -28,7 +28,7 @@ const LANGS = ["tr", "en", "ru", "ar"]
  * (tarayıcının yerleşik çeviri modeli, `lib/onDeviceTranslate`): metin cihazdan çıkmaz, anahtar
  * yok. Kaynak dil kendiliğinden anlaşılır; hedef seçilmediyse arayüz dili (metin zaten o dildeyse
  * İngilizce). Tarayıcı cihazda çeviremiyorsa (Safari, Firefox, telefon) ya da dil çifti yoksa metin
- * çeviri isteğiyle TYRO'ya, sohbete gider (tyroOffice). Metin kişisel: Sunum modunda bulanık
+ * çeviri isteğiyle TYRO'ya, sohbete gider (tyroOffice). Metin kişisel: Sunum modunda rakamları gizli
  * (`data-private`), hiçbir yere kaydedilmez. ⌘/Ctrl + Enter çevirir.
  *
  * Dar kartta iki kip (`data-mode`): yazarken metin kutusu ve diller; çevirince kutu tek satırlık özete

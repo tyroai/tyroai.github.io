@@ -126,7 +126,7 @@ export function NarrowTools({
           <DropdownMenuTrigger aria-label={t("feed.menu.aria")} className={ICON_BTN}>
             <HugeiconsIcon icon={MoreHorizontalIcon} className="size-4" strokeWidth={2} />
             {off > 0 && (
-              <span className="absolute -end-0.5 -top-0.5 grid min-w-4 place-items-center rounded-full bg-brand-solid px-1 text-[0.625rem] font-semibold leading-4 text-brand-on-brand">
+              <span className="absolute -end-0.5 -top-0.5 grid min-w-4 place-items-center rounded-full bg-brand-solid px-1 text-[0.6875rem] font-semibold leading-4 text-brand-on-brand">
                 {off}
               </span>
             )}

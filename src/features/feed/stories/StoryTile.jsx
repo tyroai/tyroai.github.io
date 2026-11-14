@@ -63,7 +63,7 @@ export function StoryTile({ story: s, photo, wide, onView, t, locale }) {
       {caption && (
         <span
           lang={locale}
-          className="-mt-1 w-full truncate text-center text-[0.625rem] leading-tight text-muted-foreground shortest:hidden"
+          className="-mt-1 w-full truncate text-center text-[0.6875rem] leading-tight text-muted-foreground shortest:hidden"
         >
           {caption}
         </span>

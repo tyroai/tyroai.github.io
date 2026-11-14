@@ -135,7 +135,7 @@ export const RailButton = forwardRef(function RailButton(
         )}
       </span>
       {/* Uzun widget adı tek satırda kısalır (tam adı ipucunda); ray boyu değişmez. */}
-      <span className="max-w-full truncate text-[0.625rem] font-semibold tracking-[0.01em]">
+      <span className="max-w-full truncate text-[0.6875rem] font-semibold tracking-[0.01em]">
         {label}
       </span>
       {srSuffix && <span className="sr-only">{srSuffix}</span>}
@@ -148,7 +148,7 @@ export const RailButton = forwardRef(function RailButton(
           initial={{ scale: 0.6, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 460, damping: 26, mass: 0.7 }}
-          className="absolute -top-[0.1875rem] right-[0.5rem] grid h-4 min-w-4 place-items-center rounded-full px-[0.3125rem] text-[0.625rem] font-semibold leading-none tabular-nums tracking-[-0.01em] shadow-[0_2px_6px_rgb(0_0_0/0.22)]"
+          className="absolute -top-[0.1875rem] right-[0.5rem] grid h-4 min-w-4 place-items-center rounded-full px-[0.3125rem] text-[0.6875rem] font-semibold leading-none tabular-nums tracking-[-0.01em] shadow-[0_2px_6px_rgb(0_0_0/0.22)]"
           style={{ background: accent, color: "var(--notch-on-hot)" }}
         >
           {count > 99 ? "99+" : count}

@@ -93,7 +93,6 @@ export function CalendarScreen({ access, tasks, leave }) {
     firstDay: s.firstDay,
     range: s.range,
     layers: s.layers,
-    hidePending: tools.hidePending,
     query: s.query,
     tasks,
     leave,
@@ -176,6 +175,8 @@ export function CalendarScreen({ access, tasks, leave }) {
   // Yeni görev penceresi: aynı şekilde; `initial`: Anlat'ın okuduğu başlık ve teslim günü.
   const openTask = ({ day, minute }, initial = null) =>
     setNewTask({ day, minute, initial, seq: ++taskOpens.current })
+  // `?new=task`: başka yerden (telefonun karşılama çekmecesi › Yeni › Görev) yeni görev.
+  useUrlCommand("new", "task", () => openTask({ day: s.today, minute: null }))
   const onSlot = ({ day, minute, x, y }) => openAdd({ day, minute, anchor: pointAt(x, y) })
   const grid = { items: data.items, today: s.today, onOpen: openDetail, onDay: s.openDay }
 

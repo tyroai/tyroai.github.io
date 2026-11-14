@@ -1,0 +1,511 @@
+/* Sahneler (`HomeScenes`): üstte sahne şeridi, altında sahnenin panosu, yanında sahne paneli.
+   Ölçüler prototipten: şerit gri kapsül içinde haplar, not paletin hafif tonunda kapsül, panel
+   gri zeminde beyaz satırlar (22 px köşe, 14 px satır köşesi). */
+.scn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  min-width: 0;
+  margin-bottom: 1rem;
+}
+.scn-new {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.375rem;
+  height: calc(var(--spacing-control) - 0.25rem);
+  margin-inline-end: 0.125rem;
+  padding-inline: 0.75rem 0.875rem;
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-callout);
+  font-weight: 500;
+  white-space: nowrap;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.scn-new svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.scn-new:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+.scn-new[data-state="open"] {
+  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  color: var(--foreground);
+}
+/* TYRO'nun notu: hangi sahneyi ne zaman açtığı; sonunda Geri al. */
+.scn-auto {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  height: var(--spacing-control);
+  padding-inline: 0.875rem 0.25rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--brand-text) 9%, transparent);
+  color: var(--brand-text);
+  font-size: var(--text-callout);
+  font-weight: 500;
+  animation: scn-in 220ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.scn-auto svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+.scn-auto > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.scn-auto button {
+  flex: none;
+  height: calc(var(--spacing-control) - 0.5rem);
+  min-height: 0;
+  padding-inline: 0.625rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--brand-text) 10%, transparent);
+  color: inherit;
+  font-size: var(--text-footnote);
+  font-weight: 600;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.scn-auto button:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+.scn-gap {
+  flex: 1;
+}
+.scn-edit {
+  position: relative;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.scn-edit-ic {
+  display: grid;
+  place-items: center;
+}
+.scn-edit svg {
+  width: 1rem;
+  height: 1rem;
+}
+/* Düzenlerken: palet halesi (Yedek düzendeki yüzen düğmeyle aynı dil) — kipin açık olduğu ve
+   nereden kapanacağı bakışta okunur. Açılırken hale bir kez genişleyip söner. */
+.scn-edit[data-editing] {
+  box-shadow:
+    0 0 0 0.25rem color-mix(in oklch, var(--brand-via) 22%, transparent),
+    0 10px 24px -12px var(--brand-via);
+}
+.scn-edit[data-editing]::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--brand-via) 60%, transparent);
+  content: "";
+  pointer-events: none;
+  animation: scn-edit-ring 900ms cubic-bezier(0.23, 1, 0.32, 1) 2 both;
+}
+@keyframes scn-edit-ring {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.22, 1.5);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scn-edit[data-editing]::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+@media (hover: hover) {
+  .scn-new:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+    color: var(--foreground);
+  }
+  .scn-auto button:hover {
+    background: color-mix(in oklab, var(--brand-text) 18%, transparent);
+  }
+}
+@media (pointer: coarse) {
+  .scn-new {
+    justify-content: center;
+    min-width: 2.75rem;
+    height: 2.75rem;
+  }
+  .scn-auto {
+    height: 2.75rem;
+  }
+  .scn-auto button {
+    height: 2.25rem;
+  }
+}
+/* Dar şerit (telefon): kapsül tam ende kayar, düzenle yalnız simge, not kendi satırında. */
+@container myspace (max-width: 34rem) {
+  .scn-gap {
+    display: none;
+  }
+  .scn-edit-label {
+    display: none;
+  }
+  .scn-auto {
+    order: 3;
+    flex: 1 1 100%;
+  }
+  .scn-auto > span {
+    flex: 1;
+  }
+  .scn-new span {
+    display: none;
+  }
+  .scn-new {
+    padding-inline: 0.75rem;
+  }
+}
+@keyframes scn-in {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+}
+
+/* "+ Sahne" formu (açılır kart ve alt çekmece). */
+.scn-form-title {
+  margin-bottom: 0.625rem;
+  font-size: var(--text-card-title, 0.9375rem);
+  font-weight: 600;
+}
+.scn-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.scn-form p {
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-footnote);
+}
+.scn-form button {
+  align-self: flex-end;
+}
+
+/* Pano ile panel yan yana (prototip: 300 px sütun, 18 px ara). Raf düzeninin kuralları (`shelf.css`)
+   bu düzende inmez; bölme burada kurulur. */
+.hs-scn .hs-split {
+  display: grid;
+  gap: 1.125rem;
+  min-width: 0;
+}
+.hs-scn .hs-col {
+  min-width: 0;
+}
+@container myspace (min-width: 60rem) {
+  .hs-scn .hs-split[data-shelf] {
+    grid-template-columns: minmax(0, 1fr) 18.75rem;
+    align-items: start;
+  }
+}
+
+/* SAHNE PANELİ */
+.scp {
+  flex-direction: column;
+  gap: 0.625rem;
+  min-width: 0;
+}
+.hs-split > .scp {
+  display: none;
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100dvh - 7rem);
+  padding: 0.875rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 1.375rem;
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+  animation: scp-in 220ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@container myspace (min-width: 60rem) {
+  .hs-split[data-shelf] > .scp {
+    display: flex;
+  }
+}
+.scp--sheet {
+  display: flex;
+  padding-bottom: 0.5rem;
+}
+/* Dar ekrandaki sağ panel: satırlar gri zeminde dursun diye içerik payı. */
+.scp-side .scp--sheet {
+  padding: 0 1rem 1rem;
+  overflow-y: auto;
+}
+.scp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 1.75rem;
+}
+.scp--sheet .scp-head {
+  display: none;
+}
+.scp-eyebrow {
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-eyebrow, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.scp-eyebrow--gap {
+  margin-top: 0.25rem;
+}
+.scp-x {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  min-height: 0;
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.scp-x svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+/* Küçük yerleşim haritası: panonun ızgarasının aynısı (üç sütun, geniş kart iki sütun, ilk sıra
+   karşılama kartıyla yüksek), kart başına bir blok. */
+.scp-mini {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 2.75rem;
+  grid-auto-rows: 1.375rem;
+  grid-auto-flow: row dense;
+  gap: 0.3125rem;
+}
+.scp-mini i {
+  border-radius: 0.375rem;
+  background: var(--brand-text);
+  opacity: 0.72;
+}
+.scp-mini i[data-size="wide"],
+.scp-mini i[data-size="hero"] {
+  grid-column: span 2;
+}
+.scp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.scp-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.625rem;
+  padding-inline-start: 0.75rem;
+  border-radius: 0.875rem;
+  background: var(--card);
+  color: var(--foreground);
+  font-size: var(--text-callout);
+  text-align: start;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.scp-row:has(.scp-tile) {
+  padding-inline-start: 0.5rem;
+}
+.scp--sheet .scp-row {
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+}
+.scp-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.scp-name small {
+  display: block;
+  overflow: hidden;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-eyebrow, 0.6875rem);
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.scp-tile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.625rem;
+  background: color-mix(in oklab, var(--brand-text) 10%, transparent);
+  color: var(--brand-text);
+}
+.scp-tile svg {
+  width: 1rem;
+  height: 1rem;
+}
+/* Anahtar: 36×20, topuz 16; açıkken paletin rengi. */
+.scp-sw {
+  position: relative;
+  flex: none;
+  width: 2.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 16%, transparent);
+  transition: background-color 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.scp-sw::after {
+  position: absolute;
+  inset-block-start: 0.125rem;
+  inset-inline-start: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  content: "";
+  transition: translate 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+[aria-checked="true"] > .scp-sw {
+  background: var(--brand-text);
+}
+[aria-checked="true"] > .scp-sw::after {
+  translate: 1rem 0;
+}
+[dir="rtl"] [aria-checked="true"] > .scp-sw::after {
+  translate: -1rem 0;
+}
+.scp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+.scp-chips button {
+  height: 1.75rem;
+  min-height: 0;
+  padding-inline: 0.625rem;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--foreground);
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  white-space: nowrap;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.scp--sheet .scp-chips button {
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+}
+.scp-chips button[aria-pressed="true"] {
+  background: color-mix(in oklab, var(--brand-text) 12%, var(--card));
+  color: var(--brand-text);
+  font-weight: 600;
+}
+.scp-del {
+  align-self: flex-start;
+  height: 1.75rem;
+  min-height: 0;
+  margin-top: 0.25rem;
+  padding-inline: 0.625rem;
+  border-radius: 999px;
+  /* Gri zeminde AA: kırmızı bir tık koyu. */
+  color: color-mix(in oklab, var(--destructive) 72%, var(--foreground));
+  font-size: var(--text-footnote);
+  font-weight: 500;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.scp-row:focus-visible,
+.scp-x:focus-visible,
+.scp-chips button:focus-visible,
+.scp-del:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+@media (hover: hover) {
+  .scp-row:hover {
+    background: color-mix(in oklab, var(--foreground) 4%, var(--card));
+  }
+  .scp--sheet .scp-row:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+  .scp-x:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+  .scp-chips button:not([aria-pressed="true"]):hover {
+    background: color-mix(in oklab, var(--foreground) 6%, var(--card));
+  }
+  .scp-del:hover {
+    background: color-mix(in oklab, var(--destructive) 10%, transparent);
+  }
+}
+@media (pointer: coarse) {
+  .scp-chips button,
+  .scp-del {
+    height: 2.75rem;
+    padding-inline: 0.875rem;
+  }
+  .scp-x {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+/* Panel kenardan gelir. */
+@keyframes scp-in {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scn-auto,
+  .hs-split > .scp {
+    animation: none;
+  }
+  .scp-sw,
+  .scp-sw::after {
+    transition: none;
+  }
+}
+
+/* Yandaki panel sıkı: ekrana kaydırmadan sığsın (ürün sahibi) — satır 36 px, aralar dar, harita
+   kısa. Çekmecede (dokunmatik) satırlar 44 px kalır. */
+.hs-split > .scp {
+  gap: 0.5rem;
+  max-height: calc(100dvh - 6rem);
+}
+.hs-split > .scp .scp-list {
+  gap: 0.3125rem;
+}
+.hs-split > .scp .scp-row {
+  min-height: 2.25rem;
+  padding-block: 0.1875rem;
+}
+.hs-split > .scp .scp-tile {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.5rem;
+}
+.hs-split > .scp .scp-mini {
+  grid-template-rows: 2rem;
+  grid-auto-rows: 1rem;
+  gap: 0.25rem;
+}
+.hs-split > .scp .scp-name small {
+  line-height: 0.875rem;
+}

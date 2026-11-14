@@ -37,6 +37,9 @@ const INTERACTION_CODES = new Set([
   "consent_required",
   "invalid_grant",
   "no_tokens_found",
+  // Yenileme anahtarının süresi doldu (MSAL bazen düz `AuthError` atıyor): bu kod listede
+  // yokken şerit hiç çıkmıyor, kullanıcı yalnız boş kartlar görüyordu.
+  "refresh_token_expired",
 ])
 
 export function isInteractionRequired(err) {

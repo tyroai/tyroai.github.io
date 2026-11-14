@@ -151,7 +151,7 @@ export function EntityPanel({ open, kind, item, draft, phone, onClose, onSave, o
         form="catalog-entity-form"
         aria-busy={busy || undefined}
         aria-keyshortcuts="Control+Enter Meta+Enter"
-        className={cn(BTN, "bg-brand-fill-deep text-brand-on-brand shadow-sm hover:brightness-110")}
+        className={cn(BTN, "bg-brand-fill-deep text-brand-on-brand shadow-sm")}
       >
         {busy
           ? t("settings.catalog.form.saving")

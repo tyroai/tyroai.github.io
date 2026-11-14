@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import { useWelcomeOpen } from "@/lib/welcomeGate"
 import { KIND_ORDER } from "./entryText"
 import { WhatsNewSheet } from "./dialog/WhatsNewSheet"
 import { useWhatsNewDialog } from "./hooks/useWhatsNewDialog"
@@ -17,8 +18,11 @@ const MAX_IN_DIALOG = 5
 export function WhatsNewDialog() {
   const navigate = useNavigate()
   const [shown, setShown] = useWhatsNewDialog()
+  // Telefondaki karşılama çekmecesi açıkken pencere bekler (çekmecenin altında kalıp onu
+  // dokunmaya kapatıyordu — `lib/welcomeGate`); çekmece kapanınca açılır.
+  const welcomeOpen = useWelcomeOpen()
 
-  if (!shown?.items?.length) return null
+  if (!shown?.items?.length || welcomeOpen) return null
   const items = [...shown.items].sort(
     (a, b) => (KIND_ORDER[a.kind] ?? 99) - (KIND_ORDER[b.kind] ?? 99),
   )

@@ -1,82 +1,13 @@
 /**
- * ORB GÖRÜNÜMÜ — kişisel bir tercih (2026-09-13, istek üzerine).
- *
- * Kullanıcının sözü: *"login ekranında, dashboard'ta ve chat ekranında bizim
- * orb yuvarlağımız var havada süzülen; buna ek bir alternatif orb maskotu
- * yaptırdım. Profil tercihlerde mevcuttaki orb küre seçilebilir ya da yeni orb
- * maskot seçilebilir. Kullanıcı orb küreyi seçerse login/dashboard/chat'te
- * mevcuttaki küre çıkmaya devam edecek, orb maskot seçerse onun yerine maskot
- * çıkacak."*
- *
- * İki görünüm:
- *   `sphere` — bugünkü `PastelVoiceOrb` (varsayılan; hiçbir şey değişmez)
- *   `mascot` — yeni vektör maskot (`brand/mascot/mascot.mjs`)
- *
- * ⚠️ **VARSAYILAN `mascot` — VE BU AYRI BİR İSTEKTİR** (2026-09-13, sahada
- * gördükten sonra: *"beğendim güzel olmuş, orb maskot varsayılan olsun"*).
- * İlk turda bilinçli olarak `sphere`di: bir uyarlamanın yan etkisi olarak
- * varsayılan değiştirilmez. Kullanıcı canlıda görüp istedi, o yüzden değişti —
- * `whatsNewCardStyle.js`teki varsayılan yolculuğunun aynısı.
- *
- * ⚠️ **BEDELİ ÖLÇÜLDÜ: giriş ekranında ~6,9 KB gz'lik bir TEMBEL PARÇA.**
- * Çizici giriş paketinde DEĞİL (orası 452/510 KB gz ve öyle kalıyor), ama
- * varsayılan maskot olunca hiç seçim yapmamış herkes o parçayı indiriyor ve
- * küre bir an geç beliriyor. `Suspense` yer tutucusu kürenin KUTUSU kadar,
- * yani düzen zıplamıyor — beliren şey yalnız kürenin kendisi.
- *
- * ⚠️ Değişiklik YALNIZ hiç seçim yapmamış tarayıcıyı etkiler: bu modül
- * varsayılanı depoya YAZMIYOR, yani "seçmedim" ile "seçtim" ayrımı duruyor ve
- * `sphere` seçmiş olan kimse maskota atlamıyor.
- *
- * ⚠️ **KİMLİKLER DEPOLAMA DEĞERİDİR — YAYINDAN SONRA DEĞİŞTİRİLMEZ.**
- * Görünen adlar sözlükte (`profile.prefs.orbStyle.<id>`), kimlik burada.
- *
- * Kapsam BU TARAYICI (tema · palet · dil ile aynı sınıf). `useSyncExternalStore`
- * deseni `whatsNewCardStyle.js` ile birebir aynı: durum React'in dışında,
- * birden çok tüketici var (login · dashboard · sohbet · Tercihler · stüdyo) ve
- * tek bir string için sağlayıcı açmak fazla.
+ * ORB GÖRÜNÜMÜ — herkeste maskot. Küre · maskot seçimi (Profil › Görünüm) kaldırıldı: orb her
+ * yerde (giriş, Anasayfa, sohbet) varsayılan görünümde çizilir. Eski seçimin kaydı
+ * (`tyro-orb-style-v1`) okunmaz; açılışta silinir (`cacheMigration`). Çağrı yerleri görünümü
+ * yine tek addan okur (`useOrbStyle`).
  */
-const STYLE_KEY = "tyro-orb-style-v1"
-const STYLE_EVENT = "tyro:orb-style"
+export const ORB_STYLE = "mascot"
 
-export const ORB_STYLES = ["sphere", "mascot"]
-export const DEFAULT_ORB_STYLE = "mascot"
-
-const VALID_STYLE = new Set(ORB_STYLES)
-
-export function readOrbStyle() {
-  if (typeof window === "undefined") return DEFAULT_ORB_STYLE
-  try {
-    const raw = window.localStorage.getItem(STYLE_KEY)
-    return raw && VALID_STYLE.has(raw) ? raw : DEFAULT_ORB_STYLE
-  } catch {
-    return DEFAULT_ORB_STYLE
-  }
-}
-
-export function writeOrbStyle(id) {
-  if (typeof window === "undefined") return
-  const next = VALID_STYLE.has(id) ? id : DEFAULT_ORB_STYLE
-  try {
-    window.localStorage.setItem(STYLE_KEY, next)
-  } catch {
-    // Depolama kapalı: seçim bu oturumda görünür, yenilemede varsayılana
-    // döner. Sessiz kalmak doğru — "tercihin kaydedilemedi" ikinci bir
-    // uyarı olurdu.
-  }
-  // Aynı sekmedeki öteki tüketici `storage` olayını GÖRMEZ (o yalnız BAŞKA
-  // sekmeleri haberdar eder) — uygulama içi olay şart.
-  window.dispatchEvent(new Event(STYLE_EVENT))
-}
-
-export function subscribeOrbStyle(callback) {
-  window.addEventListener(STYLE_EVENT, callback)
-  window.addEventListener("storage", callback)
-  return () => {
-    window.removeEventListener(STYLE_EVENT, callback)
-    window.removeEventListener("storage", callback)
-  }
-}
+/** Kaldırılan seçimin tarayıcıda kalmış kaydı (yalnız temizlik için). */
+export const LEGACY_ORB_STYLE_KEY = "tyro-orb-style-v1"
 
 /**
  * ═══════════════════════════════════════════════════════════════════════

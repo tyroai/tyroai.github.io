@@ -120,7 +120,7 @@ export function ExpenseDetails({ form, idBase, owners, history, via = "chat" }) 
         aria-label={t("selfService.expense.summary.title")}
         // Alana götürülünce odak orada kalır: kart kapanırken düğmeye dönmesin.
         onCloseAutoFocus={(e) => jumped.current && e.preventDefault()}
-        className="max-h-[min(var(--radix-popover-content-available-height),34rem)] w-[min(24rem,calc(100vw-1.5rem))] gap-0 overflow-y-auto overscroll-contain rounded-2xl p-0 text-sm"
+        className="max-h-[min(var(--radix-popover-content-available-height),34rem)] w-[min(24rem,calc(100vw-1.5rem))] gap-0 overflow-y-auto overscroll-contain p-0 text-sm"
       >
         <SummaryHero side info={info} className={cell(true)} />
         <SummaryParts

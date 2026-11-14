@@ -23,4 +23,11 @@ export const strings = {
   "widgetEdit.group.tibot": "Ticket",
   "widgetEdit.notchReplaced": "{name}, {old} yerine çentikte",
   "widgetEdit.notchDropSwap": "Bir yuvanın üstüne bırak: yerine geçer",
+  "widgetEdit.groupShort.day": "Günüm",
+  "widgetEdit.groupShort.time": "Takvim",
+  "widgetEdit.groupShort.mail": "Posta",
+  "widgetEdit.groupShort.team": "Ekip",
+  "widgetEdit.groupShort.tibot": "Ticket",
+  "widgetEdit.groupShort.markets": "Piyasa",
+  "widgetEdit.groupShort.ambient": "Araçlar",
 }

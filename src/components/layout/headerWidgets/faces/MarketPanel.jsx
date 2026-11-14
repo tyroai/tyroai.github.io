@@ -10,16 +10,14 @@ import { useMarketList } from "@/features/widgets/market/useMarketList"
 import { useLookProps } from "@/features/widgets/lookProps"
 import { CardInkContext } from "@/features/widgets/useBrandInk"
 import { useLocale } from "@/hooks/useLocale"
-import { hasFxHistory } from "@/lib/fxHistory"
 import { MARKET_CATALOG, orderedList } from "@/lib/marketCatalog"
 import { cn } from "@/lib/utils"
 import { MARKET_FACE_MAX, toggleCode } from "../faceOptions"
 import { headerFaceOf, setHeaderFace, useHeaderWidgets } from "../headerStore"
 import { RollText } from "@/components/common/RollText"
-import { MarketChart } from "@/components/market/MarketChart"
 
 const CHIP =
-  "hc-chip inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[0.71875rem] font-medium transition hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-9"
+  "hc-chip inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[0.75rem] font-medium transition hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-9"
 
 /** Seçilen kurun büyük karosu: kısa ad, değer (kayarak değişir) ve değişim hapı. */
 function QuoteTile({ row, wide, delay }) {
@@ -46,7 +44,7 @@ function QuoteTile({ row, wide, delay }) {
 
 /**
  * Header'daki Piyasa'nın kendi penceresi: header'da görünen kurlar büyük karolarda (değer kayarak
- * değişir), altında ilkinin son 30 günü (canlı çizgi grafik, `MarketChart`), sonra header'da
+ * değişir), sonra header'da
  * hangi kurların görüneceği (en çok iki — tepsiye anında geçer) ve listenin geri kalanı;
  * güncelleme saati ve yenile. Veri kartla aynı önbellekten.
  */
@@ -69,8 +67,6 @@ function Panel() {
   const face = headerFaceOf(faces, "market")
   const byId = new Map((market.data?.rows ?? []).map((r) => [r.id, r]))
   const tiles = face.codes.map((id) => byId.get(id)).filter(Boolean)
-  // Canlı grafik seçili kurların ECB geçmişi olan ilkinde (altın, BIST için kaynak yok).
-  const chartRow = tiles.find(hasFxHistory)
   const rest = orderedList(list.ids)
     .map((r) => byId.get(r.id))
     .filter((r) => r && !face.codes.includes(r.id))
@@ -89,7 +85,7 @@ function Panel() {
           />
           {t("widgets.market.title")}
         </h3>
-        <span className="flex items-center gap-1 text-[0.71875rem] text-muted-foreground">
+        <span className="flex items-center gap-1 text-[0.75rem] text-muted-foreground">
           {at && <span className="tabular-nums">{stamp(at, locale)}</span>}
           <button
             type="button"
@@ -118,11 +114,8 @@ function Panel() {
           ))}
         </div>
       )}
-      {chartRow && (
-        <MarketChart key={chartRow.id} row={chartRow} name={rowNames(chartRow, t, locale).short} />
-      )}
       <div className="mt-3">
-        <p className="text-[0.71875rem] font-medium text-muted-foreground">
+        <p className="text-[0.75rem] font-medium text-muted-foreground">
           {t("headerWidgets.catalog.codes", { n: MARKET_FACE_MAX })}
         </p>
         <div className="mt-1.5 flex flex-wrap gap-1.5">

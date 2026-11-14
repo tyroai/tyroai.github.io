@@ -1,0 +1,39 @@
+/* Cam ipucu (`InsightTip look="glass"`): koyu kart yerine yarı saydam cam — arkası bulanır ve
+   doygunlaşır, kenarda ince çizgi ve üst ışık, köşede paletin hafif parıltısı. İçerik kartın
+   mürekkebinde (`insightBody.css` › `.insight-glass`). Azaltılmış saydamlıkta düz kart. */
+.insight-glass {
+  color: var(--foreground);
+  background:
+    radial-gradient(
+      120% 70% at 0% 0%,
+      color-mix(in oklch, var(--brand-text) 9%, transparent),
+      transparent 62%
+    ),
+    color-mix(in oklch, var(--card) 76%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--foreground) 9%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    0 24px 48px -18px rgb(0 0 0 / 0.28);
+}
+.dark .insight-glass {
+  background:
+    radial-gradient(
+      120% 70% at 0% 0%,
+      color-mix(in oklch, var(--brand-text) 14%, transparent),
+      transparent 62%
+    ),
+    color-mix(in oklch, var(--card) 72%, transparent);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.1),
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 24px 48px -18px rgb(0 0 0 / 0.6);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .insight-glass {
+    background: var(--card);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

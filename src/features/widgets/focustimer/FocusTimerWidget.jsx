@@ -135,7 +135,7 @@ export function FocusTimerWidget({ className }) {
                   aria-label={primary.label}
                   className={cn(
                     ROUND,
-                    "ft-primary bg-brand-fill-deep text-brand-on-brand shadow-sm hover:brightness-110",
+                    "ft-primary bg-brand-fill-deep text-brand-on-brand shadow-sm",
                   )}
                 >
                   <HugeiconsIcon icon={primary.icon} strokeWidth={2} aria-hidden="true" />

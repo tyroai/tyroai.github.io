@@ -195,7 +195,13 @@
   color: var(--brand-solid);
 }
 @media (pointer: coarse) {
+  /* Dokunma hedefi yazı alanının kendisi: kapsül boyunca 44 px (artı ve gönder ortada). */
   .tasks-add {
+    min-height: 2.75rem;
+    padding-block: 0;
+  }
+  .tasks-add-input {
+    align-self: stretch;
     min-height: 2.75rem;
   }
   .tasks-add-plus,

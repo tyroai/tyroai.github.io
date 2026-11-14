@@ -144,7 +144,7 @@ export function FocusWindowWidget({ ctx, className }) {
                         disabled={done || busy != null}
                         onClick={() => book(w)}
                         className={cn(
-                          "inline-flex h-7 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand/[0.06] px-2.5 text-[0.71875rem] font-semibold text-brand transition hover:bg-brand/15 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-10",
+                          "inline-flex h-7 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand/[0.06] px-2.5 text-[0.75rem] font-semibold text-brand transition hover:bg-brand/15 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-10",
                           "@max-[16rem]/widget:h-9 @max-[16rem]/widget:w-full @max-[16rem]/widget:text-[0.8125rem] @max-[16rem]/widget:pointer-coarse:h-11",
                         )}
                       >

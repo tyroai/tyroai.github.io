@@ -94,7 +94,7 @@ export function NotificationsSection() {
             <Button
               type="button"
               size="sm"
-              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110 pointer-coarse:h-11"
+              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep pointer-coarse:h-11"
               onClick={allow}
             >
               {t("chat.notify.allow")}
@@ -129,7 +129,7 @@ export function NotificationsSection() {
             <Button
               type="button"
               size="sm"
-              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110 pointer-coarse:h-11"
+              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep pointer-coarse:h-11"
               onClick={() => {
                 setVerify(null)
                 notify.success(t("chat.notify.enabled"))

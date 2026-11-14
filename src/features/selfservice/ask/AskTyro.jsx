@@ -74,7 +74,7 @@ export function AskTyro({ tab, onAsk, className }) {
           type="submit"
           disabled={!text.trim()}
           aria-label={t("selfService.askBox.send")}
-          className="relative grid size-7 shrink-0 place-items-center rounded-lg bg-brand-fill-deep text-brand-on-brand transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:opacity-40 pointer-coarse:size-9 pointer-coarse:after:absolute pointer-coarse:after:-inset-1"
+          className="relative grid size-7 shrink-0 place-items-center rounded-lg bg-brand-fill-deep text-brand-on-brand transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:opacity-40 pointer-coarse:size-9 pointer-coarse:after:absolute pointer-coarse:after:-inset-1"
         >
           <HugeiconsIcon icon={ArrowUp02Icon} className="size-4" strokeWidth={2.2} />
         </button>

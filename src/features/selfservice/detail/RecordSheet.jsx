@@ -87,7 +87,7 @@ export function RecordSheet({ record, facet, person, onOpenChange, onAsk }) {
         onEscapeKeyDown={onEscapeKeyDown}
         data-layout={wide ? "wide" : "narrow"}
         className={cn(
-          "flex max-h-[88dvh] w-[calc(100vw-2rem)] max-w-none flex-col gap-0 overflow-hidden rounded-[1.375rem] p-0 sm:max-h-[88dvh] sm:pb-0",
+          "flex max-h-[88dvh] w-[calc(100vw-2rem)] max-w-none flex-col gap-0 overflow-hidden p-0 sm:max-h-[88dvh] sm:pb-0",
           "rw-window",
         )}
       >

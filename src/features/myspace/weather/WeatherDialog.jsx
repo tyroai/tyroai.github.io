@@ -120,7 +120,7 @@ export function WeatherDialog({ open, onOpenChange, w, returnFocusRef }) {
           returnFocusRef.current?.focus()
         }}
         {...skyAttrs(kind, night)}
-        className="wx-dialog wxd wxd-sky flex max-h-[min(92dvh,52rem)] flex-col gap-0 overflow-hidden rounded-[1.75rem] p-0 ring-0 sm:max-h-[min(92dvh,52rem)] sm:max-w-[40rem] sm:pb-0 md:max-w-[min(54rem,calc(100%-2rem))]"
+        className="wx-dialog wxd wxd-sky flex max-h-[min(92dvh,52rem)] flex-col gap-0 overflow-hidden p-0 ring-0 sm:max-h-[min(92dvh,52rem)] sm:max-w-[40rem] sm:pb-0 md:max-w-[min(54rem,calc(100%-2rem))]"
       >
         <DialogTitle className="sr-only">{t("myspace.weather.title")}</DialogTitle>
         <DialogDescription className="sr-only">{t("myspace.weather.desc")}</DialogDescription>

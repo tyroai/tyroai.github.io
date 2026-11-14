@@ -3,6 +3,8 @@ import Alert02Icon from "@hugeicons/core-free-icons/Alert02Icon"
 import CloudIcon from "@hugeicons/core-free-icons/CloudIcon"
 import UserAccountIcon from "@hugeicons/core-free-icons/UserAccountIcon"
 import { useLocale } from "@/hooks/useLocale"
+import { useReconnect } from "@/hooks/useReconnect"
+import { useSessionExpired } from "@/hooks/useSessionExpired"
 import { cn } from "@/lib/utils"
 import { usePhone } from "./layout/phone"
 import { erpKind } from "@/lib/causeText"
@@ -100,11 +102,17 @@ export function SelfServiceState({ status, detail, onConnect, onRetry, busy }) {
   const kind = KINDS[status] ?? KINDS.error
   const why = status === "denied" ? erpKind(detail) : null
   const connect = status === "denied" && (why === "consent" || why === "popup" || why === null)
-  const action = connect
-    ? { label: t("selfService.state.connect"), run: onConnect }
-    : status === "denied" || status === "error"
-      ? { label: t("selfService.state.retry"), run: onRetry }
-      : null
+  // Oturumun süresi dolduysa (her sayfadaki şerit açık) kart da aynı tek çareyi sunar: "Yeniden giriş
+  // yap" — çoğu zaman şifresiz, aynı sayfaya döner. Kişi iki ayrı düğme arasında seçim yapmasın.
+  const expired = useSessionExpired()
+  const { reconnect, busy: reconnecting } = useReconnect()
+  const action = expired
+    ? { label: t("session.expired.action"), run: reconnect }
+    : connect
+      ? { label: t("selfService.state.connect"), run: onConnect }
+      : status === "denied" || status === "error"
+        ? { label: t("selfService.state.retry"), run: onRetry }
+        : null
   return (
     <div className="mt-6 flex flex-col items-center rounded-[1.5rem] border border-border/70 bg-card px-6 py-10 text-center @[40rem]/ss:mt-8">
       <span
@@ -128,8 +136,9 @@ export function SelfServiceState({ status, detail, onConnect, onRetry, busy }) {
         <button
           type="button"
           onClick={action.run}
-          aria-busy={busy || undefined}
-          className="mt-5 inline-flex h-10 items-center rounded-full bg-brand-fill-deep px-5 text-[0.8125rem] font-semibold text-brand-on-brand transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11"
+          disabled={reconnecting || undefined}
+          aria-busy={busy || reconnecting || undefined}
+          className="mt-5 inline-flex h-10 items-center rounded-full bg-brand-fill-deep px-5 text-[0.8125rem] font-semibold text-brand-on-brand transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11"
         >
           {action.label}
         </button>

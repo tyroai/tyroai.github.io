@@ -26,7 +26,7 @@ export function FeedStateCard({ icon, title, body, cause, action, onAction }) {
         <button
           type="button"
           onClick={onAction}
-          className="mt-4 rounded-lg border border-border bg-background px-3 py-1.5 text-[0.75rem] font-medium text-foreground/85 transition hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:min-h-11"
+          className="mt-4 rounded-full bg-muted px-3 py-1.5 text-[0.75rem] font-medium text-foreground/85 transition hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:min-h-11"
         >
           {action}
         </button>

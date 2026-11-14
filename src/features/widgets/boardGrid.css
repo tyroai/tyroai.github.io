@@ -29,3 +29,47 @@
     opacity: 0.8;
   }
 }
+
+/* ANASAYFA'NIN TEK IZGARASI (Yedek ve Sahneler). Soru
+   kutusu kart olarak çizilmez — yerinde sayfanın altındaki yüzen sohbet çubuğu
+   (`myspace/shelf/HomeCommand`); kart kayıtta durur. İki bölgenin kutusu akıştan çıkar, kartlar tek
+   ızgaraya dizilir: karşılama kartı iki sütun, geniş ekranda dört sütun (2+1+1, ürün sahibi: tek
+   sütunluk kart üçte bir ende fazla geniş kalıyordu); dar yerde üç, iki, tek sütun. Sol sütunda
+   soru kutusunun bıraktığı boşluk kalmaz. Kurallar panonun kabına bakar. */
+:is(.hs-home, .hs-scn) [data-widget-slot="ask"] {
+  display: none;
+}
+:is(.hs-home, .hs-scn) .board-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-flow: row dense;
+  gap: 1rem;
+}
+:is(.hs-home, .hs-scn) .board-split > div {
+  display: contents;
+}
+/* Tek ızgarada iki "Widget ekle" karosu olmaz: sol bölgeninki gizlenir, sondaki kalır. */
+:is(.hs-home, .hs-scn) .board-split > div:first-child > [data-tour="edit-add"] {
+  display: none;
+}
+@container myspace (min-width: 34rem) {
+  :is(.hs-home, .hs-scn) .board-split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(15rem, auto) minmax(15rem, auto);
+    grid-auto-rows: 15rem;
+  }
+  :is(.hs-home, .hs-scn) [data-widget-slot="tyro-welcome"] {
+    grid-column: span 2;
+  }
+}
+@container myspace (min-width: 46rem) {
+  :is(.hs-home, .hs-scn) .board-split {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: minmax(15rem, auto);
+  }
+}
+@container myspace (min-width: 62rem) {
+  :is(.hs-home, .hs-scn) .board-split {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

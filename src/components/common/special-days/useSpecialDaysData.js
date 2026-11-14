@@ -12,7 +12,8 @@ import { specialDaysOfYear, isoOf } from "@/data/specialDays"
  * pencere `lib/weekStart.js`) ve İK kütüğünden kutlamalar (`useCelebrations`ın önbelleği, ek
  * istek yok). Yaklaşanlar BUGÜNE göre — takvimde gezilen yıla göre değil: rozet gezinmeyle
  * değişmesin; yıl sonunda gelecek yılın ilk tatilleri de girer. Kişinin kendisi listede kalır
- * ("Senin günün") ama rozete girmez (`self`).
+ * ("Senin günün") ama rozete girmez (`self`). `peopleLoading`: kütük okunuyor (panel iskelet
+ * çizer); okunamadıysa ikisi de `false` (kutlama bölümleri hiç çizilmez).
  */
 export function useSpecialDaysData() {
   const { locale } = useLocale()
@@ -30,6 +31,7 @@ export function useSpecialDaysData() {
   const celebrations = useCelebrations()
   const ids = useMyIdentity()
   const peopleKnown = celebrations.status === STATUS.ready
+  const peopleLoading = celebrations.status === "loading"
   const people = useMemo(() => {
     if (!peopleKnown) return []
     const pick = (list, kind) =>
@@ -41,5 +43,5 @@ export function useSpecialDaysData() {
     ]
   }, [celebrations, ids, peopleKnown])
 
-  return { today, todayIso, soon, people, peopleKnown }
+  return { today, todayIso, soon, people, peopleKnown, peopleLoading }
 }

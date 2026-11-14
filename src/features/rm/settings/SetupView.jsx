@@ -120,7 +120,7 @@ export function SetupView() {
                         className="inline-flex h-7 items-center gap-1.5 rounded-full bg-foreground/[0.05] px-2.5 text-xs text-foreground/85 dark:bg-white/[0.07]"
                       >
                         {tag ? (
-                          <span className="text-[0.625rem] font-semibold text-foreground/60">
+                          <span className="text-[0.6875rem] font-semibold text-foreground/60">
                             {tag}
                           </span>
                         ) : null}

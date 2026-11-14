@@ -95,7 +95,7 @@ export function UpdateCard({ release, onApply, onLater }) {
         <div className="min-w-0 flex-1 p-4 sm:p-5">
           <p
             lang={locale}
-            className="update-card__eyebrow text-[0.625rem] font-semibold uppercase tracking-[0.13em]"
+            className="update-card__eyebrow text-[0.6875rem] font-semibold uppercase tracking-[0.13em]"
           >
             {when ? t("update.eyebrowAt", { when }) : t("update.eyebrow")}
           </p>

@@ -96,6 +96,12 @@ export const localStorageRegistry = [
   { match: ["tyro-request-drafts-v1"], labelKey: "settings.general.storage.requestDrafts" },
   { match: ["tyro-ss-alerts-dismissed"], labelKey: "settings.general.storage.ssAlerts" },
   { match: ["tyro-home-layout-v1"], labelKey: "settings.general.storage.homeLayout" },
+  // Anasayfa'nın sayfa düzenleri: sahnelerin düzenleri ve seçimi, TYRO'nun bugünkü seçiminde
+  // kaldırılanlar — yalnız widget kimlikleri, sahne adları ve kurallar.
+  {
+    match: ["tyro-home-scene-*"],
+    labelKey: "settings.general.storage.homeLayouts",
+  },
   { match: ["tyro-widgets-*"], labelKey: "settings.general.storage.widgets" },
   // Rapor günü: takvime eklenen yayınlar (rapor kimliği ve tarih) — iki kez eklenmesin.
   { match: ["tyro-report-day-v1"], labelKey: "settings.general.storage.reportDay" },
@@ -112,6 +118,9 @@ export const localStorageRegistry = [
   { match: ["tyro-photo-*"], labelKey: "settings.general.storage.photo" },
   { match: ["tyro-orb-*"], labelKey: "settings.general.storage.orb" },
   { match: ["tyro-edge-notch-*"], labelKey: "settings.general.storage.edgeNotch" },
+  { match: ["tyro-page-layout-v1"], labelKey: "settings.general.storage.pageLayout" },
+  { match: ["tyro-scene-strip-v1"], labelKey: "settings.general.storage.sceneStrip" },
+  { match: ["tyro-snap-*"], labelKey: "settings.general.storage.snapshots" },
   { match: ["tyro-radio-v1"], labelKey: "settings.general.storage.radio" },
   { match: ["tyro-weather-estate"], labelKey: "settings.general.storage.weather" },
   { match: ["tyro-shared-calendars"], labelKey: "settings.general.storage.sharedCalendars" },

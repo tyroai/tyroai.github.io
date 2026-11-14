@@ -64,7 +64,7 @@ export function SelfHero({ profile, team, tray, people, showMeta = true, band = 
     </span>
   )
   const personnel = profile?.personnel && (
-    <span className={cn("shrink-0 text-[0.8125rem] tabular-nums", SOFT_INK)}>
+    <span data-private="" className={cn("shrink-0 text-[0.8125rem] tabular-nums", SOFT_INK)}>
       <span className="sr-only">{t("selfService.profile.personnel")} </span>#{profile.personnel}
     </span>
   )

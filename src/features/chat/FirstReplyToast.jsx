@@ -33,12 +33,13 @@ export function FirstReplyToast({ title, body, compact = false }) {
       initial={{ opacity: 0, y: -28, scale: 0.92 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: "spring", stiffness: 420, damping: 26, mass: 0.9 }}
-      // Sağ panelde panelin genişliğine sığar (panel en az 340, varsayılan 420 px).
-      className={cn(TOAST_SURFACE, compact && "w-[min(360px,calc(100vw-2rem))]")}
+      // Sağ panelde küçük (ürün sahibi: "çok büyük, biraz küçültelim"): panelin genişliğine sığar
+      // (panel en az 340, varsayılan 420 px), boşluklar ve rozet daha küçük.
+      className={cn(TOAST_SURFACE, compact && "w-[min(320px,calc(100vw-2rem))] gap-3 p-3")}
     >
-      {/* Rozet 72px, orb 64: paket 20 ve 64 için AYRI tasarım gönderiyor ve
-          20'de bantların dönüşü okunmuyor. */}
-      <div className="relative size-[4.5rem] shrink-0">
+      {/* Rozet 72px, orb 64 (panelde 48 px rozet, orb 64'ün tasarımı %72 küçültülmüş ≈ 46 px). Paket
+          yalnız 64 · 32 · 20 boylarını taşır (başka boy çöker); 20'de bantların dönüşü okunmuyor. */}
+      <div className={cn("relative shrink-0", compact ? "size-12" : "size-[4.5rem]")}>
         <span
           aria-hidden="true"
           className="absolute -inset-1 rounded-2xl bg-[var(--badge)]/20 blur-md"
@@ -49,14 +50,36 @@ export function FirstReplyToast({ title, body, compact = false }) {
           className="relative grid size-full place-items-center"
         >
           <Suspense fallback={null}>
-            <ThinkingOrb state="composing" size={64} speed={1.2} theme="dark" aria-hidden="true" />
+            <span className={cn("grid place-items-center", compact && "scale-[0.72]")}>
+              <ThinkingOrb
+                state="composing"
+                size={64}
+                speed={1.2}
+                theme="dark"
+                aria-hidden="true"
+              />
+            </span>
           </Suspense>
         </span>
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="text-[0.9375rem] font-semibold tracking-tight text-white">{title}</p>
-        <p className="mt-1 text-[0.78125rem] leading-snug text-white/60">{body}</p>
+        <p
+          className={cn(
+            "font-semibold tracking-tight text-white",
+            compact ? "text-[0.875rem]" : "text-[0.9375rem]",
+          )}
+        >
+          {title}
+        </p>
+        <p
+          className={cn(
+            "mt-0.5 leading-snug text-white/60",
+            compact ? "text-[0.75rem]" : "text-[0.8125rem]",
+          )}
+        >
+          {body}
+        </p>
       </div>
     </motion.div>
   )

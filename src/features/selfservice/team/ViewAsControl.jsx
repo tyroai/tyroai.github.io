@@ -87,7 +87,7 @@ export function ViewAsBanner({ asUpn, subject, onClear }) {
         type="button"
         onClick={onClear}
         aria-label={t("selfService.team.as.clear")}
-        className="grid size-7 shrink-0 place-items-center rounded-full text-brand-ink hover:bg-brand/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+        className="grid size-7 shrink-0 place-items-center rounded-full text-brand-ink hover:bg-brand/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 relative pointer-coarse:after:absolute pointer-coarse:after:-inset-2"
       >
         <HugeiconsIcon icon={Cancel01Icon} className="size-3.5" strokeWidth={2.2} />
       </button>

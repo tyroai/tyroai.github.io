@@ -250,7 +250,7 @@ export class ErrorBoundary extends Component {
             <Button
               type="button"
               onClick={this.reload}
-              className="h-9 rounded-lg bg-brand-fill-deep px-4 text-[0.8125rem] font-semibold text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110 [@media(pointer:coarse)]:min-h-11"
+              className="h-9 rounded-lg bg-brand-fill-deep px-4 text-[0.8125rem] font-semibold text-brand-on-brand hover:bg-brand-fill-deep [@media(pointer:coarse)]:min-h-11"
             >
               {this.text("error.boundary.reload")}
             </Button>
@@ -274,7 +274,7 @@ export class ErrorBoundary extends Component {
               {messageOf(error)}
             </p>
             {stack && (
-              <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/50 px-3 py-2 font-mono text-[0.625rem] leading-relaxed text-muted-foreground">
+              <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/50 px-3 py-2 font-mono text-[0.6875rem] leading-relaxed text-muted-foreground">
                 {stack}
               </pre>
             )}

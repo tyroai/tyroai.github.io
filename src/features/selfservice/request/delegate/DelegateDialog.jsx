@@ -22,7 +22,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const SECONDARY =
   "h-11 shrink-0 rounded-full border border-border bg-background px-5 text-[0.8125rem] font-semibold text-foreground/85 shadow-xs transition hover:bg-foreground/[0.04] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-12"
 const PRIMARY =
-  "inline-flex h-11 items-center justify-center gap-2.5 rounded-full bg-brand-fill-deep px-5 text-[0.875rem] font-semibold text-brand-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.45)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background pointer-coarse:h-12"
+  "inline-flex h-11 items-center justify-center gap-2.5 rounded-full bg-brand-fill-deep px-5 text-[0.875rem] font-semibold text-brand-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.45)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background pointer-coarse:h-12"
 
 /**
  * "Yeni" menüsünün dördüncü düğmesi: Temsilci ata. Talep formlarıyla aynı çerçeve — masaüstünde
@@ -143,7 +143,7 @@ export function DelegateDialog({ open, onClose, from = null, initial = null }) {
           e.preventDefault()
           from.focus?.()
         }}
-        className="flex max-h-[88dvh] w-[calc(100vw-2rem)] max-w-none flex-col gap-0 overflow-hidden rounded-[1.375rem] p-0 sm:max-h-[88dvh] sm:max-w-[min(40rem,calc(100vw-3rem))] sm:pb-0"
+        className="flex max-h-[88dvh] w-[calc(100vw-2rem)] max-w-none flex-col gap-0 overflow-hidden p-0 sm:max-h-[88dvh] sm:max-w-[min(40rem,calc(100vw-3rem))] sm:pb-0"
       >
         <RequestHeader
           icon={UserSwitchIcon}

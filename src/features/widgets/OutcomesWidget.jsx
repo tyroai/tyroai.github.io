@@ -25,9 +25,9 @@ const OPTS_WHEN = { weekday: "short", hour: "2-digit", minute: "2-digit", hourCy
 // Dar kart (içerik < 22rem): sayfada TEK toplantı — eylemler alt satıra iner.
 const NARROW_PX = 352
 const BTN =
-  "inline-flex h-7 shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 text-[0.71875rem] font-semibold transition pointer-coarse:h-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:opacity-60"
+  "inline-flex h-7 shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 text-[0.75rem] font-semibold transition pointer-coarse:h-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:opacity-60"
 const CTA =
-  "inline-flex h-8 items-center rounded-full bg-brand-fill-deep px-3.5 text-[0.75rem] font-semibold text-brand-on-brand transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+  "inline-flex h-8 items-center rounded-full bg-brand-fill-deep px-3.5 text-[0.75rem] font-semibold text-brand-on-brand transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
 
 /**
  * Bir toplantının özet durumunu yukarı bildirir, kendisi bir şey çizmez:
@@ -74,7 +74,7 @@ function Row({ event, actions, names }) {
       <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-2">
         {/* Dar kartta saat ve rozet kendi satırında, eylemler altında alt alta tam
             genişlik: sığmayınca rozet düğmenin altına giriyor, etiket kırılıyordu. */}
-        <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5 text-[0.71875rem] text-muted-foreground @max-[22rem]/widget:basis-full">
+        <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5 text-[0.75rem] text-muted-foreground @max-[22rem]/widget:basis-full">
           <span className="truncate">{when}</span>
           {actions.length ? (
             <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-background/80 px-1.5 py-0.5 text-[0.6875rem] font-medium text-foreground/75 ring-1 ring-border">

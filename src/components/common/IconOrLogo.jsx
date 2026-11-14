@@ -13,7 +13,7 @@ export function IconOrLogo({ iconName, logo, className, size, strokeWidth = 1.6,
     return (
       <span
         className={cn(
-          "inline-flex items-center justify-center text-[0.625rem] font-semibold opacity-60",
+          "inline-flex items-center justify-center text-[0.6875rem] font-semibold opacity-60",
           className,
         )}
       >

@@ -6,6 +6,11 @@ import { markSeen, pendingSteps, tourState } from "./tourStore"
 const START_DELAY_MS = 1200
 const REPLAY_DELAY_MS = 400
 const POLL_MS = 800
+// Hedefler gelene dek en çok ~8 sn bakılır.
+const REPLAY_TRIES = 10
+// Tur ilk adımından başlar: o adımın hedefi henüz çizilmediyse (karşılama kartı sahne seçicisinden
+// sonra geliyor) beklenir; yoksa tur ikinci adımdan açılıp ilkini hiç göstermiyordu.
+const startsAtFirst = (steps, all) => steps.length > 0 && steps[0].id === all[0]?.id
 
 // Aynı anda TEK tur: Anasayfa turu sürerken düzenleme turu ya da formun ipuçları bekler.
 let active = null
@@ -47,12 +52,19 @@ export function useTourTrigger(id, def, { when = true, page = false, insideDialo
       return undefined
     }
     let timer
+    let tries = 0
     const attempt = () => {
       if ((!insideDialog && dialogOpen()) || !claimTour(id)) {
         timer = setTimeout(attempt, POLL_MS)
         return
       }
       const steps = visibleSteps(pending.steps)
+      if (!startsAtFirst(steps, pending.steps) && tries < REPLAY_TRIES) {
+        releaseTour(id)
+        tries += 1
+        timer = setTimeout(attempt, POLL_MS)
+        return
+      }
       if (!steps.length) {
         releaseTour(id)
         return
@@ -80,15 +92,25 @@ export function useTourTrigger(id, def, { when = true, page = false, insideDialo
     setReplaying(true)
   }, [replay, when, def, setParams])
 
+  // Hedefler henüz çizilmediyse (sayfanın parçası yavaş iniyor) birkaç kez daha bakılır: önce
+  // 0,4 sn'de hedef yoksa tur sessizce hiç açılmıyordu ("Rehber turları"ndan Anasayfa).
   useEffect(() => {
     if (!replaying || !when) return undefined
-    const timer = setTimeout(() => {
-      setReplaying(false)
+    let tries = 0
+    let timer
+    const attempt = () => {
       const steps = visibleSteps(def.steps)
+      if (!startsAtFirst(steps, def.steps) && tries < REPLAY_TRIES) {
+        tries += 1
+        timer = setTimeout(attempt, POLL_MS)
+        return
+      }
+      setReplaying(false)
       if (!steps.length || !claimTour(id)) return
       markSeen(id, def.version)
       setRun({ steps, delta: false, replay: true })
-    }, REPLAY_DELAY_MS)
+    }
+    timer = setTimeout(attempt, REPLAY_DELAY_MS)
     return () => clearTimeout(timer)
   }, [replaying, when, id, def])
 

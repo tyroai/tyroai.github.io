@@ -25,7 +25,7 @@ export function EarlierConversationDivider({ at }) {
   return (
     <div className="flex items-center gap-2.5 px-1 pb-1" role="separator">
       <span className="h-px flex-1 bg-border/60" />
-      <span className="whitespace-nowrap text-[0.65625rem] font-medium uppercase tracking-wider text-muted-foreground/70">
+      <span className="whitespace-nowrap text-[0.6875rem] font-medium uppercase tracking-wider text-muted-foreground/70">
         {t("chat.session.earlier", "Önceki konuşma")}
         {stamp ? ` · ${stamp}` : ""}
       </span>

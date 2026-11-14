@@ -68,7 +68,7 @@ export function MeetingCountdown({ alert }) {
         // Yalnız kişinin eylemi küçültür (Esc, ×, arka plana tıklama): başka bir
         // pencere ya da kompozitör odağı alınca kart sessizce küçülmesin.
         onFocusOutside={(e) => e.preventDefault()}
-        className="w-[min(26rem,calc(100vw-2rem))] gap-0 overflow-visible rounded-3xl p-0 sm:max-w-[26rem]"
+        className="w-[min(26rem,calc(100vw-2rem))] gap-0 overflow-visible p-0 sm:max-w-[26rem]"
       >
         {/* Son dakikada kartın çevresi nabız gibi parlar. */}
         {final && !still && (

@@ -129,7 +129,7 @@ export function TodoAddBar({ board, view, today, onAdded, inputRef, compact = fa
         <button
           type="submit"
           disabled={!draft.trim()}
-          className="h-8 rounded-full bg-brand-fill-deep px-3.5 text-[0.75rem] font-semibold text-brand-on-brand shadow-sm transition hover:brightness-110 disabled:opacity-40 pointer-coarse:h-11 pointer-coarse:px-4"
+          className="h-8 rounded-full bg-brand-fill-deep px-3.5 text-[0.75rem] font-semibold text-brand-on-brand shadow-sm transition disabled:opacity-40 pointer-coarse:h-11 pointer-coarse:px-4"
         >
           {t("todo.add.submit")}
         </button>

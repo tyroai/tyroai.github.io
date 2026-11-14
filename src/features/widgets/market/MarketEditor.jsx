@@ -116,7 +116,7 @@ export default function MarketEditor({ list, byId, indicativeHint, source }) {
         <button
           type="button"
           onClick={list.reset}
-          className="inline-flex h-8 items-center rounded-full border border-border bg-background px-3 text-[0.75rem] font-medium transition hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+          className="inline-flex h-8 items-center rounded-full bg-muted px-3 text-[0.75rem] font-medium transition hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
         >
           {t("widgets.market.edit.reset")}
         </button>

@@ -20,7 +20,7 @@
  */
 
 /** Kartın görünümü (`layout.js`; Standart · Renkli · Cam · Açık · Koyu · sade). */
-export type WidgetLook = "palette" | "glass" | "plain" | "standard" | "light" | "dark"
+export type WidgetLook = "palette" | "glass" | "plain" | "standard" | "light" | "dark" | "hybrid"
 
 /** Header yüzünde gösterilebilecek bilgi. */
 export type HeaderShow = "value" | "range" | "icon" | "unread" | "late"
@@ -56,9 +56,11 @@ export interface WidgetDef {
 export const REGISTRY = {
   // Hava kartları kendi göğünü taşır: görünüm seçeneği yok. Header'da selamlamasız çizilir
   // ("İyi günler, Ömer!" tepside fazlalık).
+  // Hava kartı panodan kalktı (ürün sahibi; ilk kart Karşılama kartı): yalnız header'da.
   weather: {
     title: "widgets.weather.title",
     looks: false,
+    board: false,
     data: "weather",
     header: {
       shows: ["value", "range", "icon"],
@@ -68,16 +70,24 @@ export const REGISTRY = {
       desc: "headerWidgets.desc.weather",
     },
   },
-  // Hava kartının alternatifleri: eklenince sol sütunun başına. `ownPalette`: Renkli'yi kendisi
-  // çizer (genel palet tonu ona uygulanmaz). Selamlama ve süs kartları header'a girmez.
-  intro: {
-    title: "widgets.intro.title",
+  "weather-plain": {
+    title: "myspace.weather.title",
     zone: "left",
-    looks: ["palette", "glass", "plain"],
+    looks: false,
+    board: false,
+    header: false,
+  },
+  // Karşılama kartı: Anasayfa'nın ilk kartı — telefondaki karşılama çekmecesinin widget hâli (Yeni ·
+  // TYRO kapsülü yok).
+  "tyro-welcome": {
+    title: "widgets.welcomeCard.title",
+    zone: "left",
+    // Görünüm ••• menüsünden (ürün sahibi): Renkli (paletin gradyanı, kendi paleti seçilebilir) ·
+    // Açık · Hibrit (beyaz kart, öneri kapsülü Renkli) · Cam. Renkli'yi kendisi çizer (`ownPalette`).
+    looks: ["palette", "light", "hybrid", "glass"],
     ownPalette: true,
     header: false,
   },
-  "weather-plain": { title: "myspace.weather.title", zone: "left", looks: false, header: false },
   // Soru kutusunun yerine TYRO düğmesi zaten header'da.
   ask: { title: "widgets.ask.title", wide: true, header: false },
   // Anasayfa'nın kendi kartları: özet balonu ve yardım küresi.
@@ -123,7 +133,7 @@ export const REGISTRY = {
   // gümüş; kurlar Piyasa'yla aynı önbellekten). Header'da ve Denetim Merkezi'nde penceresi kartın kendisi.
   "tyro-fx": { title: "widgets.fx.title" },
   // Çevir: yapıştırılan metni TR · EN · RU · AR'ye çevirir — cihazda (tarayıcının çeviri modeli),
-  // olmazsa TYRO sohbette. Metin kişisel: Sunum modunda bulanık, hiçbir yere kaydedilmez.
+  // olmazsa TYRO sohbette. Metin kişisel: Sunum modunda rakamları gizli, hiçbir yere kaydedilmez.
   "tyro-translate": { title: "widgets.translate.title" },
   // Bölge havası: üretim bölgelerinde yağış normale göre, toprak nemi ve tahmin (herkese açık veri).
   "region-weather": { title: "widgets.region.title" },

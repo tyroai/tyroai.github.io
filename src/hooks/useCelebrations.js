@@ -12,7 +12,8 @@ import { onSessionClear, PERSONAL_STORAGE } from "@/lib/sessionCache"
  * ⚠️ **NEDEN DİSKE YAZIYORUZ.** Sorgu ~3 sn sürüyor (ölçüldü) ve liste
  * günde en fazla bir kez değişiyor — doğum tarihi hiç değişmiyor, kadro
  * yavaş. Her sekme açılışında yeniden çekmek o 3 saniyeyi bedelsiz sanmaktı
- * (istek, 2026-09-22: *"localStorage'ta tutup 12 saatte bir çekebilirsin"*).
+ * Kayıt GÜNLÜK: günün ilk açılışında çekilir, ertesi güne kadar yeniden sorulmaz (ürün sahibinin
+ * kararı; önce 12 saatti).
  *
  * ⚠️ **AMA BU BAŞKALARININ VERİSİ — ÜÇ KORUMA ŞART:**
  *
@@ -30,16 +31,17 @@ import { onSessionClear, PERSONAL_STORAGE } from "@/lib/sessionCache"
  *    onu da siliyor.
  *
  * ⚠️ **BAYAT KAYIT EKRANA ÇIKAR, AMA "BUGÜNE" ÇEVRİLEREK.** `narrowToToday`
- * her okumada `inDays` ve kaçıncı yıl olduğunu YENİDEN hesaplıyor; kayıt 12
- * saat önce "yarın" diyorsa bugün "bugün" der. Pencereye eklenen 2 günlük
+ * her okumada `inDays` ve kaçıncı yıl olduğunu YENİDEN hesaplıyor (kayıt aynı günün olduğu için
+ * bugünün hesabı her zaman doğru). Pencereye eklenen 2 günlük
  * pay da bunun için (gerekçe `WINDOW_SLACK_DAYS`).
  */
 const KEY = PERSONAL_STORAGE.celebrations.key
-const TTL_MS = 12 * 60 * 60 * 1000
+/** Kayıt yalnız alındığı yerel gün geçerli: günün ilk açılışında okunur, ertesi güne dek sorulmaz. */
+const sameDay = (a, b) => new Date(a).toDateString() === new Date(b).toDateString()
 /**
  * ⚠️ **ALAN EKLENİNCE SÜRÜM ARTAR.** 1 → 2: kayda `joiners` (bugün işe
  * başlayanlar) eklendi. Artırılmasaydı eski bir kayıt `joiners`sız okunur
- * ve tarih hapının rozeti, kayıt bayatlayana kadar (12 saat) eksik sayardı —
+ * ve tarih hapının rozeti, kayıt bayatlayana kadar (gün sonu) eksik sayardı —
  * ekranda hiçbir hata görünmeden. Sürüm uyuşmayan kayıt yok sayılır, bir
  * sonraki okuma ağdan gelir.
  */
@@ -68,7 +70,7 @@ function readStored(now) {
     if (snap.owner !== currentOwner()) return null
     if (!Array.isArray(snap.birthdays) || !Array.isArray(snap.anniversaries)) return null
     if (!Array.isArray(snap.joiners)) return null
-    if (!(now - snap.at < TTL_MS)) return null
+    if (!sameDay(snap.at, now)) return null
     return {
       status: STATUS.ready,
       birthdays: snap.birthdays,
@@ -116,7 +118,7 @@ onSessionClear(clearCelebrationsCache)
  * İsteği React'tan ÖNCE başlatır — kabuk mount olurken çağrılır.
  *
  * ⚠️ **KAYIT TAZEYSE AĞA HİÇ ÇIKILMAZ.** Ölçüldü: sorgu ~3 sn (eskiden ~12);
- * 12 saat içinde ikinci kez ödemenin karşılığı yok.
+ * aynı gün içinde ikinci kez ödemenin karşılığı yok.
  */
 export function primeCelebrations() {
   if (cache) return

@@ -57,7 +57,7 @@ function Row({ item }) {
           </span>
         )}
       </span>
-      <span className="flex shrink-0 items-center gap-0.5 text-[0.71875rem] font-medium text-brand">
+      <span className="flex shrink-0 items-center gap-0.5 text-[0.75rem] font-medium text-brand">
         <span className="rq-action">{row.action}</span>
         <HugeiconsIcon
           icon={ArrowRight01Icon}

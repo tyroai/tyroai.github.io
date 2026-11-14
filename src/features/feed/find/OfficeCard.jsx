@@ -81,7 +81,7 @@ export function OfficeCard({ office, now, homeTz, query, people, photos, onPeopl
             )}
           </p>
           {clock.diff !== 0 && (
-            <p className="mt-1 flex items-center gap-1 text-[0.71875rem] font-medium tabular-nums text-foreground/75">
+            <p className="mt-1 flex items-center gap-1 text-[0.75rem] font-medium tabular-nums text-foreground/75">
               <HugeiconsIcon
                 icon={Clock01Icon}
                 className="size-3 text-muted-foreground"

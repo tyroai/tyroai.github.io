@@ -1,4 +1,5 @@
 import { apiAll, dvApi } from "./dataverse"
+import { syncTradeAccess } from "./tradeAccessSync"
 
 /**
  * ═══════════════════════════════════════════════════════════════════════
@@ -268,6 +269,7 @@ export async function createAuthorization({ upn, apps = [], isAdmin = false }) {
         tyro_isadmin: Boolean(isAdmin),
       }),
     })
+    await syncTradeAccess(null, { upn: key, apps })
     return row ? toAuthorization(row) : null
   } catch (err) {
     throw asDuplicate(err)
@@ -287,6 +289,7 @@ export async function createAuthorization({ upn, apps = [], isAdmin = false }) {
 export async function updateAuthorizationUpn(id, upn) {
   const key = String(upn ?? "").trim()
   if (!key) throw new Error("UPN bos olamaz")
+  const before = await readForSync(id)
   try {
     await dvApi(`/${AUTH_SET}(${id})`, {
       method: "PATCH",
@@ -295,6 +298,7 @@ export async function updateAuthorizationUpn(id, upn) {
   } catch (err) {
     throw asDuplicate(err)
   }
+  if (before) await syncTradeAccess(before, { ...before, upn: key })
 }
 
 /**
@@ -309,7 +313,19 @@ export async function updateAuthorizationUpn(id, upn) {
  * haberi yok.
  */
 export async function deleteAuthorization(id) {
+  const before = await readForSync(id)
   await dvApi(`/${AUTH_SET}(${id})`, { method: "DELETE" })
+  if (before) await syncTradeAccess(before, null)
+}
+
+/**
+ * Yazmadan ÖNCEKİ hâl — tyroTrade eşitlemesi (`tradeAccessSync.js`) app'in eklenip
+ * çıkarıldığını ve adres değişimini buradan anlar. Okunamazsa eşitleme atlanır, tyro'nun
+ * işi düşmez.
+ */
+async function readForSync(id) {
+  const r = await dvApi(`/${AUTH_SET}(${id})?$select=tyro_useremail,tyro_apps`).catch(() => null)
+  return r ? { upn: r.tyro_useremail ?? "", apps: parseApps(r.tyro_apps) } : null
 }
 
 /** Seçilen app adlarını `;` ile birleştirip yazar. Boş seçim alanı
@@ -317,10 +333,12 @@ export async function deleteAuthorization(id) {
  *  "app atanmamış" ile "bir şey yazılmış ama boş" ayrımıdır. */
 export async function updateAuthorizedApps(id, apps) {
   const value = apps.length ? apps.join(APP_SEPARATOR) : null
+  const before = await readForSync(id)
   await dvApi(`/${AUTH_SET}(${id})`, {
     method: "PATCH",
     body: JSON.stringify({ tyro_apps: value }),
   })
+  if (before) await syncTradeAccess(before, { ...before, apps })
 }
 
 /**
@@ -445,6 +463,7 @@ export async function approveRequest({ upn, app, requestId }) {
         tyro_isadmin: false,
       }),
     })
+    await syncTradeAccess(null, { upn, apps: [app] })
   }
   await setRequestCompleted(requestId, true)
 }

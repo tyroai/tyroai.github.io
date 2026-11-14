@@ -1,17 +1,16 @@
 import { useSyncExternalStore } from "react"
 import {
   DEFAULT_MASCOT_SETTINGS,
-  DEFAULT_ORB_STYLE,
+  ORB_STYLE,
   readMascotSettings,
-  readOrbStyle,
   subscribeMascotSettings,
-  subscribeOrbStyle,
 } from "@/lib/orbStyle"
 
-/** Seçili orb görünümünün kimliği (`sphere` · `mascot`); depo değişince yeniden çizer. */
-export function useOrbStyle() {
-  return useSyncExternalStore(subscribeOrbStyle, readOrbStyle, () => DEFAULT_ORB_STYLE)
-}
+/**
+ * Orb görünümünün kimliği. Seçim kaldırıldı: herkeste `mascot` (`lib/orbStyle`). Ad ve imza
+ * aynı kaldı ki görünüme göre ölçü seçen çağrı yerleri değişmesin.
+ */
+export const useOrbStyle = () => ORB_STYLE
 
 /**
  * Maskotun kayıtlı görünüş ayarları.

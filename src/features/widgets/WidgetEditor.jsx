@@ -9,7 +9,16 @@ import { members, shownId, step as stepOp } from "./layoutOps"
 import { WidgetCatalog } from "./WidgetCatalog"
 import { lookNotice } from "./lookSwatch"
 import { useHeaderMove } from "./useHeaderMove"
-import { WidgetEditorContext } from "./widgetEditorContext"
+import { useWidgetEditor, WidgetEditorContext } from "./widgetEditorContext"
+
+/**
+ * Sayfanın düzenleyiciye bağlanan parçası (Sahneler'in paneli): `children(actions)` — katalog
+ * penceresini açmak gibi düzenleyici eylemleri sayfaya verir.
+ */
+export function EditorSlot({ children }) {
+  const { actions } = useWidgetEditor()
+  return children(actions)
+}
 
 const UNDO_MS = 8000
 

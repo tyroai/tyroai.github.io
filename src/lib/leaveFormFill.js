@@ -1,8 +1,10 @@
 /**
  * Sohbetteki izin formunu (HR MCP) tyro'nun bildikleriyle tamamlar — saf, testli.
  *
- * HR MCP formu ERP'den basar; Şirketi · Bölümü · Pozisyon ise Self Servis profil başlığında ne
- * yazıyorsa o olmalı (Graph birincil, istek üzerine). HR MCP'nin ERP değeri yedek olarak kalır.
+ * HR MCP formu ERP'den basar; kişi bilgisi ise Self Servis profil başlığında ne yazıyorsa o
+ * olmalı (Graph birincil, istek üzerine): Ad Soyad · Sicil No · İşe Giriş · Şirketi · Bölümü ·
+ * Pozisyon. HR MCP'nin ERP değeri yedek olarak kalır. Ad formda dört yerde geçer (hücre, başlık
+ * satırı, belge başlığı, imzanın altı) ve dördü birlikte değişir; sicil başlık satırındadır.
  *
  * Hücreler `data-f="<anahtar>"` ile işaretli (`leaveFormSheet.js` ve HR MCP aynı biçimi basar).
  * Boş değer hücreye yazılmaz: bilmediğimiz yerde ERP'nin değeri kalır.
@@ -51,13 +53,36 @@ export function isFillableLeaveForm(html) {
   return typeof html === "string" && html.includes('data-f="company"')
 }
 
+// Başlık satırı: "<ad> · Sicil No <sicil>" (`leaveFormSheet.js` ve HR MCP aynı biçimi basar).
+const SUB_RE = /<p class="sub">([^<]*) · Sicil No ([^<]*)<\/p>/
+const TITLE_RE = /<title>Personel İzin\/Görev Formu · [^<]*<\/title>/
+// İmzanın altındaki ad. "Personel İmzası" satırının kendisi `signedForm.js` ile SÖZLEŞME: dokunulmaz.
+const SIGN_NAME_RE = /(<span>Personel İmzası<\/span><\/div><p>)[^<]*(<\/p>)/
+
+function setName(html, value) {
+  const name = esc(String(value ?? "").trim())
+  if (!name) return html
+  return setCell(html, "name", value)
+    .replace(SUB_RE, (_, _old, no) => `<p class="sub">${name} · Sicil No ${no}</p>`)
+    .replace(TITLE_RE, () => `<title>Personel İzin/Görev Formu · ${name}</title>`)
+    .replace(SIGN_NAME_RE, (_, open, close) => `${open}${name}${close}`)
+}
+
+function setPersonnel(html, value) {
+  const no = esc(String(value ?? "").trim())
+  if (!no) return html
+  return html.replace(SUB_RE, (_, name) => `<p class="sub">${name} · Sicil No ${no}</p>`)
+}
+
 /**
  * @param {string} html
- * @param {{ company?: string, department?: string, position?: string }} values
+ * @param {{ name?: string, personnel?: string, hire?: string, company?: string,
+ *   department?: string, position?: string }} values
  */
 export function fillLeaveForm(html, values = {}) {
   if (!isFillableLeaveForm(html)) return html
-  let out = html
-  for (const key of ["company", "department", "position"]) out = setCell(out, key, values[key])
+  let out = setPersonnel(setName(html, values.name), values.personnel)
+  for (const key of ["hire", "company", "department", "position"])
+    out = setCell(out, key, values[key])
   return out
 }

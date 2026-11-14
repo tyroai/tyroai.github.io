@@ -264,12 +264,7 @@ export function PlaceTile({
   wide = false,
 }) {
   return (
-    <li
-      className={cn(
-        "group/tile relative min-w-0 transition motion-safe:hover:-translate-y-0.5",
-        wide && "col-span-full",
-      )}
-    >
+    <li className={cn("group/tile relative min-w-0", wide && "col-span-full")}>
       <Link to={href} onClick={() => onNavigate?.(item)} className={cn(TILE, menu && "pr-11")}>
         <span className={TILE_CHIP}>
           <HugeiconsIcon icon={glyph} className="size-5" strokeWidth={1.8} />
@@ -296,7 +291,7 @@ export function PlaceTile({
 /** Ekip: adresi yok (kitaplık tıklayınca çözülür) → düğme; ⋯ yok, çözülürken döner. */
 export function TeamTile({ item, pending, onOpenGroup }) {
   return (
-    <li className="group/tile relative min-w-0 transition motion-safe:hover:-translate-y-0.5">
+    <li className="group/tile relative min-w-0">
       <button
         type="button"
         onClick={() => !pending && onOpenGroup?.(item)}
@@ -381,10 +376,7 @@ export function DoorCards({ hrefs, counts }) {
         const cls =
           "ms-surface flex h-full min-h-[11rem] min-w-0 flex-col gap-1 rounded-[1.75rem] p-5 outline-none transition group-hover/tile:shadow-md focus-visible:ring-2 focus-visible:ring-brand/40"
         return (
-          <li
-            key={c.title}
-            className="group/tile min-w-0 transition motion-safe:hover:-translate-y-0.5"
-          >
+          <li key={c.title} className="group/tile min-w-0">
             {c.external ? (
               <a href={c.external} target="_blank" rel="noopener noreferrer" className={cls}>
                 {inner}
@@ -411,7 +403,7 @@ export function CdnGrid({ items, onOpen }) {
             type="button"
             onClick={() => onOpen(it)}
             aria-haspopup="dialog"
-            className="ms-surface group/tile block w-full overflow-hidden rounded-2xl text-left transition hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+            className="ms-surface group/tile block w-full overflow-hidden rounded-2xl text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 hover:bg-accent/30"
           >
             <span className="block aspect-[4/3] w-full overflow-hidden bg-muted">
               <img
@@ -443,7 +435,7 @@ export function LoadMore({ hasMore, loading, onMore, capLine, endLine }) {
         type="button"
         onClick={onMore}
         aria-busy={loading || undefined}
-        className="mx-auto mt-1 w-fit rounded-full border border-border bg-card px-4 py-2 text-[0.78125rem] font-medium text-foreground transition hover:bg-accent/60 aria-busy:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-11"
+        className="mx-auto mt-1 w-fit rounded-full bg-muted px-4 py-2 text-[0.8125rem] font-medium text-foreground transition hover:bg-accent aria-busy:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-11"
       >
         {loading ? t("files.loadingMore") : t("files.loadMore")}
       </button>

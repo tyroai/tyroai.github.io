@@ -1,177 +1,304 @@
 /*
- * Günün okumasının ipucu gövdesi (`InsightBody`, tembel parça): koyu ipucu kartının içinde
- * mesai şeridi, satırlar, eylem ve not. Renkler kartın beyaz mürekkebinden (AA koyu zeminde);
- * vurgu paletin `--brand-to`'su, kartın üst etiketiyle aynı karışım.
+ * Günün okumasının gövdesi (`InsightBody` + `DayStrip`, tembel parça). Renkler kabın görünümünden
+ * (`--ib-*`): koyu ipucunda beyaz mürekkep, cam ipucunda kartın mürekkebi ve paletin tonları.
+ * Ölçüler token boylarından (11 · 12 · 13 · 14); satır 52 px, simge kutusu 28 px.
  */
 @layer components {
   .insight-body {
     display: flex;
     flex-direction: column;
-    --insight-ink: color-mix(in oklch, var(--brand-to) 62%, white);
+    /* Koyu ipucu (varsayılan): beyaz mürekkep. */
+    --ib-fg: white;
+    --ib-muted: rgb(255 255 255 / 0.62);
+    --ib-track: rgb(255 255 255 / 0.08);
+    --ib-hour: rgb(255 255 255 / 0.1);
+    --ib-busy: color-mix(in oklch, var(--brand-to) 58%, rgb(255 255 255 / 0.2));
+    --ib-busy-on: color-mix(in oklch, var(--brand-to) 80%, white);
+    --ib-accent: color-mix(in oklch, var(--brand-to) 62%, white);
+    --ib-focus-bg: color-mix(in oklch, var(--brand-to) 22%, transparent);
+    --ib-row-hover: rgb(255 255 255 / 0.07);
+    --ib-row-press: rgb(255 255 255 / 0.11);
+    --ib-icon-bg: rgb(255 255 255 / 0.1);
+    --ib-btn: color-mix(in oklch, var(--brand-to) 70%, white);
+    --ib-btn-ink: rgb(23 23 23);
+  }
+  /* Cam ipucu (`InsightTip look="glass"`): kartın mürekkebi, paletin tonları. */
+  .insight-glass .insight-body {
+    --ib-fg: var(--foreground);
+    --ib-muted: color-mix(in oklch, var(--muted-foreground) 76%, var(--foreground));
+    --ib-track: color-mix(in oklch, var(--foreground) 5%, transparent);
+    --ib-hour: color-mix(in oklch, var(--foreground) 8%, transparent);
+    --ib-busy: color-mix(in oklch, var(--brand-text) 26%, var(--card));
+    --ib-busy-on: color-mix(in oklch, var(--brand-text) 46%, var(--card));
+    --ib-accent: var(--brand-text);
+    --ib-focus-bg: color-mix(in oklch, var(--brand-text) 8%, transparent);
+    --ib-row-hover: color-mix(in oklch, var(--foreground) 5%, transparent);
+    --ib-row-press: color-mix(in oklch, var(--foreground) 8.5%, transparent);
+    --ib-icon-bg: color-mix(in oklch, var(--brand-text) 10%, transparent);
+    --ib-btn: var(--brand-fill-deep);
+    --ib-btn-ink: var(--brand-on-brand);
   }
 
-  /* Şerit: taralı iz = boş zaman, dolu açık blok = toplantı, palet rengi = önerilen odak. */
-  .insight-strip {
+  /* ŞERİT: düz iz, saat başı ince çizgi; toplantı dolu blok, önerilen odak kesik çerçeve. */
+  .ib-strip {
     margin-top: 0.875rem;
-    --insight-hatch: repeating-linear-gradient(
-      135deg,
-      rgb(255 255 255 / 0.16) 0 2px,
-      transparent 2px 6px
-    );
   }
-  .insight-strip__track {
+  .ib-track {
     position: relative;
-    height: 1.125rem;
-    overflow: hidden;
-    border-radius: 0.375rem;
-    background: var(--insight-hatch);
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+    height: 2rem;
+    border-radius: 0.625rem;
+    background: var(--ib-track);
   }
-  .insight-strip__track > span {
+  .ib-hour {
     position: absolute;
-    inset-block: 0;
+    inset-block: 0.5rem;
+    width: 1px;
+    background: var(--ib-hour);
   }
-  /* Ardışık toplantılar arasına koyu ince ayraç: bloklar ayrı okunsun. */
-  .insight-strip__busy {
-    /* Tam dolgu: yarı saydam blokta boş zamanın taraması görünüyordu. */
-    background: color-mix(in oklch, white 82%, rgb(23 23 23));
-    box-shadow:
-      1px 0 0 rgb(23 23 23),
-      -1px 0 0 rgb(23 23 23);
-  }
-  .insight-strip__focus {
+  .ib-seg {
+    position: absolute;
+    inset-block: 0.25rem;
     display: grid;
     place-items: center;
-    border-radius: 0.375rem;
-    background: var(--insight-ink);
-    box-shadow: 0 0 0 2px rgb(23 23 23);
-    color: rgb(23 23 23);
-    font-size: 0.625rem;
-    font-weight: 700;
+    min-width: 0.375rem;
+    min-height: 0;
+    padding: 0;
+    border-radius: 0.4375rem;
+    color: var(--ib-accent);
+    font-size: var(--text-eyebrow, 0.6875rem);
+    font-weight: 600;
     letter-spacing: 0.02em;
     white-space: nowrap;
+    outline: none;
+    transition:
+      background-color 160ms ease,
+      box-shadow 160ms ease;
   }
-  .insight-strip__legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 0.875rem;
-    margin: 0.5rem 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: 0.6875rem;
-    color: rgb(255 255 255 / 0.72);
+  /* Ardışık bloklar arasında 2 px ara: ayrı okunsun. */
+  .ib-seg[data-kind="busy"] {
+    background: var(--ib-busy);
+    box-shadow: inset 0 0 0 1px transparent;
+    clip-path: inset(0 1px);
   }
-  .insight-strip__legend > li {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
+  .ib-seg[data-kind="free"] {
+    background: transparent;
   }
-  .insight-strip__legend > li::before {
-    content: "";
-    width: 0.75rem;
-    height: 0.5rem;
-    border-radius: 0.125rem;
+  .ib-seg[data-kind="focus"] {
+    background: var(--ib-focus-bg);
+    outline: 1.5px dashed var(--ib-accent);
+    outline-offset: -1.5px;
   }
-  .insight-strip__legend > li[data-key="busy"]::before {
-    background: color-mix(in oklch, white 82%, rgb(23 23 23));
+  .ib-seg[data-kind="busy"][aria-pressed="true"] {
+    background: var(--ib-busy-on);
   }
-  .insight-strip__legend > li[data-key="free"]::before {
-    background: var(--insight-hatch);
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+  .ib-seg[data-kind="free"][aria-pressed="true"] {
+    background: var(--ib-row-press);
   }
-  .insight-strip__legend > li[data-key="focus"]::before {
-    background: var(--insight-ink);
+  .ib-seg[data-kind="focus"][aria-pressed="true"] {
+    background: color-mix(in oklch, var(--ib-accent) 18%, transparent);
   }
-  .insight-strip__now {
+  .ib-seg:focus-visible {
+    box-shadow: 0 0 0 2px var(--ib-accent);
+  }
+  @media (hover: hover) {
+    .ib-seg[data-kind="free"]:hover {
+      background: var(--ib-row-hover);
+    }
+  }
+  .ib-now {
+    position: absolute;
+    top: -0.25rem;
+    bottom: -0.25rem;
     width: 2px;
     margin-inline-start: -1px;
-    background: white;
+    border-radius: 999px;
+    background: var(--ib-accent);
+    pointer-events: none;
   }
-  .insight-strip__ticks {
-    position: relative;
-    height: 0.875rem;
-    margin-top: 0.25rem;
-    font-size: 0.625rem;
-    font-variant-numeric: tabular-nums;
-    color: rgb(255 255 255 / 0.6);
-  }
-  .insight-strip__ticks > span {
+  .ib-now::before {
     position: absolute;
-    top: 0;
-    white-space: nowrap;
-  }
-  .insight-strip__ticks > span:first-child {
-    inset-inline-start: 0;
-  }
-  .insight-strip__ticks > span:nth-child(2) {
+    top: -0.1875rem;
+    left: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--ib-accent);
+    content: "";
     translate: -50% 0;
   }
-  [dir="rtl"] .insight-strip__ticks > span:nth-child(2) {
-    translate: 50% 0;
+  .ib-ticks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.375rem;
+    color: var(--ib-muted);
+    font-size: var(--text-eyebrow, 0.6875rem);
+    font-variant-numeric: tabular-nums;
   }
-  .insight-strip__ticks > span:last-child {
-    inset-inline-end: 0;
-  }
-
-  .insight-body__rows {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: 0.75rem;
-    row-gap: 0.5rem;
-    margin: 0.875rem 0 0;
-    font-size: 0.8125rem;
-    line-height: 1.35;
-  }
-  .insight-body__row {
-    display: contents;
-  }
-  .insight-body__row dt {
-    max-width: 8rem;
-    color: rgb(255 255 255 / 0.6);
-    overflow-wrap: anywhere;
-  }
-  .insight-body__row dd {
-    min-width: 0;
-    margin: 0;
+  /* Seçili dilimin hikâyesi: tek satır, önünde dilimin rengi. */
+  .ib-detail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 1.25rem;
+    margin: 0.5rem 0 0;
+    color: var(--ib-fg);
+    font-size: var(--text-footnote);
     font-weight: 500;
-    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
   }
-  .insight-body__sub {
-    display: block;
-    margin-top: 0.125rem;
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: rgb(255 255 255 / 0.68);
+  .ib-detail > span:last-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ib-dot {
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 0.1875rem;
+    background: var(--ib-track);
+    box-shadow: inset 0 0 0 1px var(--ib-hour);
+  }
+  .ib-detail[data-kind="busy"] .ib-dot {
+    background: var(--ib-busy-on);
+    box-shadow: none;
+  }
+  .ib-detail[data-kind="focus"] .ib-dot {
+    background: transparent;
+    box-shadow: none;
+    outline: 1.5px dashed var(--ib-accent);
+    outline-offset: -1.5px;
   }
 
+  /* HİKÂYE SATIRLARI: tam genişlikte satır; götürdüğü yer varsa ok + üstüne gelince zemin. */
+  .ib-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin: 0.75rem -0.5rem 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ib-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: 0.75rem;
+    color: var(--ib-fg);
+    text-decoration: none;
+    outline: none;
+    transition:
+      background-color 160ms ease,
+      scale 120ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .ib-row[data-go]:active {
+    background: var(--ib-row-press);
+    scale: 0.985;
+  }
+  .ib-row[data-go]:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--ib-accent);
+  }
+  @media (hover: hover) {
+    .ib-row[data-go]:hover {
+      background: var(--ib-row-hover);
+    }
+    .ib-row[data-go]:hover .ib-chev {
+      color: var(--ib-fg);
+      translate: 2px 0;
+    }
+  }
+  .ib-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.5rem;
+    background: var(--ib-icon-bg);
+    color: var(--ib-accent);
+  }
+  .ib-icon svg {
+    width: 0.9375rem;
+    height: 0.9375rem;
+  }
+  .ib-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .ib-label {
+    color: var(--ib-muted);
+    font-size: var(--text-eyebrow, 0.6875rem);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1rem;
+  }
+  .ib-value {
+    font-size: var(--text-callout);
+    font-weight: 600;
+    line-height: 1.25rem;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+  .ib-sub {
+    color: var(--ib-muted);
+    font-size: var(--text-footnote);
+    line-height: 1rem;
+  }
+  .ib-chev {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    color: var(--ib-muted);
+    transition:
+      color 160ms ease,
+      translate 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @media (pointer: coarse) {
+    .ib-row {
+      min-height: 3.5rem;
+    }
+  }
+
+  /* EYLEM: paletin düz dolgusu (geçiş yok); ne yapacağı altında. */
   .insight-body__act {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    margin-top: 0.875rem;
+    align-items: stretch;
+    margin-top: 0.75rem;
   }
   .insight-body__btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    min-height: 2rem;
-    padding: 0.375rem 0.75rem;
+    justify-content: center;
+    gap: 0.4375rem;
+    min-height: 2.25rem;
+    padding: 0.375rem 1rem;
     border-radius: 999px;
-    background: rgb(255 255 255 / 0.12);
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
-    font-size: 0.75rem;
+    background: var(--ib-btn);
+    color: var(--ib-btn-ink);
+    font-size: var(--text-callout);
     font-weight: 600;
-    color: white;
     outline: none;
-    transition: background-color 160ms ease-out;
+    transition:
+      background-color 160ms ease,
+      scale 120ms cubic-bezier(0.23, 1, 0.32, 1);
   }
   .insight-body__btn svg {
-    width: 0.875rem;
-    height: 0.875rem;
-    color: var(--insight-ink);
+    width: 1rem;
+    height: 1rem;
+  }
+  .insight-body__btn:not(:disabled):active {
+    scale: 0.97;
   }
   .insight-body__btn:focus-visible {
-    box-shadow: 0 0 0 2px rgb(255 255 255 / 0.7);
+    box-shadow:
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ib-accent);
   }
   .insight-body__btn:disabled {
     cursor: default;
@@ -181,54 +308,39 @@
   }
   @media (hover: hover) {
     .insight-body__btn:not(:disabled):hover {
-      background: rgb(255 255 255 / 0.18);
+      background: color-mix(in oklch, var(--ib-btn) 88%, var(--ib-fg));
     }
   }
   @media (pointer: coarse) {
     .insight-body__btn {
       min-height: 2.75rem;
-      padding-inline: 1rem;
     }
   }
-
-  /* Eylemin açıklaması: dokunmatikte hep görünür; farede üstüne gelince ya da klavye odağında
-     açılır (yer önceden ayrılmaz: kart sakin kalsın). Ekran okuyucu `aria-describedby` ile okur. */
   .insight-body__why {
     margin: 0.5rem 0 0;
-    font-size: 0.75rem;
+    color: var(--ib-muted);
+    font-size: var(--text-footnote);
     line-height: 1.4;
-    color: rgb(255 255 255 / 0.72);
+    text-align: center;
   }
-  @media (hover: hover) and (pointer: fine) {
-    .insight-body__why {
-      display: grid;
-      grid-template-rows: 0fr;
-      margin-top: 0;
-      opacity: 0;
-    }
-    .insight-body__why > span {
-      min-height: 0;
-      overflow: hidden;
-    }
-    .insight-body__btn:is(:hover, :focus-visible) + .insight-body__why {
-      grid-template-rows: 1fr;
-      margin-top: 0.5rem;
-      opacity: 1;
-    }
-    @media (prefers-reduced-motion: no-preference) {
-      .insight-body__why {
-        transition:
-          grid-template-rows 200ms cubic-bezier(0.22, 1, 0.36, 1),
-          margin-top 200ms cubic-bezier(0.22, 1, 0.36, 1),
-          opacity 160ms ease-out;
-      }
-    }
-  }
-
   .insight-body__note {
-    margin: 0.875rem 0 0;
-    font-size: 0.75rem;
+    margin: 0.75rem 0 0;
+    color: var(--ib-muted);
+    font-size: var(--text-eyebrow, 0.6875rem);
     line-height: 1.4;
-    color: rgb(255 255 255 / 0.65);
+  }
+}
+/* Koyu temada kartın zemini koyu: blokların tonu bir kademe güçlü (iz üstünde seçilsin). */
+.dark .insight-glass .insight-body {
+  --ib-busy: color-mix(in oklch, var(--brand-text) 42%, var(--card));
+  --ib-busy-on: color-mix(in oklch, var(--brand-text) 64%, var(--card));
+  --ib-track: color-mix(in oklch, var(--foreground) 8%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ib-row,
+  .ib-chev,
+  .insight-body__btn,
+  .ib-seg {
+    transition: none;
   }
 }

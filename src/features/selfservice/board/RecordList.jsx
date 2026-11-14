@@ -72,7 +72,7 @@ function EmptyList({ tab, filtered, onNew, onClear, onAllYears }) {
           <button
             type="button"
             onClick={onClear}
-            className={cn(GHOST, "border border-border bg-card px-3")}
+            className={cn(GHOST, "bg-muted hover:bg-accent px-3")}
           >
             <HugeiconsIcon icon={FilterRemoveIcon} aria-hidden="true" strokeWidth={1.9} />
             {t("selfService.filter.clear")}
@@ -97,7 +97,7 @@ function EmptyList({ tab, filtered, onNew, onClear, onAllYears }) {
           <button
             type="button"
             onClick={onAllYears}
-            className={cn(GHOST, "border border-border bg-card px-3")}
+            className={cn(GHOST, "bg-muted hover:bg-accent px-3")}
           >
             {t("selfService.report.showAll")}
           </button>

@@ -101,11 +101,15 @@ export function migrateLayout(items, v) {
 }
 
 const HOME_DROPPED = new Set(["day-summary", "focus"])
+// v3: hava kartı (selamlamalı ya da sade) yerini Master karta bırakır (ürün sahibi: "mevcut weather
+// card yerini bu alacak"); hava kartı katalogda kalır, isteyen yeniden ekler.
+const WEATHER_CARDS = new Set(["weather", "weather-plain"])
 
 /**
- * Anasayfa düzeni göçü (`BOARDS.home`). v2: üst sırada Günün brifingi (geniş) + sıradaki
- * toplantı; özet balonu ve Bugünün odağı çıktı (yığınlardan da). Kişinin eklediği öteki
- * kartlar yerinde kalır.
+ * Anasayfa düzeni göçü (`BOARDS.home`). v2: üst sırada TYRO brifingi (geniş) + sıradaki
+ * toplantı; özet balonu ve Bugünün odağı çıktı (yığınlardan da). v3: hava kartının yuvasına Master
+ * kart (ilk hava kartı; yığındaki hava kartına dokunulmaz). v4: Master kart yerinde Karşılama kartına
+ * döner (yeni varsayılan). Kişinin eklediği öteki kartlar yerinde kalır.
  */
 export function migrateHomeLayout(items, v) {
   let next = items.filter(Boolean)
@@ -129,6 +133,22 @@ export function migrateHomeLayout(items, v) {
       { id: "next-meeting", zone: "main", wide: false },
       ...rest.filter((x) => x.zone !== "left"),
     ]
+  }
+  // Karşılama kartı zaten panodaysa hava kartı da yerinde kalır (iki karşılama kartı olmasın).
+  if (v < 3 && !next.some((x) => x.id === "tyro-master" || x.id === "tyro-welcome")) {
+    let placed = false
+    next = next
+      .map((x) => {
+        if (placed || !WEATHER_CARDS.has(x.id) || x.stack) return x
+        placed = true
+        return { ...x, id: "tyro-master", wide: false }
+      })
+      .filter(Boolean)
+  }
+  // v4: varsayılan ilk kart Karşılama kartı oldu (ürün sahibi) — Master kart yerinde ona döner;
+  // Karşılama kartı zaten panodaysa dokunulmaz.
+  if (v < 4 && !next.some((x) => x.id === "tyro-welcome")) {
+    next = next.map((x) => (x.id === "tyro-master" ? { ...x, id: "tyro-welcome" } : x))
   }
   return next
 }
@@ -171,16 +191,17 @@ export function sanitizeLayout(list, board = BOARDS.pano) {
 
 /**
  * Kayıtlı görünümler `{ [widget]: görünüm }`: tanınmayan widget ya da seçenek düşer,
- * varsayılan (listenin ilki) saklanmaz.
+ * varsayılan saklanmaz — panonun varsayılanı (`defaults`, ör. sahnelerde karşılama "Açık") ya da
+ * yoksa listenin ilki.
  */
-export function sanitizeLooks(raw) {
+export function sanitizeLooks(raw, defaults = {}) {
   const out = {}
   if (!raw || typeof raw !== "object") return out
   for (const [rawId, look] of Object.entries(raw)) {
     const merged = MERGED[rawId] ?? BOARD_RETIRED[RENAMED[rawId] ?? rawId]
     const id = merged ?? RENAMED[rawId] ?? rawId
     const options = looksOf(id)
-    if (!CATALOG[id] || !validLook(id, look) || look === options[0]) continue
+    if (!CATALOG[id] || !validLook(id, look) || look === (defaults[id] ?? options[0])) continue
     // Yeni kimliğe taşınan görünüm, eski kimliğin aynı adlı kaydından önce gelir; birleşen kartın
     // görünümü ise hedefin kendi kaydı yoksa geçer.
     if (merged ? !(merged in raw) && !(id in out) : RENAMED[rawId] || !(id in out)) out[id] = look
@@ -201,7 +222,7 @@ function load(board) {
     if (!Array.isArray(raw?.items) || !(v >= 1 && v <= board.version)) return fresh
     const migrate = MIGRATIONS[board.id]
     const items = migrate && v < board.version ? migrate(raw.items, v) : raw.items
-    const looks = sanitizeLooks(raw.looks)
+    const looks = sanitizeLooks(raw.looks, board.defaultLooks)
     const ambient =
       typeof raw.ambient === "boolean"
         ? raw.ambient
@@ -245,7 +266,8 @@ export function useWidgetLayout(available, board = BOARDS.pano) {
   // İşlem görünenler üzerinde; şu an açık olmayanlar (ör. Keşfet erişimi gidip
   // gelen) bölgelerinin sonunda düzende kalır.
   const apply = (fn) => commit(grouped([...fn(visible), ...closed]))
-  const lookOf = (id) => looks[id] ?? looksOf(id)[0]
+  // Panonun varsayılan görünümü (`board.defaultLooks`), yoksa widget'ın ilki.
+  const lookOf = (id) => looks[id] ?? board.defaultLooks?.[id] ?? looksOf(id)[0]
   return {
     items: visible,
     hidden,
@@ -274,7 +296,7 @@ export function useWidgetLayout(available, board = BOARDS.pano) {
     show: (slotId, at) => apply((list) => showAt(list, slotId, at)),
     setLook(id, look) {
       const next = { ...looks }
-      if (look === looksOf(id)[0]) delete next[id]
+      if (look === (board.defaultLooks?.[id] ?? looksOf(id)[0])) delete next[id]
       else next[id] = look
       commit(items, next)
     },
@@ -292,9 +314,10 @@ export function useWidgetLayout(available, board = BOARDS.pano) {
     add(id, zone = board.addZone) {
       commit(addTo(items, id, zone, CATALOG[id]))
     },
-    /** Katalogdan çoklu ekleme, tek kayıtta (art arda `add` eski listeyi görürdü). */
+    /** Katalogdan çoklu ekleme, tek kayıtta (art arda `add` eski listeyi görürdü); önceki hâli döndürür. */
     addMany(ids, zone = board.addZone) {
       commit(addAll(items, ids, zone, CATALOG))
+      return state
     },
     resize(slotId) {
       commit(items.map((x) => (x.id === slotId ? { ...x, wide: !x.wide } : x)))

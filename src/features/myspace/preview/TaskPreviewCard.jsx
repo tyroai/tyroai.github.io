@@ -177,7 +177,7 @@ export function TaskPreviewCard({ task, openTo, actions = null }) {
         {openTo ? (
           <Link
             to={openTo}
-            className="flex items-center justify-center gap-1.5 rounded-lg bg-brand-solid px-3 py-2 text-[0.75rem] font-semibold text-white transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
+            className="flex items-center justify-center gap-1.5 rounded-lg bg-brand-solid px-3 py-2 text-[0.75rem] font-semibold text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
           >
             {t("myspace.tip.tasks.open")}
             <HugeiconsIcon

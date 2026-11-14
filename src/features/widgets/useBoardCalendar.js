@@ -13,11 +13,14 @@ import { firstDayOfWeek } from "@/lib/weekStart"
  * Takvim: çentiğin ve bütün panoların AYNI aralığı ve kişileri — önbellek anahtarı ortak,
  * Graph'a ikinci kez gidilmez. Gün ve kişi listesi açılışta bir kez.
  */
+const SNAPSHOT = { snapshot: true }
+
 export function useBoardCalendar() {
   const [today] = useState(() => startOfDay(new Date()))
   const { rangeStart, rangeEnd } = useMemo(() => defaultCalendarRange(today), [today])
   const [people] = useState(readSharedCalendars)
-  const cal = useCalendarEvents(rangeStart, rangeEnd, true, people)
+  // Pano aralığı cihazda son görüntüyle başlar (önce göster, arkada tazele — `lib/homeSnapshots`).
+  const cal = useCalendarEvents(rangeStart, rangeEnd, true, people, SNAPSHOT)
   return { cal, rangeStart, rangeEnd }
 }
 

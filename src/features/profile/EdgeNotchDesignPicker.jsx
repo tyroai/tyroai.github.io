@@ -28,7 +28,7 @@ import { useRadioRoving } from "./ProfilePage/useRadioRoving"
  * birkaç metin çizgisi var; düz bir zeminde iki cam kabuk birbirinden ve
  * paletten ayırt edilemezdi.
  *
- * ⚠️ **KÖK `<button>` DEĞİL** (OrbStylePicker'ın dersi): `RailButton` bir
+ * ⚠️ **KÖK `<button>` DEĞİL** (iç içe düğme geçersiz HTML): `RailButton` bir
  * `<button>`, iç içe düğme geçersiz HTML. Seçimi yapan düğme gerilmiş
  * kaplama; önizleme `inert` + `pointer-events-none`, DOM'da kaplamadan ÖNCE.
  */
@@ -128,7 +128,7 @@ export function EdgeNotchDesignPicker() {
                 </p>
               </div>
               {id === DEFAULT_EDGE_NOTCH_DESIGN && (
-                <span className="shrink-0 rounded-full border border-border bg-muted/40 px-1.5 py-0.5 text-[0.625rem] font-medium text-muted-foreground">
+                <span className="shrink-0 rounded-full border border-border bg-muted/40 px-1.5 py-0.5 text-[0.6875rem] font-medium text-muted-foreground">
                   {t("profile.prefs.whatsNewCardDefault")}
                 </span>
               )}

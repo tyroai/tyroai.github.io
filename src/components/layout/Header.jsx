@@ -26,6 +26,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Robot01Icon as AnimatedRobotIcon } from "@/components/ui/robot-01"
 import { useLocale } from "@/hooks/useLocale"
 import { cn } from "@/lib/utils"
+import { BrandOrb } from "@/components/brand/BrandOrb"
 
 function PremiumSidebarTrigger() {
   const { toggleSidebar } = useSidebar()
@@ -109,7 +110,7 @@ export function Header({ activeId = "myspace", onOpenSearch, onToggleDock, dockO
                 href="#"
                 className="font-medium text-foreground transition-opacity hover:opacity-80"
               >
-                tyro
+                tyro ai
               </a>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden lg:block [&>svg]:size-3.5 text-muted-foreground/60" />
@@ -184,25 +185,17 @@ export function Header({ activeId = "myspace", onOpenSearch, onToggleDock, dockO
                 // (bkz. index.css yoğunluk bloğu) ve `h-8` o zaman 25,6px
                 // oluyor — dokunma hedefinin altı. Hap 28'de durur; 16px kökte
                 // boy birebir eskisi.
-                "size-8 shrink-0 rounded-full p-0 [&_svg]:!size-[1.125rem] [min-height:max(2rem,28px)] [min-width:max(2rem,28px)]",
-                // Dokunmatikte görünmez pay: 32 px hap 44 px'lik hedef olur, satır taşmaz.
-                "relative pointer-coarse:after:absolute pointer-coarse:after:-inset-1.5",
-                // Dashboard'daki AI asistan rozetlerinin ta kendisi olan dolgu,
-                // yani asistan iki yerde de aynı şey gibi okunuyor.
-                // `border-0` ŞART: Button'ın tabanı `border border-transparent`
-                // + `bg-clip-padding` taşıyor, yani dolgu o 1px kenarlığın
-                // ALTINA boyanmıyor ve arkadaki header oradan sızıyor — halka
-                // hemen dışına oturduğunda bu, hapı çevreleyen beyaz bir çizgi
-                // olarak okunuyor.
-                "border-0 bg-gradient-to-br from-brand-from via-brand-via to-brand-to text-brand-on-ramp",
-                "shadow-sm transition hover:brightness-110 hover:text-brand-on-ramp",
+                "size-9 shrink-0 rounded-full border-0 bg-transparent p-0 shadow-none [min-height:36px] [min-width:36px]",
+                "relative pointer-coarse:after:absolute pointer-coarse:after:-inset-1 transition hover:bg-transparent",
                 // Halka hapa DOĞRUDAN yaslanır: `ring-offset-1` araya
                 // `--background` renginde 1px koyuyor ve açık temada bu, hapı
                 // çevreleyen beyaz bir çizgi gibi okunuyor.
                 dockOpen && "ring-2 ring-brand/45",
               )}
             >
-              {tyroIcon}
+              <span aria-hidden="true" inert className="pointer-events-none grid size-9 place-items-center">
+                <BrandOrb surface="dashboard" state="idle" mascotState="idle" size={22} reading />
+              </span>
             </Button>
           </TooltipTrigger>
           <TooltipContent>{t("chatDock.toggle")}</TooltipContent>

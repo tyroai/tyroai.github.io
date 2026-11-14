@@ -59,6 +59,8 @@ export function WidgetsPage({ onOpenChat, onNewChat }) {
     firstName,
     celebration,
     ctx,
+    rangeStart,
+    rangeEnd,
     briefCta,
     onNewChat,
     load,

@@ -15,6 +15,19 @@
   /* Alçak pencerede kök yazı küçülür (index.css); dokunma hedefi 44 px'in altına inmez. */
   width: max(var(--spacing-fab), 44px);
   height: max(var(--spacing-fab), 44px);
+  /* Raf açılınca düğme panonun köşesine kayar (`widgets/shelf`): ortak geçişlere yer değişimi
+     eklenir (liste `fab.css`teki ikiliyle aynı kalmalı). */
+  transition:
+    scale 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 150ms ease-out,
+    translate 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fab.home-edit-fab {
+    transition:
+      scale 150ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 150ms ease-out;
+  }
 }
 
 /* Düzenlerken: palet halesi — kipin açık olduğu bakışta okunur (simge onay işaretine döner). */

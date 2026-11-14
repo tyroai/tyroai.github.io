@@ -15,6 +15,10 @@ import { worstMode } from "@/dev/worstCase/mode"
 import { cleanNote, colorOf, sortNotes, type StickyColor, type StickyNote } from "./lib/stickyNotes"
 import { createNote, deleteNote, listNotes, updateNote } from "./lib/stickySource"
 import { setStickyPeek } from "@/lib/stickyCount"
+import { writeSnapshot } from "@/lib/snapshot"
+
+/** Çentik yüzünün cihazdaki özeti (`lib/snapshot`; sayı + renkler, metin yok). */
+export const PEEK_SNAPSHOT = "sticky-peek"
 
 export interface StickyState {
   status: GraphStatus | "idle" | "loading"
@@ -30,16 +34,21 @@ let loadedAt = 0
 let inflight: Promise<void> | null = null
 const listeners = new Set<() => void>()
 
+// Son okuyan hesap: özet (sayı + renkler, not metni değil) onun adına cihaza yazılır.
+let owner: string | null = null
+
 const emit = (next: StickyState) => {
   state = next
-  setStickyPeek(
+  const peek =
     next.status === STATUS.ready
       ? {
           count: next.notes.length,
           top: next.notes.slice(0, 3).map((n) => ({ id: n.id, color: n.color })),
         }
-      : null,
-  )
+      : null
+  setStickyPeek(peek)
+  // Çentiğin rozeti ve destesi açılışta istek atmadan bu özetle çizilir (`StickyTrayFace`).
+  if (peek && owner) writeSnapshot(PEEK_SNAPSHOT, owner, peek)
   listeners.forEach((l) => l())
 }
 const subscribe = (l: () => void) => {
@@ -49,6 +58,7 @@ const subscribe = (l: () => void) => {
 
 onSessionClear(function clearStickyNotes() {
   loadedAt = 0
+  owner = null
   emit({ status: "idle", notes: [] })
 }, "stickyNotes")
 
@@ -109,6 +119,7 @@ const isFake = (ctx: Ctx) => fake() && (!ctx.account || Boolean(worstMode()))
 
 /** Listeyi yükler; `force` olmadan 5 dk tazeyse dokunmaz. */
 export function loadStickyNotes(ctx: Ctx, force = false): Promise<void> {
+  owner = ctx.account?.homeAccountId ?? null
   if (!force && state.status === STATUS.ready && Date.now() - loadedAt < STALE_MS)
     return Promise.resolve()
   if (inflight) return inflight

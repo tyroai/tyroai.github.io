@@ -38,7 +38,7 @@ export function SpotlightPane({ item, now, homeTz, query, onBack, onDone, onPeop
         type="button"
         autoFocus
         onClick={onBack}
-        className="flex w-full items-center gap-1.5 border-b border-border/70 px-3.5 py-2 text-left text-[0.71875rem] font-semibold text-muted-foreground transition hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-11"
+        className="flex w-full items-center gap-1.5 border-b border-border/70 px-3.5 py-2 text-left text-[0.75rem] font-semibold text-muted-foreground transition hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-11"
       >
         <HugeiconsIcon
           icon={ArrowLeft01Icon}

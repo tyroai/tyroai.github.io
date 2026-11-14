@@ -34,7 +34,7 @@ export function FeedCustomize({ hidden, onToggle, onReset }) {
           {t("feed.customize.button")}
           {/* Kaç öğenin gizlendiği yazının yanında (eskiden ikonun köşesinde). */}
           {off > 0 && (
-            <span className="grid min-w-4 place-items-center rounded-full bg-brand-solid px-1 text-[0.625rem] font-semibold leading-4 text-brand-on-brand">
+            <span className="grid min-w-4 place-items-center rounded-full bg-brand-solid px-1 text-[0.6875rem] font-semibold leading-4 text-brand-on-brand">
               {off}
             </span>
           )}

@@ -1,0 +1,118 @@
+/* Görünüm ve renk seçimi (`LookChoices`; kart tutamağı, araç şeridi, header). Görünümler yan yana
+   küçük önizleme karoları (bakıp seçilir), renkler gerçek daireler. Menü öğesi ölçüleri
+   (`styles/floating.css`: boy 32, pay) burada bilerek ezilir: karo ve daire satır değildir. */
+/* Her sütun kendi adının eninde: ad hiç kesilmez, uzun ad (başka dil) ötekileri genişletmez; menü
+   içeriğine göre genişler (4 ya da 5 görünüm). */
+.lk-looks {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  justify-content: space-between;
+  gap: 0.125rem;
+  padding: 0.125rem 0.375rem 0.25rem;
+}
+.lk-look {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.3125rem;
+  min-height: 0;
+  padding: 0.3125rem;
+  border-radius: var(--radius-tile);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  font-weight: 500;
+  text-align: center;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+/* Seçim önizlemenin halkasında: ortak radyo tiki karoda çizilmez. */
+.lk-look > [data-slot="dropdown-menu-radio-item-indicator"] {
+  display: none;
+}
+.lk-look-prev {
+  display: block;
+  min-width: 2.75rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+}
+.lk-look-name {
+  white-space: nowrap;
+}
+.lk-look[data-state="checked"] {
+  font-weight: 600;
+  color: var(--foreground);
+}
+.lk-look[data-state="checked"] .lk-look-prev,
+.lk-dot[aria-checked="true"] {
+  box-shadow:
+    0 0 0 2px var(--popover),
+    0 0 0 3.5px var(--brand-text);
+}
+
+.lk-colors {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  justify-items: center;
+  gap: 0.5rem 0.25rem;
+  padding: 0.375rem 0.625rem 0.5rem;
+}
+.lk-dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 1.625rem;
+  min-height: 0;
+  height: 1.625rem;
+  padding: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--foreground) 14%, transparent);
+  transition: scale 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.lk-dot svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: #fff;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.45));
+}
+/* Uygulamanın paleti: ilk daire, paletin rampasıyla; içinde küçük "otomatik" işareti. */
+.lk-dot[data-app] {
+  background-image: linear-gradient(135deg, var(--brand-from), var(--brand-via), var(--brand-to));
+}
+.lk-dot:is(:focus, [data-highlighted]):not([aria-checked="true"]) {
+  box-shadow:
+    0 0 0 2px var(--popover),
+    0 0 0 3.5px color-mix(in oklab, var(--foreground) 35%, transparent);
+}
+.lk-dot:active {
+  scale: 0.92;
+}
+.lk-app-note {
+  padding: 0 0.625rem 0.375rem;
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+}
+@media (pointer: coarse) {
+  .lk-look-prev {
+    height: 2.5rem;
+  }
+  .lk-colors {
+    gap: 0.75rem 0.25rem;
+  }
+  .lk-dot {
+    width: 2rem;
+    height: 2rem;
+  }
+  .lk-dot::after {
+    content: "";
+    position: absolute;
+    inset: -0.375rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lk-dot {
+    transition: none;
+  }
+  .lk-dot:active {
+    scale: 1;
+  }
+}

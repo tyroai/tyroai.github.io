@@ -32,6 +32,9 @@ const subscribe = (l: () => void) => {
   return () => listeners.delete(l)
 }
 
+/** Bellekteki son özet (istek atmaz). */
+export const currentStickyPeek = (): StickyPeek | null => peek
+
 export function useStickyPeek(): StickyPeek | null {
   return useSyncExternalStore(
     subscribe,

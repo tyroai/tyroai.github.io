@@ -69,7 +69,7 @@ export function RailSection({ title, icon, meta, children, accentTop }) {
           <span className="truncate">{title}</span>
         </h2>
         {meta != null && (
-          <span className="shrink-0 rounded-full bg-muted px-1.5 py-0.5 text-[0.625rem] font-semibold tabular-nums text-foreground/70">
+          <span className="shrink-0 rounded-full bg-muted px-1.5 py-0.5 text-[0.6875rem] font-semibold tabular-nums text-foreground/70">
             {meta}
           </span>
         )}
@@ -190,7 +190,7 @@ export function FeedPeople({ kind, posts, now, onOpen }) {
                         {titles.get(row.label)}
                       </span>
                     )}
-                    <span className="text-[0.625rem] text-muted-foreground">
+                    <span className="text-[0.6875rem] text-muted-foreground">
                       {formatAgo(row.received, locale)}
                     </span>
                   </span>
@@ -312,7 +312,7 @@ export function CelebrationPeople({ kind, people }) {
                         {person.title}
                       </span>
                     )}
-                    <span lang={locale} className="text-[0.625rem] text-muted-foreground">
+                    <span lang={locale} className="text-[0.6875rem] text-muted-foreground">
                       {isMine(ids, person.mail) && person.inDays === 0 && kind !== "joiner"
                         ? kind === "anniversary"
                           ? `${t("feed.cel.years", { count: person.years })} · ${t("person.selfDay")}`

@@ -1,5 +1,6 @@
 import { hrRequest, HR_DATAVERSE_URL, msalInstance } from "@/lib/msal"
 import { erpAuthCause, erpDeniedCause, erpErrorCause } from "@/lib/errorCause"
+import { suspectSession } from "@/lib/sessionHealth"
 
 /**
  * Self Servis — ERP'nin Dataverse'üne tarayıcıdan istek (kişinin KENDİ oturumuyla, `hrRequest`
@@ -20,17 +21,48 @@ export class SelfServiceError extends Error {
 }
 
 // İlk açılışta geçici hata olabiliyor (zaman aşımı, ağ; F&O sanal tabloları yavaş uyanıyor):
-// kalıcı olmayan hatada bir kez daha denenir — kişi boş ekran ya da "Bağlan" görmesin.
+// kalıcı olmayan hatada bir kez daha denenir — kişi boş ekran ya da "Bağlan" görmesin. Süresi dolan
+// yenileme belirteci kalıcıdır: beklemek bir şey çözmez, kişi "Bağlan"ı bir an önce görsün.
 const RETRY_MS = 1200
-const PERMANENT = /consent_required|interaction_required|login_required|invalid_grant/
+const PERMANENT =
+  /consent_required|interaction_required|login_required|invalid_grant|refresh_token_expired|no_tokens_found/
+const POPUP_BLOCKED = /popup_window_error|empty_window_error/
 const TRANSIENT_HTTP = new Set([502, 503, 504])
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const silent = async (account) =>
   (await msalInstance.acquireTokenSilent({ ...hrRequest, account })).accessToken
 
+/**
+ * "Bağlan" (kişinin tıklaması): Microsoft penceresi HEMEN açılır. Önce sessiz denenirse (iki deneme
+ * + bekleme, gizli çerçeve zaman aşımıyla saniyeler sürer) tarayıcı tıklamayı eskimiş sayıp pencereyi
+ * engelliyor ve düğme sessizce hiçbir şey yapmıyordu (canlıda görüldü: `refresh_token_expired`).
+ * Pencere yine de engellenirse tam sayfa yönlendirmeye düşülür (`lib/graph` › `requestGraphScopes`
+ * ile aynı kural): dönüşte kişi aynı sayfaya gelir. Vazgeçen kişi yönlendirilmez.
+ */
+async function connect(account) {
+  try {
+    return (await msalInstance.acquireTokenPopup({ ...hrRequest, account })).accessToken
+  } catch (popupErr) {
+    if (!POPUP_BLOCKED.test(popupErr?.errorCode ?? ""))
+      throw new SelfServiceError("denied", erpAuthCause(popupErr))
+    try {
+      await msalInstance.acquireTokenRedirect({
+        ...hrRequest,
+        account,
+        redirectStartPage: window.location.href,
+      })
+    } catch (redirectErr) {
+      throw new SelfServiceError("denied", erpAuthCause(redirectErr))
+    }
+    // Sayfa ayrılıyor: buradan dönülmez; ayrılana dek kart "pencere" nedenini gösterir.
+    throw new SelfServiceError("denied", erpAuthCause(popupErr))
+  }
+}
+
 export async function token(interactive = false) {
   const account = msalInstance.getActiveAccount() ?? msalInstance.getAllAccounts()[0]
   if (!account) throw new SelfServiceError("denied", "no account")
+  if (interactive) return connect(account)
   try {
     return await silent(account)
   } catch (first) {
@@ -43,13 +75,10 @@ export async function token(interactive = false) {
         err = again
       }
     }
+    // Oturum dolduysa her sayfadaki tek şerit açılır (tek tık, çoğu zaman şifresiz geri döner).
+    suspectSession(msalInstance, Date.now(), undefined, err)
     // Hata kodu ekranda görünür (`StateDetail`): izin mi, ek doğrulama mı, pencere mi — ayırt edilsin.
-    if (!interactive) throw new SelfServiceError("denied", erpAuthCause(err))
-    try {
-      return (await msalInstance.acquireTokenPopup({ ...hrRequest, account })).accessToken
-    } catch (popupErr) {
-      throw new SelfServiceError("denied", erpAuthCause(popupErr))
-    }
+    throw new SelfServiceError("denied", erpAuthCause(err))
   }
 }
 

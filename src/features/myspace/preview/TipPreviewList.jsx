@@ -48,9 +48,12 @@ export function TipPreviewList({
             onOpenChange={(next) => setOpenId(next ? item.id : null)}
             mobile={isMobile}
           >
-            {(wrap) => (
+            {(wrap, hover) => (
               // Satırın tamamı önizlemeyi açar (değer düğmesinin `::after`'ı satırı kaplar).
-              <li className="group/tp relative -mx-2 flex items-baseline gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/[0.07] has-[[data-state=open]]:bg-white/[0.1]">
+              <li
+                {...hover}
+                className="group/tp relative -mx-2 flex items-baseline gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/[0.07] has-[[data-state=open]]:bg-white/[0.1]"
+              >
                 <span
                   className={cn(
                     "shrink-0 text-white/55 tabular-nums [overflow-wrap:anywhere]",

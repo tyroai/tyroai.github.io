@@ -68,7 +68,7 @@ function CatalogSearch({ kind, query, onQuery, short }) {
 }
 
 const PRIMARY =
-  "inline-flex shrink-0 items-center justify-center gap-1.5 bg-brand-fill-deep font-medium text-brand-on-brand transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
+  "inline-flex shrink-0 items-center justify-center gap-1.5 bg-brand-fill-deep font-medium text-brand-on-brand transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
 const FLOAT =
   "pointer-events-auto h-12 rounded-full px-5 text-[0.875rem] shadow-[0_6px_20px_-6px_var(--brand)]"
 

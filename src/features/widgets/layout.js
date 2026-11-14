@@ -19,7 +19,7 @@ const HALF = "@[34rem]/myspace:col-span-2"
 export const ZONES = ["left", "main", "more"]
 
 const DEFAULT_ORDER = [
-  ["weather", "left"],
+  ["tyro-welcome", "left"],
   ["ask", "left"],
   ["brief", "main", true],
   ["next-meeting", "main"],
@@ -60,10 +60,18 @@ export const MERGED = { week: "rhythm", suggest: "focus", nudge: "help", tibot: 
 
 /**
  * Panodan kalkıp yalnız header'da yaşayan kartlar (`board: false`) → kayıtlı düzende yerine geçen
- * kart; o zaten duruyorsa eskisi düşer. Tyrofy'ın istasyon listeli ilk kartı Tyrofy Disk'e
- * döner. Header'daki Tyrofy aynı kimlikle sürdüğü için `MERGED`e yazılmaz (header da onu okur).
+ * kart; o zaten duruyorsa eskisi düşer (kalkan kartlar da: kimliği katalogda olmasa bile). Tyrofy'ın
+ * istasyon listeli ilk kartı Tyrofy Disk'e döner. Header'daki Tyrofy aynı kimlikle sürdüğü için `MERGED`e yazılmaz (header da onu okur).
  */
-export const BOARD_RETIRED = { radio: "tyro-radio-disc" }
+export const BOARD_RETIRED = {
+  radio: "tyro-radio-disc",
+  // Sol üstteki karşılama kartları tek karta indi (ürün sahibi): hava kartı (yalnız header'da), eski
+  // Karşılama (palet kartı) ve Master kart yerinde Karşılama kartına döner.
+  weather: "tyro-welcome",
+  "weather-plain": "tyro-welcome",
+  intro: "tyro-welcome",
+  "tyro-master": "tyro-welcome",
+}
 
 /** Panoya girebilen widget (katalog ve ekleme listesi). */
 export const onBoard = (id) => Boolean(CATALOG[id]) && CATALOG[id].board !== false
@@ -115,17 +123,16 @@ const toLayout = (order) => order.map(([id, zone, wide]) => ({ id, zone, wide: B
 /** Varsayılan düzen `[{ id, zone, wide }]` — bölge içinde sıra ızgaradaki sıradır. */
 export const DEFAULT_LAYOUT = toLayout(DEFAULT_ORDER)
 
-/**
- * Anasayfa'nın varsayılanı: solda gök kartı ve soru kutusu; sağda üstte Günün brifingi
- * (geniş) · sıradaki toplantı (köşe), altta ritim (geniş) · yardım küresi. Özet balonu ve
- * Bugünün odağı varsayılanda yok (katalogdan eklenir).
- */
+// Anasayfa'nın varsayılanı. 2+1+1 kalıbı (tek ızgara, `boardGrid.css`; ürün sahibinin dizilişi): üstte karşılama + Toplantı
+// ritmin + Sıradaki toplantı, altta TYRO brifingi (geniş) + Bugünün görevleri + TYRO kartı (sağ
+// altta, sıradaki toplantının altında). Soru kutusu kayıtta, çizilmez (yüzen sohbet çubuğu).
 export const HOME_LAYOUT = toLayout([
-  ["weather", "left"],
+  ["tyro-welcome", "left"],
   ["ask", "left"],
-  ["brief", "main", true],
+  ["rhythm", "main"],
   ["next-meeting", "main"],
-  ["rhythm", "main", true],
+  ["brief", "main", true],
+  ["focus", "main"],
   ["help", "main"],
 ])
 
@@ -147,11 +154,15 @@ export const BOARDS = {
   home: {
     id: "home",
     key: "tyro-home-layout-v1",
-    version: 2,
+    version: 4,
     zones: ["left", "main"],
     defaults: HOME_LAYOUT,
     addZone: "main",
     labels: { bar: "widgets.editBarHome" },
-    tour: { weather: "welcome", "weather-plain": "welcome", intro: "welcome", ask: "ask" },
+    // Soru kutusu kart olarak çizilmez (sayfanın altındaki yüzen çubuk; turun "Sor" adımı onu
+    // gösterir, `myspace/shelf/HomeCommand`).
+    tour: {
+      "tyro-welcome": "welcome",
+    },
   },
 }

@@ -1,0 +1,153 @@
+/* Bildirim panelinin satırı (kişi · tatil · Keşfet bildirimi): 52 px, başta 36 px fotoğraf ya da
+   ikon kutusu, iki satır yazı, sonda ayırt eden bilgi. İki görünüm de kullanır; değişkenler
+   (`--bn-*`) panelden gelir (`bell.css`). */
+
+.bn-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--radius-tile);
+  text-align: start;
+  outline: none;
+  transition: background-color 0.12s ease;
+}
+.bn-row:not([data-static]):active,
+.bn-row[aria-expanded="true"] {
+  background: var(--bn-soft-hover);
+}
+.bn-lead {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  color: var(--bn-muted);
+}
+.bn-lead svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.bn-lead[data-kind="tile"] {
+  border-radius: 0.625rem;
+  background: var(--bn-soft);
+}
+.bn-lead[data-tone="brand"] {
+  background: color-mix(in oklab, var(--brand-from) 14%, transparent);
+  color: var(--brand-text);
+}
+/* Ekibinden ya da departmanından biri: fotoğrafın çevresinde marka halkası. */
+.bn-lead[data-circle] {
+  box-shadow:
+    0 0 0 2px var(--bn-surface),
+    0 0 0 3.5px var(--brand-solid);
+}
+.bn-avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.bn-avatar > span[aria-hidden] {
+  font-size: 0.75rem;
+}
+.bn-text {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+}
+.bn-name-line {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.375rem;
+}
+.bn-name,
+.bn-sub {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.bn-name {
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  font-weight: 500;
+}
+.bn-sub {
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  color: var(--bn-muted);
+}
+.bn-pill {
+  flex: none;
+  padding: 0.0625rem 0.4375rem;
+  border-radius: 999px;
+  background: var(--brand-solid);
+  color: #fff;
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  font-weight: 600;
+}
+.bn-meta {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--bn-muted);
+}
+.bn-meta svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--brand-text);
+}
+.bn-dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-inline: 0.25rem;
+  border-radius: 999px;
+  background: var(--brand-solid);
+}
+
+/* "N kişi daha" ve "Geçmiş günler": metin sütunuyla hizalı küçük kapsül. */
+.bn-more {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 1.75rem;
+  margin: 0.125rem 0 0.25rem 3rem;
+  padding-inline: 0.625rem 0.5rem;
+  border-radius: 999px;
+  background: var(--bn-soft);
+  font-size: var(--text-footnote);
+  line-height: 1;
+  font-weight: 500;
+  color: var(--foreground);
+  outline: none;
+  transition:
+    background-color 0.15s ease,
+    transform 0.16s var(--bn-ease);
+}
+.bn-more svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--bn-muted);
+  transition: transform 0.2s var(--bn-ease);
+}
+.bn-more[data-fold] {
+  margin-inline-start: 0.5rem;
+}
+.bn-more[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+.bn-more:active {
+  transform: scale(0.97);
+}

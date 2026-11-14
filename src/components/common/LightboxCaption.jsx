@@ -8,7 +8,7 @@ export function LightboxCaption({ view, many, className }) {
   return (
     <figcaption
       className={cn(
-        "flex max-w-full items-center gap-2 rounded-full bg-black/60 px-4 py-1.5 text-[0.78125rem] text-white/90 backdrop-blur-sm",
+        "flex max-w-full items-center gap-2 rounded-full bg-black/60 px-4 py-1.5 text-[0.8125rem] text-white/90 backdrop-blur-sm",
         className,
       )}
     >

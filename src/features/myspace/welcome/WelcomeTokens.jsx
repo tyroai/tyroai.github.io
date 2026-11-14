@@ -62,22 +62,23 @@ export function WeatherPearl({ kind, night }) {
 }
 
 /**
- * TYRO'nun küresi satırın içinde ("[küre] Tyro … öneriyor"): öneriyi kimin yaptığını pekiştirir. Gerçek
- * küre (`BrandOrb`, kişinin seçtiği görünüm), etkisiz kutuda; yazı boyuyla ölçeklenir
- * (`--welcome-scale`, `useFitText`).
+ * TYRO'nun küresi öneri kartında: öneriyi kimin yaptığını gösterir. Gerçek küre (`BrandOrb`, kişinin
+ * seçtiği görünüm), etkisiz kutuda; yazı kutuya sığdırılırken aynı oranda küçülür (`--welcome-scale`,
+ * `useFitText`). Okuma kipinde (`reading`, Anasayfa'nın brif balonu gibi): yanındaki cümleye döner,
+ * gözleri satırları tarar ve göz kırpar (ürün sahibi: "orb hareketsiz … yazıya doğru dönmüyor").
+ * `mascotState="idle"`: panelin uyku döngüsünü atlar — uyuyan küre cümleye bakamazdı.
  */
 export function OrbToken() {
   return (
     <span aria-hidden="true" inert className="welcome-orbtok">
       <span className="welcome-orbtok-in">
-        <BrandOrb surface="dashboard" state="idle" mascotState="idle" size={ORB_TOKEN_PX} />
+        <BrandOrb surface="dashboard" state="idle" mascotState="idle" size={ORB_TOKEN_PX} reading />
       </span>
     </span>
   )
 }
-// 28 px yazıda 0,66em ≈ 18,5 px: büyük harften (0,73em) bir tık küçük, ortası harfin ortasında —
-// ürün sahibi: "aynı yükseklik olsun sırıtmasın", sonra "çok az bir tık büyük".
-const ORB_TOKEN_PX = 18.5
+// 19 px yazıda kartın 2,5em kutusu (≈ 43 px): cümlenin iki satırı boyunda.
+const ORB_TOKEN_PX = 42
 
 /** Bugünkü toplantıların sahipleri: üst üste binen, beyaz halkalı, her biri kendi renginde pullar (en çok üç). */
 export function Coins({ people }) {

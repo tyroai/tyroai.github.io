@@ -1,0 +1,171 @@
+/* Toplantı ritmin — küçük kart (`RhythmMini`). Gün sütunları düğme: üstüne gelince sütunun zemini
+   tonlanır, basınca hafif çöker; balon açıkken zemin kalır. Sütunlar ortak ölçekte; en yoğun gün
+   paletin degradesi tam doygun, bugün belirgin, öteki günler soluk. Ölçüler token boylarından. */
+.rm-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin-top: 0.375rem;
+}
+.rm-hero {
+  display: flex;
+  margin: 0;
+  align-items: baseline;
+  gap: 0.1875rem;
+  font-variant-numeric: tabular-nums;
+}
+.rm-hero b {
+  font-size: 1.625rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.rm-hero small {
+  margin-inline-end: 0.3125rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-footnote);
+}
+.rm-sub {
+  margin: 0.3125rem 0 0;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-footnote);
+}
+
+/* Haftanın ritmi: yedi gün, ince sütun + iz; etiketler altta. */
+.rm-bars {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+  min-height: 3.5rem;
+  margin-top: 0.75rem;
+}
+.rm-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3125rem;
+  min-width: 0;
+  min-height: 0;
+  margin: -0.25rem 0;
+  padding: 0.25rem 0;
+  border-radius: 0.625rem;
+  outline: none;
+  transition:
+    background-color 160ms ease,
+    scale 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.rm-day:active {
+  scale: 0.94;
+}
+.rm-day[data-state="open"] {
+  background: color-mix(in oklab, var(--foreground) 6%, transparent);
+}
+.rm-day:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 60%, transparent);
+}
+@media (hover: hover) {
+  .rm-day:hover {
+    background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+  }
+}
+.rm-track {
+  position: relative;
+  flex: 1;
+  width: 0.5rem;
+  min-height: 2.25rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 6%, transparent);
+}
+.rm-fill {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  border-radius: 999px;
+  /* Paletin degradesi, izin tamamına yayılı (çubuk yalnız kendi boyu kadarını gösterir). Vurgu
+     renkle değil doygunlukla: öteki günler soluk, bugün belirgin, en yoğun gün tam. */
+  background: linear-gradient(to top, var(--brand-from), var(--brand-via) 62%, var(--brand-to))
+    bottom / 100% calc(var(--rm-k, 1) * 100%) no-repeat;
+  opacity: 0.42;
+  transform-origin: bottom;
+  animation: rm-grow 420ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.rm-day[data-today] .rm-fill {
+  opacity: 0.78;
+}
+.rm-day[data-peak] .rm-fill {
+  opacity: 1;
+}
+.rm-label {
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-eyebrow, 0.6875rem);
+  line-height: 1;
+}
+.rm-day[data-today] .rm-label {
+  color: var(--brand-text);
+  font-weight: 600;
+}
+@keyframes rm-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+.rm-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin: 0.625rem 0 0;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-footnote);
+}
+.rm-foot b {
+  color: var(--foreground);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.rm-foot [data-warn] b {
+  color: var(--warning-ink);
+}
+
+/* Başlıktaki hafta seçici küçük kartta daha sıkı. */
+.rm-week {
+  height: 1.75rem;
+  padding-inline: 0.625rem;
+}
+
+.rm-skel {
+  display: grid;
+  gap: 0.625rem;
+  margin-top: 0.75rem;
+}
+.rm-skel span:nth-child(1) {
+  width: 6rem;
+  height: 1.625rem;
+  border-radius: 0.5rem;
+}
+.rm-skel span:nth-child(2) {
+  width: 4.5rem;
+  height: 0.75rem;
+  border-radius: 999px;
+}
+.rm-skel span:nth-child(3) {
+  height: 3.5rem;
+  border-radius: 0.75rem;
+}
+.rm-empty {
+  margin-top: 0.75rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-callout);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-fill {
+    animation: none;
+  }
+  .rm-day {
+    transition: none;
+  }
+}

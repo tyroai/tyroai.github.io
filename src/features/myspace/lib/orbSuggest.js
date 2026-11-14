@@ -28,7 +28,7 @@ export const heavyWeek = (week) =>
  * toplantısının özeti) · 3 gün içinde seyahat · ağır toplantı haftası (pazartesi–perşembe,
  * `heavyWeek`) · bugün ≥ 90 dk boş odak · 21 gün içinde köprü tatili · günün dilimi (pazartesi
  * sabahı hafta planı, cuma öğleden sonra hafta özeti, sabah günü planla, akşam yarını planla) ·
- * Keşfet'te ≥ 3 yeni. Davet, posta ve To-Do işleri öneri DEĞİL: Günün brifingi onları zaten
+ * Keşfet'te ≥ 3 yeni. Davet, posta ve To-Do işleri öneri DEĞİL: TYRO brifingi onları zaten
  * gösteriyor (ürün sahibinin kararı) — küre brifingin tekrarı olmasın.
  * Hafta sonu: seyahat, köprü, hafta özeti. Uygulama yüklü değilse (`install`) "Yükle" HEP İLK kart
  * (ürün sahibinin kararı) — sınırın dışında, iş önerisi onu itmez.

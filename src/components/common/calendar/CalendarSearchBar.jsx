@@ -32,7 +32,7 @@ export function CalendarSearchBar({ query, onQuery, filter, onFilter, onClose })
             onChange={(e) => onQuery(e.target.value)}
             placeholder={t("calendar.searchPlaceholder")}
             aria-label={t("calendar.search")}
-            className="h-8 w-full rounded-lg border border-input bg-background pe-8 ps-8 text-[0.78125rem] outline-none transition placeholder:text-muted-foreground focus-visible:border-brand/60 focus-visible:ring-2 focus-visible:ring-brand/20 [&::-webkit-search-cancel-button]:appearance-none"
+            className="h-8 w-full rounded-lg border border-input bg-background pe-8 ps-8 text-[0.8125rem] outline-none transition placeholder:text-muted-foreground focus-visible:border-brand/60 focus-visible:ring-2 focus-visible:ring-brand/20 [&::-webkit-search-cancel-button]:appearance-none"
           />
           {query && (
             <button

@@ -79,7 +79,7 @@ function Snippet({ summary }) {
   const parts = parseSummary(summary)
   if (!parts.length) return null
   return (
-    <span className="mt-0.5 line-clamp-1 text-[0.71875rem] leading-4 text-muted-foreground/90 [overflow-wrap:anywhere]">
+    <span className="mt-0.5 line-clamp-1 text-[0.75rem] leading-4 text-muted-foreground/90 [overflow-wrap:anywhere]">
       {parts.map((p, i) =>
         p.mark ? (
           <mark key={i} className="rounded-sm bg-brand/[0.14] px-0.5 text-foreground">
@@ -387,35 +387,26 @@ export function RowMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 p-1.5" onEscapeKeyDown={stopEscape}>
         {canPreview && (
-          <DropdownMenuItem
-            onSelect={() => onOpen(item)}
-            className="gap-2 rounded-lg px-2 py-1.5 text-[0.78125rem]"
-          >
+          <DropdownMenuItem onSelect={() => onOpen(item)}>
             <HugeiconsIcon icon={ViewIcon} strokeWidth={1.9} />
             {item.cdn ? t("myfiles.row.viewImage") : t("myfiles.row.preview")}
           </DropdownMenuItem>
         )}
         {canSearchIn && (
-          <DropdownMenuItem
-            onSelect={() => onSearchIn(item)}
-            className="gap-2 rounded-lg px-2 py-1.5 text-[0.78125rem]"
-          >
+          <DropdownMenuItem onSelect={() => onSearchIn(item)}>
             <HugeiconsIcon icon={Search01Icon} strokeWidth={1.9} />
             {t("myfiles.row.searchInFolder")}
           </DropdownMenuItem>
         )}
         {canReveal && (
-          <DropdownMenuItem
-            onSelect={() => onReveal(item)}
-            className="gap-2 rounded-lg px-2 py-1.5 text-[0.78125rem]"
-          >
+          <DropdownMenuItem onSelect={() => onReveal(item)}>
             <HugeiconsIcon icon={FolderOpenIcon} strokeWidth={1.9} />
             {t("myfiles.row.reveal")}
           </DropdownMenuItem>
         )}
         {(canPreview || canSearchIn || canReveal) && item.webUrl && <DropdownMenuSeparator />}
         {item.webUrl && (
-          <DropdownMenuItem asChild className="gap-2 rounded-lg px-2 py-1.5 text-[0.78125rem]">
+          <DropdownMenuItem asChild>
             <a href={sourceUrl(item)} target="_blank" rel="noopener noreferrer">
               <HugeiconsIcon icon={ArrowUpRight01Icon} strokeWidth={1.9} />
               {item.kind === "site" ||
@@ -429,10 +420,7 @@ export function RowMenu({
           </DropdownMenuItem>
         )}
         {item.webUrl && (
-          <DropdownMenuItem
-            onSelect={() => onCopy(item)}
-            className="gap-2 rounded-lg px-2 py-1.5 text-[0.78125rem]"
-          >
+          <DropdownMenuItem onSelect={() => onCopy(item)}>
             <HugeiconsIcon icon={Copy01Icon} strokeWidth={1.9} />
             {t("myfiles.row.copyLink")}
           </DropdownMenuItem>

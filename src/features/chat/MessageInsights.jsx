@@ -40,7 +40,7 @@ export function MessageInsights({ analyses }) {
     <div className="w-full max-w-[min(34rem,92cqw)]">
       <div className="mb-1.5 flex items-center justify-between px-0.5">
         <span className="flex items-baseline gap-1.5">
-          <span className="text-[0.78125rem] font-semibold text-foreground">
+          <span className="text-[0.8125rem] font-semibold text-foreground">
             {t("chat.insights.title")}
           </span>
           <span className="text-[0.75rem] tabular-nums text-muted-foreground">

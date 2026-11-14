@@ -10,6 +10,7 @@ import {
 } from "@/lib/selfServiceFields"
 import { expenseCategoryName, leaveTypeCode, purposeKeyOf } from "@/lib/selfServiceNames"
 import { foldText, statusKind } from "@/lib/selfServiceStatus"
+import { halfDayFix } from "@/lib/leaveHalfDay"
 
 /**
  * Self Servis — ERP satırlarını ekrana çeviren SAF işlevler (izin, izin bakiyesi, masraf, iş
@@ -98,7 +99,14 @@ export function toLeave(row, flow = null) {
   const start = dateOnly(row.mserp_startdate)
   const end = dateOnly(row.mserp_enddate) ?? start
   const type = label(row, "mserp_allowancetypeid")
-  const days = toNumber(row.mserp_noofdays)
+  // Yarım gün ERP'de dört ayrı biçimde yazılıyor (gün 50, saat eksi…): tek okunuşa indirilir.
+  const span = halfDayFix({
+    start,
+    end,
+    days: toNumber(row.mserp_noofdays),
+    hours: toNumber(row.mserp_noofhours),
+  })
+  const { days } = span
   const status =
     LEAVE_STATUS_FIELD in row ? leaveStatusLabel(label(row, LEAVE_STATUS_FIELD), flow) : ""
   // Saat yalnız gün altı izinde anlamlı; tam günlük izinde vardiya saatleri gürültü.
@@ -115,7 +123,8 @@ export function toLeave(row, flow = null) {
     start,
     end,
     days,
-    hours: toNumber(row.mserp_noofhours),
+    hours: span.hours,
+    half: span.half === true,
     description: label(row, "mserp_description"),
     status,
     statusKind: statusKind(status),

@@ -4,10 +4,8 @@
  * Profilim'e taşınmıştı, bu uygulamada iki sayfa da duruyor ve kullanıcı
  * stüdyoyu Ayarlar'da bekliyor (istek üzerine).
  *
- * Profilim → Tercihler'de yalnız KÜÇÜK seçici var (`OrbStylePicker`): orada
- * tema · palet · dil ile yan yana "küre mi maskot mu" seçilir, ince ayar
- * buraya gelir. Okuma sırası "önce seç, sonra ayarla" — yalnız iki sayfaya
- * bölünmüş hâli.
+ * Orb herkeste maskot (küre · maskot seçimi kaldırıldı, `lib/orbStyle`); maskotun ince ayarı
+ * burada yapılır.
  *
  * Klasör adı `profile/orbStudio/` KALDI: tyroTrade'deki (`components/profile/orbStudio/`)
  * yerinin aynısı, böylece iki depo arasındaki fark okunabilir kalıyor.
@@ -21,9 +19,9 @@ import { agentStates, expressions, renderMascot } from "@/components/brand/masco
 import { mascotColorsForPalette } from "@/components/brand/mascot/mascotPalette"
 import TyroMascot from "@/components/brand/mascot/TyroMascot"
 import { useLocale } from "@/hooks/useLocale"
-import { useMascotSettings, useOrbStyle } from "@/hooks/useOrbStyle"
+import { useMascotSettings } from "@/hooks/useOrbStyle"
 import { usePalette } from "@/hooks/usePalette"
-import { resetMascotSettings, writeMascotSettings, writeOrbStyle } from "@/lib/orbStyle"
+import { resetMascotSettings, writeMascotSettings } from "@/lib/orbStyle"
 import { CardHead, ProfileCard } from "../primitives"
 import { cn } from "@/lib/utils"
 import { ColorPanel, ExpressionPanel, MotionPanel } from "./StudioPanels"
@@ -94,7 +92,6 @@ const DEMO_STEP_MS = 3400
 export function MascotStudioCard() {
   const { t } = useLocale()
   const { palette: appPalette } = usePalette()
-  const orbStyle = useOrbStyle()
   const saved = useMascotSettings()
 
   // ── ÖNİZLEMEYE AİT durum (diske yazılmaz) ────────────────────────────
@@ -247,24 +244,6 @@ export function MascotStudioCard() {
       />
 
       <div className="space-y-4 px-5 pb-5">
-        {/* Maskot seçili değilse stüdyo yine çalışır ama ekranda hiçbir şeyi
-            değiştirmez — kullanıcı bunu bilmeden ayar kısarsa hiçbir şey
-            olmadığını sanır. Şerit tek tıkla görünümü açar. */}
-        {orbStyle !== "mascot" && (
-          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand/30 bg-brand/[0.06] px-3 py-2.5">
-            <p className="text-[0.75rem] leading-relaxed text-foreground/85">
-              {t("orbStudio.notSelected")}
-            </p>
-            <button
-              type="button"
-              onClick={() => writeOrbStyle("mascot")}
-              className="shrink-0 rounded-lg border border-brand/40 bg-card px-2.5 py-1.5 text-[0.75rem] font-medium text-foreground transition hover:bg-brand-soft/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [min-height:max(1.75rem,28px)] [@media(pointer:coarse)]:min-h-9"
-            >
-              {t("orbStudio.selectMascot")}
-            </button>
-          </div>
-        )}
-
         <Switcher
           items={VIEWS}
           value={view}

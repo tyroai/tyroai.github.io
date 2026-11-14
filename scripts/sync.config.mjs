@@ -7,7 +7,7 @@ import { readFileSync } from "node:fs"
 import { DEMO_CHANGELOG } from "../demo/changelog.demo.mjs"
 import { DICT_OVERRIDES } from "../demo/dict-overrides.mjs"
 import { GROUP_COMPANIES, GROUP_SHORT_NAMES, OFFICE_CITIES_JS } from "../demo/fictional.mjs"
-import { hubWord } from "../demo/hub.mjs"
+import { productWord } from "../demo/product-word.mjs"
 import { tyroWord } from "../demo/logo.mjs"
 
 const priv = await import("./sync.private.mjs").catch(() => null)
@@ -39,6 +39,11 @@ export const EXCLUDE = [
   "public/radio-logos", // üçüncü taraf logoları; eksikse sahne görsel koleksiyonuna düşer
   "public/images", // gerçek kişi fotoğrafları (yerine demo/overlay avatarları)
   "public/tyra-market",
+  // Avans akışının ERP lokasyon listesinden küçük yerleşimler (gerçek şirket yerleşkelerini ele verir): görselleri alınmaz
+  "public/tyra-advance/cities/bandirma.webp",
+  "public/tyra-advance/cities/corum.webp",
+  "public/tyra-advance/cities/giresun.webp",
+  "public/tyra-advance/cities/merzifon.webp",
   "public/tyra-stage/lorde-melodrama.webp", // gerçek albüm kapağı: herkese açık depoya girmez
   "src/dev", // geliştirme verisi; yerine demo/overlay saplamaları
 ]
@@ -242,31 +247,133 @@ export const POST_PATCHES = [
     replace: (_m, d) => `export const WORD =\n  "${tyroWord(d)}"`,
   },
   {
-    // Logonun ikinci kelimesi "hub" (tyro·hub): paletin renginde, harfler logodan ölçülen değerlerle çizilir.
+    // Logonun ikinci kelimesi "ai" (tyro·ai): paletin renginde, harfler logo üretecinin resmi harfleridir.
     file: "src/components/brand/tyroLogoPaths.js",
     find: /export const WORD_RIGHT = \d+/,
-    replace: (m) => `${m}\n\n/** İkinci kelime "hub": \`BrandText\` ek verilmezse bunu çizer (\`demo/hub.mjs\`). */\nexport const HUB = ${JSON.stringify(hubWord())}`,
+    replace: (m) => `${m}\n\n/** İkinci kelime "ai": \`BrandText\` ek verilmezse bunu çizer (\`demo/product-word.mjs\`). */\nexport const PRODUCT = ${JSON.stringify(productWord())}`,
   },
   {
     file: "src/components/brand/BrandText.jsx",
     find: 'import { SUFFIX, WORD, WORD_BOX, WORD_RIGHT } from "./tyroLogoPaths"',
-    replace: 'import { HUB, SUFFIX, WORD, WORD_BOX, WORD_RIGHT } from "./tyroLogoPaths"',
+    replace: 'import { PRODUCT, SUFFIX, WORD, WORD_BOX, WORD_RIGHT } from "./tyroLogoPaths"',
   },
   {
     file: "src/components/brand/BrandText.jsx",
     find: "const extra = suffix ? SUFFIX[suffix] : null",
-    replace: "const extra = suffix ? SUFFIX[suffix] : HUB",
+    replace: "const extra = suffix ? SUFFIX[suffix] : PRODUCT",
   },
   {
     file: "src/components/brand/BrandText.jsx",
     find: 'aria-label={`tyro${suffix ?? ""}`}',
-    replace: 'aria-label={`tyro${suffix ?? "hub"}`}',
+    replace: 'aria-label={`tyro${suffix ?? " ai"}`}',
   },
   {
     file: "src/components/brand/BrandText.jsx",
     find: '{extra ? <path d={extra.d} className="fill-brand" /> : null}',
     replace:
-      '{extra ? <path d={extra.d} className="fill-brand" fillRule={extra === HUB ? "nonzero" : undefined} /> : null}',
+      '{extra ? <path d={extra.d} className="fill-brand" fillRule={extra === PRODUCT ? "nonzero" : undefined} /> : null}',
+  },
+  // Header'ın sağ ucundaki "Sohbeti yan panelde aç" düğmesi: gradyanlı robot simgesi yerine doğrudan TYRO küresi
+  // (sohbet çubuğundakiyle aynı `BrandOrb`). Boy komşu düğmelerle aynı 36 px; küre onlardan büyük olmaz.
+  {
+    file: "src/components/layout/Header.jsx",
+    find: 'import { cn } from "@/lib/utils"',
+    replace: 'import { cn } from "@/lib/utils"\nimport { BrandOrb } from "@/components/brand/BrandOrb"',
+  },
+  {
+    file: "src/components/layout/Header.jsx",
+    find: /"size-8 shrink-0 rounded-full p-0[\s\S]*?"shadow-sm transition hover:brightness-110 hover:text-brand-on-ramp",/,
+    replace:
+      '"size-9 shrink-0 rounded-full border-0 bg-transparent p-0 shadow-none [min-height:36px] [min-width:36px]",\n' +
+      '                "relative pointer-coarse:after:absolute pointer-coarse:after:-inset-1 transition hover:bg-transparent",',
+  },
+  {
+    file: "src/components/layout/Header.jsx",
+    find: /\{tyroIcon\}\s*<\/Button>/,
+    replace:
+      '<span aria-hidden="true" inert className="pointer-events-none grid size-9 place-items-center">\n' +
+      '                <BrandOrb surface="dashboard" state="idle" mascotState="idle" size={22} reading />\n' +
+      '              </span>\n' +
+      '            </Button>',
+  },
+  // Uygulama adı "tyro ai": başlık kırıntısının kökü ve marka dizeleri (ad kodlarda "tyroAI" ya da "tyro" yazıyordu).
+  {
+    file: "src/components/layout/Header.jsx",
+    find: /(hover:opacity-80"\s*>\s*)tyro(\s*<\/a>)/,
+    replace: (_m, a, b) => `${a}tyro ai${b}`,
+  },
+  ...["tr", "en", "ar", "ru"].flatMap((lng) => [
+    { file: `src/data/strings.${lng}.js`, find: /"brand\.name": "[^"]*"/, replace: '"brand.name": "tyro ai"' },
+    { file: `src/data/strings.${lng}.js`, find: /"brand\.fullName": "[^"]*"/, replace: '"brand.fullName": "TYRO AI · TYRO Tech"' },
+  ]),
+  // Avans akışının "gidilecek yer" listesi ERP'nin gerçek lokasyon listesi: küçük yerleşimler (Bandırma, Çorum, Giresun,
+  // Merzifon) şirketin gerçek yerleşkelerini ele verir. Dünya saati listesinden zaten çıkarılmıştı; burada da çıkar.
+  {
+    file: "src/lib/advanceLocations.js",
+    find: /^ {2}"(?:BANDIRMA|ÇORUM|GİRESUN|MERZİFON)",\n/gm,
+    replace: "",
+  },
+  {
+    file: "src/features/myspace/flows/advance/lib/cityPhotos.js",
+    find: /^ {2}(?:BANDIRMA|ÇORUM|GİRESUN|MERZİFON): \{[^\n]*\},\n/gm,
+    replace: "",
+  },
+  {
+    file: "src/features/myspace/flows/advance/lib/turkeyMap.ts",
+    find: /^ {2}(?:BANDIRMA|ÇORUM|GİRESUN|MERZİFON): \[[^\n]*\],\n/gm,
+    replace: "",
+  },
+  {
+    // Dünya saati koordinatları: katalogdan çıkarılan şehirlerin satırları da gider.
+    file: "src/data/cityGeo.js",
+    find: /^ {2}(?:corum|bandirma|giresun|karacabey|mus|tekirdag|"buffalo-mo"|basra): \[[^\n]*\],\n/gm,
+    replace: "",
+  },
+  {
+    file: "public/tyro-advance/credits.txt",
+    find: /^[^\n]*\((?:bandirma|corum|giresun|merzifon)\.webp\)\n(?: {2}[^\n]*\n)*\n?/gm,
+    replace: "",
+  },
+  // Sahne seçici hapı (Sabah · 06:00–10:00 …): gri zemin yerine dinlenirken zeminsiz, çizgisiz ve gölgesiz (yalnız ok); üzerine gelince ve menü açıkken beyaz zemin, hafif kabartma ve gölge.
+  {
+    file: "src/features/myspace/scenes/sceneStrip.css",
+    find: "  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);\n  outline: none;\n  transition: background-color 160ms ease;",
+    replace:
+      "  background: transparent;\n  box-shadow: none;\n  outline: none;\n  transition:\n    background-color 160ms ease,\n    box-shadow 160ms ease,\n    transform 160ms ease;",
+  },
+  {
+    file: "src/features/myspace/scenes/sceneStrip.css",
+    find: '.scs-pick[data-state="open"] {\n  background: color-mix(in oklab, var(--foreground) 8%, transparent);\n}',
+    replace:
+      '.scs-pick[data-state="open"] {\n  background: var(--card);\n  box-shadow: 0 6px 20px rgb(0 0 0 / 0.09);\n  transform: translateY(-1px);\n}',
+  },
+  {
+    file: "src/features/myspace/scenes/sceneStrip.css",
+    find: "  .scs-pick:hover {\n    background: color-mix(in oklab, var(--foreground) 7%, transparent);\n  }",
+    replace:
+      "  .scs-pick:hover {\n    background: var(--card);\n    box-shadow: 0 6px 18px rgb(0 0 0 / 0.08);\n    transform: translateY(-1px);\n  }",
+  },
+  // "Sahneyi düzenle" (seçici düzeninde): gri hap yerine zeminsiz, düz palet renkli yazı (sekmeler düzenindeki gibi); üzerine
+  // gelince zemin çıkmaz, yazı biraz silikleşir.
+  {
+    file: "src/features/myspace/scenes/sceneStrip.css",
+    find: '.scn[data-strip="tabs"] .scn-edit:not([data-editing]) {\n  background: transparent;\n  color: var(--brand-text);\n}',
+    replace:
+      '.scn[data-strip="tabs"] .scn-edit:not([data-editing]),\n.scn[data-strip="picker"] .scn-edit:not([data-editing]) {\n  background: transparent;\n  color: var(--brand-text);\n}',
+  },
+  {
+    file: "src/features/myspace/scenes/sceneStrip.css",
+    find: '  .scn[data-strip="tabs"] .scn-edit:not([data-editing]):hover {\n    background: color-mix(in oklab, var(--foreground) 6%, transparent);\n  }',
+    replace:
+      '  .scn[data-strip="tabs"] .scn-edit:not([data-editing]):hover {\n    background: color-mix(in oklab, var(--foreground) 6%, transparent);\n  }\n  .scn[data-strip="picker"] .scn-edit:not([data-editing]):hover {\n    background: transparent;\n    opacity: 0.75;\n  }',
+  },
+  // Kutlamalar (doğum günü, iş yıl dönümü, yeni katılan): kaynak yalnız kurumsal alan adlı adresleri alır. Metin dönüşümü
+  // o alan adını "www.tyrotech.example" yapıyordu; demo adresleri "@tyrotech.example", bu yüzden hepsi eleniyor,
+  // Bildirimler hep "her şey sakin" diyordu.
+  {
+    file: "src/lib/celebrations.js",
+    find: 'mail.endsWith("@www.tyrotech.example")',
+    replace: 'mail.endsWith("@tyrotech.example")',
   },
   // Giriş sayfası (yalnız orada): marka satırı altında "powered by TYRO Tech"; alt bilgi yalnız telif.
   ...["tr", "en", "ar", "ru"].flatMap((lng) => [

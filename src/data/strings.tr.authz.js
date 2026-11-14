@@ -153,6 +153,7 @@ export const strings = {
   "authz.inbox.deleted": "Talep silindi",
   "authz.inbox.noteSaved": "Not kaydedildi",
   "authz.inbox.failed": "İşlem tamamlanamadı",
+  "authz.tradeSync.failed": "tyro yetkisi yazıldı ama tyroTrade yetki tablosu güncellenemedi",
   "authz.inbox.writeFailed": "Değişiklik kaydedilmedi. Biraz sonra tekrar dene.",
   "authz.inbox.loadFailed": "Liste yüklenemedi.",
   "authz.inbox.approveUndone": "Onay geri alındı; talep yeniden bekliyor",

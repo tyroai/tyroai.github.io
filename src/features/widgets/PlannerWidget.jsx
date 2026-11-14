@@ -44,7 +44,7 @@ export function PlannerWidget({ className }) {
       pager={<Pager pager={pager} label={t("widgets.planner.title")} />}
       action={
         total && pager.pages < 2 ? (
-          <span className="text-[0.71875rem] tabular-nums text-muted-foreground">
+          <span className="text-[0.75rem] tabular-nums text-muted-foreground">
             {t("widgets.planner.total", { n: total })}
           </span>
         ) : null

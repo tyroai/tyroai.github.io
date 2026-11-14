@@ -42,8 +42,9 @@ const STATUS = {
   pending: { value: 200000001, label: "First manager approvement" },
 }
 
-function leaveRow(start, end, description, status = "completed", type = "TR01") {
-  const days = weekdaysBetween(start, end)
+function leaveRow(start, end, description, status = "completed", type = "TR01", half = false) {
+  // Yarım gün izin: 0,5 gün / 4 saat (kaynak uygulama listede ve özette bunu ayrı gösterir).
+  const days = half ? 0.5 : weekdaysBetween(start, end)
   const s = STATUS[status]
   return {
     mserp_boraxallowancetransselfserviceentityid: leaveId(),
@@ -54,7 +55,7 @@ function leaveRow(start, end, description, status = "completed", type = "TR01") 
     mserp_allowancetypeid: type,
     [`mserp_allowancetypeid${FV}`]: "Yıllık izin",
     mserp_noofdays: days,
-    mserp_noofhours: days * 8,
+    mserp_noofhours: half ? 4 : days * 8,
     mserp_description: description,
     mserp_status: s.value,
     [`mserp_status${FV}`]: s.label,
@@ -71,14 +72,15 @@ export function ownLeaves(now = new Date()) {
     [-200, 2, 1, "Kişisel işler", "completed"],
     [-120, 1, 4, "Yıllık izin", "completed"],
     [-55, 3, 2, "Aile ziyareti", "completed"],
-    [-20, 4, 0, "Doktor randevusu", "completed"],
+    [-20, 4, 0, "Doktor randevusu (yarım gün)", "completed", true],
+    [10, 5, 0, "Okul toplantısı (yarım gün)", "completed", true],
     [24, 2, 2, "Yıllık izin", "completed"],
     [52, 1, 1, "Kısa tatil", "pending"],
     [95, 1, 3, "Yaz hazırlığı için izin", "pending"],
   ]
-  return spans.map(([off, wd, len, text, status]) => {
+  return spans.map(([off, wd, len, text, status, half]) => {
     const start = nextWeekday(addDays(today, off), wd)
-    return leaveRow(start, addDays(start, len), text, status)
+    return leaveRow(start, addDays(start, len), text, status, "TR01", Boolean(half))
   })
 }
 
@@ -222,12 +224,12 @@ export function roster(now = new Date()) {
   const cast = (name) => EVERYONE.find((p) => p.displayName === name)
   const spots = [
     // [kişi, doğum günü kaç gün sonra | null, kıdem günü: [kaç gün sonra, kaç yıl] | null]
-    [REPORTS[0], 1, null],
+    [REPORTS[0], 0, null], // bugün doğum günü (bildirim paneli, Kutla)
     [COLLEAGUES[0], 3, [3, 6]],
     [COLLEAGUES[4], null, [4, 3]],
     [COLLEAGUES[5], 6, null],
     [COLLEAGUES[1], 9, null],
-    [REPORTS[3], null, [10, 5]],
+    [REPORTS[3], null, [0, 5]], // bugün iş yıl dönümü
     [REPORTS[4], 12, null],
     [COLLEAGUES[3], null, [2, 0]], // yeni katılan
     [MANAGER, null, [7, 9]],

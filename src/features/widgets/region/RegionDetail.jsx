@@ -127,7 +127,7 @@ function Ahead({ ahead, t, locale }) {
           )
           .join(", ")}
       >
-        <div className="grid grid-cols-7 gap-1.5 text-center text-[0.625rem] text-muted-foreground">
+        <div className="grid grid-cols-7 gap-1.5 text-center text-[0.6875rem] text-muted-foreground">
           {ahead.days.map((d) => (
             <span key={d.key} className="h-4">
               {d.precip >= RAIN_DAY_MM ? mm(locale, d.precip) : ""}

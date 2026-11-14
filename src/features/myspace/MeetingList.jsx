@@ -35,9 +35,12 @@ export function MeetingList({ meetings, timeFmt, onOpen, limit = 3 }) {
             onOpenChange={(next) => setOpenId(next ? e.id : null)}
             mobile={isMobile}
           >
-            {(wrap) => (
+            {(wrap, hover) => (
               // Satırın tamamı önizlemeyi açar (konu düğmesinin `::after`'ı satırı kaplar).
-              <li className="group/mt relative -mx-2 grid grid-cols-[3rem_minmax(0,1fr)] items-baseline gap-x-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/[0.07] has-[[data-state=open]]:bg-white/[0.1]">
+              <li
+                {...hover}
+                className="group/mt relative -mx-2 grid grid-cols-[3rem_minmax(0,1fr)] items-baseline gap-x-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/[0.07] has-[[data-state=open]]:bg-white/[0.1]"
+              >
                 <span className="tabular-nums text-white/55">{timeFmt.format(e.start)}</span>
                 {wrap(
                   <button

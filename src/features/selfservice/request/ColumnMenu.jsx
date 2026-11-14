@@ -50,7 +50,7 @@ export function ColumnMenu({ columns }) {
         collisionPadding={12}
         onEscapeKeyDown={keepEscape}
         aria-labelledby={titleId}
-        className="w-[19rem] gap-0 rounded-2xl p-0 text-[0.8125rem]"
+        className="w-[19rem] gap-0 p-0 text-[0.8125rem]"
       >
         <div className="border-b border-border/60 px-4 pt-3.5 pb-3">
           <p id={titleId} className="text-[0.875rem] font-semibold text-foreground">

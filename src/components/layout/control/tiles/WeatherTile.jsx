@@ -1,9 +1,10 @@
 import { lazy, Suspense } from "react"
 import { useLocale } from "@/hooks/useLocale"
 import { useWeather } from "@/hooks/useWeather"
+import { openWeatherDetail } from "@/lib/weatherDetailBus"
 import { cardSkyOf } from "@/lib/weatherSky"
 import { headerTitleKey } from "../../headerWidgets/headerStore"
-import { preloadPanel } from "../panelPreload"
+import { useControlActions } from "../controlActions"
 import { TileShell } from "./TileShell"
 import { TileTip } from "./TileTip"
 import { WidgetTile } from "./WidgetTile"
@@ -17,11 +18,14 @@ const condKey = (kind, night) =>
 /**
  * Hava kutucuğu — header'daki ve Anasayfa'daki havanın görselliği: kutucuğun zemini kartın göğü
  * (`.wxd-sky`: saat ve havaya göre), renkli işaret, derece büyük, yanında durum ("Parçalı
- * bulutlu"), altında günün en yüksek / en düşüğü. Hava okunamadıysa düz widget kutucuğu.
+ * bulutlu"), altında günün en yüksek / en düşüğü. Dokununca panel kapanır, hava ayrıntı penceresi
+ * açılır (Anasayfa'daki hava kartının açtığı pencere, `lib/weatherDetailBus`; ürün sahibi: hava kartı
+ * Master karta yerini bırakınca ayrıntı buradan). Hava okunamadıysa düz widget kutucuğu.
  */
 export function WeatherTile({ onOpen, ...shell }) {
   const { t } = useLocale()
   const w = useWeather()
+  const { close } = useControlActions()
   const c = w.status === "ready" ? w.forecast.current : null
   if (!c || !Number.isFinite(c.temp)) return <WidgetTile id="weather" onOpen={onOpen} {...shell} />
   const span = w.forecast.days?.[0] ?? w.forecast.range24
@@ -37,8 +41,10 @@ export function WeatherTile({ onOpen, ...shell }) {
         <button
           type="button"
           className="cc-hit"
-          onClick={() => onOpen("weather")}
-          onPointerEnter={() => preloadPanel("weather")}
+          onClick={() => {
+            close()
+            openWeatherDetail()
+          }}
         >
           <span className="sr-only">{t(headerTitleKey("weather"))}</span>
           <span className="cc-wx-sym" aria-hidden="true">

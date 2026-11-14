@@ -75,10 +75,10 @@ export function CalendarEventRow({ event }) {
           )}
         >
           <div className="w-[2.875rem] shrink-0 pt-px text-right">
-            <div className="text-[0.78125rem] font-semibold tabular-nums leading-tight text-foreground">
+            <div className="text-[0.8125rem] font-semibold tabular-nums leading-tight text-foreground">
               {event.isAllDay ? t("calendar.allDayShort") : timeFmt.format(event.start)}
             </div>
-            <div className="mt-0.5 text-[0.65625rem] leading-tight text-muted-foreground">
+            <div className="mt-0.5 text-[0.6875rem] leading-tight text-muted-foreground">
               {duration(event, t)}
             </div>
           </div>
@@ -101,7 +101,7 @@ export function CalendarEventRow({ event }) {
             <p
               data-private=""
               className={cn(
-                "truncate text-[0.78125rem] font-semibold leading-snug",
+                "truncate text-[0.8125rem] font-semibold leading-snug",
                 event.isCancelled ? "text-muted-foreground" : "text-foreground",
               )}
             >
@@ -113,7 +113,7 @@ export function CalendarEventRow({ event }) {
             {event.owner && (
               <p
                 data-private=""
-                className="mt-0.5 truncate text-[0.65625rem] font-medium text-brand-deep"
+                className="mt-0.5 truncate text-[0.6875rem] font-medium text-brand-deep"
               >
                 {t("calendar.sharedOwner", { name: event.owner.name })}
               </p>
@@ -168,9 +168,9 @@ export function CalendarEventRow({ event }) {
                 joinInTeams(e, event.joinUrl, t)
               }}
               className={cn(
-                "mt-0.5 shrink-0 rounded-full px-2 py-1 text-[0.65625rem] font-semibold transition",
+                "mt-0.5 shrink-0 rounded-full px-2 py-1 text-[0.6875rem] font-semibold transition",
                 live
-                  ? "bg-brand-solid text-white shadow-sm hover:brightness-110"
+                  ? "bg-brand-solid text-white shadow-sm"
                   : "bg-brand/10 text-brand-deep hover:bg-brand/20 focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100",
               )}
             >

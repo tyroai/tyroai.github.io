@@ -85,7 +85,7 @@ export function MailRow({ m, photo, panelRef, onExpand }) {
                 >
                   {m.from || t("mail.unknownSender")}
                 </span>
-                <span className="flex shrink-0 items-center gap-1 text-[0.625rem] tabular-nums text-muted-foreground">
+                <span className="flex shrink-0 items-center gap-1 text-[0.6875rem] tabular-nums text-muted-foreground">
                   {m.importance === "high" && <span className="font-bold text-destructive">!</span>}
                   {m.hasAttachments && (
                     <HugeiconsIcon

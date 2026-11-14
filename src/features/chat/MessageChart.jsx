@@ -349,7 +349,7 @@ export function MessageChart({
               disabled={saving}
               aria-label={t("chat.chart.download")}
               title={t("chat.chart.download")}
-              className="grid size-6 place-items-center rounded-md text-muted-foreground transition hover:bg-accent/60 hover:text-foreground disabled:opacity-50"
+              className="grid size-6 place-items-center rounded-md text-muted-foreground transition hover:bg-accent/60 hover:text-foreground disabled:opacity-50 relative pointer-coarse:after:absolute pointer-coarse:after:-inset-2"
             >
               <HugeiconsIcon icon={Download01Icon} className="size-3.5" strokeWidth={2} />
             </button>

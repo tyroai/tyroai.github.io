@@ -62,9 +62,7 @@ function DocCard({ title, subtitle, icon, children, className }) {
             {title}
           </h2>
           {subtitle && (
-            <p className="mt-0.5 text-[0.71875rem] leading-snug text-muted-foreground">
-              {subtitle}
-            </p>
+            <p className="mt-0.5 text-[0.75rem] leading-snug text-muted-foreground">{subtitle}</p>
           )}
         </div>
       </div>
@@ -82,7 +80,7 @@ function Row({ icon, label, meta, external, onClick, href }) {
       </span>
       <span
         lang="tr"
-        className="min-w-0 flex-1 text-left text-[0.78125rem] font-medium leading-snug text-foreground/90"
+        className="min-w-0 flex-1 text-left text-[0.8125rem] font-medium leading-snug text-foreground/90"
       >
         {label}
       </span>
@@ -267,7 +265,7 @@ function PolicyBrowser() {
         /* ⚠️ "Soramadık ≠ boş klasör": okunamadığını SÖYLÜYOR ve klasörün
            kendi bağlantısını veriyor — kullanıcı yine de ulaşabilsin. */
         <div className="flex flex-col gap-1.5 rounded-xl border border-border bg-muted/30 p-2.5">
-          <p className="flex items-start gap-1.5 text-[0.71875rem] leading-snug text-muted-foreground">
+          <p className="flex items-start gap-1.5 text-[0.75rem] leading-snug text-muted-foreground">
             <HugeiconsIcon
               icon={Alert02Icon}
               className="mt-0.5 size-3.5 shrink-0"

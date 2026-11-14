@@ -151,7 +151,7 @@ export function FormNarrate({ kind, form, placement = "header", compact = false,
           e.preventDefault()
           inputRef.current?.focus()
         }}
-        className="w-[min(26rem,calc(100vw-1.5rem))] gap-0 rounded-2xl p-2"
+        className="w-[min(26rem,calc(100vw-1.5rem))] gap-0 p-2"
       >
         <NarrateField
           inputRef={inputRef}

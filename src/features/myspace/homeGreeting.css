@@ -13,6 +13,13 @@
     margin-bottom: var(--spacing-cards);
   }
 
+  /* Karşılama kartı panodaysa selamlamayı ve günün okumasını o söyler: sayfanın başında yalnız kaş
+     (canlı · tarih · saat) kalır. Kart panodan kalkarsa selamlama kendiliğinden geri gelir. */
+  .ms-home:is(:has([data-widget-slot="tyro-welcome"]), :has([data-board-pending]))
+    :is(.home-greeting__title, .home-greeting__line, .home-greeting__ghost) {
+    display: none;
+  }
+
   /* Canlı rozeti: palet mürekkebinin %12'si zemin, yazı ve nokta mürekkep (her palette AA). */
   .home-greeting__live {
     display: inline-flex;
@@ -205,4 +212,33 @@
 /* İpucu gövdesi inerken kartın yeri (tembel parça; önce üstüne gelince yüklenir). */
 .home-greeting__tip-wait {
   height: 7rem;
+}
+
+/* Sahneler parçası inene dek iskelet (`MySpacePage` › `ScenesFallback`): şerit + 2+1+1 ilk sıra. */
+.scn-pending {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+.scn-pending-strip {
+  width: min(22rem, 100%);
+  height: 2.5rem;
+  border-radius: 999px;
+}
+.scn-pending-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+}
+.scn-pending-row > span {
+  height: 15rem;
+  border-radius: 1.75rem;
+}
+@container myspace (max-width: 46rem) {
+  .scn-pending-row {
+    grid-template-columns: 1fr;
+  }
+  .scn-pending-row > span + span {
+    display: none;
+  }
 }

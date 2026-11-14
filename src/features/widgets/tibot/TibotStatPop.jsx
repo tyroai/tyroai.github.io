@@ -35,7 +35,8 @@ export function TibotStatPop({ title, items, bucket, onOpen, side = "bottom", ch
         sideOffset={8}
         collisionPadding={12}
         aria-label={title}
-        className="tbw-pop w-80 rounded-2xl p-2"
+        data-private=""
+        className="tbw-pop w-80 p-2"
       >
         <p className="tbw-pop-title">
           {title}

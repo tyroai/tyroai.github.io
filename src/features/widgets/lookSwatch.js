@@ -20,6 +20,9 @@ export const SWATCH = {
   plain:
     "bg-card ring-1 ring-border [background-image:radial-gradient(circle_at_68%_32%,var(--brand-via)_0_24%,transparent_27%)]",
   light: "bg-white ring-1 ring-black/15",
+  // Hibrit: beyaz kart, altta paletin şeridi (öneri kapsülü Renkli).
+  hybrid:
+    "bg-white ring-1 ring-black/15 [background-image:linear-gradient(to_top,var(--brand-via)_0_40%,transparent_40%)]",
   dark: "bg-[#1f1f22] ring-1 ring-white/15",
 }
 
@@ -57,6 +60,21 @@ export function renkliFill(id) {
  * (`app`; Renkli dışında `SWATCH`).
  */
 export function lookSwatch(base, id, app) {
+  if (base === "hybrid") {
+    const fill = renkliFill(id ?? app)
+    return fill
+      ? {
+          className: "ring-1 ring-black/15",
+          style: {
+            backgroundColor: "#fff",
+            backgroundImage: fill,
+            backgroundSize: "100% 42%",
+            backgroundPosition: "bottom",
+            backgroundRepeat: "no-repeat",
+          },
+        }
+      : { className: SWATCH.hybrid }
+  }
   if (base === "palette") {
     const fill = renkliFill(id ?? app)
     return fill

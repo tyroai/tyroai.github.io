@@ -1,0 +1,136 @@
+/* İş avansı akışının kubbesi (`TurkeyDome`): mavi yarım küre, noktalı Türkiye, iğne, rota ve uçak.
+   Renk değişkenleri `.af`te (`advanceFlow.css`). */
+.af-dome {
+  display: block;
+  width: min(100%, 26.5rem);
+  margin: 0.75rem auto 0;
+  overflow: visible;
+}
+.dark .af {
+  --af-accent: #6db6f2;
+  --af-sea-top: #2b5078;
+  --af-sea-mid: #1d3654;
+  --af-haze: #3a5f88;
+  --af-rim: #36608f;
+  --af-land: #7fb2e8;
+}
+.af-dome-top {
+  stop-color: var(--af-sea-top);
+}
+.af-dome-mid {
+  stop-color: var(--af-sea-mid);
+}
+.af-dome-end {
+  stop-color: var(--card);
+}
+.af-dome-haze {
+  stop-color: var(--af-haze);
+  stop-opacity: 0.38;
+}
+.af-rim {
+  fill: var(--af-rim);
+}
+.af-map {
+  transform-origin: 0 0;
+  transition: transform 720ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.af-land {
+  fill: none;
+  stroke: var(--af-land);
+  stroke-linecap: round;
+}
+/* Rota: beyaz yay (altında yumuşak gölge) çizilerek gelir; uçak yay boyunca uçar (SMIL). */
+.af-arc,
+.af-arc-shadow {
+  fill: none;
+  stroke-linecap: round;
+}
+.af-arc {
+  stroke: #fff;
+  stroke-dasharray: 1;
+  animation: af-draw 900ms cubic-bezier(0.23, 1, 0.32, 1) 120ms both;
+}
+.af-arc-shadow {
+  stroke: color-mix(in oklab, #1d3f66 24%, transparent);
+  translate: 0 1px;
+  filter: blur(1.2px);
+  animation: af-fade 600ms ease 300ms both;
+}
+.af-plane {
+  animation: af-fade 260ms ease 200ms both;
+}
+.af-plane-shadow {
+  fill: color-mix(in oklab, #1d3f66 30%, transparent);
+  filter: blur(2.4px);
+}
+.af-plane-body {
+  stroke: #b9c2d0;
+  stroke-width: 0.5;
+}
+.af-plane-engine {
+  fill: #dfe4ec;
+  stroke: #aeb8c8;
+  stroke-width: 0.4;
+}
+.af-plane-glass {
+  fill: #2c3b52;
+}
+@keyframes af-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.af-pin {
+  animation: af-pin-in 420ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.af-pin-ripple {
+  fill: none;
+  stroke: var(--af-accent);
+  stroke-width: 1.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: af-ripple 2.4s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+}
+.af-pin-halo {
+  fill: color-mix(in oklab, var(--af-accent) 20%, transparent);
+}
+.af-pin[data-soft] .af-pin-dot {
+  fill: color-mix(in oklab, var(--af-accent) 62%, #fff);
+}
+.af-pin-ring {
+  fill: #fff;
+}
+.af-pin-dot {
+  fill: var(--af-accent);
+}
+.af-tag {
+  fill: var(--card);
+  filter: drop-shadow(0 1px 2px color-mix(in oklab, var(--foreground) 22%, transparent));
+}
+.dark .af-tag {
+  fill: #f4f6fa;
+}
+.af-tag-text {
+  fill: #1b2a3d;
+  font-size: 11px;
+  font-weight: 600;
+}
+@keyframes af-pin-in {
+  from {
+    opacity: 0;
+    translate: 0 -10px;
+  }
+}
+@keyframes af-ripple {
+  from {
+    opacity: 0.7;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}

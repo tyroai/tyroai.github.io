@@ -24,7 +24,7 @@ function escapeText(value) {
 
 /** Çerçevenin içerik politikası — OneNote okuyucusu da aynısını kullanır (`lib/onenote/onenoteFrame`). */
 export const FRAME_CSP =
-  "default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:"
+  "default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:; base-uri 'none'; form-action 'none'"
 
 export function readerFrameDoc(html, { note } = {}) {
   // ⚠️ Renkler TOKEN DEĞİL, SABİT. Çerçeve AYRI bir belge: `var(--foreground)`

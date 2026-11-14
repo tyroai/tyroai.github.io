@@ -3,6 +3,7 @@ import "@/lib/i18n/authz"
 import { useMemo, useRef } from "react"
 import { useLocale } from "@/hooks/useLocale"
 import { useAuthorizationsAdmin } from "@/features/security/hooks/useAuthorizationsAdmin"
+import { useTradeSyncNotice } from "@/features/security/hooks/useTradeSyncNotice"
 import { usePhoneLayout } from "@/features/selfservice/layout/phone"
 import { TextTabs } from "@/features/selfservice/board/TextTabs"
 import { ErrorCause } from "@/components/common/ErrorCause"
@@ -33,6 +34,7 @@ export function SecurityPage() {
   const view = useSecurityParams()
   // Kanca sayfada BİR KEZ: sekmeler aynı veriyi ve aynı Yenile'yi paylaşır.
   const ctx = useAuthorizationsAdmin()
+  useTradeSyncNotice()
   const { authorizations, requests, catalog, known, allowed } = ctx
 
   // Üç durum üç cümle: bekliyor · soramadık (UNKNOWN, "hayır" değil) · hayır.

@@ -4,6 +4,10 @@ import { fetchMarket, peekMarket } from "@/features/widgets/lib/market"
 // Dakikada bir yoklanır; ağa çıkıp çıkmamaya `fetchMarket`in önbellek süresi karar verir (taze
 // veride 5 dk, güncellenemeyen veride 1 dk).
 const TICK_MS = 60_000
+// Birincil kaynak ara ara isteği yarıda kesiyor: taze veri gelmediyse (boş, yedek ya da eski veri)
+// dakikalık yoklamayı beklemeden bu aralıklarla yeniden denenir; kart kendini toparlar.
+const HEAL_MS = [4_000, 10_000, 20_000]
+const settled = (data) => Boolean(data) && !data.stale && data.source !== "ecb"
 
 /**
  * Piyasa verisi (`features/widgets/lib/market.js`): ilk boyamada son bilinen veri (varsa) hemen görünür; sekme
@@ -29,12 +33,26 @@ export function useMarketData() {
   )
 
   useEffect(() => {
-    const tick = () => !document.hidden && fetchMarket().then(apply)
-    fetchMarket().then(apply)
+    let heal = 0
+    let timer = null
+    let gone = false
+    const land = (data) => {
+      if (gone) return
+      apply(data)
+      clearTimeout(timer)
+      if (settled(data)) heal = 0
+      else if (heal < HEAL_MS.length) {
+        timer = setTimeout(() => fetchMarket({ force: true }).then(land), HEAL_MS[heal++])
+      }
+    }
+    const tick = () => !document.hidden && fetchMarket().then(land)
+    fetchMarket().then(land)
     const id = setInterval(tick, TICK_MS)
     document.addEventListener("visibilitychange", tick)
     return () => {
+      gone = true
       clearInterval(id)
+      clearTimeout(timer)
       document.removeEventListener("visibilitychange", tick)
     }
   }, [apply])

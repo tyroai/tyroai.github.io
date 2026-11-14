@@ -74,7 +74,7 @@ export function PanelFooterAction({
     >
       <span className="truncate">{children}</span>
       {count != null && count > 0 && (
-        <span className="shrink-0 rounded-full bg-foreground/[0.08] px-1.5 py-0.5 text-[0.625rem] font-semibold tabular-nums text-foreground/[0.65]">
+        <span className="shrink-0 rounded-full bg-foreground/[0.08] px-1.5 py-0.5 text-[0.6875rem] font-semibold tabular-nums text-foreground/[0.65]">
           {count}
         </span>
       )}

@@ -47,7 +47,7 @@ export function DayStrip({ day, busy, windows, active, now, time }) {
       )}
       {/* Etiket saatin tam altında: uçtakiler kenara yaslı, aradakiler sıfır genişlikli kutuda
           ortalı (her iki yönde de doğru). */}
-      <div className="relative mt-1 h-3.5 text-[0.625rem] tabular-nums text-muted-foreground">
+      <div className="relative mt-1 h-3.5 text-[0.6875rem] tabular-nums text-muted-foreground">
         {TICKS.map((h, i) => {
           const last = i === TICKS.length - 1
           const style =

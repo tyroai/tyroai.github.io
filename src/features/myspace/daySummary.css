@@ -1,6 +1,6 @@
 /*
  * Günün özetinin vurgu tonları (`DaySummary` › `TONE`, `--ds-*`); aynı tonu isteyen
- * başka yer `ds-tones` sınıfını alır (Günün brifingi'nin cümleleri).
+ * başka yer `ds-tones` sınıfını alır (TYRO brifingi'nin cümleleri).
  *
  * ⚠️ AÇIKLIK SINIRLI, TON VE DOYGUNLUK PALETİN (2026-10-03). Ölçüldü (17 palet ×
  * 2 tema, `--card` zeminine karşı, renk boyanıp pikselden okunarak): eski

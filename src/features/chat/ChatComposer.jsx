@@ -292,7 +292,7 @@ export function ChatComposer({
               light-theme duo, and in dark it put navy text on a near-black
               pill. The paired tokens are legible in both themes by
               definition, and the brand colour stays on the icon. */}
-            <span className="relative flex items-center gap-2 rounded-full border border-brand/30 bg-card px-3.5 py-1.5 text-[0.78125rem] font-semibold text-foreground shadow-sm">
+            <span className="relative flex items-center gap-2 rounded-full border border-brand/30 bg-card px-3.5 py-1.5 text-[0.8125rem] font-semibold text-foreground shadow-sm">
               <HugeiconsIcon
                 icon={Attachment01Icon}
                 className="size-4 text-brand"

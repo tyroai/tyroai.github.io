@@ -2,7 +2,7 @@ import { Fragment, useMemo } from "react"
 import { InsightTerm } from "@/features/myspace/InsightTerm"
 import { useLocale } from "@/hooks/useLocale"
 import { getDateTimeFormat } from "@/lib/intl-cache"
-import { plural } from "./useBrief"
+import { plural } from "@/hooks/useBrief"
 
 const OPTS_TIME = { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }
 const CATS = new Set(["zero", "one", "two", "few", "many", "other"])
@@ -20,7 +20,7 @@ function fill(template, slots) {
 }
 
 /**
- * Brifingin iki cümlesi — Karşılama (`card: "intro"`) ve Günün brifingi (`card: "brief"`)
+ * Brifingin iki cümlesi — Karşılama (`card: "intro"`) ve TYRO brifingi (`card: "brief"`)
  * ortak. Toplantı ifadeleri Anasayfa özetindeki gibi VURGULU (noktalı alt çizgi; üstüne
  * gelince ya da basınca toplantılar, listeden önizleme, dipte takvim): bugün kalanlar ve
  * sıradakinin saati, hafta sonunda bir sonraki iş gününün toplantıları ve ilkinin saati.

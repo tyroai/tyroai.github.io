@@ -1,0 +1,122 @@
+/* PENCERE DİLİ (`docs/design-system.md` › Pencereler): pencere (dialog), sağdan açılan panel ve
+   telefonun alt çekmecesi aynı yüzeyi, perdeyi ve hareket ailesini paylaşır. Kurallar `components`
+   katmanında: çağıranın yardımcı sınıfı (tam ekran, köşesiz, özel en) üstün gelir. */
+@layer components {
+  /* Perde: içerik arkada seçilir kalsın (ağır siyah yerine yarı saydam + hafif bulanıklık). */
+  :where([data-slot="dialog-overlay"], [data-slot="sheet-overlay"]) {
+    background: rgb(15 23 42 / 0.42);
+    &[data-state="open"] {
+      animation: veil-in 220ms ease-out;
+    }
+    &[data-state="closed"] {
+      animation: veil-out 160ms ease-out forwards;
+    }
+  }
+  .dark :where([data-slot="dialog-overlay"], [data-slot="sheet-overlay"]) {
+    background: rgb(0 0 0 / 0.6);
+  }
+
+  /* Pencere: ortada, yerinden büyür (tetiğe bağlı değil: köken merkez). */
+  :where([data-slot="dialog-content"]) {
+    border-radius: var(--radius-panel);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--foreground) 8%, transparent),
+      0 32px 80px -24px rgb(15 23 42 / 0.5);
+    &[data-state="open"] {
+      animation: window-in 220ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    &[data-state="closed"] {
+      animation: window-out 150ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+  }
+
+  /* Sağdan/soldan panel: kenardan kayar (iOS çekmece eğrisi), iç köşeleri panel köşesi. */
+  :where([data-slot="sheet-content"]):where([data-side="right"], [data-side="left"]) {
+    --sheet-from: 100% 0;
+    border-radius: var(--radius-panel) 0 0 var(--radius-panel);
+    box-shadow: 0 0 80px -20px rgb(15 23 42 / 0.45);
+    &[data-side="left"] {
+      --sheet-from: -100% 0;
+      border-radius: 0 var(--radius-panel) var(--radius-panel) 0;
+    }
+  }
+  /* Alt çekmece: boyu kadar aşağıdan yükselir; sürüklerken parmağı izleyen `useSheetDrag`. */
+  :where([data-slot="sheet-content"]):where([data-side="bottom"]) {
+    --sheet-from: 0 100%;
+  }
+  :where([data-slot="sheet-content"]):where([data-side="top"]) {
+    --sheet-from: 0 -100%;
+  }
+  :where([data-slot="sheet-content"]) {
+    &[data-state="open"] {
+      animation: sheet-in 420ms cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    &[data-state="closed"] {
+      animation: sheet-out 260ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+    }
+  }
+
+  /* BASIŞ HİSSİ: her düğme basıldığını hissettirir. Tam genişlikte satırlar ölçeklenmez (zemin
+     tonuyla cevap verir); kapatmak için `data-press="none"`. */
+  :where(button, [role="button"], [data-slot="button"]):where(
+    :not(
+      :disabled,
+      [aria-disabled="true"],
+      [data-press="none"],
+      [class*="w-full"],
+      [class*="-row "],
+      [class$="-row"]
+    )
+  ) {
+    transition: scale 160ms cubic-bezier(0.23, 1, 0.32, 1);
+    &:active {
+      scale: 0.97;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-slot="dialog-content"], [data-slot="sheet-content"]) {
+      &[data-state="open"] {
+        animation: veil-in 150ms ease-out;
+      }
+      &[data-state="closed"] {
+        animation: veil-out 120ms ease-out forwards;
+      }
+    }
+    :where(button, [role="button"], [data-slot="button"]):active {
+      scale: 1;
+    }
+  }
+}
+@keyframes veil-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes veil-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes window-in {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+@keyframes window-out {
+  to {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+@keyframes sheet-in {
+  from {
+    translate: var(--sheet-from);
+  }
+}
+@keyframes sheet-out {
+  to {
+    translate: var(--sheet-from);
+  }
+}

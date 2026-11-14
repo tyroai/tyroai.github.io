@@ -13,6 +13,8 @@ import { usePageAccess } from "@/hooks/usePageAccess"
 import { ConfigProvider } from "@/providers/ConfigProvider"
 import { prefetchOnIdle, ROUTE_CHUNKS } from "@/lib/routeChunks"
 import { MeetingSummaryHost } from "@/features/myspace/summary/MeetingSummaryHost"
+import { WeatherDetailHost } from "@/features/myspace/weather/WeatherDetailHost"
+import { registerWidgetSlot } from "@/lib/widgetSlots"
 import { MeetingAlertHost } from "@/features/meeting-alert/MeetingAlertHost"
 import { DashboardLayout } from "@/components/layout/DashboardLayout"
 import { ErrorBoundary } from "@/components/common/ErrorBoundary"
@@ -51,6 +53,14 @@ const MySpacePage = lazy(ROUTE_CHUNKS["myspace"])
 // maskotun panosu, grafikler ve ayrıntı paneli yalnız sayfayı açana iniyor.
 const TodoPage = lazy(ROUTE_CHUNKS["todo"])
 const SelfServicePage = lazy(ROUTE_CHUNKS["selfservice"])
+// Karşılama kartı Anasayfa'nın özelliğinde, panolar onu yuvadan çizer (`lib/widgetSlots`): kabuk
+// kaydeder, özellikler birbirine bağlanmaz. Tembel: Anasayfa açılınca iner.
+registerWidgetSlot(
+  "tyro-welcome",
+  lazy(() =>
+    import("@/features/myspace/welcome/WelcomeCard").then((m) => ({ default: m.WelcomeCard })),
+  ),
+)
 // Ticket — Xurrent talepleri, salt okunur (kitle `lib/tibotPolicy`).
 const TibotPage = lazy(ROUTE_CHUNKS.tibot)
 // tyroRM bölümü (`/rm?view=…`): yetkisiz kişiye kendi kapısını gösterir.
@@ -471,6 +481,8 @@ function App() {
       </DashboardLayout>
       {/* Toplantı özeti: takvim, çentik ve Anasayfa aynı pencereyi açar. */}
       <MeetingSummaryHost />
+      {/* Hava ayrıntısı: Denetim Merkezi'nin hava kutucuğu ve Master kart buradan açar. */}
+      <WeatherDetailHost />
       {/* Sıradaki toplantıya 15 dk kala geri sayım (her sayfada). */}
       <MeetingAlertHost />
     </>

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import { PHOTO_CREDITS_URL } from "@/lib/photoCredits"
 import { HugeiconsIcon } from "@hugeicons/react"
 import ArrowRight01Icon from "@hugeicons/core-free-icons/ArrowRight01Icon"
 import BubbleChatIcon from "@hugeicons/core-free-icons/BubbleChatIcon"
@@ -84,6 +85,17 @@ export function HelpSupport({ query = "" }) {
         ) : null}
       </ul>
       <PwaInstallButton />
+      {/* Serbest lisanslı fotoğrafların atıf listesi (`lib/photoCredits`). */}
+      <p className="text-xs text-muted-foreground">
+        <a
+          href={PHOTO_CREDITS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-sm underline decoration-foreground/20 underline-offset-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+        >
+          {t("help.support.photoCredits")}
+        </a>
+      </p>
     </section>
   )
 }
@@ -122,7 +134,7 @@ function SupportPerson({ person, note }) {
           rel="noreferrer"
           aria-label={t("help.support.teams.aria", { name })}
           className={cn(
-            "inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-brand-fill-deep px-4 text-sm font-semibold text-brand-on-brand transition hover:brightness-110 focus-visible:ring-offset-2 focus-visible:ring-offset-background @2xl/help:h-10 @2xl/help:flex-none",
+            "inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-brand-fill-deep px-4 text-sm font-semibold text-brand-on-brand transition focus-visible:ring-offset-2 focus-visible:ring-offset-background @2xl/help:h-10 @2xl/help:flex-none",
             FOCUS,
           )}
         >

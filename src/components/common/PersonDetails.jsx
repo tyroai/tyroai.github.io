@@ -12,8 +12,9 @@ import { PersonAvatar } from "@/components/common/PersonAvatar"
 import { useLocale } from "@/hooks/useLocale"
 import { usePeoplePhotos } from "@/hooks/usePeoplePhotos"
 import { cn } from "@/lib/utils"
+import "./personCard.css"
+import "./personParts.css"
 
-const LABEL = "block text-[0.625rem] font-medium uppercase tracking-[0.06em] text-muted-foreground"
 const telOf = (value) => `tel:${value.replace(/[^\d+]/g, "")}`
 
 /**
@@ -46,7 +47,7 @@ export function PersonDetails({
   return (
     <>
       {(address || p?.phones?.length || p?.mobile || company || p?.city) && (
-        <ul className={cn("space-y-0.5", className)}>
+        <ul className={cn("pc-list", className)}>
           {address && (
             <CopyRow icon={Mail01Icon} label={t("person.email")} value={address} roomy={roomy} />
           )}
@@ -68,47 +69,43 @@ export function PersonDetails({
             />
           )}
           {(company || p?.city) && (
-            <li className="flex items-start gap-2.5 rounded-lg px-2 py-1.5">
-              <HugeiconsIcon
-                icon={company ? Building03Icon : Location01Icon}
-                className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
-                strokeWidth={1.9}
-                aria-hidden="true"
+            <li className="pc-row">
+              <RowIcon icon={company ? Building03Icon : Location01Icon} />
+              <RowText
+                label={t(company ? "person.company" : "person.address")}
+                value={[company, p.city].filter(Boolean).join(" · ")}
+                lang="tr"
               />
-              <span className="min-w-0 flex-1">
-                <span className={LABEL} lang={locale}>
-                  {t(company ? "person.company" : "person.address")}
-                </span>
-                <span lang="tr" className="block text-foreground/85 [overflow-wrap:anywhere]">
-                  {[company, p.city].filter(Boolean).join(" · ")}
-                </span>
-              </span>
             </li>
           )}
         </ul>
       )}
       {manager && (
-        <div className={className}>
-          <p lang={locale} className={cn(LABEL, "px-2 pb-1")}>
+        <div className={cn("pc-list", className)}>
+          <p lang={locale} className="pc-eyebrow">
             {t("person.manager")}
           </p>
           {renderManager
             ? renderManager(manager, row)
-            : row({ onClick: () => onManager?.(manager) })}
+            : row({ onClick: () => onManager?.(manager), "data-pc-manager": "" })}
         </div>
       )}
     </>
   )
 }
 
-function RowText({ label, value }) {
+const RowIcon = ({ icon }) => (
+  <HugeiconsIcon icon={icon} className="pc-row-ic" strokeWidth={1.8} aria-hidden="true" />
+)
+
+function RowText({ label, value, lang }) {
   const { locale } = useLocale()
   return (
-    <span className="min-w-0 flex-1">
-      <span className={LABEL} lang={locale}>
+    <span className="pc-row-text">
+      <span className="pc-label" lang={locale}>
         {label}
       </span>
-      <span className="block text-foreground/85 tabular-nums [overflow-wrap:anywhere]">
+      <span className="pc-value" lang={lang}>
         {value}
       </span>
     </span>
@@ -117,28 +114,13 @@ function RowText({ label, value }) {
 
 /** Telefon satırı: kendisi `tel:` bağlantısı; bölmede sağda kopyala düğmesi (masaüstünde arama yok). */
 function PhoneRow({ icon, label, value, roomy }) {
-  const link = (
-    <a
-      href={telOf(value)}
-      className={cn(
-        "flex items-start gap-2.5 rounded-lg px-2 py-1.5 transition hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40",
-        roomy && "min-w-0 flex-1 pointer-coarse:min-h-11",
-      )}
-    >
-      <HugeiconsIcon
-        icon={icon}
-        className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
-        strokeWidth={1.9}
-        aria-hidden="true"
-      />
-      <RowText label={label} value={value} />
-    </a>
-  )
-  if (!roomy) return <li>{link}</li>
   return (
-    <li className="flex items-center gap-1">
-      {link}
-      <CopyButton value={value} labelKey="person.copyPhone" roomy />
+    <li className="pc-item">
+      <a href={telOf(value)} className="pc-row" data-roomy={roomy ? "" : undefined}>
+        <RowIcon icon={icon} />
+        <RowText label={label} value={value} />
+      </a>
+      {roomy && <CopyButton value={value} labelKey="person.copyPhone" roomy />}
     </li>
   )
 }
@@ -146,14 +128,9 @@ function PhoneRow({ icon, label, value, roomy }) {
 /** Adres satırı: metin seçilebilir, sağdaki düğme kopyalar. */
 function CopyRow({ icon, label, value, roomy }) {
   return (
-    <li className="flex items-center gap-1">
-      <span className="flex min-w-0 flex-1 items-start gap-2.5 rounded-lg px-2 py-1.5 select-text">
-        <HugeiconsIcon
-          icon={icon}
-          className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
-          strokeWidth={1.9}
-          aria-hidden="true"
-        />
+    <li className="pc-item">
+      <span className="pc-row" data-static="">
+        <RowIcon icon={icon} />
         <RowText label={label} value={value} />
       </span>
       <CopyButton value={value} labelKey="person.copy" roomy={roomy} />
@@ -181,14 +158,14 @@ function CopyButton({ value, labelKey, roomy }) {
         onClick={copy}
         aria-label={label}
         title={label}
-        className={cn(
-          "grid size-8 shrink-0 place-items-center rounded-lg text-muted-foreground transition hover:bg-accent/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40",
-          roomy ? "pointer-coarse:size-11" : "[@media(pointer:coarse)]:size-10",
-        )}
+        className="pc-copy"
+        data-roomy={roomy ? "" : undefined}
+        data-copied={copied ? "" : undefined}
       >
+        {/* `key`: simge değişince küçük bir belirme (onay hissi). */}
         <HugeiconsIcon
+          key={copied ? "ok" : "copy"}
           icon={copied ? Tick02Icon : Copy01Icon}
-          className={cn("size-3.5", copied && "text-emerald-600")}
           strokeWidth={2}
           aria-hidden="true"
         />
@@ -211,25 +188,22 @@ export function ManagerRow({ manager, label, className, ...props }) {
       aria-label={label}
       title={t("person.openManager", { name: manager.name })}
       {...props}
-      className={cn(
-        "group/mgr flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-12",
-        className,
-      )}
+      className={cn("pc-row pc-mgr", className)}
     >
-      <PersonAvatar name={manager.name} photo={photo} className="size-8" />
-      <span className="min-w-0 flex-1">
-        <span lang="tr" className="block truncate font-semibold text-foreground/90">
+      <PersonAvatar name={manager.name} photo={photo} className="pc-mgr-avatar" />
+      <span className="pc-row-text">
+        <span lang="tr" className="pc-mgr-name">
           {manager.name}
         </span>
         {manager.title && (
-          <span lang="tr" className="block truncate text-[0.6875rem] text-muted-foreground">
+          <span lang="tr" className="pc-mgr-title">
             {manager.title}
           </span>
         )}
       </span>
       <HugeiconsIcon
         icon={ArrowRight01Icon}
-        className="size-3.5 shrink-0 text-muted-foreground transition group-hover/mgr:text-foreground"
+        className="pc-chev"
         strokeWidth={2}
         aria-hidden="true"
       />

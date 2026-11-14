@@ -32,7 +32,7 @@ export const strings = {
   "tour.home.start.item1":
     "Hava kartına dokun: saatlik ve iki haftalık tahmin; konum hapı yağmurun saatini de söyler.",
   "tour.home.start.item2":
-    "Günün brifingi toplantılarını, okunmamış postalarını, açık işlerini ve Keşfet'teki yenileri sayar.",
+    "TYRO brifingi toplantılarını, okunmamış postalarını, açık işlerini ve Keşfet'teki yenileri sayar.",
   "tour.home.start.item3":
     "Vurgulu bir ifadeye dokun ya da üstüne gel: ilk üç kayıt açılır, oradan takvimine, postana, listene ya da Keşfet'e geçersin.",
   "tour.home.ask.title": "Sor, TYRO yapsın",
@@ -73,6 +73,13 @@ export const strings = {
     "Odak modu bildirimleri susturur; Sunum modu ekran paylaşırken posta, toplantı ve İK bilgilerini bulanıklaştırır.",
   "tour.home.control.item2":
     "Bir araca dokun, burada açılır; sık kullandığını header'a ya da çentiğe sabitle.",
+  "tour.home.scenes.title": "Sahnelerin burada",
+  "tour.home.scenes.item1":
+    "TYRO sabah, gün içi ve akşam sahnesini saate ya da takvimine göre kendisi açar; sıradakini seçicinin yanında görürsün.",
+  "tour.home.scenes.item2":
+    "Her sahne kendi kartlarını tutar: başka bir sahneye geçebilir ya da kendi sahneni kurabilirsin.",
+  "tour.home.scenes.item3":
+    "Şeridin görünüşünü Profil › Görünüm › Sahne şeridi'nden değiştirebilirsin.",
   "tour.chat.composer.title": "Yaz, yapıştır, bırak",
   "tour.chat.composer.item1":
     "Ekran görüntüsünü doğrudan yapıştır ya da dosyayı kutunun üstüne bırak: TYRO ikisini de okur.",

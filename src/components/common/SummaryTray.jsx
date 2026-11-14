@@ -30,7 +30,7 @@ const CELL =
 const ACTIVE =
   "group/stat transition hover:bg-foreground/[0.04] hover:before:opacity-0 focus-visible:ring-2 focus-visible:ring-brand/40 aria-pressed:bg-brand/[0.08] aria-pressed:before:opacity-0"
 const LABEL_ROW =
-  "flex min-w-0 items-center gap-1.5 text-[0.75rem] font-medium leading-tight text-muted-foreground @max-[24rem]/tray:flex-1 @max-[24rem]/tray:gap-1 @max-[24rem]/tray:text-[0.65625rem]"
+  "flex min-w-0 items-center gap-1.5 text-[0.75rem] font-medium leading-tight text-muted-foreground @max-[24rem]/tray:flex-1 @max-[24rem]/tray:gap-1 @max-[24rem]/tray:text-[0.6875rem]"
 const VALUE =
   "shrink-0 text-[1.375rem] font-semibold leading-none tracking-[-0.03em] tabular-nums @max-[24rem]/tray:text-[1.125rem]"
 

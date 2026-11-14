@@ -140,7 +140,7 @@ function RowButton({ icon, onClick, disabled, children, tone, title }) {
       className={cn(
         "inline-flex items-center gap-1 rounded-lg border px-2 [min-height:max(1.75rem,28px)] text-[0.75rem] font-medium transition-colors disabled:opacity-60",
         tone === "primary"
-          ? "border-transparent bg-brand-fill-deep text-brand-on-brand hover:brightness-110"
+          ? "border-transparent bg-brand-fill-deep text-brand-on-brand"
           : tone === "brand"
             ? "border-brand/30 bg-brand-soft/50 text-brand hover:bg-brand-soft/80"
             : "border-border bg-background text-foreground/[0.78] hover:bg-foreground/[0.04]",
@@ -236,7 +236,7 @@ export function NewAuthorizationDialog({ ctx }) {
           <Button
             onClick={saveNewRow}
             disabled={busy || !trimmed || !!duplicate}
-            className="gap-1.5 bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110"
+            className="gap-1.5 bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep"
           >
             <HugeiconsIcon icon={UserAdd01Icon} className="size-3.5" strokeWidth={2} />
             {t("authz.new.save")}
@@ -456,7 +456,7 @@ function RequestCard({ ctx, row }) {
           bir gerekçe, değerlendirilen şeyin kendisini değiştirirdi. */}
       {row.userNote ? (
         <div className="mt-2.5 rounded-lg border border-border/70 bg-foreground/[0.025] px-3 py-2">
-          <p className="text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground">
             {t("authz.req.userNote")}
           </p>
           <p className="mt-0.5 whitespace-pre-wrap break-words text-[0.8125rem] leading-relaxed text-foreground">
@@ -519,7 +519,7 @@ function RequestCard({ ctx, row }) {
               strokeWidth={2}
             />
             <span className="min-w-0 flex-1">
-              <span className="block text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground">
+              <span className="block text-[0.6875rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground">
                 {t("authz.req.adminNote")}
               </span>
               <span

@@ -2,30 +2,23 @@ import { useMemo, useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import ArrowDown01Icon from "@hugeicons/core-free-icons/ArrowDown01Icon"
 import ChartColumnIcon from "@hugeicons/core-free-icons/ChartColumnIcon"
-import { PreviewDialog } from "@/features/myspace/preview/PreviewDialog"
 import { CalendarRetry } from "./CalendarRetry"
 import { RhythmBar } from "./RhythmBar"
-import { RhythmMeetingList } from "./RhythmMeetingList"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { useLocale } from "@/hooks/useLocale"
 import { useStoredFlag } from "@/features/myspace/hooks/useStoredFlag"
 import { getDateTimeFormat } from "@/lib/intl-cache"
 import { STATUS } from "@/lib/graph"
-import { openMeetingSummary } from "@/lib/summaryBus"
 import { cn } from "@/lib/utils"
 import { weekStats } from "@/features/myspace/lib/weekStats"
 import { useSlotSize } from "@/features/widgets/slotSize"
 import { Card, CardTitle } from "./CardShell"
-import { OPTS_TIME, OPTS_WEEKDAY_LONG, OPTS_WEEKDAY_SHORT } from "./cardFormats"
+import { OPTS_WEEKDAY_LONG, OPTS_WEEKDAY_SHORT } from "./cardFormats"
 import { RhythmMini } from "./RhythmMini"
-import { compactHours } from "./rhythmFormat"
+import { WeekSelect } from "./RhythmWeek"
+import { rhythmWeeks } from "./lib/rhythmWeeks"
+import { compactHours, formatHM } from "./rhythmFormat"
+import { useRhythmTips } from "./hooks/useRhythmTips"
 import "./rhythm.css"
 
 /* ─── Toplantı ritmin ───────────────────────────────────────────────── */
@@ -34,20 +27,9 @@ function splitMinutes(total) {
   return { h: Math.floor(total / 60), m: total % 60 }
 }
 
-/** "1 sa 30 dk" · "1 sa" · "45 dk" — sıfır parça yazılmaz ("1 sa 0 dk" değil). */
-function formatHM(total, t) {
-  const { h, m } = splitMinutes(total)
-  const parts = []
-  if (h) parts.push(`${h} ${t("myspace.rhythm.h")}`)
-  if (m || !h) parts.push(`${m} ${t("myspace.rhythm.m")}`)
-  return parts.join(" ")
-}
-
 /** Yüklenirken çizilen hayalet çubukların boyu (%): hafta içi dolu, hafta
  *  sonu alçak — boş bir grafik değil, "bir hafta" gibi okunsun. */
 const GHOST_BARS = [46, 72, 38, 88, 58, 22, 14]
-const PLURAL_CATEGORIES = new Set(["zero", "one", "two", "few", "many", "other"])
-const OPTS_DAY_LONG = { weekday: "long", day: "numeric", month: "long" }
 
 /**
  * Referansın "Today activity" kartı: iki sütun genişliğinde, solda büyük
@@ -78,7 +60,7 @@ export function MeetingRhythmCard(props) {
   // Panonun küçük kartında haftanın dört sayısı (eski "Haftam"); büyük kartta, header'da ve
   // telefonda çubuklu tam hâl.
   return useSlotSize() === "mini" ? (
-    <RhythmMini cal={props.cal} now={props.now} className={props.className} />
+    <RhythmMini cal={props.cal} load={props.load} now={props.now} className={props.className} />
   ) : (
     <RhythmFull {...props} />
   )
@@ -87,17 +69,9 @@ export function MeetingRhythmCard(props) {
 function RhythmFull({ cal, load, now, className }) {
   const { t, locale } = useLocale()
   const [week, setWeek] = useState("current")
-  const plural = useMemo(() => new Intl.PluralRules(locale), [locale])
-  // Bir hafta aralığın dışına taşarsa seçenek hiç sunulmaz (gerekçe
-  // `meetingLoad`ta) — seçili kalmışsa bu haftaya düşer.
-  const weeks = [
-    load.previous && { id: "previous", label: t("myspace.rhythm.lastWeek") },
-    { id: "current", label: t("myspace.rhythm.thisWeek") },
-    load.next && { id: "next", label: t("myspace.rhythm.nextWeek") },
-  ].filter(Boolean)
-  const effWeek = weeks.some((w) => w.id === week) ? week : "current"
-  const days =
-    effWeek === "previous" ? load.previous : effWeek === "next" ? load.next : load.current
+  const { tipFor, countText, dialog } = useRhythmTips(now)
+  const { weeks, id: effWeek, days } = rhythmWeeks(load, week, t)
+  const offset = effWeek === "previous" ? -1 : effWeek === "next" ? 1 : 0
   const total = days.reduce((s, d) => s + d.minutes, 0)
   const { h, m } = splitMinutes(total)
   // Telefonda istatistik kartı yer kaplamaz: özet satırı, grafik dokununca açılır.
@@ -114,52 +88,12 @@ function RhythmFull({ cal, load, now, className }) {
   )
   const peakThis = Math.max(...days.map((d) => d.minutes))
   // Haftanın öteki sayıları (eski Haftam): toplantı sayısı, boş odak (geçen haftada yok), mesai dışı.
-  const offset = effWeek === "previous" ? -1 : effWeek === "next" ? 1 : 0
   const stats = useMemo(() => weekStats(cal.events, now, offset), [cal.events, now, offset])
   const busiest = peakThis > 0 ? days.find((d) => d.minutes === peakThis) : null
   const weekdayFmt = getDateTimeFormat(locale, OPTS_WEEKDAY_SHORT)
   const weekdayLong = getDateTimeFormat(locale, OPTS_WEEKDAY_LONG)
-  const dayLong = getDateTimeFormat(locale, OPTS_DAY_LONG)
-  const timeFmt = getDateTimeFormat(locale, OPTS_TIME)
   const todayKey = new Date(now).toDateString()
   const ready = cal.status === STATUS.ready
-
-  const countText = (n) => {
-    const cat = plural.select(n)
-    return t(`myspace.rhythm.count.${PLURAL_CATEGORIES.has(cat) ? cat : "other"}`, { n })
-  }
-
-  // Bir çubuğun ipucu. Süre ÇUBUĞUN sayısı (birleşim), listedeki tek tek
-  // süreler değil — çakışma varsa not bunu söylüyor.
-  // Telefonda önizleme penceresi ve (her yerde) yapay zekâ özeti (App'teki
-  // MeetingSummaryHost): ipucu kapanır, pencere açılır — sıra tersine
-  // dönerse odak ipucunun tetiğinde kalırdı.
-  const [preview, setPreview] = useState(null)
-  const later = (close, open) => {
-    close()
-    requestAnimationFrame(open)
-  }
-
-  function tipFor(d, isToday) {
-    const date = dayLong.format(d.date)
-    const title = isToday ? `${t("myspace.meeting.today")} · ${date}` : date
-    if (!d.items.length) return { title, kicker: t("myspace.rhythm.none") }
-    return {
-      title,
-      kicker: `${countText(d.items.length)} · ${formatHM(d.minutes, t)}`,
-      // Satıra basınca önizleme; geçmiş Teams toplantısında Sohbet · Özet.
-      list: (close) => (
-        <RhythmMeetingList
-          items={d.items}
-          timeFmt={timeFmt}
-          now={now}
-          onOpen={(event) => later(close, () => setPreview({ kind: "event", item: event }))}
-          onSummary={(event) => later(close, () => openMeetingSummary(event))}
-        />
-      ),
-      note: d.overlap ? t("myspace.rhythm.overlap") : null,
-    }
-  }
 
   return (
     <Card
@@ -186,32 +120,7 @@ function RhythmFull({ cal, load, now, className }) {
               <HugeiconsIcon icon={ArrowDown01Icon} className="size-4 rotate-180" strokeWidth={2} />
             </button>
           ) : ready && !folded && weeks.length > 1 ? (
-            <Select value={effWeek} onValueChange={setWeek}>
-              <SelectTrigger
-                aria-label={t("myspace.rhythm.weekAria")}
-                className="rhythm-week gap-1 rounded-full border-border/70 bg-background/60 px-3 text-[0.71875rem] font-medium text-muted-foreground shadow-none transition hover:border-foreground/20 hover:text-foreground data-[state=open]:border-foreground/25 data-[state=open]:text-foreground dark:bg-background/40 [@media(pointer:coarse)]:data-[size=default]:h-9"
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent
-                position="popper"
-                align="end"
-                sideOffset={6}
-                // Escape RIHTIMA KAÇMAZ (sohbet rıhtımı pencerede Escape dinliyor).
-                onEscapeKeyDown={(e) => e.stopPropagation()}
-                className="min-w-[9.5rem] rounded-xl p-1"
-              >
-                {weeks.map((w) => (
-                  <SelectItem
-                    key={w.id}
-                    value={w.id}
-                    className="min-h-8 rounded-lg pr-8 text-[0.78125rem]"
-                  >
-                    {w.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <WeekSelect value={effWeek} onChange={setWeek} weeks={weeks} />
           ) : null
         }
       >
@@ -318,7 +227,7 @@ function RhythmFull({ cal, load, now, className }) {
             <p className="mt-1.5 text-[0.75rem] text-muted-foreground">
               {t(effWeek === "next" ? "myspace.rhythm.captionNext" : "myspace.rhythm.caption")}
             </p>
-            <p className="mt-1 text-[0.71875rem] tabular-nums text-muted-foreground">
+            <p className="mt-1 text-[0.75rem] tabular-nums text-muted-foreground">
               {countText(stats.count)}
               {stats.focusMinutes != null && (
                 <span className="block">
@@ -343,7 +252,7 @@ function RhythmFull({ cal, load, now, className }) {
                   <p className="text-[0.8125rem] font-medium leading-tight">
                     {t("myspace.rhythm.busiest")}
                   </p>
-                  <p className="mt-0.5 text-[0.71875rem] tabular-nums text-muted-foreground">
+                  <p className="mt-0.5 text-[0.75rem] tabular-nums text-muted-foreground">
                     {weekdayLong.format(busiest.date)} · {formatHM(busiest.minutes, t)}
                   </p>
                 </div>
@@ -384,7 +293,7 @@ function RhythmFull({ cal, load, now, className }) {
           </div>
         </div>
       )}
-      <PreviewDialog preview={preview} onClose={() => setPreview(null)} />
+      {dialog}
     </Card>
   )
 }

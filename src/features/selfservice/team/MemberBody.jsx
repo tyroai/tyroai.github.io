@@ -90,7 +90,7 @@ export function MemberBody({ row, rows, today, status, onAsk, onClose, onSwitch,
         <button
           type="button"
           onClick={() => onAsk(question)}
-          className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-brand-fill-deep px-3 text-[0.8125rem] font-semibold text-brand-on-brand transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11"
+          className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-brand-fill-deep px-3 text-[0.8125rem] font-semibold text-brand-on-brand transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11"
         >
           <HugeiconsIcon icon={AiChat02Icon} className="size-4" strokeWidth={1.9} />
           {t("selfService.askTyro")}

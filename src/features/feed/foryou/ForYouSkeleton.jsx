@@ -47,7 +47,7 @@ export function ForYouSkeleton() {
                     <span className="min-w-0 flex-1">
                       <SkelLine text="text-[0.8125rem]" width="w-32" />
                       <SkelLine text="mt-1 text-[0.875rem] leading-snug" width={w} />
-                      <SkelLine text="mt-0.5 text-[0.78125rem]" width="w-4/5" />
+                      <SkelLine text="mt-0.5 text-[0.8125rem]" width="w-4/5" />
                     </span>
                     <span className="ms-skeleton h-8 w-20 shrink-0 self-center rounded-full" />
                   </li>

@@ -1,0 +1,189 @@
+/* Kartlar düzeni, Ekibim (`TeamCards`, `TeamRank`, `TeamView cards`). Kart, kaş, çubuk ve not
+   kuralları `cards/cards.css`te. Yerleşim tasarımdaki gibi: üstte solda özet, sağında üç gösterge;
+   altında solda yıl sonu sıralaması, sağında sekmeler ve çizelge tek kartta. */
+@container ss (min-width: 50rem) {
+  .ssc-team {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+}
+.ssc-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  min-width: 0;
+}
+.ssc-stat {
+  gap: 0.375rem;
+}
+.ssc-stat-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 2.25rem;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+/* Ayrıntı rakamın hemen altında (prototipteki gibi): yüzler ya da tek satır not. */
+.ssc-stat-foot {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+/* Yüzler: üst üste binen küçük fotoğraflar; aralarındaki halka kartın zemini. */
+.ssc-faces {
+  display: flex;
+  align-items: center;
+  padding-inline-start: 0.5rem;
+}
+.ssc-faces > span {
+  margin-inline-start: -0.5rem;
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px var(--card);
+}
+.ssc-face {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.6875rem;
+}
+.ssc-face-more {
+  display: grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding-inline: 0.25rem;
+  background: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Gövde: geniş kapta solda yan sütun (sıralama + yaklaşanlar), sağda sekmeler + çizelge kartı;
+   iki sütun aynı boyda biter. Dar kapta tek sütun: yaklaşanlar zaten çizelgenin yerinde görünür. */
+.ssc-body {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  margin-top: 0.75rem;
+}
+.ssc-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.ssc-side:empty,
+.ssc-side-list {
+  display: none;
+}
+@container ss (min-width: 60rem) {
+  .ssc-body {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  }
+  .ssc-side:empty {
+    display: flex;
+  }
+  .ssc-card.ssc-side-list {
+    display: flex;
+    flex: 1;
+  }
+  /* Dar sütunda çizelge hafta başlıklarıyla okunur: gün sayıları sığmaz, ad sütunu daralır. */
+  .ssc-body [data-tl-day] {
+    display: none;
+  }
+  .ssc-body [role="table"] {
+    --ncol: 11.5rem;
+  }
+}
+.ssc-rank-card {
+  gap: 0.75rem;
+}
+/* Tek sütunlu gövdede (dar kap) sıralama iki sütuna dizilir: çubuklar ekran boyu uzamaz. */
+.ssc-rank {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(3rem, max-content) minmax(2rem, 1fr) auto);
+  align-items: center;
+  gap: 0.625rem 0.75rem;
+  font-size: var(--text-callout);
+}
+.ssc-rank > span:nth-child(odd) > b {
+  margin-inline-end: 1.25rem;
+}
+@container ss (min-width: 60rem) {
+  .ssc-rank {
+    grid-template-columns: minmax(3rem, max-content) minmax(2rem, 1fr) auto;
+  }
+  .ssc-rank > span:nth-child(odd) > b {
+    margin-inline-end: 0;
+  }
+}
+.ssc-rank > span {
+  display: contents;
+}
+.ssc-rank > span > span:first-child {
+  max-width: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ssc-rank b {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* Sekmeler ve çizelge tek kartta: iç pay yok, çizelge kartın kenarına dayanır. */
+.ssc-card.ssc-board {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Üst çubuk: "TYRO'ya sor" da gri kapsül (prototip); menüsü aynı. */
+.ssc-ask > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: var(--spacing-control-sm);
+  padding-inline: 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+  color: var(--foreground);
+  font-size: var(--text-footnote);
+  font-weight: 500;
+}
+.ssc-ask > button svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+@media (hover: hover) {
+  .ssc-ask > button:hover {
+    background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+}
+
+/* Çizelgenin başlığı sekmelerle TEK satırda (prototip): gezinme ve 6 hafta · 3 ay sağda; ad ve
+   aralık yalnız ekran okuyucuya (haftalar zaten sütun başlıklarında). */
+.ssc-board {
+  position: relative;
+}
+@container ss (min-width: 48rem) {
+  .ssc-board [data-tl-head] {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    height: 2.875rem;
+    padding-block: 0;
+  }
+  .ssc-board [data-tl-title] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .ssc-board [role="table"] {
+    border-top: 0;
+  }
+}

@@ -116,7 +116,7 @@ export function HorizonWidget({ ctx, className }) {
           <button
             type="button"
             onClick={horizon.retry}
-            className="mt-1 inline-flex h-8 items-center rounded-full border border-border px-3.5 text-[0.75rem] font-medium outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11"
+            className="bg-muted mt-1 inline-flex h-8 items-center rounded-full px-3.5 text-[0.75rem] font-medium outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11"
           >
             {t("widgets.horizon.retry")}
           </button>

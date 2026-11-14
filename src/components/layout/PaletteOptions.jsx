@@ -31,7 +31,7 @@ export function PaletteSwatch({ colors, solid = false }) {
 }
 
 // Grup adları her dilde İngilizce: büyük harf İngilizce kuralıyla (Türkçede "SOLİD" olmasın).
-const GROUP_LABEL = "text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+const GROUP_LABEL = "text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
 
 /** Palet seçenekleri (düz · degrade) — header seçicisi ve kullanıcı menüsü aynı listeyi çizer. */
 export function PaletteOptions() {

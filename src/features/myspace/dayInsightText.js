@@ -68,9 +68,10 @@ export function cueOf(ins) {
 /**
  * Günün okumasının cümlesi (`lib/dayInsight` sonucundan): neden cümlesi, sonundaki öneri etiketi
  * (`cue`: anahtar ve metin) ve ipucu kartının üst etiketi (bakılan gün). Kartın satırları ve
- * eylemi tembel parçada (`insight/InsightBody`).
+ * eylemi tembel parçada (`insight/InsightBody`). `prefix`: cümlenin sözlük kökü — karşılama
+ * çekmecesi aynı hikâyeyi kendi, daha sohbet eder gibi diliyle anlatır (`insight.welcome.day`).
  */
-export function dayInsightText(ins, { t, locale }) {
+export function dayInsightText(ins, { t, locale, prefix = "insight" }) {
   const time = timeFormat(locale)
   const fmt = (d) => (d ? time.format(d) : "")
   const weekday = weekdayName(ins.date, locale)
@@ -91,7 +92,7 @@ export function dayInsightText(ins, { t, locale }) {
     city: ins.city ? (ins.city[locale] ?? ins.city.en ?? Object.values(ins.city)[0]) : "",
     holiday: ins.holiday ? t(`widgets.holiday.name.${ins.holiday}`) : "",
   }
-  const text = t(`insight.${ins.id}`, params)
+  const text = t(`${prefix}.${ins.id}`, params)
   const cue = cueOf(ins)
   const focus = ins.action?.kind === "focus" ? ins.action : null
   return {

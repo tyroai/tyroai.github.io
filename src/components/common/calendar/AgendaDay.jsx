@@ -35,7 +35,7 @@ export function AgendaDay({ bucket, label }) {
         </span>
         <span className="font-medium">{label.date}</span>
         {bucket.events.length > 0 && (
-          <span className="ml-auto text-[0.625rem] font-medium tabular-nums opacity-70">
+          <span className="ml-auto text-[0.6875rem] font-medium tabular-nums opacity-70">
             {bucket.events.length}
           </span>
         )}
@@ -47,7 +47,7 @@ export function AgendaDay({ bucket, label }) {
           ))}
         </ul>
       ) : (
-        <p className="px-3 py-2.5 text-[0.71875rem] text-muted-foreground">
+        <p className="px-3 py-2.5 text-[0.75rem] text-muted-foreground">
           {t("calendar.noEventsDay")}
         </p>
       )}

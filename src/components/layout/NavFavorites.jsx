@@ -17,7 +17,7 @@ import { useFavorites } from "@/hooks/useFavorites"
 import { useNavigate } from "react-router-dom"
 import { openAppUrl } from "@/lib/appLink"
 
-const GROUP_LABEL = "text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+const GROUP_LABEL = "text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
 
 function FavoriteItem({ item, onOpenChat, onRemove }) {
   const { t } = useLocale()

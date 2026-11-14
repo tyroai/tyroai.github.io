@@ -1,20 +1,38 @@
 import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
+import AiChat02Icon from "@hugeicons/core-free-icons/AiChat02Icon"
 import Beach02Icon from "@hugeicons/core-free-icons/Beach02Icon"
 import CalendarAdd01Icon from "@hugeicons/core-free-icons/CalendarAdd01Icon"
 import Invoice03Icon from "@hugeicons/core-free-icons/Invoice03Icon"
 import MoneyReceive01Icon from "@hugeicons/core-free-icons/MoneyReceive01Icon"
 import PlusSignIcon from "@hugeicons/core-free-icons/PlusSignIcon"
-import Video01Icon from "@hugeicons/core-free-icons/Video01Icon"
+import TaskAdd01Icon from "@hugeicons/core-free-icons/TaskAdd01Icon"
 import { useLocale } from "@/hooks/useLocale"
 import "./welcomeActions.css"
 
-// Self Servis'in üç talebi; Anasayfa'nın çipleriyle aynı adlar ve simgeler.
-const REQUESTS = [
-  { kind: "leave", label: "myspace.chip.leaveRequest", icon: Beach02Icon },
-  { kind: "expense", label: "myspace.chip.expense", icon: Invoice03Icon },
-  { kind: "advance", label: "myspace.chip.advance", icon: MoneyReceive01Icon },
+// "Yeni"nin seçenekleri: Self Servis'in üç talebi, görev ve toplantı (Takvim'de açılır). Kısa adlar.
+const ITEMS = [
+  { kind: "leave", label: "insight.welcome.menu.leave", icon: Beach02Icon, need: "selfService" },
+  {
+    kind: "expense",
+    label: "insight.welcome.menu.expense",
+    icon: Invoice03Icon,
+    need: "selfService",
+  },
+  {
+    kind: "advance",
+    label: "insight.welcome.menu.advance",
+    icon: MoneyReceive01Icon,
+    need: "selfService",
+  },
+  { kind: "task", label: "insight.welcome.menu.task", icon: TaskAdd01Icon, need: "calendar" },
+  {
+    kind: "meeting",
+    label: "insight.welcome.menu.meeting",
+    icon: CalendarAdd01Icon,
+    need: "calendar",
+  },
 ]
 // Seçim kartı düğmenin köşesinden yayla açılır, sekmez (kuvvet yok).
 const MENU = { type: "spring", bounce: 0, duration: 0.26 }
@@ -32,15 +50,17 @@ function Face({ icon, children }) {
 
 /**
  * Çekmecenin alt kenarına yarı yarıya oturan koyu cam kapsül (referansın "Send · Receive"
- * kapsülü). Sohbet sol üstteki kürede; kapsülde iş başlatılır:
- * - "Yeni talep" (birincil, beyaz yuva): üstünde küçük seçim kartı — İzin talebi · Masraf girişi ·
- *   İş avansı; seçilen form Self Servis'te açılır. Dışarıya dokunmak ya da Esc yalnız kartı kapatır.
- * - "Toplantı" ↔ "Katıl": çevrim içi toplantı 15 dakika içinde başlıyor ya da sürüyorsa "Katıl"
- *   (Teams; bağlantı, ortak `JoinButton` gibi), yoksa yeni toplantı penceresi.
- * Açamadığı sayfanın düğmesi çizilmez. Çekmeceyle birlikte kalkar, açıklık azalınca solar.
+ * kapsülü; ürün sahibi: "ilkine Yeni yazalım … sağdaki toplantı yerine de TYRO butonu koy"):
+ * - "Yeni" (birincil, beyaz yuva): üstünde küçük seçim kartı — İzin · Masraf · Avans (Self Servis) ·
+ *   Görev · Toplantı (Takvim); yalnız kişinin açabildiği sayfanınkiler. Dışarıya dokunmak ya da Esc
+ *   yalnız kartı kapatır.
+ * - "TYRO" (kenar çubuğundaki sohbet simgesiyle): sohbeti açar. Küre burada yok: TYRO'nun küresi
+ *   hemen üstündeki öneri kartında (ürün sahibi: "butonda ise orbu koyma zaten öneride var").
+ * Çekmeceyle birlikte kalkar, açıklık azalınca solar.
  */
-export function WelcomeActions({ opacity, onRequest, joinUrl, onJoin, onMeeting }) {
+export function WelcomeActions({ opacity, access, onNew, onAsk }) {
   const { t } = useLocale()
+  const items = ITEMS.filter((it) => access?.[it.need])
   const [menu, setMenu] = useState(false)
   const box = useRef(null)
   const first = useRef(null)
@@ -81,31 +101,31 @@ export function WelcomeActions({ opacity, onRequest, joinUrl, onJoin, onMeeting 
           <motion.div
             className="welcome-menu"
             role="menu"
-            aria-label={t("insight.welcome.newRequest")}
+            aria-label={t("insight.welcome.new")}
             initial={{ opacity: 0, scale: 0.9, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 6 }}
             transition={MENU}
           >
-            {REQUESTS.map((r, i) => (
+            {items.map((it, i) => (
               <button
-                key={r.kind}
+                key={it.kind}
                 ref={i === 0 ? first : undefined}
                 type="button"
                 role="menuitem"
                 className="welcome-menu-item"
-                onClick={() => onRequest(r.kind)}
+                onClick={() => onNew(it.kind)}
               >
                 <span className="welcome-menu-ic" aria-hidden="true">
-                  <HugeiconsIcon icon={r.icon} strokeWidth={1.9} />
+                  <HugeiconsIcon icon={it.icon} strokeWidth={1.9} />
                 </span>
-                {t(r.label)}
+                {t(it.label)}
               </button>
             ))}
           </motion.div>
         )}
       </AnimatePresence>
-      {onRequest && (
+      {items.length > 0 && (
         <button
           type="button"
           className="welcome-action"
@@ -114,26 +134,17 @@ export function WelcomeActions({ opacity, onRequest, joinUrl, onJoin, onMeeting 
           aria-expanded={menu}
           onClick={() => setMenu((open) => !open)}
         >
-          <Face icon={PlusSignIcon}>{t("insight.welcome.newRequest")}</Face>
+          <Face icon={PlusSignIcon}>{t("insight.welcome.new")}</Face>
         </button>
       )}
-      {joinUrl ? (
-        <a
-          className="welcome-action"
-          href={joinUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={onJoin}
-        >
-          <Face icon={Video01Icon}>{t("calendar.join")}</Face>
-        </a>
-      ) : (
-        onMeeting && (
-          <button type="button" className="welcome-action" onClick={onMeeting}>
-            <Face icon={CalendarAdd01Icon}>{t("calendar.page.new.meeting")}</Face>
-          </button>
-        )
-      )}
+      <button
+        type="button"
+        className="welcome-action"
+        aria-label={t("insight.welcome.ask")}
+        onClick={onAsk}
+      >
+        <Face icon={AiChat02Icon}>TYRO</Face>
+      </button>
     </motion.div>
   )
 }

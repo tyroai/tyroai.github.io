@@ -238,7 +238,7 @@ export function SaveBar({ ctx, row }) {
         {t("security.detail.discard")}
       </Button>
       <Button
-        className="h-9 bg-brand-fill-deep px-3.5 text-[0.8125rem] text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110 pointer-coarse:h-11"
+        className="h-9 bg-brand-fill-deep px-3.5 text-[0.8125rem] text-brand-on-brand hover:bg-brand-fill-deep pointer-coarse:h-11"
         disabled={busy}
         onClick={() => ctx.saveApps(row)}
       >

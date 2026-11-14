@@ -34,7 +34,7 @@ export function StoryActions({ story: s, context, onOpenPost }) {
           >
             <button
               type="button"
-              className="flex h-10 w-full items-center justify-center gap-1.5 rounded-xl bg-brand-fill-deep px-3 text-[0.8125rem] font-semibold text-brand-on-brand ring-1 ring-foreground/10 transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 aria-expanded:brightness-110 pointer-coarse:h-11 shortest:flex-1"
+              className="flex h-10 w-full items-center justify-center gap-1.5 rounded-xl bg-brand-fill-deep px-3 text-[0.8125rem] font-semibold text-brand-on-brand ring-1 ring-foreground/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 pointer-coarse:h-11 shortest:flex-1"
             >
               <HugeiconsIcon
                 icon={PartyIcon}

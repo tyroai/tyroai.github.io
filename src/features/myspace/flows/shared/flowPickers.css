@@ -1,0 +1,425 @@
+/* İş avansı akışının seçim kartları (`pickers/*`): kart kabuğu, arama, şehirler, gün şeridi, tutar,
+   şirket listesi. Üstüne gelme, dokunma ve dar panel kuralları `advanceFlow.css`in sonunda. */
+.af-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+.af-card {
+  position: absolute;
+  inset-inline: 1rem;
+  z-index: 6;
+  padding: 1rem;
+  border-radius: var(--radius-panel);
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent),
+    0 22px 48px -18px color-mix(in oklab, var(--foreground) 34%, transparent),
+    0 4px 12px -6px color-mix(in oklab, var(--foreground) 12%, transparent);
+  transform-origin: var(--af-origin, 50% 100%);
+  animation: af-card-in 180ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.af-card:not([data-wide]) {
+  inset-inline: 1.75rem;
+}
+@keyframes af-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+}
+.af-card-title {
+  margin: 0.25rem 0.5rem 0.5rem;
+  font-size: var(--text-section-title);
+  font-weight: 600;
+}
+.af-card-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0.875rem 0.25rem 0.5rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-callout);
+  font-weight: 500;
+}
+.af-card-kicker svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+.af-empty {
+  padding: 1rem 0.5rem 0.5rem;
+  color: var(--muted-foreground);
+  font-size: var(--text-callout);
+  text-align: center;
+}
+.af-search {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  height: 2.875rem;
+  padding-inline: 1rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--af-accent) 34%, transparent);
+}
+.af-search svg {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--muted-foreground);
+}
+.af-search input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  font-size: 1rem;
+  outline: none;
+}
+
+/* Şehirler */
+.af-city-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--af-cols, 4), minmax(0, 1fr));
+  gap: 0.25rem;
+  /* İki tam satır (daire + ad) ve üçüncünün ucu görünür; devamı kayar. */
+  max-height: 17.25rem;
+  margin-inline: -0.25rem;
+  padding: 0.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.af-city-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+  padding: 0.5rem 0.25rem;
+  border-radius: var(--radius-menu);
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.af-city-disc {
+  display: grid;
+  place-items: center;
+  width: min(100%, 5rem);
+  aspect-ratio: 1;
+  padding: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
+  color: var(--muted-foreground);
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.af-city-disc svg {
+  width: 100%;
+}
+.af-city-disc .af-city-more {
+  width: 1.5rem;
+}
+.af-city-disc:has(.af-city-photo) {
+  padding: 0;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+.af-city-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+/* İllüstrasyon (saydam zemin): kırpılmaz, tonlu dairede paylı durur. */
+.af-city-grid--art .af-city-disc:has(.af-city-photo) {
+  padding: 16%;
+  overflow: visible;
+  box-shadow: none;
+}
+.af-city-grid--art .af-city-photo {
+  border-radius: 0;
+  object-fit: contain;
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.af-city-grid--art .af-city-item[aria-pressed="true"] .af-city-disc:has(.af-city-photo) {
+  background: color-mix(in oklab, var(--af-accent) 12%, transparent);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--af-accent) 55%, transparent);
+}
+.af-city-grid--art .af-city-item[aria-pressed="true"] .af-city-photo {
+  transform: scale(1.08);
+}
+/* Sekiz illüstrasyon dar ekranda da iki tam sıra (4 + 4). */
+.af-city-grid.af-city-grid--art {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+/* İllüstrasyonun adı iki satıra sarar (ERP kategori adları uzun). */
+.af-city-grid--art .af-city-name {
+  display: -webkit-box;
+  overflow: hidden;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+@container af (max-width: 26rem) {
+  .af-city-grid--art .af-city-name {
+    font-size: var(--text-footnote);
+  }
+}
+.af-mini-land {
+  fill: none;
+  stroke: color-mix(in oklab, var(--foreground) 26%, transparent);
+  stroke-linecap: round;
+}
+.af-mini-halo {
+  fill: color-mix(in oklab, var(--af-accent) 22%, transparent);
+}
+.af-mini-dot {
+  fill: var(--af-accent);
+}
+.af-city-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--text-body);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.af-city-item[aria-pressed="true"] .af-city-disc:has(.af-city-photo) {
+  box-shadow:
+    0 0 0 2px var(--popover),
+    0 0 0 4px var(--af-accent);
+}
+.af-city-item[aria-pressed="true"] .af-city-disc {
+  background: color-mix(in oklab, var(--af-accent) 10%, transparent);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--af-accent) 55%, transparent);
+}
+.af-city-item[aria-pressed="true"] .af-city-name {
+  font-weight: 600;
+}
+
+/* Gün şeridi */
+/* Başlık: solda ay, sağda hafta (ve uzun şeritte ay) okları. */
+.af-days-head {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+.af-days-head .af-card-title {
+  flex: 1;
+  min-width: 0;
+  margin-block: 0.25rem;
+}
+.af-days-nav {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  outline: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+.af-days-nav svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+[dir="rtl"] .af-days-nav svg {
+  transform: scaleX(-1);
+}
+.af-days-nav:disabled {
+  opacity: 0.32;
+}
+.af-days-nav:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 70%, transparent);
+}
+@media (hover: hover) {
+  .af-days-nav:not(:disabled):hover {
+    background: color-mix(in oklab, var(--foreground) 5%, transparent);
+    color: var(--foreground);
+  }
+}
+@media (pointer: coarse) {
+  .af-days-nav {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+.af-days-track {
+  display: flex;
+  gap: 0.125rem;
+  margin-inline: -0.25rem;
+  padding: 0.25rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.af-days-track::-webkit-scrollbar {
+  display: none;
+}
+.af-day {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 3.25rem;
+  padding: 0.5rem 0 0.625rem;
+  border-radius: var(--radius-menu);
+  outline: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.af-day span {
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-callout);
+}
+.af-day b {
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.af-day[data-today]::after {
+  position: absolute;
+  bottom: 0.25rem;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 999px;
+  background: var(--af-accent);
+  content: "";
+}
+/* Hafta sonu ve resmî tatil soluk; izin aralığının içi hafif vurgulu; seçilemeyen gün silik. */
+.af-day[data-off]:not([aria-pressed="true"]) b {
+  color: color-mix(in oklab, var(--muted-foreground) 82%, var(--foreground));
+  font-weight: 500;
+}
+.af-day[data-in] {
+  background: color-mix(in oklab, var(--af-accent) 12%, transparent);
+  border-radius: 0;
+}
+.af-day:disabled {
+  opacity: 0.32;
+}
+.af-day[aria-pressed="true"] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.af-day[aria-pressed="true"] span {
+  color: color-mix(in oklab, var(--background) 72%, transparent);
+}
+.af-day[aria-pressed="true"]::after {
+  background: var(--background);
+}
+
+/* Tutar */
+.af-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0.25rem 0.875rem;
+}
+.af-amount-ic {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--af-accent) 12%, transparent);
+  color: var(--af-accent);
+}
+.af-amount-ic svg {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+.af-amount-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+.af-round {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--foreground) 16%, transparent);
+  color: var(--foreground);
+  outline: none;
+  transition:
+    background-color 160ms ease,
+    opacity 160ms ease;
+}
+.af-round svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.af-round--solid {
+  background: var(--foreground);
+  box-shadow: none;
+  color: var(--background);
+}
+.af-round:disabled {
+  opacity: 0.4;
+}
+
+/* Şirket listesi */
+.af-list-rows {
+  display: flex;
+  flex-direction: column;
+  max-height: 15rem;
+  margin-top: 0.5rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.af-list-row {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-tile);
+  text-align: start;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.af-list-row b {
+  flex: none;
+  min-width: 3rem;
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+.af-list-row span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-footnote);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.af-list-row svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: var(--af-accent);
+}
+.af-list-row[aria-pressed="true"] {
+  background: color-mix(in oklab, var(--af-accent) 8%, transparent);
+}

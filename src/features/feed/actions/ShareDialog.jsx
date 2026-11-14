@@ -117,7 +117,7 @@ function Body({ post, mode, onClose, returnFocus }) {
           <DialogTitle className="text-[0.875rem] font-semibold leading-tight">
             {t(mail ? "feed.share.mail" : "feed.share.teams")}
           </DialogTitle>
-          <DialogDescription className="mt-0.5 line-clamp-2 text-[0.71875rem] leading-snug">
+          <DialogDescription className="mt-0.5 line-clamp-2 text-[0.75rem] leading-snug">
             {subject}
           </DialogDescription>
         </div>
@@ -146,7 +146,7 @@ function Body({ post, mode, onClose, returnFocus }) {
           placeholder={t("files.mailToPlaceholder")}
         />
         <div className="space-y-1.5">
-          <Label htmlFor={noteId} className="text-[0.71875rem] text-muted-foreground">
+          <Label htmlFor={noteId} className="text-[0.75rem] text-muted-foreground">
             {t(mail ? "feed.share.note" : "feed.share.message")}
           </Label>
           <Textarea
@@ -155,14 +155,14 @@ function Body({ post, mode, onClose, returnFocus }) {
             onChange={(e) => setNote(e.target.value)}
             placeholder={mail ? t("feed.share.notePlaceholder") : undefined}
             rows={3}
-            className="resize-none text-[0.78125rem]"
+            className="resize-none text-[0.8125rem]"
           />
         </div>
         {error && (
           <>
             <p
               role="alert"
-              className="rounded-lg bg-red-500/10 px-2.5 py-2 text-[0.71875rem] leading-snug text-red-700 dark:text-red-300"
+              className="rounded-lg bg-red-500/10 px-2.5 py-2 text-[0.75rem] leading-snug text-red-700 dark:text-red-300"
             >
               {error}
             </p>
@@ -180,7 +180,7 @@ function Body({ post, mode, onClose, returnFocus }) {
           type="button"
           onClick={mail ? forward : openTeams}
           aria-busy={sending || undefined}
-          className="h-9 shrink-0 gap-1.5 rounded-lg bg-brand-fill-deep text-[0.78125rem] text-brand-on-brand hover:bg-brand-fill-deep/90 pointer-coarse:h-11 aria-busy:opacity-70"
+          className="h-9 shrink-0 gap-1.5 rounded-lg bg-brand-fill-deep text-[0.8125rem] text-brand-on-brand hover:bg-brand-fill-deep/90 pointer-coarse:h-11 aria-busy:opacity-70"
         >
           <HugeiconsIcon
             icon={mail ? MailSend01Icon : BubbleChatIcon}

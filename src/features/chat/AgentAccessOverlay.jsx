@@ -49,7 +49,7 @@ export function AgentAccessOverlay({ onGoToCatalogue }) {
         <button
           type="button"
           onClick={onGoToCatalogue}
-          className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-brand-fill-deep px-4 py-2 text-[0.8125rem] font-medium text-white shadow-sm transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [@media(pointer:coarse)]:min-h-11"
+          className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-brand-fill-deep px-4 py-2 text-[0.8125rem] font-medium text-white shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [@media(pointer:coarse)]:min-h-11"
         >
           {t("lock.requestCta")}
           <HugeiconsIcon icon={ArrowRight01Icon} className="size-4 shrink-0" strokeWidth={2} />

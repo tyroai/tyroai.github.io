@@ -51,7 +51,7 @@ export function ListMessage({ icon, title, action, onAction, primary = false }) 
           className={cn(
             "inline-flex h-9 items-center rounded-lg px-3.5 text-[0.8125rem] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11",
             primary
-              ? "bg-brand-fill-deep text-brand-on-brand hover:brightness-110"
+              ? "bg-brand-fill-deep text-brand-on-brand"
               : "text-foreground/80 hover:bg-foreground/[0.05] hover:text-foreground",
           )}
         >

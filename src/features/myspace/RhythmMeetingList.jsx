@@ -50,8 +50,11 @@ export function RhythmMeetingList({ items, timeFmt, now, onOpen, onSummary }) {
               onOpenChange={(next) => setOpenId(next ? event.id : null)}
               mobile={isMobile}
             >
-              {(wrap) => (
-                <li className="group/rm relative -mx-2 rounded-lg px-2 py-1.5 transition-colors focus-within:bg-white/[0.07] hover:bg-white/[0.07] has-[[data-state=open]]:bg-white/[0.1]">
+              {(wrap, hover) => (
+                <li
+                  {...hover}
+                  className="group/rm relative -mx-2 rounded-lg px-2 py-1.5 transition-colors focus-within:bg-white/[0.07] hover:bg-white/[0.07] has-[[data-state=open]]:bg-white/[0.1]"
+                >
                   <div className="grid grid-cols-[3rem_minmax(0,1fr)] items-baseline gap-x-3">
                     <span className="tabular-nums text-white/55">
                       {timeFmt.format(new Date(from))}

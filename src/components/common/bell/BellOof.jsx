@@ -18,7 +18,7 @@ function Mark() {
 }
 
 /**
- * ÇANIN BEKLEYEN SORUSU (sekmelerin üstünde, iki sekmede de): onaylı izin için "12–16 Kasım
+ * ÇANIN BEKLEYEN SORUSU (listenin başında): onaylı izin için "12–16 Kasım
  * iznin onaylandı · Otomatik yanıt kurulsun mu?" (*Kur* hazır metinle planlar, × "bu izin için
  * sorma") ya da TYRO'nun kurduğu yanıtın izni kalmadıysa "kaldırılsın mı?". Denetim Merkezi'nin
  * şeridiyle aynı soru, aynı görünüş (`OofPrompt`; düğmeler şeridin hapları — ortak `ActionButton`

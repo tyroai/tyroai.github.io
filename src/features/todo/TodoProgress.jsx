@@ -64,7 +64,7 @@ function Ring({ pct }) {
       </svg>
       <span className="text-[1rem] font-semibold tabular-nums leading-none @[64rem]/todo:text-[1.25rem]">
         {pct}
-        <small className="text-[0.625rem] font-medium text-muted-foreground">%</small>
+        <small className="text-[0.6875rem] font-medium text-muted-foreground">%</small>
       </span>
     </span>
   )
@@ -140,10 +140,10 @@ export function TodoProgress({ tasks, today, openTotal, state, onView, className
             sideOffset={6}
             // Escape rıhtıma kaçmaz (sohbet rıhtımı pencerede Escape dinliyor).
             onEscapeKeyDown={(e) => e.stopPropagation()}
-            className="min-w-[9rem] rounded-xl p-1"
+            className="min-w-[9rem]"
           >
             {PERIODS.map((p) => (
-              <SelectItem key={p} value={p} className="min-h-8 rounded-lg pr-8 text-[0.78125rem]">
+              <SelectItem key={p} value={p} className="pr-8">
                 {t(`todo.kpi.period.${p}`)}
               </SelectItem>
             ))}

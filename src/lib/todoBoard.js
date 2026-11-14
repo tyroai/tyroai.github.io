@@ -10,11 +10,9 @@ import {
   RETRY,
   TODO_SCOPES,
   completedDayOf,
-  describeFailure,
   dueDayOf,
   getPages,
   isPermanent,
-  mapPool,
   warnFailure,
 } from "@/lib/todo"
 import { notifyTodoChanged } from "@/lib/todoSync"
@@ -63,12 +61,10 @@ import { notifyTodoChanged } from "@/lib/todoSync"
  * eksik bir cevabı TAM gibi vermek olmasın.
  */
 
-const MAX_LISTS = 25
 /** Açık görevler: liste başına en çok 5 × 100. */
 const OPEN_PAGES = 5
 /** Süzgeçsiz yedek: varsayılan sayfa boyu küçük, sayfa sayısı büyük. */
 const FALLBACK_PAGES = 20
-const LIST_CONCURRENCY = 2
 
 const enc = encodeURIComponent
 
@@ -84,6 +80,9 @@ const DONE_CAP = 200
 let doneStep = 0
 /** Açık görev sorgusu adımları da getirebiliyor mu (yukarıdaki basamak). */
 let stepsExpand = true
+
+/** Açık görev sorgusu adımları getiriyor mu (satırlar adımı kendisi sormasın). */
+export const stepsInline = () => stepsExpand
 
 /** Çıkışta — bir sonraki oturum tam sorguyla başlasın. */
 export function resetTodoBoardQuery() {
@@ -215,7 +214,7 @@ export function toBoardTask(raw, listId) {
   }
 }
 
-function toBoardList(raw) {
+export function toBoardList(raw) {
   return {
     id: raw.id,
     name: String(raw.displayName ?? ""),
@@ -252,10 +251,11 @@ async function readOpen(instance, account, base, label) {
   return open
 }
 
-async function readDone(instance, account, base, label) {
+async function readDone(instance, account, base, label, deep) {
   for (let step = doneStep; step < DONE_QUERIES.length; step = Math.max(step + 1, doneStep)) {
     const { query, pages } = DONE_QUERIES[step]
-    const res = await getPages(instance, account, `${base}${query}`, pages)
+    // Sığ okuma (Bugünün odağı) yalnız ilk sayfayı ister: bugün bitenler en yeniler arasında.
+    const res = await getPages(instance, account, `${base}${query}`, deep ? pages : 1)
     if (res.status === STATUS.ready) return { tasks: res.data, missing: false }
     warnFailure(`"${label}" tamamlananlar`, res)
     if (!isPermanent(res)) break
@@ -266,68 +266,18 @@ async function readDone(instance, account, base, label) {
   return { tasks: [], missing: true }
 }
 
-async function readList(instance, account, list) {
+/** Bir listenin açık + tamamlanan görevleri (ham); `deep` değilse tamamlananların yalnız ilk sayfası. */
+export async function readBoardList(instance, account, list, deep = true) {
   const base = `/me/todo/lists/${enc(list.id)}/tasks`
   const label = list.displayName ?? list.id
   const open = await readOpen(instance, account, base, label)
   if (open.status !== STATUS.ready) return { failed: open }
-  const done = await readDone(instance, account, base, label)
+  const done = await readDone(instance, account, base, label, deep)
   return {
     listId: list.id,
     raw: [...open.data, ...done.tasks],
     doneMissing: done.missing,
     truncated: done.tasks.length >= DONE_CAP,
-  }
-}
-
-/**
- * Bütün tablo. Dönen: `{ status, lists, tasks, defaultListId, skipped,
- * detail, doneMissing, truncated }` — `skipped` okunamayan liste sayısı
- * (kart SÖYLÜYOR), `doneMissing` tamamlananları okunamayan liste var mı.
- */
-export async function fetchBoard(instance, account) {
-  const listsRes = await getPages(instance, account, "/me/todo/lists", 3)
-  if (listsRes.status !== STATUS.ready) {
-    warnFailure("listeler", listsRes)
-    return { ...listsRes, detail: describeFailure(listsRes, "lists") }
-  }
-  const all = listsRes.data
-  if (all.length > MAX_LISTS) console.warn(`[todo] ${all.length} liste, ilk ${MAX_LISTS}'i okundu`)
-  const scan = all.slice(0, MAX_LISTS)
-  const lists = scan.map(toBoardList)
-  const defaultListId = (lists.find((l) => l.kind === "default") ?? lists[0])?.id ?? null
-
-  const results = await mapPool(scan, LIST_CONCURRENCY, (list) => readList(instance, account, list))
-  const failures = results.filter((r) => r.failed)
-  if (scan.length > 0 && failures.length === scan.length) {
-    const first =
-      failures.find((f) => f.failed.status === STATUS.error)?.failed ?? failures[0].failed
-    return { ...first, detail: describeFailure(first, "tasks") }
-  }
-
-  const seen = new Set()
-  const tasks = []
-  for (const r of results) {
-    if (r.failed) continue
-    for (const raw of r.raw) {
-      if (seen.has(raw.id)) continue
-      seen.add(raw.id)
-      const task = toBoardTask(raw, r.listId)
-      if (task) tasks.push(task)
-    }
-  }
-  const failedIds = new Set(results.map((r, i) => (r.failed ? scan[i].id : null)).filter(Boolean))
-  return {
-    status: STATUS.ready,
-    lists: lists.map((l) => ({ ...l, unreadable: failedIds.has(l.id) })),
-    tasks,
-    defaultListId,
-    skipped: failures.length,
-    detail: failures.length ? describeFailure(failures[0].failed, "tasks") : "",
-    doneMissing: results.some((r) => r.doneMissing),
-    truncated: results.some((r) => r.truncated),
-    // Adımlar sorguyla gelmediyse satırlar onları kendisi sorar.
-    stepsInline: stepsExpand,
   }
 }
 

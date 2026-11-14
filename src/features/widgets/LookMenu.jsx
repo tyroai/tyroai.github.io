@@ -42,7 +42,11 @@ export function LookMenu({
           {children}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="center" className="w-52 pointer-coarse:w-64">
+      <DropdownMenuContent
+        align="center"
+        sideOffset={8}
+        className="w-auto min-w-60 max-w-[calc(100vw-1.5rem)]"
+      >
         <LookChoices looks={looks} look={look} onLook={onLook} />
       </DropdownMenuContent>
     </DropdownMenu>

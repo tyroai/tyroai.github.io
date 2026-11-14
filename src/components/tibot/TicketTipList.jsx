@@ -6,7 +6,7 @@ import { tibotStats } from "@/lib/tibot/tibotStats"
 import { cn } from "@/lib/utils"
 
 /**
- * Ticket ipucundaki talepler (Günün özeti, Günün brifingi, Karşılama; koyu yüzey). Öteki
+ * Ticket ipucundaki talepler (Günün özeti, TYRO brifingi, Karşılama; koyu yüzey). Öteki
  * ipuçlarının listesiyle aynı dil (`TipPreviewList`): numara · konu, ilk `limit` satır, "+n daha"
  * (basınca hepsi, uzunsa kayar). `kind`: "onMe" (bende bekleyen, gecikenler önce) ya da
  * "waiting" (beklediğim, benden yanıt bekleyenler önce). Satıra basınca talep penceresi

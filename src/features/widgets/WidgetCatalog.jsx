@@ -197,7 +197,7 @@ export function WidgetCatalog({ open, onOpenChange, ids, render, onAdd, onClosed
               onAdd(picked)
               reset()
             }}
-            className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110 pointer-coarse:h-11"
+            className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep pointer-coarse:h-11"
           >
             {t("widgets.catalogDialog.add", { n: picked.length })}
           </Button>

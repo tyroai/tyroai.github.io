@@ -15,7 +15,7 @@ import { useRmAccess } from "../data/useRmAccess"
 import { useRmText } from "../data/useRmText"
 import { lastView, returnPath, RM_GROUPS, RM_VIEWS, rmHref, viewOf } from "../shell/views"
 
-const GROUP_LABEL = "text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+const GROUP_LABEL = "text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
 
 function Row({ icon, label, active, onClick }) {
   return (

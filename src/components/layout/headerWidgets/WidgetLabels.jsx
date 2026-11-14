@@ -63,9 +63,12 @@ export function LiveLabel({ id, face }) {
   if (id === "report-day") return <ReportLabel />
   if (TIBOT_FACES.has(id))
     return (
-      <Suspense fallback={null}>
-        <TibotLabel id={id} />
-      </Suspense>
+      // Kişisel sayı: Sunum modunda rakamı gizlenir (`styles/private.css`).
+      <span data-private="">
+        <Suspense fallback={null}>
+          <TibotLabel id={id} />
+        </Suspense>
+      </span>
     )
   return null
 }

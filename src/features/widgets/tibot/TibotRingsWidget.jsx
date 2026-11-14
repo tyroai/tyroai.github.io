@@ -188,6 +188,7 @@ export default function TibotRingsWidget({ className }) {
 
   return (
     <WidgetFrame
+      personal
       id="tibot-rings"
       title={t("widgets.tibotRings.title")}
       shortTitle={t("widgets.tibotRings.short")}

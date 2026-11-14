@@ -26,6 +26,19 @@
 .stage[data-variant="card"] {
   height: 100%;
 }
+/* Anasayfa'nın ızgarasında (≥ 34rem; sıra en az 15rem, boyu sıradaki öteki kartlar belirler) oran
+   bırakılır ve kart hücreyi KAPLAR (`absolute`; yuva `relative`): sütunun eniyle uzayıp sırayı itmez
+   (Akşam sahnesinde ilk sıra 1920'de 372 px oluyordu, öteki sahnelerde 240). ⚠️ Boy `min-height` ya
+   da `height: 100%` ile verilirse kapsayıcı sorgusu birimi `cqh` SIFIR çözülür (boy "belirsiz"
+   sayılıyor): `--u` sıfıra düşer, halka, ad ve kadran görünmez olur — kartta yalnız resim kalıyordu. */
+@container myspace (min-width: 34rem) {
+  .stage[data-variant="card"] {
+    position: absolute;
+    inset: 0;
+    height: auto;
+    aspect-ratio: auto;
+  }
+}
 .stage-card {
   --u: min(calc(100cqw / 360), calc(100cqh / 396));
   /* Tasarımın merkezine göre yer: kart tasarımdan uzunsa içerik dikeyde ortalanır. */

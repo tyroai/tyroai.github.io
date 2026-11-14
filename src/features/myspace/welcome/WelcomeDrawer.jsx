@@ -5,19 +5,24 @@ import { useNavigate } from "react-router-dom"
 import { motion, useTransform } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import Notification01Icon from "@hugeicons/core-free-icons/Notification01Icon"
-import { joinableMeeting } from "@/components/layout/control/joinModel"
 import { useBackToClose } from "@/hooks/useBackToClose"
-import { useJoinUrl } from "@/hooks/useJoinUrl"
 import { useLocale } from "@/hooks/useLocale"
 import { useMe } from "@/hooks/useMe"
 import { usePageAccess } from "@/hooks/usePageAccess"
-import { joinInTeams } from "@/lib/teamsJoin"
+import { useBrief } from "@/hooks/useBrief"
+import { requestOpenChat, setPendingAsk } from "@/lib/chatBus"
+import { setWelcomeOpen } from "@/lib/welcomeGate"
+import { useHelloChat } from "../hello/useHelloChat"
+import { useHelloStory } from "../hello/useHelloStory"
+import { useWelcomeOffer } from "../hello/useWelcomeOffer"
+import { markOfferDone } from "../hello/offerDone"
 import { useFitText } from "./useFitText"
 import { useWelcomeDrag, QUICK } from "./useWelcomeDrag"
 import { useWelcomeInk } from "./useWelcomeInk"
 import { WelcomeActions } from "./WelcomeActions"
 import { WelcomeBackdrop } from "./WelcomeBackdrop"
-import { WelcomeLines } from "./WelcomeLines"
+import { WelcomeCardLines } from "./WelcomeCardLines"
+import { WeatherPearl } from "./WelcomeTokens"
 import { skyOf, initialsOf } from "./welcomeText"
 import "./welcome.css"
 
@@ -27,25 +32,28 @@ const openBell = () => document.querySelector("[data-bell-trigger]")?.click()
 /**
  * TELEFONDA KARŞILAMA ÇEKMECESİ — Anasayfa oturumun ilk açılışında yukarıdan iner (ekranın ~%58'i):
  * paletin rampasından yukarıdan aşağı inen gradyan, gren ve süzülen ışık (`WelcomeBackdrop`; duraklar
- * ve yazının iki tonu `useWelcomeInk`), solda yuvasız TYRO küresi (sohbet), sağda cam çan, orta-üstte
- * üç büyük iki tonlu cümle (`WelcomeLines`), alt kenarda koyu cam kapsül (`WelcomeActions`: Yeni talep ·
- * Toplantı/Katıl). Yukarı sürükleyince parmağı izler; satırlar üstten alta sırayla bulanıklaşıp dağılır,
+ * ve yazının iki tonu `useWelcomeInk`), solda cam avatar (Profilim), sağda cam çan, orta-üstte
+ * iki tonlu cümleler (`WelcomeLines`), alt kenarda koyu cam kapsül (`WelcomeActions`: Yeni · TYRO). Yukarı sürükleyince parmağı izler; satırlar üstten alta sırayla bulanıklaşıp dağılır,
  * karartı aynı oranda açılır ve uygulama yerinde belirir.
  * Karartı, tutamak, Esc ve Geri de kapatır; düğmeler çekmeceyi kapatıp kendi işini yapar.
  * Kurallar: `docs/features/anasayfa-karsilama.md`.
  */
 /**
- * Öneriye dokununca: çekmece kapandıktan sonra Anasayfa'daki selamlamanın öneri düğmesi (kartı ve
- * eylemi orada — odak bloğu ekle, mola …) görünür yapılıp açılır.
+ * Öneriye dokununca (çekmece kapandıktan sonra): Anasayfa'daki Karşılama kartının aynı önerisi
+ * açılır (günün okumasının cam ipucu — odak bloğu ekle, mola …); kart panoda yoksa sayfa başındaki
+ * selamlamanın öneri düğmesi. Görünmeyen öğe açılmaz.
  */
-function openHomeCue() {
-  const cue = document.querySelector(".home-greeting__cue")
-  if (!cue) return
-  cue.scrollIntoView({ block: "center", behavior: "smooth" })
-  cue.click()
+function openBoardOffer() {
+  const target = [
+    document.querySelector('[data-widget="tyro-welcome"] .welcome-offer'),
+    document.querySelector(".home-greeting__cue"),
+  ].find((el) => el && el.offsetParent)
+  if (!target) return
+  target.scrollIntoView({ block: "center", behavior: "smooth" })
+  target.click()
 }
 
-export default function WelcomeDrawer({ onClose, ...data }) {
+export default function WelcomeDrawer({ onClose, onNewChat, briefCtx, ...data }) {
   const { t, locale } = useLocale()
   const titleId = useId()
   const sheetRef = useRef(null)
@@ -56,13 +64,6 @@ export default function WelcomeDrawer({ onClose, ...data }) {
   const me = useMe()
   const navigate = useNavigate()
   const access = usePageAccess()
-  // Toplantı 15 dakika içinde başlıyor ya da sürüyorsa kapsülün birincili "Katıl" (Denetim
-  // Merkezi'nin kuralı); bağlantı listede yoksa davetten okunur.
-  const meeting = useMemo(
-    () => joinableMeeting(data.cal?.events, data.now),
-    [data.cal?.events, data.now],
-  )
-  const { url: joinUrl } = useJoinUrl(meeting, Boolean(meeting))
   // Yazının iki tonu ve zeminin durakları çekmeceye değişken olarak iner (palet değişince yenilenir).
   const tone = useMemo(
     () => ({
@@ -72,6 +73,32 @@ export default function WelcomeDrawer({ onClose, ...data }) {
     }),
     [ink],
   )
+  // Karşılama kartıyla aynı akıl: hikâye, durum seçici ve brifingden öneri.
+  const story = useHelloStory({
+    weather: data.weather,
+    cal: data.cal,
+    focus: data.focus,
+    now: +data.now,
+    rangeStart: data.rangeStart,
+    rangeEnd: data.rangeEnd,
+    celebration: data.celebration,
+  })
+  const brief = useBrief(briefCtx)
+  const offer = useWelcomeOffer(story, brief)
+  const chat = useHelloChat(story, brief, offer)
+  // Çekmecede havayı gösteren başka yer yok: gerçek bir öneri yoksa havanın sakin cümlesi
+  // ("Dışarısı 13°, güzel bir gün.") ilk satır.
+  const rows = useMemo(() => {
+    const sky = story.sky
+    if (!sky || chat.some((r) => r.id === "weather")) return chat
+    const [a, b = ""] = t("insight.welcome.weather", { temp: "\u0000", rest: sky.tip }).split(
+      "\u0000",
+    )
+    const parts = [{ text: a }, { text: sky.temp, mark: true }, { text: b }]
+    const pearl = <WeatherPearl kind={sky.kind} night={sky.night} />
+    return [{ id: "weather", pearl, parts }, ...chat]
+  }, [chat, story.sky, t])
+
   const { y, fade, progress, bind, open, close } = useWelcomeDrag(sheetRef, () => {
     onClose()
     const next = after.current
@@ -83,6 +110,11 @@ export default function WelcomeDrawer({ onClose, ...data }) {
     open()
     sheetRef.current?.focus({ preventScroll: true })
   }, [open])
+  // Çekmece açıkken kendiliğinden gelen pencereler (toplantı geri sayımı) bekler (`lib/welcomeGate`).
+  useLayoutEffect(() => {
+    setWelcomeOpen(true)
+    return () => setWelcomeOpen(false)
+  }, [])
   useBackToClose(true, () => {
     close()
     return true
@@ -139,9 +171,13 @@ export default function WelcomeDrawer({ onClose, ...data }) {
               {me.photoUrl ? (
                 <img src={me.photoUrl} alt="" className="welcome-avatar-face" />
               ) : (
-                <span aria-hidden="true" className="welcome-glass welcome-avatar-face">
-                  {initialsOf(me.fullName, locale)}
-                </span>
+                // Baş harfler CSS'ten (`data-initials`): görünen yazı düğmenin adıyla ("Profilim")
+                // çelişmesin (axe: label-content-name-mismatch).
+                <span
+                  aria-hidden="true"
+                  className="welcome-glass welcome-avatar-face"
+                  data-initials={initialsOf(me.fullName, locale)}
+                />
               )}
               {me.photoUrl && <span aria-hidden="true" className="welcome-glass" data-over="" />}
             </button>
@@ -156,12 +192,23 @@ export default function WelcomeDrawer({ onClose, ...data }) {
             </button>
           </motion.div>
           <div ref={bodyRef} className="welcome-body">
-            <WelcomeLines
+            <WelcomeCardLines
               ref={textRef}
-              progress={progress}
               titleId={titleId}
-              onSuggest={() => then(openHomeCue)}
-              {...data}
+              progress={progress}
+              maxRows={2}
+              story={story}
+              rows={rows}
+              offer={offer}
+              firstName={data.firstName}
+              onOffer={(o) =>
+                then(() => {
+                  if (!o.prompt) return openBoardOffer()
+                  markOfferDone(o.doneKey)
+                  setPendingAsk({ question: o.prompt, agent: "tyroOffice" })
+                  requestOpenChat({ focusComposer: true })
+                })
+              }
             />
           </div>
           <button
@@ -175,17 +222,17 @@ export default function WelcomeDrawer({ onClose, ...data }) {
         </div>
         <WelcomeActions
           opacity={chromeOpacity}
-          onRequest={
-            access.selfService ? (kind) => then(() => navigate(`/self-service?new=${kind}`)) : null
+          access={access}
+          onNew={(kind) =>
+            then(() =>
+              navigate(
+                kind === "task" || kind === "meeting"
+                  ? `/calendar?new=${kind}`
+                  : `/self-service?new=${kind}`,
+              ),
+            )
           }
-          joinUrl={meeting ? joinUrl : null}
-          onJoin={(e) => {
-            // Önce Teams uygulaması (`joinInTeams` varsayılanı durdurur); olmazsa bağlantının kendisi
-            // tarayıcıda yeni sekmede açılır.
-            joinInTeams(e, joinUrl, t)
-            close(0, QUICK)
-          }}
-          onMeeting={access.calendar ? () => then(() => navigate("/calendar?new=meeting")) : null}
+          onAsk={() => then(() => onNewChat?.())}
         />
       </motion.div>
     </motion.div>,

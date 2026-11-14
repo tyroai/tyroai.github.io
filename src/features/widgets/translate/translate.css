@@ -155,7 +155,7 @@
   height: 1.75rem;
   border-radius: 9999px;
   color: var(--muted-foreground);
-  font-size: 0.71875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   transition:
     background-color 150ms ease,
@@ -241,7 +241,7 @@
   border-radius: 9999px;
   /* Gri zeminde küçük yazı: ikincil ton bir kademe koyu (AA). */
   color: color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground));
-  font-size: 0.71875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   transition:
@@ -316,7 +316,7 @@
   align-items: center;
   gap: 0.25rem;
   overflow: hidden;
-  font-size: 0.71875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--muted-foreground);
   white-space: nowrap;
@@ -338,7 +338,7 @@
   background: var(--background);
   box-shadow: 0 0 0 1px var(--border);
   color: var(--foreground);
-  font-size: 0.71875rem;
+  font-size: 0.75rem;
   font-weight: 500;
 }
 .tw-chip svg {
@@ -355,7 +355,7 @@
   overscroll-behavior: contain;
 }
 .tw-note {
-  font-size: 0.71875rem;
+  font-size: 0.75rem;
   line-height: 1.45;
   color: var(--muted-foreground);
 }

@@ -6,6 +6,7 @@ import { CALENDAR_PAGE_SIZE, getCalendarPages } from "@/lib/calendarPages"
 import { teamsLinkIn } from "@/lib/teamsJoin"
 import { worstEvents } from "@/dev/worstCase/calendarEvents"
 import { onSessionClear } from "@/lib/sessionCache"
+import { calendarSnapshot, keepStale, saveCalendarSnapshot } from "@/lib/homeSnapshots"
 
 // Kept in memory, not localStorage: meeting subjects are other people's
 // business on a possibly shared browser, and an in-memory cache also avoids
@@ -225,10 +226,23 @@ async function loadEvents(instance, account, startIso, endIso, people, range) {
  * morning events.
  */
 
-export function useCalendarEvents(start, end, enabled = true, people = EMPTY_PEOPLE) {
+export function useCalendarEvents(
+  start,
+  end,
+  enabled = true,
+  people = EMPTY_PEOPLE,
+  { snapshot = false } = {},
+) {
   const { instance, accounts } = useMsal()
   const account = accounts[0]
-  const [state, setState] = useState({ status: "loading", events: [], range: null })
+  // `snapshot`: pano aralığı sayfa açılınca son görüntüyle başlar, ağdan gelince tazelenir
+  // (`lib/homeSnapshots`). Anahtar hesapsız: hesap eşleşmesini görüntü kendisi yapar.
+  const [state, setState] = useState(
+    () =>
+      (snapshot && enabled && isMsalConfigured && account && start && end
+        ? calendarSnapshot(account.homeAccountId, rangeKey("", start, end, people))
+        : null) ?? { status: "loading", events: [], range: null },
+  )
   // Bump to force a refetch past the TTL (manual refresh, window focus).
   const [nonce, setNonce] = useState(0)
   const seq = useRef(0)
@@ -280,14 +294,21 @@ export function useCalendarEvents(start, end, enabled = true, people = EMPTY_PEO
         })
       inflight.set(key, job)
     }
+    // Görüntüyü İSTEYEN kanca yazar, isteği başlatan değil: kabuktaki toplantı uyarısı ve çentik
+    // sayaçları aynı aralığı sayfadan önce, görüntüsüz istiyor; pano onların isteğine bağlanınca
+    // görüntü hiç yazılmıyordu (canlıda görüldü). Çıkıştan önce başlamış okuma yazılmaz.
+    const started = generation
     job.then((value) => {
-      if (!cancelled && mySeq === seq.current) setState(value)
+      if (snapshot && value.status === STATUS.ready && started === generation)
+        saveCalendarSnapshot(account.homeAccountId, rangeKey("", from, to, people), value)
+      if (!cancelled && mySeq === seq.current)
+        setState((prev) => keepStale(prev, value, (p) => p.events.length > 0))
     })
 
     return () => {
       cancelled = true
     }
-  }, [instance, account, signedIn, startIso, endIso, nonce, enabled, people])
+  }, [instance, account, signedIn, startIso, endIso, nonce, enabled, people, snapshot])
 
   const refresh = useCallback(() => setNonce((n) => n + 1), [])
   useEffect(() => {
@@ -297,7 +318,8 @@ export function useCalendarEvents(start, end, enabled = true, people = EMPTY_PEO
 
   // Okunamadıysa (izin değil, hata) kendiliğinden yeniden dene: pencereye /
   // sekmeye dönünce ve aralıkla. Sayaç başarıda sıfırlanır.
-  const failed = state.status === STATUS.error
+  // Görüntü gösterilirken tazeleme düştüyse de yeniden denenir (`keepStale`).
+  const failed = state.status === STATUS.error || Boolean(state.refreshError)
   const autoTries = useRef(0)
   useEffect(() => {
     if (state.status === STATUS.ready) autoTries.current = 0

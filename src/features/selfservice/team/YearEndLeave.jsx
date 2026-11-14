@@ -32,7 +32,7 @@ export function YearEndLeave({ rows, className }) {
         strokeWidth={1.9}
       />
       <span className="font-medium">{t("selfService.team.yearEnd.title")}</span>
-      <span className="min-w-0 flex-1">{items.join(" · ")}</span>
+      <span className="min-w-0 flex-1 break-words">{items.join(" · ")}</span>
     </p>
   )
 }

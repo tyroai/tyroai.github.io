@@ -78,7 +78,7 @@ export function CatalogTile({ id, render, checked, onToggle }) {
         <div className="flex items-start gap-2 px-1.5 pt-2.5 pb-1">
           <span className="min-w-0 flex-1">
             <span className="block text-[0.8125rem] font-medium">{name}</span>
-            <span id={descId} className="mt-0.5 block text-[0.71875rem] text-muted-foreground">
+            <span id={descId} className="mt-0.5 block text-[0.75rem] text-muted-foreground">
               {t(`widgets.catalog.${id}`)}
             </span>
           </span>

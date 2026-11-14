@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils"
  * ⚠️ Ekleniyor hâli `aria-disabled`, `disabled` DEĞİL (odak kaybolmasın).
  */
 const PILL =
-  "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-[0.71875rem] font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-brand/30 [@media(pointer:coarse)]:h-11 [@media(pointer:coarse)]:px-3.5"
+  "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-[0.75rem] font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-brand/30 [@media(pointer:coarse)]:h-11 [@media(pointer:coarse)]:px-3.5"
 
 export function TodoHandoff({ item, entry, todoOpen, onAdd, onConnect }) {
   const { t } = useLocale()

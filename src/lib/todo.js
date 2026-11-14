@@ -72,30 +72,12 @@ export const TODO_SCOPES = ["Tasks.ReadWrite"]
  * parametre EKLEYEN kişi onu gerçek To Do'da denemeden eklememeli — sahte
  * sunucu her parametreyi kabul ediyordu, hatayı o yüzden görmedi.
  */
-const MAX_LISTS = 12
-/** Açık görevler için en fazla üç sayfa (3 × 100). */
-const OPEN_PAGES = 3
-/** Süzgeçsiz yedek sorgu varsayılan sayfa boyuyla gelir; daha çok sayfa. */
-const FALLBACK_PAGES = 10
 /** Aynı anda sorulan liste sayısı — gerekçe dosya başında. */
-const LIST_CONCURRENCY = 2
+export const LIST_CONCURRENCY = 2
 /** Geçici hatada (429 · 50x · ağ) yeniden deneme sayısı. */
 export const RETRY = 2
 /** Yeniden denemeden sonra da düşen bu kodlarda süzgeçsiz yedek sorulmaz — sorgu değil yük sorunu. */
 const TRANSIENT_HTTP = new Set([429, 502, 503, 504])
-
-/**
- * "Bugün bitenler" sorgusunun basamakları. Kalıcı bir ret (4xx/501) bir alt
- * basamağa iner ve karar oturum boyunca hatırlanır — `authorizations.js`in
- * `notesAvailable` deseni: son değişene göre sıralı 25 → sırasız 100 → hiç.
- * En alt basamakta "bugün bitenler" yalnız karttan bitirilenler olur; açık
- * görevler etkilenmez.
- */
-const COMPLETED_QUERIES = [
-  `?$filter=${encodeURIComponent("status eq 'completed'")}&$orderby=${encodeURIComponent("lastModifiedDateTime desc")}&$top=25`,
-  `?$filter=${encodeURIComponent("status eq 'completed'")}&$top=100`,
-]
-let completedStep = 0
 
 /** Yerel takvim günü — `toISOString()` DEĞİL (UTC'de gün kayar). */
 export function localDayKey(d = new Date()) {
@@ -185,112 +167,10 @@ export function toFocusTask(task, listId, today) {
 }
 
 /** Açıklar önce (en eski teslim başta), bitenler sonda. */
-function order(a, b) {
+export function focusOrder(a, b) {
   if (a.done !== b.done) return a.done ? 1 : -1
   if (a.dueKey !== b.dueKey) return a.dueKey < b.dueKey ? -1 : 1
   return a.created < b.created ? -1 : a.created > b.created ? 1 : 0
-}
-
-/**
- * Bir listenin bugüne giren görevleri. Açık görevler süzgeçle; süzgeçli sorgu
- * geçici OLMAYAN bir hatayla reddedilirse (400 · 404 · 501…) bir kez de
- * SÜZGEÇSİZ, `$select`siz ve `$top`suz sorulur — hangisinin reddedildiğini
- * bilmiyoruz, yedek hiçbirini taşımıyor. Bugün bitenlerin sorgusu isteğe
- * bağlı: düşerse liste yine okunmuş sayılır (yalnız "bugün bitti" satırları
- * eksik kalır ve konsola yazılır).
- */
-async function readList(instance, account, list) {
-  const base = `/me/todo/lists/${enc(list.id)}/tasks`
-  let open = await getPages(
-    instance,
-    account,
-    `${base}?$filter=${enc("status ne 'completed'")}&$top=100`,
-    OPEN_PAGES,
-  )
-  if (isPermanent(open)) {
-    warnFailure(`"${list.displayName ?? list.id}" süzgeçli sorgu`, open)
-    open = await getPages(instance, account, base, FALLBACK_PAGES)
-  }
-  if (open.status !== STATUS.ready) return { failed: open }
-
-  let done = []
-  for (
-    let step = completedStep;
-    step < COMPLETED_QUERIES.length;
-    step = Math.max(step + 1, completedStep)
-  ) {
-    const res = await graphGet(instance, account, {
-      path: `${base}${COMPLETED_QUERIES[step]}`,
-      scopes: TODO_SCOPES,
-      retry: RETRY,
-    })
-    if (res.status === STATUS.ready) {
-      done = res.data?.value ?? []
-      break
-    }
-    warnFailure(`"${list.displayName ?? list.id}" bugün bitenler`, res)
-    // Kalıcı ret (sorgu biçimi) bir alt basamağa iner; geçici hatada bu tur
-    // bitenler olmadan devam edilir, basamak korunur.
-    if (!isPermanent(res)) break
-    // ⚠️ `+= 1` DEĞİL: listeler aynı anda soruluyor ve aynı reddi gören iki
-    // liste basamağı iki kez artırıp yedek sorguyu hiç denemeden atlıyordu
-    // (ölçüldü: bugün biten iş karttan düştü). Basamak, DENENENİN bir altı.
-    completedStep = Math.max(completedStep, step + 1)
-  }
-  return { listId: list.id, tasks: [...open.data, ...done] }
-}
-
-/**
- * Bugünün odağı: bütün listelerde teslimi bugün/geçmiş açık görevler + bugün
- * bitenler. Dönen: `{ status, tasks, defaultListId, skipped, detail }` —
- * `skipped` okunamayan liste sayısı, `detail` hatanın kısa özeti.
- */
-export async function fetchFocusTasks(instance, account, today = localDayKey()) {
-  // Sorgusuz — belgenin kendi örneği de öyle; liste yükü küçük.
-  const lists = await getPages(instance, account, "/me/todo/lists", 2)
-  if (lists.status !== STATUS.ready) {
-    warnFailure("listeler", lists)
-    return { ...lists, detail: describeFailure(lists, "lists") }
-  }
-  const all = lists.data
-  if (all.length > MAX_LISTS) console.warn(`[todo] ${all.length} liste, ilk ${MAX_LISTS}'i okundu`)
-  const scan = all.slice(0, MAX_LISTS)
-  const defaultListId =
-    (all.find((l) => l.wellknownListName === "defaultList") ?? all[0])?.id ?? null
-
-  const results = await mapPool(scan, LIST_CONCURRENCY, (list) => readList(instance, account, list))
-
-  const failures = results.filter((r) => r.failed)
-  for (const [i, r] of results.entries()) {
-    if (r.failed) warnFailure(`"${scan[i].displayName ?? scan[i].id}" okunamadı`, r.failed)
-  }
-  // Hepsi düştüyse kısmi bir sonuç yok — hata, ilk düşenin özetiyle. İzin
-  // reddi (403) listelerin HEPSİNDE ise o bir izin durumu, hata değil.
-  if (scan.length > 0 && failures.length === scan.length) {
-    const first =
-      failures.find((f) => f.failed.status === STATUS.error)?.failed ?? failures[0].failed
-    return { ...first, detail: describeFailure(first, "tasks") }
-  }
-
-  const seen = new Set()
-  const tasks = []
-  for (const r of results) {
-    if (r.failed) continue
-    for (const task of r.tasks) {
-      if (seen.has(task.id)) continue
-      seen.add(task.id)
-      const focus = toFocusTask(task, r.listId, today)
-      if (focus) tasks.push(focus)
-    }
-  }
-  tasks.sort(order)
-  return {
-    status: STATUS.ready,
-    tasks,
-    defaultListId,
-    skipped: failures.length,
-    detail: failures.length ? describeFailure(failures[0].failed, "tasks") : "",
-  }
 }
 
 /** Varsayılan listeye bugünün tarihiyle yeni görev. `done`: taşınan yerel iş bitmişse. */

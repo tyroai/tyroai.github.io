@@ -1,14 +1,10 @@
-import { useState } from "react"
-import { useMsal } from "@azure/msal-react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import Alert02Icon from "@hugeicons/core-free-icons/Alert02Icon"
 import Login03Icon from "@hugeicons/core-free-icons/Login03Icon"
 import { useLocale } from "@/hooks/useLocale"
+import { useReconnect } from "@/hooks/useReconnect"
 import { useSessionExpired } from "@/hooks/useSessionExpired"
-import { loginRequest } from "@/lib/msal"
-import { clearLocalSession } from "@/lib/sessionExpiry"
-import { attemptSilentSso } from "@/lib/silentSso"
 
 /**
  * Oturumun süresi dolunca her sayfada, üst çubuğun hemen altında tek uyarı (`lib/sessionHealth`):
@@ -21,13 +17,7 @@ import { attemptSilentSso } from "@/lib/silentSso"
 export function SessionExpiredBanner() {
   const { t } = useLocale()
   const expired = useSessionExpired()
-  const { instance } = useMsal()
-  const [busy, setBusy] = useState(false)
-  const reconnect = async () => {
-    setBusy(true)
-    await clearLocalSession(instance)
-    if (!(await attemptSilentSso(instance, loginRequest))) window.location.assign("/login")
-  }
+  const { reconnect, busy } = useReconnect()
   const reduce = useReducedMotion()
   return (
     <AnimatePresence initial={false}>

@@ -29,8 +29,23 @@ function set(next) {
   for (const cb of listeners) cb()
 }
 
-/** Bir token alınamadı: oturum dolmuş mu, bir kez sına. */
-export async function suspectSession(instance, now = Date.now(), alive = isSessionAlive) {
+/** Kuşkusuz süre dolması: yenileme anahtarı bitti ya da hiç yok — yoklamaya gerek yok. */
+const CERTAIN = /refresh_token_expired|no_tokens_found/
+
+/**
+ * Bir token alınamadı: oturum dolmuş mu, bir kez sına. `error` kesin bir süre dolmasıysa
+ * (`CERTAIN`) şerit yoklamasız açılır.
+ */
+export async function suspectSession(
+  instance,
+  now = Date.now(),
+  alive = isSessionAlive,
+  error = null,
+) {
+  if (CERTAIN.test(error?.errorCode ?? "")) {
+    set(true)
+    return
+  }
   if (checking || expired || now - lastCheck < COOLDOWN) return
   checking = true
   lastCheck = now

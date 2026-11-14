@@ -3,8 +3,16 @@ import { useMsal } from "@azure/msal-react"
 import { graphRequest } from "@/lib/graph"
 import { isMsalConfigured } from "@/lib/msal"
 import { checkPhoto, photoDue, photoKey, readPhoto } from "@/lib/myPhoto"
-import { currentUser as mockUser } from "@/data/user"
+import { currentUser as devUser } from "@/data/user"
 import { worstMe } from "@/dev/worstCase/home"
+
+// Oturum yokken dönen kişi. Geliştirmede örnek kullanıcı; üretimde boş — gerçek bir kişinin adı ve
+// adresi herkesin indirdiği pakette durmasın (`import.meta.env.DEV`
+// derlemede `false` olunca örnek kullanıcı paketten düşer).
+const TITLE = { tr: "TYRO", en: "TYRO" }
+const FALLBACK = import.meta.env.DEV
+  ? devUser
+  : { name: "", fullName: "", initials: "", email: "", title: TITLE }
 
 function initialsFromName(name) {
   if (!name) return ""
@@ -79,8 +87,7 @@ async function revalidate(account, instance) {
  *
  * When MSAL is configured and a session is active, values come from the active
  * MSAL account claims and (if available) the Microsoft Graph profile photo.
- * Otherwise it falls back to the mock currentUser so the UI keeps working in
- * preview / no-auth mode. `photoUrl` is null when the user has no photo or
+ * Otherwise it falls back to an empty user (the sample user only in development). `photoUrl` is null when the user has no photo or
  * MSAL isn't configured.
  */
 export function useMe() {
@@ -109,17 +116,17 @@ export function useMe() {
   // DEV: `?data=worst` en kötü veri (src/dev/worstCase); üretimde ölü kod.
   const worst = import.meta.env.DEV ? worstMe() : null
   if (worst) return worst
-  if (!isMsalConfigured || !account) return { ...mockUser, photoUrl: null }
+  if (!isMsalConfigured || !account) return { ...FALLBACK, photoUrl: null }
 
-  const fullName = account.name || account.username || mockUser.fullName
+  const fullName = account.name || account.username || FALLBACK.fullName
   const firstName = fullName.split(/\s+/)[0]
 
   return {
     name: firstName,
     fullName,
-    initials: initialsFromName(fullName) || mockUser.initials,
-    email: account.username || mockUser.email,
-    title: mockUser.title,
+    initials: initialsFromName(fullName) || FALLBACK.initials,
+    email: account.username || FALLBACK.email,
+    title: TITLE,
     photoUrl,
   }
 }

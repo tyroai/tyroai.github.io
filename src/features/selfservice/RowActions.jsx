@@ -13,7 +13,7 @@ const FOCUS =
   "transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
 // İkincil: yalnız simge (ad balonda ve `aria-label`da); menü açıkken basılı görünür.
 const ICON_BTN = `${FOCUS} inline-flex size-8 items-center justify-center rounded-full text-foreground/70 hover:bg-foreground/[0.06] hover:text-foreground data-[state=open]:bg-foreground/[0.06] data-[state=open]:text-foreground [&_svg]:size-4`
-const PRIMARY = `${FOCUS} inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-solid px-3 text-[0.75rem] font-semibold text-brand-on-brand shadow-sm hover:brightness-110 [&_svg]:size-3.5`
+const PRIMARY = `${FOCUS} inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-solid px-3 text-[0.75rem] font-semibold text-brand-on-brand shadow-sm [&_svg]:size-3.5`
 
 /**
  * Satırın üstüne gelince (ya da klavye odağında) çıkan eylemler — kayıt penceresinin şeridiyle

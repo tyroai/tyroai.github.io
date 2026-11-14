@@ -80,7 +80,7 @@ export function NextStepsTip({ className, iconOnly = false, via = "chat" }) {
         onPointerEnter={enter}
         onPointerLeave={leave}
         aria-label={title}
-        className="w-[min(21rem,calc(100vw-2rem))] gap-0 rounded-2xl bg-[oklch(0.19_0.02_250/0.94)] p-4 text-white ring-1 ring-white/10 shadow-[0_1px_0_0_rgb(255_255_255/0.10)_inset,0_24px_56px_-16px_rgb(0_0_0/0.55),0_8px_20px_-8px_rgb(0_0_0/0.4)] backdrop-blur-2xl backdrop-saturate-150"
+        className="w-[min(21rem,calc(100vw-2rem))] gap-0 bg-[oklch(0.19_0.02_250/0.94)] p-4 text-white ring-1 ring-white/10 shadow-[0_1px_0_0_rgb(255_255_255/0.10)_inset,0_24px_56px_-16px_rgb(0_0_0/0.55),0_8px_20px_-8px_rgb(0_0_0/0.4)] backdrop-blur-2xl backdrop-saturate-150"
       >
         <p className="text-[0.875rem] font-semibold">{title}</p>
         <NextStepsList className="mt-3" via={via} />

@@ -40,18 +40,30 @@ export function busyBlocks(events, day, { from = WORK_HOURS.from, to = WORK_HOUR
   return out.map(([s, e]) => ({ start: new Date(s), end: new Date(e) }))
 }
 
-/** Bir günün boş pencereleri: `[{ start, end, minutes }]`, en az `min` dakika. */
+/**
+ * Bir günün boş pencereleri: `[{ start, end, minutes }]`, en az `min` dakika. Öğle arası
+ * (`WORK_HOURS.lunch`) dolu sayılır — odak penceresi, günün okuması, küre önerisi ve haftanın "boş
+ * odak"ı onu boşluk saymaz. `lunch: null` kapatır.
+ */
 export function freeWindows(
   events,
   day,
   now,
-  { from = WORK_HOURS.from, to = WORK_HOURS.to, min = 60 } = {},
+  { from = WORK_HOURS.from, to = WORK_HOURS.to, min = 60, lunch = WORK_HOURS.lunch } = {},
 ) {
   const { start, end } = workday(day, from, to)
   // Bugünse şimdiden sonrası, çeyrek saate yuvarlanmış.
   const nowMs = typeof now === "number" ? now : now?.getTime?.()
   const floor = nowMs && nowMs > start.getTime() ? Math.ceil(nowMs / STEP) * STEP : start.getTime()
   const busy = busySpans(events, start, end)
+  if (lunch) {
+    const ls = setClock(new Date(day), lunch[0]).getTime()
+    const le = setClock(new Date(day), lunch[1]).getTime()
+    if (le > start.getTime() && ls < end.getTime()) {
+      busy.push([Math.max(ls, start.getTime()), Math.min(le, end.getTime())])
+      busy.sort((a, b) => a[0] - b[0])
+    }
+  }
   const out = []
   let cursor = floor
   for (const [s, e] of busy) {

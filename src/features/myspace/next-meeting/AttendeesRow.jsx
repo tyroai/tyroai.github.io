@@ -77,7 +77,7 @@ export function AttendeesRow({ event, active = true }) {
               />
             ))}
             {more > 0 && (
-              <span className="-ms-1 grid h-[1.375rem] min-w-[1.375rem] place-items-center rounded-full bg-background px-1 text-[0.625rem] font-semibold tabular-nums text-foreground/75 ring-2 ring-background">
+              <span className="-ms-1 grid h-[1.375rem] min-w-[1.375rem] place-items-center rounded-full bg-background px-1 text-[0.6875rem] font-semibold tabular-nums text-foreground/75 ring-2 ring-background">
                 +{more}
               </span>
             )}
@@ -105,7 +105,7 @@ export function AttendeesRow({ event, active = true }) {
         align="start"
         sideOffset={6}
         collisionPadding={12}
-        className="w-[max(16rem,var(--radix-popover-trigger-width))] gap-0 rounded-2xl p-1.5 shadow-[0_18px_44px_-14px_rgb(0_0_0/0.3)] duration-200 ease-out"
+        className="w-[max(16rem,var(--radix-popover-trigger-width))] gap-0 p-1.5"
       >
         <Panel people={people} organizerAddress={event.organizerAddress} />
       </PopoverContent>

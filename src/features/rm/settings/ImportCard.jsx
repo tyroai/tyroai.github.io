@@ -234,7 +234,7 @@ export function ImportCard() {
             <Button
               onClick={() => setConfirm(true)}
               disabled={rep.older && !olderOk}
-              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110"
+              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep"
             >
               {rt("rm.import.apply")}
             </Button>
@@ -257,7 +257,7 @@ export function ImportCard() {
             <Button
               onClick={apply}
               disabled={busy}
-              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110"
+              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep"
             >
               {rt(busy ? "rm.import.applying" : "rm.import.apply")}
             </Button>

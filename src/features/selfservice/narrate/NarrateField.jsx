@@ -135,7 +135,7 @@ export function NarrateField({
           onClick={submit}
           aria-label={submitLabel}
           title={submitLabel}
-          className={cn(ROUND, "bg-brand-fill-deep text-brand-on-brand hover:brightness-110")}
+          className={cn(ROUND, "bg-brand-fill-deep text-brand-on-brand")}
         >
           <HugeiconsIcon
             icon={ArrowRight01Icon}

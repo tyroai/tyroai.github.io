@@ -179,7 +179,7 @@ function MapPin({ label }) {
           // Dar hücrede iğnenin yerine sığmıyor: hücrenin ortasında bandın dibine, köşedekilerin altına iner.
           fits
             ? "max-w-full [grid-area:1/1]"
-            : "absolute -bottom-1 left-1/2 -translate-x-1/2 gap-0.5 px-1.5 py-0.5 text-[0.625rem]",
+            : "absolute -bottom-1 left-1/2 -translate-x-1/2 gap-0.5 px-1.5 py-0.5 text-[0.6875rem]",
           "scale-90 bg-white text-neutral-900 opacity-0 shadow-[0_6px_16px_-6px_rgb(0_0_0/0.4)] transition duration-200 group-hover/thumb:scale-100 group-hover/thumb:opacity-100 group-focus-visible/thumb:scale-100 group-focus-visible/thumb:opacity-100 pointer-coarse:scale-100 pointer-coarse:opacity-100 dark:bg-neutral-900 dark:text-white",
         )}
       >

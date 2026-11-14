@@ -1,58 +1,32 @@
+import { useEffect, useRef, useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
-import Award01Icon from "@hugeicons/core-free-icons/Award01Icon"
-import BirthdayCakeIcon from "@hugeicons/core-free-icons/BirthdayCakeIcon"
+import ArrowDown01Icon from "@hugeicons/core-free-icons/ArrowDown01Icon"
 import PartyIcon from "@hugeicons/core-free-icons/PartyIcon"
-import UserAdd01Icon from "@hugeicons/core-free-icons/UserAdd01Icon"
 import { PersonAvatar } from "@/components/common/PersonAvatar"
 import { PersonPopover } from "@/components/common/PersonPopover"
-import { cn } from "@/lib/utils"
+import { BellSection } from "../bell/BellSection"
 
-const GROUPS = {
-  birthday: { icon: BirthdayCakeIcon, label: "special.group.birthdays" },
-  anniversary: { icon: Award01Icon, label: "special.group.anniversaries" },
-  joiner: { icon: UserAdd01Icon, label: "special.group.joiners" },
-}
-
-/** Grubun başlığı: marka tonlu simge, ad, sayı. */
-export function GroupHeader({ icon, label, count }) {
-  return (
-    <div className="flex items-center gap-2 px-4 pb-1 pt-2.5">
-      <span
-        aria-hidden="true"
-        className="grid size-5 shrink-0 place-items-center rounded-md bg-brand/10 text-brand"
-      >
-        <HugeiconsIcon icon={icon} className="size-3" strokeWidth={2.2} />
-      </span>
-      <span className="text-[0.6875rem] font-semibold text-foreground/80">{label}</span>
-      {count != null && (
-        <span className="ms-auto text-[0.6875rem] font-semibold tabular-nums text-muted-foreground">
-          {count}
-        </span>
-      )}
-    </div>
-  )
+const LABEL = {
+  birthday: "special.group.birthdays",
+  anniversary: "special.group.anniversaries",
+  joiner: "special.group.joiners",
 }
 
 /**
- * Kutlanan kişinin satırı; basınca kişi kartı açılır (Keşfet'in rayıyla aynı
- * kart, günün bağlamıyla). Ekibinden ya da departmanından biri (`circle`)
- * tonlu satır, halkalı fotoğraf ve "Ekibin"/"Departmanın" etiketiyle öne çıkar. Tür grubun başlığında; sağda yalnız ayırt eden
- * bilgi kalır (kaçıncı yıl, "Senin günün"). Ad `lang="tr"`: Türkçe adlar.
+ * Kutlanan kişinin satırı; basınca kişi kartı açılır (Keşfet'in rayıyla aynı kart, günün
+ * bağlamıyla). Ekibinden ya da departmanından biri (`circle`) halkalı fotoğraf ve "Ekibin" /
+ * "Departmanın" etiketiyle öne çıkar. Tür bölümün başlığında; sağda yalnız ayırt eden bilgi
+ * kalır (kaçıncı yıl, "Senin günün"). Ad `lang="tr"`: Türkçe adlar.
  */
 function PersonRow({ person, photo, dayText, isToday, t }) {
-  const side = person.self
-    ? { icon: PartyIcon, label: t("person.selfDay") }
-    : person.kind === "anniversary"
-      ? { icon: null, label: t("feed.cel.years", { count: person.years }) }
-      : null
+  const years = t("feed.cel.years", { count: person.years })
+  const meta = person.self ? t("person.selfDay") : person.kind === "anniversary" ? years : null
   const contextText =
     person.kind === "birthday"
       ? dayText
       : person.kind === "joiner"
-        ? isToday
-          ? t("feed.cel.joinedToday")
-          : t("special.joinerDay")
-        : t("feed.cel.years", { count: person.years })
+        ? t(isToday ? "feed.cel.joinedToday" : "special.joinerDay")
+        : years
 
   return (
     <li>
@@ -62,59 +36,31 @@ function PersonRow({ person, photo, dayText, isToday, t }) {
         context={{ kind: person.kind, text: contextText, years: person.years }}
       >
         {(trigger) => (
-          <button
-            {...trigger}
-            className={cn(
-              "flex w-full items-center gap-2.5 px-4 py-1.5 text-start transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-11",
-              person.circle
-                ? "bg-brand/[0.07] hover:bg-brand/[0.12] aria-expanded:bg-brand/[0.12]"
-                : "hover:bg-accent/50 aria-expanded:bg-accent/50",
-            )}
-          >
-            <span
-              className={cn(
-                "flex shrink-0 rounded-full",
-                person.circle && "ring-2 ring-brand ring-offset-2 ring-offset-popover",
-              )}
-            >
-              <PersonAvatar name={person.name} photo={photo} className="size-8 text-[0.6875rem]" />
+          <button {...trigger} className="bn-row">
+            <span className="bn-lead" data-circle={person.circle ? "" : undefined}>
+              <PersonAvatar name={person.name} photo={photo} className="bn-avatar" />
             </span>
-            <span className="flex min-w-0 flex-1 flex-col">
-              <span className="flex min-w-0 items-center gap-1.5">
-                <span
-                  lang="tr"
-                  className={cn(
-                    "truncate text-[0.75rem] font-semibold leading-snug tracking-[-0.01em]",
-                    person.circle ? "text-foreground" : "text-foreground/90",
-                  )}
-                >
+            <span className="bn-text">
+              <span className="bn-name-line">
+                <span lang="tr" className="bn-name">
                   {person.name}
                 </span>
                 {person.circle && (
-                  <span className="shrink-0 rounded-full bg-brand-solid px-1.5 py-px text-[0.5625rem] font-semibold uppercase leading-4 tracking-wide text-white">
-                    {t(`special.circle.${person.circle}`)}
-                  </span>
+                  <span className="bn-pill">{t(`special.circle.${person.circle}`)}</span>
                 )}
               </span>
               {person.title && (
-                <span
-                  lang="tr"
-                  className="truncate text-[0.6875rem] leading-snug text-muted-foreground"
-                >
+                <span lang="tr" className="bn-sub">
                   {person.title}
                 </span>
               )}
             </span>
-            {side && (
-              <span className="flex shrink-0 items-center gap-1 text-[0.6875rem] font-medium tabular-nums text-muted-foreground">
-                {side.icon && (
-                  <HugeiconsIcon
-                    icon={side.icon}
-                    className="size-3.5 shrink-0 text-brand"
-                    strokeWidth={2}
-                  />
+            {meta && (
+              <span className="bn-meta">
+                {person.self && (
+                  <HugeiconsIcon icon={PartyIcon} strokeWidth={2} aria-hidden="true" />
                 )}
-                {side.label}
+                {meta}
               </span>
             )}
           </button>
@@ -124,15 +70,26 @@ function PersonRow({ person, photo, dayText, isToday, t }) {
   )
 }
 
-/** Bir tür (doğum günü · yıl dönümü · katılan) için başlık + kişiler. */
-export function PeopleGroup({ kind, people, photoOf, dayText, isToday, t }) {
+/**
+ * Bir tür (doğum günü · yıl dönümü · katılan) için başlık + kişiler. `limit`: kalabalık günde
+ * ilk bu kadarı görünür, kalanı "N kişi daha" ile açılır (tek kişi için düğme çizilmez); açılınca
+ * odak yeni gelen ilk satıra geçer.
+ */
+export function PeopleGroup({ kind, people, photoOf, dayText, isToday, t, limit }) {
+  const [all, setAll] = useState(false)
+  const list = useRef(null)
+  const capped = Boolean(limit) && !all && people.length > limit + 1
+  const visible = capped ? people.slice(0, limit) : people
+
+  useEffect(() => {
+    if (all && limit) list.current?.children[limit]?.querySelector("button")?.focus()
+  }, [all, limit])
+
   if (!people.length) return null
-  const group = GROUPS[kind]
   return (
-    <section>
-      <GroupHeader icon={group.icon} label={t(group.label)} count={people.length} />
-      <ul className="pb-1">
-        {people.map((person) => (
+    <BellSection label={t(LABEL[kind])} count={people.length}>
+      <ul ref={list} className="bn-list">
+        {visible.map((person) => (
           <PersonRow
             key={`${person.kind}:${person.key}`}
             person={person}
@@ -143,6 +100,12 @@ export function PeopleGroup({ kind, people, photoOf, dayText, isToday, t }) {
           />
         ))}
       </ul>
-    </section>
+      {capped && (
+        <button type="button" className="bn-more" onClick={() => setAll(true)}>
+          {t("bell.more", { n: people.length - limit })}
+          <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} aria-hidden="true" />
+        </button>
+      )}
+    </BellSection>
   )
 }

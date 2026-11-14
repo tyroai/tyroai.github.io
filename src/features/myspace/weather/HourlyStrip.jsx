@@ -156,7 +156,7 @@ export function HourlyStrip({ hours, heading, upcoming = false }) {
                   </span>
                   {/* Yağış satırı HER ZAMAN yer tutar: kuru bir gün seçilince şerit —
                       ve kahraman — kısalıp altındaki sütunları zıplatıyordu. */}
-                  <span className="flex h-3.5 items-center gap-0.5 text-[0.625rem] font-semibold tabular-nums">
+                  <span className="flex h-3.5 items-center gap-0.5 text-[0.6875rem] font-semibold tabular-nums">
                     {h.precip > 0 && (
                       <>
                         <RainDrop className={cn("h-2.5 w-2", RAIN_ON_SKY)} />

@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { formatCountdown } from "@/features/meeting-alert/lib/meetingAlert"
+import { useWelcomeOpen } from "@/lib/welcomeGate"
 import { MeetingCountdown } from "./MeetingCountdown"
 import { MeetingCountdownPill } from "./MeetingCountdownPill"
 import { useMeetingAlert } from "./useMeetingAlert"
@@ -28,7 +29,10 @@ export function MeetingAlertHost() {
     }
   }, [label])
 
-  if (!alert.event) return null
+  // Telefondaki karşılama çekmecesi açıkken pencere de hap da bekler: modal pencere çekmeceyi
+  // dokunmaya kapatıyordu (`lib/welcomeGate`). Çekmece kapanınca kendiliğinden gelir.
+  const welcomeOpen = useWelcomeOpen()
+  if (!alert.event || welcomeOpen) return null
   return alert.cardOpen ? (
     <MeetingCountdown alert={alert} />
   ) : (

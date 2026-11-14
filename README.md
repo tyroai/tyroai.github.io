@@ -76,8 +76,9 @@ Veri seti eklemek ya da düzenlemek için `demo/datasets/sets/ana.js` örnek al�
 - **Hava kartı arka planları** (`demo/overlay/public/images/weather/`): güneşli ve bulutlu görseller
   [Imageory](https://imageory.in) galerisinden (yapay zekâ sanatı; sitede açık lisans metni yoktur), yağmur, kar ve sis
   [Unsplash](https://unsplash.com/license) fotoğraflarıdır. Kaynaklar `CREDITS.md` içindedir.
-- **Logo:** işaret ve "tyro" yazısı kurumsal logodan izlenmiştir; ikinci kelime "hub" paletin renginde `demo/hub.mjs`
-  ile üretilir (sync, bunu `BrandText`e yamar).
+- **Logo ve ad:** uygulamanın adı **tyro ai**. İşaret ve "tyr" harfleri kurumsal logodan izlenmiştir; "o", "a" ve "i" harfleri
+  tyra logo üretecinin resmi harfleridir (`demo/logo.mjs`, `demo/product-word.mjs`). İkinci kelime "ai" paletin renginde
+  çizilir (sync, bunu `BrandText`e yamar). Header'ın sağ ucundaki düğme TYRO küresidir.
 
 ## Lisans
 

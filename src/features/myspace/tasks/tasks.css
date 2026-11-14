@@ -308,7 +308,11 @@
 .dark .tasks-chip[data-tone="late"] {
   color: rgb(252 211 77);
 }
+/* Çarpı rozetin ÜSTÜNDE: soluklaşan (`opacity` < 1) rozet kendi katmanına çıkıyor ve görünmezken
+   tıklamayı yutuyordu (tarihi geçmiş işlerde × çalışmıyordu). */
 .tasks-remove {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
   width: 1.5rem;
@@ -334,6 +338,7 @@
   .tasks-row:hover .tasks-meta,
   .tasks-row:has(:focus-visible) .tasks-meta {
     opacity: 0;
+    pointer-events: none;
   }
   .tasks-remove:hover {
     background: color-mix(in oklab, var(--foreground) 8%, transparent);

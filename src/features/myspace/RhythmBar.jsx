@@ -32,7 +32,7 @@ export function RhythmBar({ tip, pct, minutes, isPeak, isToday, day, label, inde
         </span>
         <span
           className={cn(
-            "text-[0.625rem] text-muted-foreground",
+            "text-[0.6875rem] text-muted-foreground",
             isToday && "font-semibold text-foreground",
           )}
         >

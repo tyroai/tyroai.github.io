@@ -103,7 +103,7 @@ export function MemberRow({ row, photo, presence, status, onOpen, wide = false }
             {p.title && <span lang="tr">{p.title}</span>}
             {p.title && row.personnel && " · "}
             {row.personnel && (
-              <span className="tabular-nums">
+              <span data-private="" className="tabular-nums">
                 <span className="sr-only">{t("selfService.profile.personnel")} </span>#
                 {row.personnel}
               </span>

@@ -20,7 +20,7 @@ const SWAP = { type: "spring", stiffness: 420, damping: 28 }
  * (`--float-stack-bottom`); bildirim yığını ona binmez. Esc ve "Bitti" odağı buraya döndürür
  * (`data-board-edit-toggle`). Yeri: `HomeEditFab.css`.
  */
-export function HomeEditFab() {
+export function HomeEditFab({ hidden = false }) {
   const { t } = useLocale()
   const editing = useBoardEditing()
   const ref = useRef(null)
@@ -31,6 +31,9 @@ export function HomeEditFab() {
     "1",
     useCallback(() => setBoardEditing(true), []),
   )
+  // Sahneler düzeninde düğme çizilmez (düzenleme şeritteki "Sahneyi düzenle"de); adresle
+  // açma (`?edit=1`) yine çalışır.
+  if (hidden) return null
   const label = t(editing ? "header.editBoardDone" : "header.editHome")
   return (
     <Tooltip>

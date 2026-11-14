@@ -6,10 +6,13 @@ import Mail01Icon from "@hugeicons/core-free-icons/Mail01Icon"
 import { useLocale } from "@/hooks/useLocale"
 import { teamsChat } from "@/lib/celebrate"
 import { cn } from "@/lib/utils"
+import "./personCard.css"
+import "./personParts.css"
 
 /**
  * Kişi kartının dört eylemi — Sohbet · E-posta · Ara · Toplantı (Outlook'un kişi kartının satırı).
- * Kişi kartı ve Self Servis'in Ekibim bölmesi paylaşır.
+ * Kişi kartı ve Self Servis'in Ekibim bölmesi paylaşır. Dört eşit karo (Denetim Merkezi'nin
+ * kutucukları gibi yumuşak zemin): simge üstte, ad altta; dokunmatikte 56 px.
  *
  * Eylemler BAĞLANTI, uygulama içi işlem değil: Teams'in belgelenmiş derin bağlantıları
  * (`/l/chat`, `/l/call`, `/l/meeting/new`) ve Outlook web'in yazma bağlantısı — yeni kapsam yok,
@@ -21,7 +24,7 @@ export function PersonActions({ address, upn, className }) {
   if (!address) return null
   const id = upn || address
   return (
-    <div className={cn("grid grid-cols-4 gap-1", className)}>
+    <div className={cn("pc-actions", className)}>
       <Action
         href={teamsChat(id)}
         icon={BubbleChatIcon}
@@ -58,12 +61,10 @@ function Action({ href, icon, label, title }) {
       rel="noopener noreferrer"
       // Adı görünen etiket (sesle "Toplantı" diyen bulsun); uzun açıklama ipucunda.
       title={title}
-      className="group/act flex flex-col items-center gap-1 rounded-xl px-1 py-1.5 text-[0.6875rem] font-medium text-foreground/80 transition hover:bg-accent/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:min-h-14"
+      className="pc-act"
     >
-      <span className="grid size-8 place-items-center rounded-full bg-brand/[0.09] text-brand-ink transition group-hover/act:bg-brand/[0.15]">
-        <HugeiconsIcon icon={icon} className="size-4" strokeWidth={1.9} aria-hidden="true" />
-      </span>
-      <span className="max-w-full truncate">{label}</span>
+      <HugeiconsIcon icon={icon} strokeWidth={1.8} aria-hidden="true" />
+      <span>{label}</span>
     </a>
   )
 }

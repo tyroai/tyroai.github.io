@@ -26,7 +26,7 @@ const InsightBody = lazy(loadBody)
  * Anasayfa'nın başı — yazıyla kurulan sakin bir karşılama: kaş (öteki sayfalardaki marka
  * noktalı küçük satır: "CANLI · 30 EKİM CUMA"), selamlama ("İyi akşamlar, Ömer"; kutlama
  * gününde "İyi ki doğdun, Ömer!") ve altında günün okuması (`lib/dayInsight`): neden → sonuç →
- * öneri; sayıyı yalnız nedeni anlatıyorsa söyler (sayım Günün brifinginin işi). Bağlaçlar
+ * öneri; sayıyı yalnız nedeni anlatıyorsa söyler (sayım TYRO brifinginin işi). Bağlaçlar
  * soluk, anahtar ifade koyu mürekkep; sondaki kısa öneri etiketi (yoksa küçük (i)) günün
  * resmini ve tek eylemi açar.
  * Takvim yüklenirken satırın yeri tutulur; söylenecek doğru bir şey yoksa satır yok.
@@ -128,6 +128,7 @@ export function HomeGreeting({
             side="bottom"
             align="start"
             valueLang={null}
+            look="glass"
           >
             {/* Öneri varsa sonda kısa etiketi (simge + 1–2 söz) kartı açar, (i) yok: ürün sahibi
                 uzun öneri cümlesini istemedi, bilgisi kartta. Öneri yoksa (i). */}

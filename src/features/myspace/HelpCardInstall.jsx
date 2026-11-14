@@ -10,7 +10,7 @@ import { promptInstall, setInstallGuide } from "@/lib/pwaInstall"
 
 import { BTN, BTN_FILL, FOCUS } from "./orb/heldButton"
 
-const KICKER = "text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-brand"
+const KICKER = "text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-brand"
 
 /**
  * Yardım kartını DEVRALAN kurulum önerisi (`useInstallPromo`): maskot kenardan "TYRO'yu yükle"

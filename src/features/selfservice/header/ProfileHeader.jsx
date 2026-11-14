@@ -132,6 +132,7 @@ export function ProfileHeader({
               </Heading>
               {profile?.personnel && (
                 <span
+                  data-private=""
                   title={fromErp ? t("selfService.profile.fromErp") : undefined}
                   className="shrink-0 text-[0.8125rem] font-medium tabular-nums text-muted-foreground"
                 >

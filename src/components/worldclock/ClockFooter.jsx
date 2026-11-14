@@ -70,7 +70,7 @@ export function ClockFooter({
             target="_blank"
             rel="noopener noreferrer"
             title={t("worldClock.scheduleTitle")}
-            className={`${PILL} bg-brand-solid text-white hover:brightness-110`}
+            className={`${PILL} bg-brand-solid text-white`}
           >
             <HugeiconsIcon icon={CalendarAdd01Icon} className="size-3.5" strokeWidth={2} />
             {t("worldClock.schedule")}

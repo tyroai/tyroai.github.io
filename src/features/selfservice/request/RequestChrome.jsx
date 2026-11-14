@@ -159,7 +159,7 @@ export function RequestFooter({
       onClick={toErp ? erp.onClick : undefined}
       aria-busy={working || undefined}
       className={cn(
-        "inline-flex h-11 items-center justify-center gap-2.5 rounded-full bg-brand-fill-deep px-5 text-[0.875rem] font-semibold text-brand-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.45)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background pointer-coarse:h-12",
+        "inline-flex h-11 items-center justify-center gap-2.5 rounded-full bg-brand-fill-deep px-5 text-[0.875rem] font-semibold text-brand-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.45)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background pointer-coarse:h-12",
         mobile && "w-full px-4",
       )}
     >

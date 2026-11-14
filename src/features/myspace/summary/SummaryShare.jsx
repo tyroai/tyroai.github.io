@@ -49,11 +49,7 @@ export function SummaryShare({ text, subject, attendees, chatUrl, t }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <button
-        type="button"
-        onClick={() => copy()}
-        className={`${BTN} bg-brand-solid text-white hover:brightness-110`}
-      >
+      <button type="button" onClick={() => copy()} className={`${BTN} bg-brand-solid text-white`}>
         <HugeiconsIcon icon={Copy01Icon} className="size-4" strokeWidth={2} aria-hidden="true" />
         {t("meetingSummary.copy")}
       </button>

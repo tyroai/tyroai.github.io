@@ -113,7 +113,7 @@ export function AccrualCard({ accrual, remain = null, className }) {
     <section className={cn("min-w-0 rounded-2xl bg-foreground/[0.035] px-3.5 py-3", className)}>
       <div className="flex items-center gap-1.5">
         <h4 className={cn(CAPS, "min-w-0 truncate")}>{t("selfService.accrual.title")}</h4>
-        <span className="shrink-0 rounded-full bg-foreground/[0.06] px-1.5 py-px text-[0.625rem] font-medium text-foreground/75">
+        <span className="shrink-0 rounded-full bg-foreground/[0.06] px-1.5 py-px text-[0.6875rem] font-medium text-foreground/75">
           {t("selfService.accrual.estimated")}
         </span>
         {/* Uzun açıklama "i" düğmesinde (üstüne gelince). */}

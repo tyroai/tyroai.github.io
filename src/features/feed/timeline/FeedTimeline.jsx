@@ -173,7 +173,7 @@ export function FeedTimeline({
           type="button"
           onClick={loadMore}
           aria-busy={loadingMore}
-          className="mx-auto w-fit rounded-lg border border-border bg-card px-4 py-2 text-[0.78125rem] font-medium text-foreground transition hover:bg-accent/60 aria-busy:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:min-h-11"
+          className="mx-auto w-fit rounded-full bg-muted px-4 py-2 text-[0.8125rem] font-medium text-foreground transition hover:bg-accent aria-busy:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:min-h-11"
         >
           {loadingMore ? t("feed.loadingMore") : t("feed.more")}
         </button>

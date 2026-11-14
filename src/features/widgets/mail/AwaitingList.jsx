@@ -38,7 +38,7 @@ export function AwaitingList({ res, pager }) {
                 rel="noopener noreferrer"
                 className="-mx-2 flex min-h-11 items-center gap-2.5 rounded-xl px-2 transition hover:bg-accent/60"
               >
-                <PersonAvatar name={m.to[0] ?? ""} className="size-7 text-[0.625rem]" />
+                <PersonAvatar name={m.to[0] ?? ""} className="size-7 text-[0.6875rem]" />
                 <span data-private="" className="min-w-0 flex-1">
                   <span className="block truncate text-[0.8125rem] font-medium">
                     {m.subject || t("widgets.mail.noSubject")}

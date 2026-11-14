@@ -254,11 +254,7 @@ export function RequestItem({
                     onClick={onClose}
                     disabled={busy}
                     title={t("authz.inbox.closeHint")}
-                    className={cn(
-                      BTN,
-                      BTN_QUIET,
-                      "flex-1 border border-border @[34rem]/inbox:flex-none",
-                    )}
+                    className={cn(BTN, BTN_QUIET, "flex-1 bg-muted @[34rem]/inbox:flex-none")}
                   >
                     {t("authz.inbox.close")}
                   </button>
@@ -266,7 +262,7 @@ export function RequestItem({
                     type="button"
                     onClick={onApprove}
                     disabled={busy}
-                    className={cn(BTN, BTN_PRIMARY, "flex-1 @[34rem]/inbox:flex-none")}
+                    className={cn(BTN, BTN_PRIMARY, "flex-1 bg-muted @[34rem]/inbox:flex-none")}
                   >
                     <HugeiconsIcon icon={Tick02Icon} className="size-4" strokeWidth={2} />
                     {t("authz.req.approve")}
@@ -277,11 +273,7 @@ export function RequestItem({
                   type="button"
                   onClick={onReopen}
                   disabled={busy}
-                  className={cn(
-                    BTN,
-                    BTN_QUIET,
-                    "flex-1 border border-border @[34rem]/inbox:flex-none",
-                  )}
+                  className={cn(BTN, BTN_QUIET, "flex-1 bg-muted @[34rem]/inbox:flex-none")}
                 >
                   {t("authz.req.reopen")}
                 </button>

@@ -18,7 +18,7 @@ export function ListMore({ shown, total, onMore, onAll }) {
         <button
           type="button"
           onClick={onMore}
-          className={cn(GHOST, "border border-border bg-card px-4")}
+          className={cn(GHOST, "bg-muted hover:bg-accent px-4")}
         >
           <HugeiconsIcon icon={ArrowDown01Icon} aria-hidden="true" strokeWidth={2} />
           {t("selfService.list.more")}

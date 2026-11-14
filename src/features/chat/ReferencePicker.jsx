@@ -266,7 +266,7 @@ export const ReferencePicker = forwardRef(function ReferencePicker(
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => setTabId(tab.id)}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[0.71875rem] font-medium transition-colors",
+                  "flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[0.75rem] font-medium transition-colors",
                   active
                     ? "border-brand/30 bg-brand/10 text-brand-ink"
                     : "border-transparent text-muted-foreground hover:bg-accent/60 hover:text-foreground",
@@ -323,7 +323,7 @@ export const ReferencePicker = forwardRef(function ReferencePicker(
             }}
             placeholder={t("ref.search", { tab: activeTab ? t(activeTab.labelKey) : "" })}
             aria-label={t("ref.search", { tab: activeTab ? t(activeTab.labelKey) : "" })}
-            className="min-w-0 flex-1 bg-transparent text-[0.78125rem] outline-none placeholder:text-muted-foreground/70"
+            className="min-w-0 flex-1 bg-transparent text-[0.8125rem] outline-none placeholder:text-muted-foreground/70"
           />
           {panelQuery && (
             <button
@@ -360,13 +360,13 @@ export const ReferencePicker = forwardRef(function ReferencePicker(
       {/* Kapsam altbilgisi: liste neyin tamamı DEĞİL onu söyler. Yazılmazsa
           kullanıcı gördüğü listeyi "her şey" sanıyor. */}
       <div className="flex items-center justify-between gap-3 border-t border-border/60 bg-muted/30 px-3 py-1.5">
-        <p className="min-w-0 flex-1 text-[0.65625rem] leading-snug text-muted-foreground">
+        <p className="min-w-0 flex-1 text-[0.6875rem] leading-snug text-muted-foreground">
           {scopeNote}
         </p>
         {/* Klavye ipucu yalnızca yer varken: dar panelde kapsam cümlesinin
             önüne geçiyordu ve kapsam daha önemli. */}
         {!compact && (
-          <p className="shrink-0 text-[0.625rem] text-muted-foreground/70">{t("ref.keyHint")}</p>
+          <p className="shrink-0 text-[0.6875rem] text-muted-foreground/70">{t("ref.keyHint")}</p>
         )}
       </div>
     </div>,

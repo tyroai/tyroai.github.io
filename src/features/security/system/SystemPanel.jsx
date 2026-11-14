@@ -65,7 +65,7 @@ function StatusSummary({ upn, reasons, copied, onCopy, catalogDetail }) {
         className={cn(
           BTN,
           BTN_QUIET,
-          "shrink-0 border border-border bg-background @max-[30rem]/sys:ms-7 @max-[30rem]/sys:flex-1",
+          "shrink-0 bg-muted hover:bg-accent @max-[30rem]/sys:ms-7 @max-[30rem]/sys:flex-1",
         )}
       >
         <HugeiconsIcon icon={Copy01Icon} aria-hidden="true" className="size-4" strokeWidth={1.8} />

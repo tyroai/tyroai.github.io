@@ -78,7 +78,7 @@ export function HolidayWidget({ ctx, className }) {
             </p>
           )}
           {bridge && (
-            <p className="holiday-tip mt-2 rounded-xl bg-emerald-500/[0.08] px-3 py-2 text-[0.75rem] text-emerald-800 dark:text-emerald-300 @max-[16rem]/widget:px-2.5 @max-[16rem]/widget:py-1.5 @max-[16rem]/widget:text-[0.71875rem] @max-[16rem]/widget:leading-snug">
+            <p className="holiday-tip mt-2 rounded-xl bg-emerald-500/[0.08] px-3 py-2 text-[0.75rem] text-emerald-800 dark:text-emerald-300 @max-[16rem]/widget:px-2.5 @max-[16rem]/widget:py-1.5 @max-[16rem]/widget:text-[0.75rem] @max-[16rem]/widget:leading-snug">
               {t("widgets.holiday.bridge", {
                 day: getDateTimeFormat(locale, OPTS_WD).format(bridge.bridge),
                 n: bridge.total,

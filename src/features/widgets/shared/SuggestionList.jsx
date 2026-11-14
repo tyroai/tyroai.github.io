@@ -14,7 +14,7 @@ export function SuggestionList({ suggestions, onAdd, label, limit = 3 }) {
       <ul className="mt-1.5 space-y-1">
         {suggestions.slice(0, limit).map((p) => (
           <li key={p.address} className="flex min-h-10 items-center gap-2.5">
-            <PersonAvatar name={p.name} className="size-7 text-[0.625rem]" />
+            <PersonAvatar name={p.name} className="size-7 text-[0.6875rem]" />
             <span className="min-w-0 flex-1 truncate text-[0.8125rem]">{p.name}</span>
             <button
               type="button"

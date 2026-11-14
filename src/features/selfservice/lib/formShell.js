@@ -1,9 +1,9 @@
 /**
  * Basılı formların ORTAK kabuğu (izin ve masraf formu): tema, sayfa iskeleti, ERP biçimleri.
  *
- * ⚠️ İzin formu HR MCP'nin kopyası (`tyro-hr-mcp` › `services/form_theme.py`, `leave_form.py`):
- * sohbetten inen izin formu ile buradan basılan aynı kâğıt olmalı. Masraf formu ise Self Servis'e
- * özgü (`expenseFormSheet.js`), HR MCP'nin `expense_form.py`'sinden ayrıştı.
+ * ⚠️ HR MCP'nin kopyası (`tyro-hr-mcp` › `services/form_theme.py`, `leave_form.py`,
+ * `expense_form.py`): sohbetten inen izin ve masraf formu ile buradan basılan aynı kâğıt olmalı;
+ * biri değişince öteki de değişir.
  *
  * Saf metin işlemi (DOM yok): birim testlerinde Node'da çalışır.
  */
@@ -72,7 +72,8 @@ export const esc = (v) =>
 
 /**
  * Etiket | değer satırı (`BOX_CSS`). `value` kaçırılmış olmalı; boşsa soluk tire.
- * `key` → `data-f`: sohbetteki izin formunda tyro'nun doldurduğu hücreler (`leaveFormFill.js`).
+ * `key` → `data-f`: sohbetteki formda tyro'nun doldurduğu hücreler (`leaveFormFill.js`,
+ * `expenseFormFill.ts`).
  */
 export function field(label, value = "", { unit = "", key = "" } = {}) {
   const f = key ? ` data-f="${key}"` : ""

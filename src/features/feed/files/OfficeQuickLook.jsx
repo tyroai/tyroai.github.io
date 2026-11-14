@@ -109,7 +109,7 @@ function Workbook({ sheets }) {
         </div>
       )}
       {sheet.cut?.rows || sheet.cut?.cols ? (
-        <p className="shrink-0 border-b border-border/60 bg-card px-4 py-1.5 text-[0.71875rem] text-muted-foreground">
+        <p className="shrink-0 border-b border-border/60 bg-card px-4 py-1.5 text-[0.75rem] text-muted-foreground">
           {t("myfiles.mail.previewCut")}
         </p>
       ) : null}
@@ -209,7 +209,7 @@ export function OfficeQuickLook({ data }) {
   const cut = data.cut ? t("myfiles.mail.previewCut") : null
   return (
     <div className="flex h-full flex-col bg-background">
-      <p className="shrink-0 border-b border-border/60 bg-card px-4 py-1.5 text-[0.71875rem] text-muted-foreground">
+      <p className="shrink-0 border-b border-border/60 bg-card px-4 py-1.5 text-[0.75rem] text-muted-foreground">
         {t("myfiles.mail.quickLook")}
         {cut && <span> {cut}</span>}
       </p>

@@ -84,7 +84,7 @@ export const ClockRow = memo(function ClockRow({
             >
               {name}
             </span>
-            <span className="hidden shrink-0 rounded border border-border px-1 text-[0.625rem] leading-4 text-foreground/70 sm:inline">
+            <span className="hidden shrink-0 rounded border border-border px-1 text-[0.6875rem] leading-4 text-foreground/70 sm:inline">
               {abbr}
             </span>
             {onShow && !isHome && (

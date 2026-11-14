@@ -58,7 +58,7 @@ export function LocationMenu({ place, value, onChange, tight = false }) {
           aria-label={t("widgets.radio.place.label", { place: label })}
           className={cn(
             // En az ikon + ok kadar daralır (ad kısalır); başlıktaki ad bundan sonra kısalır.
-            "relative inline-flex h-7 min-w-[3.375rem] max-w-[9.5rem] shrink items-center justify-center gap-1 rounded-full pointer-coarse:after:absolute pointer-coarse:after:-inset-y-1 pointer-coarse:after:inset-x-0 bg-(--r-hover) px-2.5 text-[0.71875rem] font-medium text-(--r-fg) backdrop-blur-sm transition hover:bg-(--r-active) hover:text-(--r-fg) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--r-ring) data-[state=open]:bg-(--r-active) pointer-coarse:h-9",
+            "relative inline-flex h-7 min-w-[3.375rem] max-w-[9.5rem] shrink items-center justify-center gap-1 rounded-full pointer-coarse:after:absolute pointer-coarse:after:-inset-y-1 pointer-coarse:after:inset-x-0 bg-(--r-hover) px-2.5 text-[0.75rem] font-medium text-(--r-fg) backdrop-blur-sm transition hover:bg-(--r-active) hover:text-(--r-fg) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--r-ring) data-[state=open]:bg-(--r-active) pointer-coarse:h-9",
             // `tight` (dar kartta başlıkta çevirici de var): yalnız ikon ve ok, sıkı pay.
             tight &&
               "@max-[18rem]/widget:min-w-0 @max-[18rem]/widget:gap-0.5 @max-[18rem]/widget:px-1.5",
@@ -91,7 +91,7 @@ export function LocationMenu({ place, value, onChange, tight = false }) {
             <span className="flex min-w-0 flex-col">
               <span>{t("widgets.radio.place.auto")}</span>
               {auto && place.city && (
-                <span className="truncate text-[0.71875rem] text-muted-foreground">
+                <span className="truncate text-[0.75rem] text-muted-foreground">
                   {[place.city, region(place.cc)].filter(Boolean).join(" · ")}
                 </span>
               )}
@@ -123,7 +123,7 @@ export function LocationMenu({ place, value, onChange, tight = false }) {
           {OFFICE_CITIES.map((c) => (
             <DropdownMenuRadioItem key={c.id} value={c.id} className={ITEM}>
               <span className="shrink-0">{c.names[locale] ?? c.names.en}</span>
-              <span className="min-w-0 flex-1 truncate text-end text-[0.71875rem] text-muted-foreground">
+              <span className="min-w-0 flex-1 truncate text-end text-[0.75rem] text-muted-foreground">
                 {region(c.cc)}
               </span>
             </DropdownMenuRadioItem>

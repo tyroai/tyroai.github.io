@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react"
+import ViewOffSlashIcon from "@hugeicons/core-free-icons/ViewOffSlashIcon"
 import { useLocale } from "@/hooks/useLocale"
 import { useMinuteNow } from "@/hooks/useMinuteNow"
 import { notify } from "@/lib/notify"
@@ -12,7 +13,9 @@ import { joinableMeeting, meetingKey } from "./joinModel"
 const offered = new Set()
 
 /**
- * Akıllı Sunum modu: çevrim içi toplantı başlayınca bir kez "Sunum modu açılsın mı?" der (mod
+ * Akıllı Sunum modu: çevrim içi toplantı başlayınca bir kez "Sunum modunu açayım mı?" diye sorar —
+ * soru bildirimi (`notify.ask`: Sunum modunun simgesi, dolu "Aç" ve "Şimdi değil"; bilgi kartıyla
+ * karışmasın diye, ürün sahibi: "soru sorduğunu anlamıyorum"). Mod
  * zaten açıksa ya da Odak modundaysa demez). Modu bu teklif açtırdıysa toplantı bitince
  * kendiliğinden kapatır ve söyler; kişi arada kendisi kapattıysa karışmaz. Sunum modu açıkken
  * kişisel öğelerin ipucu (`title`) da gizlenir (`lib/privateTitles`). Çizmez.
@@ -35,15 +38,17 @@ export function SmartPresent() {
     const key = meetingKey(live)
     if (offered.has(key)) return
     offered.add(key)
-    notify.info(t("control.present.offer"), {
-      duration: 15000,
-      action: {
+    notify.ask(t("control.present.offer"), {
+      description: t("control.present.offerSub"),
+      icon: ViewOffSlashIcon,
+      confirm: {
         label: t("control.present.turnOn"),
         onClick: () => {
           auto.current = key
           setPresentMode(true)
         },
       },
+      cancel: { label: t("control.present.later") },
     })
   }, [live, present, t])
 

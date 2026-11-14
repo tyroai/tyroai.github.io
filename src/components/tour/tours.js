@@ -33,13 +33,15 @@ const sendStep = (first) => ({
 
 export const TOURS = {
   home: {
-    version: 4,
+    version: 5,
     steps: [
       {
         id: "start",
         targets: ["welcome", ["brief", "widget:brief"]],
         items: ["item1", "item2", "item3"],
       },
+      // Sahne seçicisi (Sahneler düzeni): turu görmüş olana yalnız bu adım bir kez daha.
+      { id: "scenes", since: 5, targets: ["scenes"], items: ["item1", "item2", "item3"] },
       { id: "ask", targets: ["ask"], items: ["item1", "item2", "item3"] },
       {
         id: "cards",

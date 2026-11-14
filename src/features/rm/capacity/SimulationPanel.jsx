@@ -232,7 +232,7 @@ export function SimulationPanel() {
         <div className="flex flex-wrap items-center gap-3">
           <Button
             onClick={openPlan}
-            className="h-9 gap-1.5 bg-brand-fill-deep px-3.5 text-[0.8125rem] text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110 pointer-coarse:h-11"
+            className="h-9 gap-1.5 bg-brand-fill-deep px-3.5 text-[0.8125rem] text-brand-on-brand hover:bg-brand-fill-deep pointer-coarse:h-11"
           >
             <HugeiconsIcon icon={FolderAddIcon} className="size-4" strokeWidth={1.8} />
             {rt("rm.sim.open")}

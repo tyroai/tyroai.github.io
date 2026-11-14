@@ -12,10 +12,10 @@ import { FirstReplyToast } from "@/features/chat/FirstReplyToast"
  * bir mesaj burada kaçırılmıyor. Sonner v2'de `position` toast BAŞINA
  * verilebiliyor, yani uygulamanın alt-orta yerleşimi değişmiyor.
  *
- * Süre metne göre: iki cümle okunacak, yenileme bildirimindeki gibi sonsuz
+ * Süre metne göre: tek kısa cümle okunacak, yenileme bildirimindeki gibi sonsuz
  * değil ama bir bakışlık da değil.
  */
-export function showFirstReplyToast({ t, inDock = false, duration = 9000 }) {
+export function showFirstReplyToast({ t, inDock = false, duration = 6000 }) {
   const title = t("chat.firstReply.title")
   const body = t("chat.firstReply.body")
   return toast.custom(() => <FirstReplyToast title={title} body={body} compact={inDock} />, {

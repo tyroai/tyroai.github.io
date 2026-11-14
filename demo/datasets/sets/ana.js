@@ -106,6 +106,7 @@ export default defineDataset({
     { title: `${ET} — ürün demosu`, day: 3, time: "11:00", minutes: 60, where: "Microsoft Teams", organizer: "Ömer Gümüş", with: [`Murat Kılınç (${ET})`, "Deniz Arslan", "Elif Kaya"], body: "Üretim planlama modülü canlı demo." },
     { title: "Müzakere teknikleri atölyesi", day: 5, time: "10:00", minutes: 180, where: "Maslak · Eğitim Salonu", organizer: "Ayşe Demir", with: ["Ömer Gümüş", "Zeynep Acar", "Kaan Özdemir", "Onur Polat"], body: "TYRO Eğitim: satış ekipleri için müzakere teknikleri atölyesi." },
     { title: `${KE} — referans görüşmesi`, day: 6, time: "16:00", minutes: 30, where: "Microsoft Teams", organizer: "Ömer Gümüş", with: [`Pelin Yazıcı (${KE})`], body: "Yeni müşteri adayına referans olması için kısa görüşme." },
+    { title: "İzmir bölge ofisi — iş gezisi", day: 10, allDay: true, span: 2, where: "İzmir", organizer: "Ömer Gümüş", with: ["Ömer Gümüş", "Selin Aydın", "Zeynep Acar"], body: "Uçuş: İstanbul → İzmir (sabah). Yeni bölge ofisinde kurulum toplantıları, bölge müşterileriyle yemek ve ofis alanı gezisi." },
     { title: "Bölge müşteri günü — Ankara", day: 8, allDay: true, where: "Ankara", organizer: "Kaan Özdemir", with: ["Ömer Gümüş", "Kaan Özdemir"], body: "Ankara bölgesi müşteri ziyaretleri." },
     // geçmiş
     { title: `${KE} — başlangıç toplantısı`, day: -1, time: "13:30", minutes: 60, where: "Microsoft Teams", organizer: "Ömer Gümüş", with: [`Pelin Yazıcı (${KE})`, "Zeynep Acar"], body: "Proje başlangıcı ve sorumluluk dağılımı." },

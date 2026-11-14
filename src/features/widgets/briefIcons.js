@@ -6,7 +6,7 @@ import HourglassIcon from "@hugeicons/core-free-icons/HourglassIcon"
 import Task01Icon from "@hugeicons/core-free-icons/Task01Icon"
 import Ticket01Icon from "@hugeicons/core-free-icons/Ticket01Icon"
 
-/** Brifing maddelerinin ikonları (Günün brifingi ve Karşılama kartı ortak). */
+/** Brifing maddelerinin ikonları (TYRO brifingi ve Karşılama kartı ortak). */
 export const BRIEF_ICON = {
   invites: Calendar03Icon,
   mail: Mail01Icon,

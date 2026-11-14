@@ -67,7 +67,7 @@ function KindPill({ kind }) {
   const { t } = useLocale()
   if (kind === "plain") return null
   return (
-    <span className="shrink-0 rounded-full bg-muted/70 px-2 py-0.5 text-[0.65625rem] font-medium text-muted-foreground">
+    <span className="shrink-0 rounded-full bg-muted/70 px-2 py-0.5 text-[0.6875rem] font-medium text-muted-foreground">
       {t(`chat.insights.kind.${kind}`)}
     </span>
   )
@@ -218,7 +218,7 @@ function ShareHero({ analysis, fmt }) {
 
       {active && (
         <div className="agent-row mt-2 rounded-lg bg-muted/50 px-2.5 py-2 ring-1 ring-border/60">
-          <span className="block text-[0.71875rem] font-medium" style={{ color: color(selected) }}>
+          <span className="block text-[0.75rem] font-medium" style={{ color: color(selected) }}>
             {active.label}
           </span>
           <span className="mt-0.5 block text-[0.6875rem] leading-relaxed text-muted-foreground">
@@ -347,7 +347,7 @@ export function InsightCard({ analysis }) {
           Bizim başlığımız değil, onun cümlesi; kısaysa tam, uzunsa kırpılır. */}
       {(analysis.caption || analysis.kind !== "plain") && (
         <div className="mb-1.5 flex items-start justify-between gap-2 px-0.5">
-          <p className="line-clamp-2 min-w-0 text-[0.78125rem] leading-relaxed text-muted-foreground">
+          <p className="line-clamp-2 min-w-0 text-[0.8125rem] leading-relaxed text-muted-foreground">
             {analysis.caption && <Caption text={analysis.caption} analysis={analysis} />}
           </p>
           <KindPill kind={analysis.kind} />

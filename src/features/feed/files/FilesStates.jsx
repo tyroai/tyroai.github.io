@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils"
  */
 const ACTION = {
   connect:
-    "rounded-full bg-brand-fill-deep px-4 py-2 text-[0.8125rem] font-semibold text-brand-on-brand shadow-sm transition hover:brightness-110",
+    "rounded-full bg-brand-fill-deep px-4 py-2 text-[0.8125rem] font-semibold text-brand-on-brand shadow-sm transition",
   retry:
     "rounded-full border border-border bg-card px-4 py-2 text-[0.8125rem] font-medium text-foreground/85 transition hover:bg-accent hover:text-foreground",
 }

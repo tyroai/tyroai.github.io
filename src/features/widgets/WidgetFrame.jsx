@@ -19,6 +19,7 @@ export function WidgetFrame({
   pager,
   busy,
   tour,
+  personal = false,
   className,
   children,
 }) {
@@ -26,6 +27,8 @@ export function WidgetFrame({
     <section
       data-widget={id}
       data-tour={tour}
+      // Kişisel veri: Sunum modunda rakamları gizlenir (`styles/private.css`).
+      data-private={personal ? "" : undefined}
       aria-label={title}
       aria-busy={busy || undefined}
       className={cn(
@@ -73,7 +76,7 @@ export function FrameAction({ children, className, ...rest }) {
       {...(Tag === "button" ? { type: "button" } : {})}
       {...rest}
       className={cn(
-        "inline-flex h-7 shrink-0 items-center gap-1 rounded-full px-2.5 text-[0.71875rem] font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40",
+        "inline-flex h-7 shrink-0 items-center gap-1 rounded-full px-2.5 text-[0.75rem] font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40",
         className,
       )}
     >

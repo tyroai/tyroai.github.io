@@ -148,7 +148,7 @@ export const PersonRow = memo(function PersonRow({
           <span className={cn("flex min-w-0 items-center gap-2", wide && "w-[18rem] shrink-0")}>
             <IdentityCell upn={row.upn} inline />
             {self && (
-              <span className="shrink-0 rounded-full bg-foreground/[0.07] px-1.5 text-[0.625rem] font-semibold leading-5 text-foreground/70">
+              <span className="shrink-0 rounded-full bg-foreground/[0.07] px-1.5 text-[0.6875rem] font-semibold leading-5 text-foreground/70">
                 {t("authz.badge.self")}
               </span>
             )}

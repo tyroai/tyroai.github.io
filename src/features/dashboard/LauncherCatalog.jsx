@@ -360,7 +360,7 @@ export function LauncherCatalog({ onOpenChat, onlyFavorites = false, id = "apps"
                   onMouseEnter={() => sendRef.current?.startAnimation?.()}
                   onMouseLeave={() => sendRef.current?.stopAnimation?.()}
                   disabled={!!requesting}
-                  className="gap-1.5 bg-brand-fill-deep text-white hover:bg-brand-fill-deep hover:brightness-110"
+                  className="gap-1.5 bg-brand-fill-deep text-white hover:bg-brand-fill-deep"
                 >
                   <AnimatedSentIcon
                     ref={sendRef}

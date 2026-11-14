@@ -8,7 +8,7 @@ import { PaletteSwatch } from "../PaletteOptions"
 
 // Grup adları her dilde İngilizce (masaüstü listesiyle aynı): büyük harf İngilizce kuralıyla.
 const GROUP_LABEL =
-  "px-1 pb-1 pt-3 text-[0.625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+  "px-1 pb-1 pt-3 text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
 
 /**
  * Telefonda Tema seçimi alttan çekmecede (ürün sahibi): menünün yanına açılan liste ekrana

@@ -36,6 +36,23 @@ export function joinableMeeting<E extends JoinEvent>(
 export const minutesUntil = (start: Date, now: number): number =>
   Math.max(0, Math.ceil((start.getTime() - now) / 60000))
 
+/**
+ * Şu an süren toplantı (çevrim içi olması gerekmez): Denetim Merkezi düğmesinin "toplantıdasın"
+ * işareti. Başkasının takvimi, tüm gün ve reddedilen sayılmaz.
+ */
+export function currentMeeting<E extends JoinEvent>(
+  events: readonly E[] | null | undefined,
+  now: number,
+): E | null {
+  for (const e of events ?? []) {
+    if (e.owner || e.isAllDay || e.myResponse === "declined") continue
+    const start = e.start.getTime()
+    const end = e.end?.getTime() ?? start
+    if (start <= now && now < end) return e
+  }
+  return null
+}
+
 /** Header'ın canlı kapsülü: 10 dakika içinde başlayacak (henüz başlamamış) ilk toplantı. */
 export const SOON_MS = 10 * 60000
 

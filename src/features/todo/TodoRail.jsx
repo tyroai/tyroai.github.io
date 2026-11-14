@@ -150,7 +150,7 @@ export function Rail({ board, view, counts, today, onView, onDeleteList }) {
       ))}
       <div className="mx-3 my-3 h-px bg-border" />
       <p
-        className="px-3 pb-1 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
+        className="px-3 pb-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground"
         lang={undefined}
       >
         {t("todo.lists.title")}

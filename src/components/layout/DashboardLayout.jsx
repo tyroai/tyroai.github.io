@@ -12,7 +12,7 @@ import { primeCelebrations } from "@/hooks/useCelebrations"
 import { EdgeNotch } from "./EdgeNotch"
 import { EdgeNotchFrame } from "./EdgeNotchFrame"
 import { MobileNotch } from "./MobileNotch"
-import { SessionExpiredBanner } from "./SessionExpiredBanner"
+import { ShellNotices } from "./ShellNotices"
 import { useNotchEdge } from "./useNotchEdge"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { usePwaInstall } from "@/hooks/usePwaInstall"
@@ -165,8 +165,8 @@ export function DashboardLayout({
           onToggleDock={onToggleDock}
           dockOpen={chatMode === "dock"}
         />
-        {/* Oturumun süresi dolunca her sayfada tek uyarı (çıkış → giriş). */}
-        <SessionExpiredBanner />
+        {/* Her sayfada tek uyarı: oturum doldu ya da Microsoft 365 yavaş (`ShellNotices`). */}
+        <ShellNotices />
         {/* min-h-0 here too — main is a flex-1 inside SidebarInset, same
             principle. Together with the chat root's min-h-0 (in ChatScreen)
             this makes the flex chain strictly bounded so only the chat

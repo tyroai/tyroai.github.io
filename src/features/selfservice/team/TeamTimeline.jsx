@@ -88,8 +88,16 @@ export function TeamTimeline({
       aria-labelledby={titleId}
       className={cn("overflow-hidden rounded-2xl border border-border/70", className)}
     >
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 px-4 pb-2 pt-2.5">
-        <h3 id={titleId} className="flex items-center gap-1.5 text-[0.875rem] font-semibold">
+      {/* `data-tl-*`: Kartlar düzeni başlığı sekmelerle aynı satıra alır (`team/teamCards.css`). */}
+      <div
+        data-tl-head=""
+        className="flex flex-wrap items-center gap-x-4 gap-y-1.5 px-4 pb-2 pt-2.5"
+      >
+        <h3
+          id={titleId}
+          data-tl-title=""
+          className="flex items-center gap-1.5 text-[0.875rem] font-semibold"
+        >
           <HugeiconsIcon
             icon={Calendar03Icon}
             aria-hidden="true"
@@ -160,8 +168,9 @@ export function TeamTimeline({
                 {days.map((d, i) => (
                   <span
                     key={i}
+                    data-tl-day=""
                     className={cn(
-                      "row-start-2 hidden text-center text-[0.625rem] tabular-nums",
+                      "row-start-2 hidden text-center text-[0.6875rem] tabular-nums",
                       !dense && "@[56rem]/ss:block",
                       // Hafta sonu zemininde de AA: soluk gri değil, yazı renginin %70'i.
                       d.today ? "font-bold text-brand-ink" : "text-foreground/70",

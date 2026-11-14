@@ -417,7 +417,7 @@ export async function fetchCelebrations(now = Date.now()) {
   for (const rows of results) {
     for (const row of rows) {
       const mail = String(row.mserp_mail ?? "").toLowerCase()
-      if (!mail.endsWith("@www.tyrotech.example")) continue
+      if (!mail.endsWith("@tyrotech.example")) continue
       merged.set(mail, { ...(merged.get(mail) ?? {}), ...row })
     }
   }

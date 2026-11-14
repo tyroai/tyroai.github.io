@@ -58,7 +58,7 @@ export function RmAccessGate({ state, detail }) {
             <Button
               onClick={request}
               disabled={busy || sent}
-              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep hover:brightness-110"
+              className="bg-brand-fill-deep text-brand-on-brand hover:bg-brand-fill-deep"
             >
               {rt(sent ? "rm.gate.sent" : "rm.gate.request")}
             </Button>

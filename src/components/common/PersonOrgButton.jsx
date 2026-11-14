@@ -23,9 +23,9 @@ export function PersonOrgButton({ id, onDone }) {
         onDone?.()
         navigate(orgPath(id))
       }}
-      className="flex h-9 w-full items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3 text-[0.75rem] font-semibold text-foreground/85 transition hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:h-11"
+      className="pc-btn"
     >
-      <HugeiconsIcon icon={HierarchyIcon} className="size-3.5" strokeWidth={2} aria-hidden="true" />
+      <HugeiconsIcon icon={HierarchyIcon} strokeWidth={2} aria-hidden="true" />
       {t("find.org.open")}
     </button>
   )

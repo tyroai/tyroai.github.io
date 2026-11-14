@@ -1,6 +1,7 @@
 import "@/lib/i18n/tour"
-import { useMemo, useRef } from "react"
+import { lazy, Suspense, useMemo, useRef } from "react"
 import { useSearchParams } from "react-router-dom"
+import { useLayoutChoice } from "@/hooks/useLayoutChoice"
 import { useLocale } from "@/hooks/useLocale"
 import { useMe } from "@/hooks/useMe"
 import { useMailMessages } from "@/hooks/useMailMessages"
@@ -70,8 +71,42 @@ import { useWideBoard } from "./useWideBoard"
  * ezerdi (Keşfet'in kuralı). Kapsayıcı OLUĞUN İÇİNDE: karar gerçekten
  * kullanılabilen genişliğe göre verilsin.
  */
+// Sahneler düzeni (şerit, panel, kurallar) yalnız seçiliyse iner.
+// Sahneler varsayılan düzen: parça sayfa modülüyle birlikte hemen istenir (Anasayfa'ya ilk
+// geçişte bekleme olmasın).
+const loadScenes = () => import("./scenes/HomeScenes")
+const LazyScenes = lazy(() => loadScenes().then((m) => ({ default: m.HomeScenes })))
+if (typeof window !== "undefined") loadScenes().catch(() => {})
+/**
+ * Parça inene dek sahnelerin iskeleti (şerit + ilk sıra): boş ya da eski görünümlü bir sayfa
+ * (büyük selamlama) bir an görünüp sahneye atlamasın. `data-board-pending` selamlamayı da kaşa
+ * indirir (`homeGreeting.css`).
+ */
+function ScenesFallback() {
+  return (
+    <div data-board-pending="" aria-hidden="true" className="scn-pending">
+      <span className="scn-pending-strip ms-skeleton" />
+      <span className="scn-pending-row">
+        <span className="ms-skeleton" />
+        <span className="ms-skeleton" />
+        <span className="ms-skeleton" />
+      </span>
+    </div>
+  )
+}
+function ScenesBoard(props) {
+  return (
+    <Suspense fallback={<ScenesFallback />}>
+      <LazyScenes {...props} />
+    </Suspense>
+  )
+}
+
 export function MySpacePage({ onOpenChat, onNewChat }) {
   const { t } = useLocale()
+  // Sayfa düzeni (Profil › Görünüm): Sahneler seçiliyse pano sahne şeridiyle gelir.
+  const homeLayout = useLayoutChoice("home")
+  const Board = homeLayout === "scenes" ? ScenesBoard : HomeBoard
   const me = useMe()
   // Kartların giriş dizisi yükleme başına bir kez: geri dönüşte yeniden oynamaz.
   const intro = useIntroOnce("home-grid")
@@ -176,7 +211,7 @@ export function MySpacePage({ onOpenChat, onNewChat }) {
       >
         {/* Düzenleme düğmesi varken alt pay büyür: kaydırmanın sonunda alt bilgi düğmenin altında kalmaz. */}
         <PageShell className={pageAccess.homeEdit ? "pb-28" : "pb-16"}>
-          <div ref={boardRef} className="@container/myspace">
+          <div ref={boardRef} className="ms-home @container/myspace">
             {/* Görünür başlık YOK (gerekçe dosya başında); belgenin ana başlığı
                 ekran okuyucu için yerinde. */}
             <h1 className="sr-only">{t("nav.myspace")}</h1>
@@ -195,13 +230,15 @@ export function MySpacePage({ onOpenChat, onNewChat }) {
             {/* ── Pano: karşılama + ızgara. Kitlesi içindeysen (`HOME_EDIT`) aynı kartlar
                 düzenlenebilir widget'lar olarak (`HomeBoard`); değilse bugünkü sabit düzen. */}
             {pageAccess.homeEdit ? (
-              <HomeBoard
+              <Board
                 env={{
                   weather,
                   now,
                   firstName,
                   celebration,
                   ctx: { cal, mail, focus, feedFresh, now, pageAccess },
+                  rangeStart,
+                  rangeEnd,
                   briefCta,
                   onNewChat,
                   load,
@@ -346,10 +383,12 @@ export function MySpacePage({ onOpenChat, onNewChat }) {
       </div>
       <OverlayScrollbar targetRef={scrollRef} avoidNotch />
       {/* Anasayfa'yı düzenle: sağ altta cam düğme (header'da değil). */}
-      {pageAccess.homeEdit && <HomeEditFab />}
+      {pageAccess.homeEdit && <HomeEditFab hidden={homeLayout !== "standard"} />}
       {welcome.open && (
         <WelcomeLazy
           onClose={welcome.close}
+          briefCtx={{ cal, mail, focus, feedFresh, now, pageAccess }}
+          onNewChat={onNewChat}
           firstName={firstName}
           celebration={celebration}
           weather={weather}

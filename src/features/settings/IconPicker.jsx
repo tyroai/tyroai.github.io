@@ -54,7 +54,7 @@ export function IconPicker({ value, onChange, disabled }) {
             {currentIcon ? (
               <HugeiconsIcon icon={currentIcon} className="size-4" strokeWidth={1.6} />
             ) : (
-              <span className="text-[0.625rem] font-semibold opacity-60">?</span>
+              <span className="text-[0.6875rem] font-semibold opacity-60">?</span>
             )}
           </div>
           <span className="flex-1 truncate text-left text-sm">

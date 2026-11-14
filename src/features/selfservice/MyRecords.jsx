@@ -1,11 +1,11 @@
 import { motion, useReducedMotion } from "motion/react"
 import { useLocale } from "@/hooks/useLocale"
 import { cn } from "@/lib/utils"
-import { SectionHeading } from "@/components/common/SectionHeading"
 import { Tour } from "@/components/tour/Tour"
 import { BoardToolbar } from "./board/BoardToolbar"
 import { PhoneToolbar } from "./board/PhoneToolbar"
 import { RecordList } from "./board/RecordList"
+import { RecordsPane } from "./cards/RecordsPane"
 import { RecordTabs } from "./board/RecordTabs"
 import { NewRequestFab } from "./header/NewRequestFab"
 import { NewRequestWand } from "./header/NewRequestWand"
@@ -27,7 +27,8 @@ import { PhoneSummary } from "./summary/PhoneSummary"
  * Seçimler adreste (`update` → `nextParams`), türetilmiş veri `useRecordsView`te.
  * `onNew(tür)`: yeni talep formu
  * (boş listenin eylemi); `accrual`: sonraki izin hak edişi tahmini (`nextAccrual`; işe giriş
- * bilinmiyorsa null) — özet kutusu gösterir.
+ * bilinmiyorsa null) — özet kutusu gösterir. `plain` (Kartlar düzeni): bölüm başlığı ve sekme
+ * şeridindeki "Yeni" yok — ikisi de sayfanın üst çubuğunda; liste kartların hemen ardından gelir.
  */
 export function MyRecords({
   data,
@@ -47,6 +48,7 @@ export function MyRecords({
   onNew,
   person,
   accrual,
+  plain = false,
 }) {
   const { t } = useLocale()
   const phone = usePhone()
@@ -59,6 +61,8 @@ export function MyRecords({
     onQuery("")
     clearFilters()
   }
+  // Kartlar düzeninde liste düz satırlı ve yanında seçili kaydın paneli (`cards/RecordsPane`).
+  const List = plain ? RecordsPane : RecordList
   const total = data?.[tabOf(tab).data]?.length ?? 0
   const filtered = Boolean(query || view.filters.status || view.filters.facet || view.filters.month)
 
@@ -69,7 +73,7 @@ export function MyRecords({
       <div className="min-w-0 flex-1">
         <RecordTabs data={data} tab={tab} year={year} onTab={(id) => update({ tab: id })} />
       </div>
-      {onNew && !phone && (
+      {onNew && !phone && !plain && (
         <div className="shrink-0 pb-2">
           <NewRequestWand onNew={onNew} />
         </div>
@@ -109,26 +113,18 @@ export function MyRecords({
       )}
       <section
         aria-labelledby="ss-records"
-        className={cn("min-w-0", !phone && "mt-10 @[56rem]/ss:mt-12")}
+        className={cn("min-w-0", !phone && (plain ? "mt-5" : "mt-8"))}
       >
-        {phone ? (
-          <h2 id="ss-records" className="sr-only">
-            {t("selfService.records")}
-          </h2>
-        ) : (
-          <SectionHeading
-            id="ss-records"
-            eyebrow={t("selfService.board.eyebrow")}
-            title={t("selfService.board.title")}
-            className="mb-4"
-          />
-        )}
+        {/* Görünür başlık sayfanın en üstünde (`SelfServicePage`); bölümün adı okuyucuya. */}
+        <h2 id="ss-records" className="sr-only">
+          {t("selfService.records")}
+        </h2>
         {phone ? <StickyBar>{tabs}</StickyBar> : tabs}
         <div
           id="ss-panel"
           role="tabpanel"
           aria-labelledby={`ss-tab-${tab}`}
-          className={phone ? "mt-1.5 min-w-0" : "mt-4 min-w-0"}
+          className={cn(phone ? "mt-1.5 min-w-0" : "mt-4 min-w-0", plain && "ssc-panel")}
         >
           <motion.div
             key={tab}
@@ -142,7 +138,7 @@ export function MyRecords({
             ) : (
               <BoardToolbar {...filterProps} onClear={clear} />
             )}
-            <RecordList
+            <List
               tab={tab}
               view={view}
               failed={view.failed}

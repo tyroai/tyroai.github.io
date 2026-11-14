@@ -1,0 +1,291 @@
+/* Bildirim paneli (çan): Denetim Merkezi'nin kardeşi — aynı yüzey (opak pencere rengi, ince iç
+   çizgi, 28 px köşe), aynı yumuşak zemin tonları. Stiller panelin tembel parçasıyla iner (ilk
+   CSS'e girmez). Zemin düz ve opak: yapışkan açılış (`GooBridge`) kartı bulur. Ölçüler ortak
+   tokenlardan (`docs/design-tokens.md`); satır 52 px, ikon/fotoğraf 36 px, dokunmatikte 44 px. */
+
+.bn-panel {
+  --bn-pad: 0.5rem;
+  --bn-surface: var(--popover);
+  --bn-soft: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --bn-soft-hover: color-mix(in oklab, var(--foreground) 8.5%, transparent);
+  --bn-line: color-mix(in oklab, var(--foreground) 8%, transparent);
+  /* İkincil yazı: üstüne gelinen satırın tonlu zemininde de AA kalsın diye griden bir tık koyu. */
+  --bn-muted: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  --bn-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --bn-max: min(40rem, calc(var(--radix-popover-content-available-height, 100dvh) - 0.5rem));
+  width: min(24rem, calc(100vw - 1.5rem));
+  border-radius: var(--radius-panel);
+  background: var(--bn-surface);
+  color: var(--popover-foreground);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent);
+  /* `clip` kaydırma kabı kurmaz: telefonda alt satır çekmecenin gövdesine yapışabilir. */
+  overflow: hidden;
+  overflow: clip;
+  /* Boy içerikle birlikte kayar (`AutoHeight` boyu yazar): görünüm değişimiyle aynı aile. */
+  transition: height 240ms var(--bn-ease);
+}
+.bn-view {
+  display: flex;
+  flex-direction: column;
+  max-height: var(--bn-max);
+}
+.bn-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0 var(--bn-pad) var(--bn-pad);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  /* Kaydırma kenarı: alttan çıkan satır sert kesilmez, alt payın içinde solar. */
+  mask-image: linear-gradient(to bottom, #000 calc(100% - var(--bn-pad)), transparent);
+}
+
+/* Telefonda çekmecenin kendisi yüzey: panel yalnız düzen, kaydırma çekmecenin gövdesinde.
+   Satırların zemini çekmecenin kenar payına 8 px taşar: yazılar başlıkla aynı hizada kalır. */
+.bn-panel[data-mobile] {
+  --bn-surface: var(--background);
+  /* Takvimin yapışkan ay başlığı pencere rengini kullanır: çekmecede zemin çekmeceninki. */
+  --popover: var(--background);
+  width: auto;
+  margin-inline: -0.5rem;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.bn-panel[data-mobile] .bn-view {
+  max-height: none;
+}
+.bn-panel[data-mobile] .bn-body {
+  padding-inline: 0;
+  overflow: visible;
+  mask-image: none;
+}
+
+/* ── Başlık ──────────────────────────────────────────────────────────────── */
+.bn-head {
+  display: flex;
+  flex: none;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.5rem;
+}
+.bn-head[data-sub] {
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.75rem 0.75rem 0.25rem;
+}
+.bn-title {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--text-section-title);
+  line-height: var(--text-section-title--line-height);
+  font-weight: 600;
+  letter-spacing: var(--text-section-title--letter-spacing);
+}
+.bn-date {
+  margin-inline-start: auto;
+  white-space: nowrap;
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  color: var(--bn-muted);
+}
+.bn-date::first-letter {
+  text-transform: uppercase;
+}
+.bn-panel[data-mobile] .bn-head {
+  padding: 0 0.5rem 0.25rem;
+}
+.bn-panel[data-mobile] .bn-head[data-sub] {
+  padding: 0 0.25rem 0.25rem;
+}
+.bn-panel[data-mobile] .bn-date {
+  margin-inline-start: 0;
+}
+
+/* ── Bölüm ───────────────────────────────────────────────────────────────── */
+.bn-sec + .bn-sec,
+.bell-oof-slot + .bn-sec {
+  margin-top: 0.25rem;
+}
+.bn-sec-head {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.5rem 0;
+}
+.bn-sec-label {
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bn-muted);
+}
+.bn-sec-count {
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--bn-muted);
+}
+.bn-sec-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  height: 1.75rem;
+  margin-inline: auto -0.375rem;
+  padding-inline: 0.5rem 0.25rem;
+  border-radius: 999px;
+  font-size: var(--text-footnote);
+  line-height: 1;
+  font-weight: 500;
+  color: var(--brand-text);
+  outline: none;
+  transition: background-color 0.15s ease;
+}
+.bn-sec-link svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.bn-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Alt satır: özel günler takvimi ──────────────────────────────────────── */
+.bn-foot {
+  flex: none;
+  padding: var(--bn-pad);
+  border-top: 1px solid var(--bn-line);
+}
+/* Köşe panelle eşmerkezli: 28 − 8 = 20 px. */
+.bn-foot-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1.25rem;
+  text-align: start;
+  outline: none;
+  transition: background-color 0.12s ease;
+}
+.bn-foot-btn:active {
+  background: var(--bn-soft-hover);
+}
+.bn-foot-label {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-callout);
+  line-height: var(--text-callout--line-height);
+  font-weight: 500;
+}
+.bn-chev {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  margin-inline-end: 0.25rem;
+  color: var(--bn-muted);
+}
+/* Çekmecede alt satır gövdenin dibine yapışır; gövdenin 8 px alt payını da örter (altından
+   satır görünmesin). */
+.bn-panel[data-mobile] .bn-foot {
+  position: sticky;
+  bottom: -0.5rem;
+  margin-top: 0.25rem;
+  padding-inline: 0;
+  background: var(--bn-surface);
+}
+.bn-panel[data-mobile] .bn-foot-btn {
+  border-radius: var(--radius-tile);
+}
+
+/* ── Boş durum ve iskelet ────────────────────────────────────────────────── */
+.bn-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.bn-empty-ic {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 999px;
+  background: var(--bn-soft);
+  color: var(--bn-muted);
+}
+.bn-empty-ic svg {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+.bn-empty-title {
+  font-size: var(--text-card-title);
+  line-height: var(--text-card-title--line-height);
+  font-weight: 600;
+}
+.bn-empty-sub {
+  margin-top: 0.25rem;
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  color: var(--bn-muted);
+}
+.bn-bar {
+  display: block;
+  width: 55%;
+  height: 0.625rem;
+  border-radius: 999px;
+}
+.bn-bar + .bn-bar {
+  width: 35%;
+  margin-top: 0.4375rem;
+}
+
+/* ── Etkileşim ───────────────────────────────────────────────────────────── */
+@media (hover: hover) {
+  .bn-row:not([data-static]):hover,
+  .bn-foot-btn:hover,
+  .bn-sec-link:hover {
+    background: var(--bn-soft);
+  }
+  .bn-more:hover {
+    background: var(--bn-soft-hover);
+  }
+}
+.bn-row:focus-visible,
+.bn-foot-btn:focus-visible,
+.bn-more:focus-visible,
+.bn-sec-link:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--brand-text) 45%, transparent);
+}
+/* Dokunmatikte 44 px: satır büyür, küçük düğmelerin görünmez payı var. */
+@media (pointer: coarse) {
+  .bn-more,
+  .bn-sec-link {
+    height: 2rem;
+  }
+  .bn-more::after,
+  .bn-sec-link::after {
+    content: "";
+    position: absolute;
+    inset: -0.375rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bn-panel,
+  .bn-more,
+  .bn-more svg {
+    transition: none;
+  }
+  .bn-more:active {
+    transform: none;
+  }
+}

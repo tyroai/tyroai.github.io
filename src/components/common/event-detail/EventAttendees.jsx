@@ -78,7 +78,7 @@ export function EventAttendees({ people, organizerAddress, photoOf, presenceOf, 
         type="button"
         onClick={() => setShowAll((v) => !v)}
         aria-expanded={showAll}
-        className="mt-2 text-[0.71875rem] font-semibold text-brand transition hover:underline"
+        className="mt-2 text-[0.75rem] font-semibold text-brand transition hover:underline"
       >
         {t(showAll ? "calendar.hideAll" : "calendar.showAll", { count: people.length })}
       </button>

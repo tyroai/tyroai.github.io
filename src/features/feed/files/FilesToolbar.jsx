@@ -52,8 +52,6 @@ export function SearchBox({ value, onChange, onSubmit, placeholder, inputRef, bu
 
 /* ─────────── Sıralama ─────────── */
 
-const ITEM = "gap-2 rounded-lg px-2 py-1.5 text-[0.78125rem] [@media(pointer:coarse)]:min-h-10"
-
 export function SortMenu({ sort, options, onSort, align = "end" }) {
   const { t } = useLocale()
   return (
@@ -80,7 +78,7 @@ export function SortMenu({ sort, options, onSort, align = "end" }) {
       <DropdownMenuContent align={align} className="w-56 p-1.5" onEscapeKeyDown={stopEscape}>
         <DropdownMenuRadioGroup value={sort} onValueChange={onSort}>
           {options.map((o) => (
-            <DropdownMenuRadioItem key={o} value={o} className={ITEM}>
+            <DropdownMenuRadioItem key={o} value={o}>
               {t(`myfiles.sort.${o}`)}
             </DropdownMenuRadioItem>
           ))}

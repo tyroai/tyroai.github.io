@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { loadChatSession, scheduleChatSessionSave, clearChatSession } from "@/lib/chatSession"
 import { useAnswerNotification } from "@/features/chat/hooks/useAnswerNotification"
 import { notify } from "@/lib/notify"
+import { safeExternalUrl } from "@/lib/utils"
 import { showFirstReplyToast } from "@/features/chat/lib/firstReplyToast"
 import { textWithStagedFiles } from "@/features/chat/lib/chatFileStaging"
 import { chatFailureMessage } from "@/features/chat/lib/chatFailure"
@@ -128,7 +129,11 @@ export function useChatTurn({
       showFirstReplyToast,
       chatFailureMessage,
       textWithStagedFiles,
-      openUrl: (url) => window.open(url, "_blank", "noopener,noreferrer"),
+      // Öneri çipinin adresi bot'tan gelir: yalnız http(s) ve mailto açılır.
+      openUrl: (url) => {
+        const safe = safeExternalUrl(url)
+        if (safe !== "#") window.open(safe, "_blank", "noopener,noreferrer")
+      },
     },
   }
 

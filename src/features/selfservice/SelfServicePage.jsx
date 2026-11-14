@@ -2,6 +2,7 @@ import "@/lib/i18n/authz"
 import "@/lib/i18n/selfService"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { useLayoutChoice } from "@/hooks/useLayoutChoice"
 import { useLocale } from "@/hooks/useLocale"
 import { useSelfService } from "@/hooks/useSelfService"
 import { useSelfServiceProfile } from "@/hooks/useSelfServiceProfile"
@@ -14,6 +15,8 @@ import { withNames } from "@/lib/selfServiceNames"
 import { nextParams, readParams } from "@/features/selfservice/lib/selfServiceParams"
 import { TIBOT_PATH } from "@/lib/tibotPolicy"
 import { cn } from "@/lib/utils"
+import { CardsTop } from "./cards/CardsTop"
+import { ViewSwitch } from "./cards/ViewSwitch"
 import { RecordSheet } from "./detail/RecordSheet"
 import { HeroTray } from "./header/HeroTray"
 import { RequestWatchLine } from "./header/RequestWatchLine"
@@ -23,6 +26,7 @@ import { PageShell } from "@/components/layout/PageShell"
 import { recordQuestion } from "./recordText"
 import { LazyRequestDialog } from "./request/LazyRequestDialog"
 import { LazyDelegateDialog } from "./request/delegate/LazyDelegateDialog"
+import { PageHeading } from "@/components/common/SectionHeading"
 import { MyRecords } from "./MyRecords"
 import { BoardSkeleton, SelfServiceState } from "./SelfServiceStates"
 import { tabOf } from "./kinds"
@@ -61,6 +65,7 @@ export function SelfServicePage() {
   const { t, locale } = useLocale()
   const box = useRef(null)
   const { phone, hero } = usePageLayout(box)
+  const layout = useLayoutChoice("selfService")
   const ss = useSelfService()
   const [params, setParams] = useSearchParams()
   const navigate = useNavigate()
@@ -235,7 +240,9 @@ export function SelfServicePage() {
   // Dönem ve özet kartın beyaz tepsisinde (geniş ekran; telefonda listenin üstünde). Ekibim'de de
   // durur: kart iki görünümde aynı boyda kalır, ekibe geçmek başka sayfaya geçmiş gibi olmaz.
   // Dar ve kısa kapta kart yalnız kişi (boyu To-Do'nunkiyle aynı): tepsi kartın hemen altında.
-  const showTray = !phone && (loading || ss.status === "ready")
+  // Kartlar düzeni (Profil › Görünüm): üst alan `CardsTop`; telefonda kart standart kalır.
+  const cards = layout === "cards"
+  const showTray = !phone && !cards && (loading || ss.status === "ready")
   const trayInside = hero === "wide" || hero === "mid"
   const tray = showTray && (
     <HeroTray
@@ -262,11 +269,43 @@ export function SelfServicePage() {
           {/* Ortak kap (kenar, üst pay, en); alt pay yüzen değneğin altında son satır okunsun diye. */}
           <PageShell className="pb-28">
             <div ref={box} className="@container/ss">
-              <h1 className="sr-only">{t("nav.selfService")}</h1>
+              {/* Sayfa başlığı en üstte (öteki sayfalar gibi); telefonda üst çubuk sayfanın adını taşır. */}
+              {phone ? (
+                <h1 className="sr-only">{t("nav.selfService")}</h1>
+              ) : (
+                <PageHeading
+                  eyebrow={t("selfService.board.eyebrow")}
+                  title={t("selfService.board.title")}
+                  className="mb-6"
+                />
+              )}
               {/* To-Do'nun kartı: gradyan, altına marka renginde gölge. Telefonda özet listenin
                   üstünde. */}
-              <SelfHero profile={profile} team={teamToggle} band={hero} tray={trayInside && tray} />
-              {!trayInside && tray}
+              {(!cards || phone) && (
+                <SelfHero
+                  profile={profile}
+                  team={teamToggle}
+                  band={hero}
+                  tray={trayInside && tray}
+                />
+              )}
+              {!cards && !trayInside && tray}
+              {cards && (
+                <CardsTop
+                  phone={phone}
+                  profile={profile}
+                  team={teamToggle}
+                  ss={ss}
+                  data={data}
+                  view={view}
+                  sel={sel}
+                  years={years.length ? years : [THIS_YEAR]}
+                  update={update}
+                  accrual={accrual}
+                  onNew={onNew}
+                  onAsk={ask}
+                />
+              )}
               {/* Satır kapanınca odak boşa düşmesin: hep duran kap odağı alır. Talep gönderilince
                   açılan sohbet paneli (telefon) kapanınca da odak buraya döner. */}
               <div
@@ -301,7 +340,12 @@ export function SelfServicePage() {
                 </p>
               )}
               {teamView ? (
-                <TeamView onAsk={ask} me={me} />
+                <TeamView
+                  onAsk={ask}
+                  me={me}
+                  cards={cards && !phone}
+                  lead={cards && !phone && teamToggle ? <ViewSwitch team={teamToggle} /> : null}
+                />
               ) : loading ? (
                 <BoardSkeleton />
               ) : ss.status === "ready" ? (
@@ -323,6 +367,7 @@ export function SelfServicePage() {
                   person={person}
                   newKeys={watch.newKeys}
                   accrual={accrual}
+                  plain={cards && !phone}
                 />
               ) : (
                 <SelfServiceState

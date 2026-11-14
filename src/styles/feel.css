@@ -1,0 +1,40 @@
+/* GİRİŞ HİSSİ (`docs/design-system.md` › Tasarım dili, 1. ve 5. ilke): her sayfa aynı sakin girişle
+   gelir — başlık hafifçe yükselir, içerik hemen ardından belirir. Sayfanın ortak kabına
+   (`PageShell`, `data-page-shell`) bağlı: yeni sayfa bir şey yazmadan bu girişi alır. Sık dönülen
+   yüzey olduğu için kısa ve hafif (≤ 280 ms, 6 px); kendi sıralı girişi olan sayfa (Anasayfa ve
+   Pano: `.ms-stagger`, kart yuvaları) hariç. İçerikte yalnız opaklık: `translate` sabit konumlu
+   torunların (yüzen düğme) yerini oynatırdı. Dolgu `backwards`: bitince kalıcı stil kalmaz. */
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
+    :where([data-page-shell]):not(:has(.ms-stagger, [data-widget-slot])) > * {
+      animation: page-fade 240ms cubic-bezier(0.23, 1, 0.32, 1) 50ms backwards;
+    }
+    :where([data-page-shell]):not(:has(.ms-stagger, [data-widget-slot])) > :first-child {
+      animation: page-rise 280ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+    }
+  }
+}
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes page-rise {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+/* ÜSTÜNE GELME — dolu marka düğmesi: parlama (`filter: brightness`) yok, zemin hafifçe açılır (yazı
+   titremez). Katmansız: `bg-brand-*` yardımcı sınıfının üstüne yazar. */
+@media (hover: hover) {
+  :is(button, a, [role="button"]).bg-brand-fill-deep:hover:not(:disabled),
+  :is(button, a, [role="button"]).bg-brand-fill-deep[aria-expanded="true"] {
+    background-color: color-mix(in oklch, var(--brand-fill-deep), #fff 8%);
+  }
+  :is(button, a, [role="button"]).bg-brand-solid:hover:not(:disabled),
+  :is(button, a, [role="button"]).bg-brand-solid[aria-expanded="true"] {
+    background-color: color-mix(in oklch, var(--brand-solid), #fff 8%);
+  }
+}

@@ -78,7 +78,7 @@ export function AttendeeList({ people, photoOf, organizerAddress, summary = fals
                   <PersonAvatar
                     name={a.name}
                     photo={photoOf(a.address)}
-                    className="size-7 text-[0.625rem]"
+                    className="size-7 text-[0.6875rem]"
                   />
                   <span
                     data-private=""
@@ -88,7 +88,7 @@ export function AttendeeList({ people, photoOf, organizerAddress, summary = fals
                   </span>
                   <span
                     className={cn(
-                      "shrink-0 rounded-full px-2 py-0.5 text-[0.625rem] font-semibold",
+                      "shrink-0 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold",
                       PILL[key],
                     )}
                   >

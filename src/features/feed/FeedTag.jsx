@@ -27,7 +27,7 @@ export function FeedTag({ tag, accent, className }) {
       lang={locale}
       className={cn(
         "inline-flex shrink-0 items-center gap-1.5 rounded-full bg-brand-soft px-2 py-0.5",
-        "text-[0.625rem] font-semibold tracking-[0.01em] text-brand-on-soft",
+        "text-[0.6875rem] font-semibold tracking-[0.01em] text-brand-on-soft",
         className,
       )}
     >
@@ -54,7 +54,7 @@ export function ForYouTag({ className }) {
       lang={locale}
       className={cn(
         "inline-flex shrink-0 items-center gap-1 rounded-full bg-brand/[0.1] px-2 py-0.5",
-        "text-[0.625rem] font-semibold tracking-[0.01em] text-brand-ink",
+        "text-[0.6875rem] font-semibold tracking-[0.01em] text-brand-ink",
         className,
       )}
     >

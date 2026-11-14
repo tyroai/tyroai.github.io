@@ -122,12 +122,12 @@ export function SharedCalendarBar({
               }
             }}
             placeholder={t("calendar.sharedAddPlaceholder")}
-            className="w-full rounded-md bg-foreground/[0.04] px-2 py-1 text-[0.71875rem] outline-none placeholder:text-muted-foreground/70"
+            className="w-full rounded-md bg-foreground/[0.04] px-2 py-1 text-[0.75rem] outline-none placeholder:text-muted-foreground/70"
           />
           {matches.length === 0 && (checking || text.trim().length > 0) && (
             <ul className="absolute z-20 mt-1 w-full rounded-lg border border-border/60 bg-popover p-1 shadow-md">
               {matches.length === 0 && (
-                <li className="px-2 py-1.5 text-[0.65625rem] leading-snug text-muted-foreground">
+                <li className="px-2 py-1.5 text-[0.6875rem] leading-snug text-muted-foreground">
                   {checking ? t("calendar.sharedChecking") : t("calendar.sharedNoneOpen")}
                 </li>
               )}
@@ -145,8 +145,8 @@ export function SharedCalendarBar({
                     onClick={() => add(m)}
                     className="flex w-full flex-col items-start rounded-md px-2 py-1 text-left hover:bg-accent/60"
                   >
-                    <span className="text-[0.71875rem] font-medium leading-tight">{m.name}</span>
-                    <span className="text-[0.625rem] leading-tight text-muted-foreground">
+                    <span className="text-[0.75rem] font-medium leading-tight">{m.name}</span>
+                    <span className="text-[0.6875rem] leading-tight text-muted-foreground">
                       {m.address}
                     </span>
                   </button>
@@ -170,10 +170,10 @@ export function SharedCalendarBar({
             <HugeiconsIcon icon={UserAdd01Icon} className="size-3.5" strokeWidth={1.9} />
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block text-[0.71875rem] font-semibold leading-tight text-brand-ink">
+            <span className="block text-[0.75rem] font-semibold leading-tight text-brand-ink">
               {t("calendar.sharedAdd")}
             </span>
-            <span className="block truncate text-[0.625rem] leading-tight text-muted-foreground">
+            <span className="block truncate text-[0.6875rem] leading-tight text-muted-foreground">
               {t("calendar.sharedAddHint")}
             </span>
           </span>

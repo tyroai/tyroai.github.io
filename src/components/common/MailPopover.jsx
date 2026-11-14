@@ -123,7 +123,7 @@ export function MailPopover({ trigger, side, align = "end", open, onOpenChange }
           <div className="flex shrink-0 items-center gap-0.5 px-3 pt-3 pb-2">
             <h3 className="text-[0.9375rem] font-bold tracking-tight">{t("mail.title")}</h3>
             {showBadge && (
-              <span className="ml-1.5 rounded-full bg-badge px-1.5 py-0.5 text-[0.625rem] font-semibold text-badge-foreground">
+              <span className="ml-1.5 rounded-full bg-badge px-1.5 py-0.5 text-[0.6875rem] font-semibold text-badge-foreground">
                 {t("mail.unreadToday", { count: unread })}
               </span>
             )}
@@ -143,7 +143,7 @@ export function MailPopover({ trigger, side, align = "end", open, onOpenChange }
                   <button
                     type="button"
                     aria-label={t("mail.moreOptions")}
-                    className="grid size-6 place-items-center rounded-md text-muted-foreground transition hover:bg-accent/60 hover:text-foreground"
+                    className="grid size-6 place-items-center rounded-md text-muted-foreground transition hover:bg-accent/60 hover:text-foreground relative pointer-coarse:after:absolute pointer-coarse:after:-inset-2"
                   >
                     <HugeiconsIcon icon={MoreHorizontalIcon} className="size-4" strokeWidth={2} />
                   </button>

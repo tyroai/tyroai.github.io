@@ -135,7 +135,7 @@ function DoneStep({ text, index = 0, animate = true }) {
   return (
     <div
       className={cn(
-        "flex min-h-6 items-center gap-2 rounded-md px-1.5 text-[0.71875rem] leading-none",
+        "flex min-h-6 items-center gap-2 rounded-md px-1.5 text-[0.75rem] leading-none",
         "text-muted-foreground/80",
         animate && "agent-row",
       )}
@@ -257,7 +257,7 @@ export function AgentActivity({ activity }) {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.18 }}
           className={cn(
-            "min-w-0 truncate text-[0.78125rem] font-medium leading-none @max-3xl/chat:text-[0.75rem]",
+            "min-w-0 truncate text-[0.8125rem] font-medium leading-none @max-3xl/chat:text-[0.75rem]",
             reduceMotion ? "text-foreground/80" : "agent-shimmer",
           )}
         >

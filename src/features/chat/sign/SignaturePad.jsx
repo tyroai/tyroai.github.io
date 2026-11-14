@@ -82,12 +82,12 @@ export function SignaturePad({ strokes, onChange }) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <span className="text-[0.71875rem] text-muted-foreground">{t("chat.sign.padLabel")}</span>
+        <span className="text-[0.75rem] text-muted-foreground">{t("chat.sign.padLabel")}</span>
         <button
           type="button"
           onClick={() => onChange([])}
           disabled={empty}
-          className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.71875rem] text-muted-foreground transition hover:text-foreground disabled:opacity-40"
+          className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.75rem] text-muted-foreground transition hover:text-foreground disabled:opacity-40"
         >
           <HugeiconsIcon icon={Eraser01Icon} className="size-3.5" strokeWidth={1.8} />
           {t("chat.sign.clear")}
@@ -107,7 +107,7 @@ export function SignaturePad({ strokes, onChange }) {
         {/* İmza çizgisi: formdaki "Personel İmzası" çizgisinin karşılığı. */}
         <div className="pointer-events-none absolute inset-x-6 bottom-8 border-b border-dashed border-slate-300" />
         {empty && (
-          <p className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 text-center text-[0.78125rem] text-slate-400">
+          <p className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 text-center text-[0.8125rem] text-slate-400">
             {t("chat.sign.padHint")}
           </p>
         )}

@@ -99,7 +99,7 @@ function Chip({ icon, text, vars, tone = "neutral", tip, onClick }) {
         t.chip,
         t.hover,
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11",
-        act ? "hover:-translate-y-px hover:shadow-sm" : "cursor-help",
+        act ? "" : "cursor-help",
       )}
     >
       {body}

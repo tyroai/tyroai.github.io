@@ -52,7 +52,7 @@ export function SpotlightRow({ item, query, photo, now, homeTz, onSelect }) {
           <span
             lang={own ? "tr" : locale}
             dir="auto"
-            className="block truncate text-left text-[0.71875rem] text-foreground/65"
+            className="block truncate text-left text-[0.75rem] text-foreground/65"
           >
             {sub}
           </span>

@@ -172,7 +172,7 @@ function Body({ item, onClose }) {
           <DialogTitle className="truncate text-[0.875rem] font-semibold leading-tight">
             {item.name}
           </DialogTitle>
-          <DialogDescription className="mt-0.5 truncate text-[0.71875rem] leading-tight">
+          <DialogDescription className="mt-0.5 truncate text-[0.75rem] leading-tight">
             {meta || t("files.preview")}
           </DialogDescription>
         </div>
@@ -271,7 +271,7 @@ function HtmlFrame({ item, html, t }) {
       <div
         title={t("files.html.note")}
         className={cn(
-          "flex shrink-0 items-center gap-2 border-b border-border/60 bg-card px-4 py-1.5 text-[0.71875rem]",
+          "flex shrink-0 items-center gap-2 border-b border-border/60 bg-card px-4 py-1.5 text-[0.75rem]",
           blank && "bg-amber-50 dark:bg-amber-950/40",
         )}
       >
@@ -302,11 +302,11 @@ function HtmlFrame({ item, html, t }) {
           onClick={toggle}
           aria-pressed={live}
           className={cn(
-            "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[0.71875rem] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:h-10",
+            "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[0.75rem] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-brand/40 [@media(pointer:coarse)]:h-10",
             live
               ? "border border-border bg-card text-foreground/85 hover:bg-accent"
               : blank
-                ? "bg-brand-fill-deep text-brand-on-brand hover:brightness-110"
+                ? "bg-brand-fill-deep text-brand-on-brand"
                 : "bg-brand/[0.1] text-brand-ink hover:bg-brand/[0.16]",
           )}
         >

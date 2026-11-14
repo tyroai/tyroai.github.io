@@ -187,7 +187,7 @@ export function PromptLab({ open, onOpenChange, agentName, onPick }) {
             <DialogTitle className="text-[0.9375rem] font-semibold leading-tight">
               {t("prompts.labTitle")}
             </DialogTitle>
-            <DialogDescription className="mt-0.5 truncate text-[0.71875rem] leading-tight">
+            <DialogDescription className="mt-0.5 truncate text-[0.75rem] leading-tight">
               {totalPrompts > 0
                 ? t("prompts.labSubtitleCount", {
                     n: totalPrompts,
@@ -219,7 +219,7 @@ export function PromptLab({ open, onOpenChange, agentName, onPick }) {
                 aria-controls="promptlab-results"
                 aria-describedby="promptlab-count"
                 placeholder={t("prompts.search")}
-                className="min-w-0 flex-1 bg-transparent text-[0.78125rem] outline-none placeholder:text-muted-foreground/70 [&::-webkit-search-cancel-button]:hidden"
+                className="min-w-0 flex-1 bg-transparent text-[0.8125rem] outline-none placeholder:text-muted-foreground/70 [&::-webkit-search-cancel-button]:hidden"
               />
               {query && (
                 <button
@@ -274,7 +274,7 @@ export function PromptLab({ open, onOpenChange, agentName, onPick }) {
                   aria-current={active ? "true" : undefined}
                   onClick={() => setPickedTopic(item.id)}
                   className={cn(
-                    "flex min-h-9 shrink-0 items-center gap-2 rounded-lg px-3 text-left text-[0.75rem] transition sm:min-h-0 sm:w-full sm:px-2.5 sm:py-2 sm:text-[0.78125rem]",
+                    "flex min-h-9 shrink-0 items-center gap-2 rounded-lg px-3 text-left text-[0.75rem] transition sm:min-h-0 sm:w-full sm:px-2.5 sm:py-2 sm:text-[0.8125rem]",
                     RING,
                     active
                       ? "bg-brand/10 font-semibold text-brand-ink"
@@ -290,7 +290,7 @@ export function PromptLab({ open, onOpenChange, agentName, onPick }) {
                       kaybetmesin. */}
                   <span
                     className={cn(
-                      "ml-auto shrink-0 pl-1 text-[0.65625rem] tabular-nums text-muted-foreground/70",
+                      "ml-auto shrink-0 pl-1 text-[0.6875rem] tabular-nums text-muted-foreground/70",
                       item.n === 0 && "opacity-40",
                     )}
                   >
@@ -306,7 +306,7 @@ export function PromptLab({ open, onOpenChange, agentName, onPick }) {
               id="promptlab-count"
               role="status"
               aria-live="polite"
-              className="px-4 pb-1 pt-3 text-[0.71875rem] leading-snug text-muted-foreground sm:px-5"
+              className="px-4 pb-1 pt-3 text-[0.75rem] leading-snug text-muted-foreground sm:px-5"
             >
               {query.trim()
                 ? // Tek konuya düşen sonuçta "1 konuda" demiyoruz: çoğul eki
@@ -367,14 +367,14 @@ export function PromptLab({ open, onOpenChange, agentName, onPick }) {
                       />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[0.78125rem] font-semibold leading-tight">
+                      <span className="block text-[0.8125rem] font-semibold leading-tight">
                         {p.title}
                       </span>
                       <span className="mt-1 block text-[0.75rem] leading-snug text-muted-foreground [overflow-wrap:anywhere]">
                         <PromptText text={p.text} />
                       </span>
                       {(query.trim() || topicId === ALL) && (
-                        <span className="mt-1 block text-[0.65625rem] uppercase tracking-wide text-muted-foreground/70">
+                        <span className="mt-1 block text-[0.6875rem] uppercase tracking-wide text-muted-foreground/70">
                           {p.topic.label}
                         </span>
                       )}
@@ -393,8 +393,8 @@ export function PromptLab({ open, onOpenChange, agentName, onPick }) {
               ))}
               {results.length === 0 && (
                 <li className="col-span-full px-2 py-10 text-center" role="status">
-                  <p className="text-[0.78125rem] font-medium">{t("prompts.noResults")}</p>
-                  <p className="mt-1 text-[0.71875rem] text-muted-foreground">
+                  <p className="text-[0.8125rem] font-medium">{t("prompts.noResults")}</p>
+                  <p className="mt-1 text-[0.75rem] text-muted-foreground">
                     {t("prompts.noResultsHint")}
                   </p>
                   {query && (
@@ -406,7 +406,7 @@ export function PromptLab({ open, onOpenChange, agentName, onPick }) {
                         setQuery("")
                         searchRef.current?.focus()
                       }}
-                      className="mt-3 h-7 rounded-full px-3 text-[0.71875rem]"
+                      className="mt-3 h-7 rounded-full px-3 text-[0.75rem]"
                     >
                       {t("prompts.clear")}
                     </Button>

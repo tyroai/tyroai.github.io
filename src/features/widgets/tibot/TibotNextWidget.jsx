@@ -191,6 +191,7 @@ export default function TibotNextWidget({ className }) {
 
   return (
     <WidgetFrame
+      personal
       id="tibot-summary"
       title={t("widgets.tibotSummary.title")}
       shortTitle={t("widgets.tibotSummary.short")}

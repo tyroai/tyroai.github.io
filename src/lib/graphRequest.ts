@@ -1,3 +1,4 @@
+import { kindOfStatus, kindOfSuccess, recordGraphOutcome } from "@/lib/serviceHealth"
 import type { AccountInfo, IPublicClientApplication } from "@azure/msal-browser"
 import { ensureMsalInitialized } from "@/lib/msal"
 import { errorCause, httpCause } from "@/lib/errorCause"
@@ -13,6 +14,7 @@ import type { CauseCode, ThrownLike } from "@/lib/errorCause"
  */
 
 export const GRAPH_BASE = "https://graph.microsoft.com/v1.0"
+const GRAPH_ORIGIN = "https://graph.microsoft.com"
 
 export const STATUS = {
   ready: "ready",
@@ -73,7 +75,8 @@ export interface GraphRequestOptions {
   /**
    * İstek başına süre sınırı (ms; yok = tarayıcının kendi sınırı, Safari'de dakikayı bulur). Gövdenin
    * okunması da kapsanır. Aşılırsa `error` + `detail: "Graph · timeout"`; zaman aşımı YENİDEN
-   * DENENMEZ (aynı beklemeyi ikiye katlar).
+   * DENENMEZ (aynı beklemeyi ikiye katlar). İstisna posta kutusu okumaları: verilmezse To Do 8 sn,
+   * öteki JSON okumaları 45 sn ve bir kez yeniden (`TODO_READ_TIMEOUT_MS`, `MAILBOX_READ_TIMEOUT_MS`).
    */
   timeoutMs?: number
   read?: GraphRead
@@ -293,25 +296,97 @@ function createGate(slots: number, onIdle?: () => void, leaseMs = 15_000): Gate 
 // widget'ları listeleri birlikte tarıyor). Sınır kutu başına: paylaşılan takvimlerde her kişinin kutusu kendi
 // sırasında. Kapı işi bitince silinir — iş arkadaşının adresi bellekte birikmez.
 const MAILBOX =
-  /\/(me|users\/[^/?]+)\/(messages|mailFolders|events|calendar|calendars|calendarView|calendarGroups|contacts|contactFolders|mailboxSettings|outlook|inferenceClassification|findMeetingTimes|sendMail|todo)\b/
+  /\/(me|users\/[^/?]+)\/(messages|mailFolders|events|calendar|calendars|calendarView|calendarGroups|contacts|contactFolders|mailboxSettings|outlook|inferenceClassification|findMeetingTimes|sendMail)\b/
 const MAILBOX_SLOTS = 4
-const mailboxGates = new Map<string, Gate>()
+// To Do kendi sırasında: To Do servisi takılınca (ölçüldü: aynı okuma bir kez 0,35 sn, hemen
+// ardından 25 sn'de bile dönmedi) asılı görev okumaları posta kutusunun dört yerini tutuyor, takvim,
+// posta ve onlara bağlı her kart (brifing, sıradaki toplantı, sahne geçişi) bekliyordu.
+export const TODO = /\/(me|users\/[^/?]+)\/todo\b/
+const TODO_SLOTS = 2
+// Görev OKUMASI 8 sn'de dönmezse bırakılır ve bir kez daha istenir (takılma çoğu zaman geçici);
+// yazma süre sınırsız kalır — yeniden denenen bir oluşturma görevi iki kez yazabilirdi.
+export const TODO_READ_TIMEOUT_MS = 8_000
+// Posta kutusunun öteki JSON okumaları (posta, takvim, ayarlar) da sonsuza dek asılı kalmasın: aynı
+// akşam `mailboxSettings` 20 sn'de dönmedi. Ama sınır YAVAŞ CEVABI KESMEMELİ: kesinti sürerken takvim
+// 16 sn'de geliyordu ve 15 sn'lik ilk sınır onu her denemede kesip kartı hiç doldurmuyordu. Sırayı
+// bekletmemek kapının işi (yer 15 sn sonra devredilir); bu sınır yalnız ölü isteği bitirir. Dosya
+// indirmeleri (`read` json değil) sınırsız.
+export const MAILBOX_READ_TIMEOUT_MS = 45_000
+const gates = new Map<string, Gate>()
 
 function gateFor(url: string): Gate | null {
-  const owner = MAILBOX.exec(url)?.[1].toLowerCase()
+  const todo = TODO.exec(url)
+  const owner = (todo ?? MAILBOX.exec(url))?.[1].toLowerCase()
   if (!owner) return null
-  let gate = mailboxGates.get(owner)
+  const key = `${todo ? "todo" : "mail"}:${owner}`
+  let gate = gates.get(key)
   if (!gate) {
-    gate = createGate(MAILBOX_SLOTS, () => mailboxGates.delete(owner))
-    mailboxGates.set(owner, gate)
+    gate = createGate(todo ? TODO_SLOTS : MAILBOX_SLOTS, () => gates.delete(key))
+    gates.set(key, gate)
   }
   return gate
 }
 
+/*
+ * Uçuştaki aynı okumaya bağlanma. Anasayfa'da birbirinden habersiz kartlar aynı şeyi aynı anda
+ * soruyordu (ölçüldü: gelen kutusu aynı milisaniyede iki kez, okunmamış sayısı yarım saniyede üç
+ * kez, To Do listeleri iki kez). Aynı hesap + aynı JSON okuması uçuştayken ikinci çağrı yeni
+ * istek atmaz, ilkinin cevabının KOPYASINI alır (biri veriyi değiştirirse öteki etkilenmesin).
+ * Arada bir yazma başladı ya da bittiyse (`writeEpoch`) bağlanılmaz: yazmadan önce başlamış okuma
+ * yazmanın sonucunu göstermeyebilir. Önbellek DEĞİL: cevap gelince kayıt silinir.
+ */
+let writeEpoch = 0
+const inflightReads = new Map<string, { epoch: number; job: Promise<GraphResult<unknown>> }>()
+
+function readKey(account: MsalAccount, opts: GraphRequestOptions): string | null {
+  if ((opts.method ?? "GET") !== "GET" || (opts.read ?? "json") !== "json" || !account) return null
+  const { path, scopes, headers, retry, timeoutMs } = opts
+  return JSON.stringify([account.homeAccountId, path, scopes, headers ?? {}, retry ?? 0, timeoutMs])
+}
+
+function copyOf<T>(res: GraphResult<T>): GraphResult<T> {
+  try {
+    return structuredClone(res)
+  } catch {
+    return res
+  }
+}
+
 /**
- * Tek Graph isteği. `T`: başarılı JSON gövdesinin çağıranca beklenen şekli (doğrulanmaz).
+ * Tek Graph isteği. `T`: başarılı JSON gövdesinin çağıranca beklenen şekli (doğrulanmaz). Aynı
+ * okuma uçuştaysa ona bağlanır (yukarıda).
  */
 export async function graphRequest<T = unknown>(
+  instance: MsalInstance,
+  account: MsalAccount,
+  opts: GraphRequestOptions,
+): Promise<GraphResult<T>> {
+  const key = readKey(account, opts)
+  if (!key) {
+    if ((opts.method ?? "GET") === "GET") return sendRequest<T>(instance, account, opts)
+    writeEpoch += 1
+    try {
+      return await sendRequest<T>(instance, account, opts)
+    } finally {
+      writeEpoch += 1
+    }
+  }
+  const flying = inflightReads.get(key)
+  if (flying && flying.epoch === writeEpoch) return copyOf((await flying.job) as GraphResult<T>)
+  const job = sendRequest<T>(instance, account, opts) as Promise<GraphResult<unknown>>
+  const entry = { epoch: writeEpoch, job }
+  inflightReads.set(key, entry)
+  try {
+    return (await job) as GraphResult<T>
+  } finally {
+    if (inflightReads.get(key) === entry) inflightReads.delete(key)
+  }
+}
+
+/** Yazma sayacı: başka modüllerin uçuştaki işleri (To Do taraması) de yazmadan sonra bağlanmasın. */
+export const graphWriteEpoch = (): number => writeEpoch
+
+async function sendRequest<T>(
   instance: MsalInstance,
   account: MsalAccount,
   opts: GraphRequestOptions,
@@ -326,9 +401,22 @@ export async function graphRequest<T = unknown>(
     retry = 0,
     read = "json",
     quiet,
-    timeoutMs,
   } = opts
+  // To Do okuması kendiliğinden süre sınırlı ve zaman aşımında bir kez yeniden denenir.
+  const plainRead = method === "GET" && opts.timeoutMs == null && read === "json"
+  const todoRead = plainRead && TODO.test(path)
+  const mailRead = plainRead && !todoRead && MAILBOX.test(path)
+  const timeoutMs = todoRead
+    ? TODO_READ_TIMEOUT_MS
+    : mailRead
+      ? MAILBOX_READ_TIMEOUT_MS
+      : opts.timeoutMs
+  let timeoutsLeft = todoRead || mailRead ? 1 : 0
   if (!instance || !account) return { status: STATUS.unauthenticated }
+  // Mutlak adres yalnız Graph'ın kendisi olabilir (`@odata.nextLink`): token başka bir adrese
+  // gitmesin (docs/deployment.md › Güvenlik başlıkları).
+  if (/^https?:/i.test(path) && !path.startsWith(`${GRAPH_ORIGIN}/`))
+    return { status: STATUS.error, error: "foreignUrl", detail: "Graph · foreign URL" }
   // Döngü sigortası (`lib/loopGuard`): durdurulan çağrı kısıtlama gibi döner — çağıran önbelleğe
   // yazmaz, sonra yeniden dener; döngü sürdükçe sigorta kapalı kalır.
   if (loopTripped(method, path, body))
@@ -351,7 +439,7 @@ export async function graphRequest<T = unknown>(
 
   // `path` mutlak olabilir: `@odata.nextLink` tam URL döner ve onu tekrar
   // GRAPH_BASE'e eklemek bozuk bir adres üretirdi.
-  const url = path.startsWith("http") ? path : `${GRAPH_BASE}${path}`
+  const url = /^https?:/i.test(path) ? path : `${GRAPH_BASE}${path}`
   const policy = RETRY_ON[method] ?? RETRY_ON.POST
   for (let attempt = 0; ; attempt += 1) {
     // Cevap gövdesiyle birlikte okunur ve kapının İÇİNDE: yer cevap tamamen inince boşalır.
@@ -367,19 +455,29 @@ export async function graphRequest<T = unknown>(
             ctl.abort()
           }, timeoutMs)
         : undefined
+      // Microsoft 365 durumu (`lib/serviceHealth`): yalnız ağda geçen süre — sırada bekleme değil.
+      const started = Date.now()
       try {
         const init = requestInit(method, token, headers, body, contentType)
         const res = await fetch(url, ctl ? { ...init, signal: ctl.signal } : init)
         // DELETE'te 404 de başarı: silinmek istenen şey zaten yok.
         if (res.ok || (method === "DELETE" && res.status === 404)) {
           const result = (await readBody(res, read)) as GraphResult<T>
+          recordGraphOutcome(url, timedOut ? "timeout" : kindOfSuccess(Date.now() - started))
           return { result: timedOut ? timeoutFail() : result }
         }
+        recordGraphOutcome(url, kindOfStatus(res.status))
         if (attempt < retry && policy.statuses.has(res.status)) return { again: res }
         return { result: await httpFail(res, scopes) }
       } catch (err) {
         // İptal bizim sınırımızdan: ağ hatası gibi yeniden denenmez.
-        if (timedOut) return { result: timeoutFail() }
+        if (timedOut) {
+          recordGraphOutcome(url, "timeout")
+          return { result: timeoutFail() }
+        }
+        // Çevrimdışıyken Microsoft'un sağlığı hakkında bir şey bilinmez.
+        if (typeof navigator === "undefined" || navigator.onLine !== false)
+          recordGraphOutcome(url, "server")
         throw err
       } finally {
         if (timer) clearTimeout(timer)
@@ -399,7 +497,17 @@ export async function graphRequest<T = unknown>(
       }
       return netFail(err)
     }
-    if ("result" in out) return out.result
+    if ("result" in out) {
+      if (
+        out.result.status === STATUS.error &&
+        out.result.error === "timeout" &&
+        timeoutsLeft > 0
+      ) {
+        timeoutsLeft -= 1
+        continue
+      }
+      return out.result
+    }
     // Bekleme kapının DIŞINDA: kısıtlanan istek yer tutarak sırayı durdurmaz.
     await wait(retryDelayMs(out.again, attempt))
   }

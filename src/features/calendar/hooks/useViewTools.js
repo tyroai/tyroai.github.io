@@ -1,13 +1,15 @@
 import { useCallback, useState } from "react"
 
-const KEY = "tyro-calendar-tools-v1"
+// v2: rahat saat ölçeği varsayılan oldu (ürün sahibi: "takvimde direk bu seçili olsun") — eski kayıt
+// okunmaz, herkes rahat ölçekle başlar; değiştiren kişinin seçimi yeni anahtarda hatırlanır.
+const KEY = "tyro-calendar-tools-v2"
 
 function read() {
   try {
     const saved = JSON.parse(globalThis.localStorage.getItem(KEY) ?? "null")
-    return { comfort: saved?.comfort === true, hidePending: saved?.hidePending === true }
+    return { comfort: saved?.comfort !== false }
   } catch {
-    return { comfort: false, hidePending: false }
+    return { comfort: true }
   }
 }
 
@@ -20,15 +22,15 @@ function write(next) {
 }
 
 /**
- * Yoğun takvim araçları: rahat saat ölçeği, yanıtlanmamış davetleri gizleme (ikisi hatırlanır) ve
- * liste görünümü (hatırlanmaz: sayfa her girişte ızgarayla açılır, bkz. `lib/prefs`).
+ * Yoğun takvim araçları: rahat saat ölçeği (varsayılan açık, hatırlanır) ve liste görünümü
+ * (hatırlanmaz: sayfa her girişte ızgarayla açılır, bkz. `lib/prefs`).
  */
 export function useViewTools() {
   const [saved, setSaved] = useState(read)
   const [list, setList] = useState(false)
-  const flip = useCallback((field) => {
+  const toggleComfort = useCallback(() => {
     setSaved((cur) => {
-      const next = { ...cur, [field]: !cur[field] }
+      const next = { ...cur, comfort: !cur.comfort }
       write(next)
       return next
     })
@@ -36,9 +38,7 @@ export function useViewTools() {
   return {
     list,
     comfort: saved.comfort,
-    hidePending: saved.hidePending,
     toggleList: useCallback(() => setList((v) => !v), []),
-    toggleComfort: useCallback(() => flip("comfort"), [flip]),
-    toggleHidePending: useCallback(() => flip("hidePending"), [flip]),
+    toggleComfort,
   }
 }

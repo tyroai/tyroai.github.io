@@ -13,7 +13,7 @@ const OPTS_TIME = { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }
 
 /**
  * Brifing maddelerinin ipuçları — Anasayfa özetinin kapı davranışı: ilk kayıtlar,
- * kayda basınca önizleme, dipte ilgili yer (panel, To-Do, Keşfet). Günün brifingi
+ * kayda basınca önizleme, dipte ilgili yer (panel, To-Do, Keşfet). TYRO brifingi
  * ve Karşılama kartı ortak. `dialog`: telefonda önizleme penceresi, kartın
  * içine çizilir. `meetingsTip(list, title)`: cümledeki toplantı ifadesinin ipucu
  * (Anasayfa özetinin aynısı — listeden önizleme, dipte takvim).
@@ -91,6 +91,13 @@ export function useBriefTips(data) {
       title: t("myspace.tip.tasks.title"),
       kicker: t("myspace.tasks.title"),
       list: taskList(tasks.filter((x) => !x.done && !x.overdue)),
+      action: todoAction,
+    },
+    // Açık işlerin tamamı (gecikenler dahil): Karşılama kartının "n iş teslim" yazısı.
+    openTasks: {
+      title: t("myspace.tip.tasks.title"),
+      kicker: t("myspace.tasks.title"),
+      list: taskList(tasks.filter((x) => !x.done)),
       action: todoAction,
     },
     // Ticket (yalnız kitlede): sayılar listenin son okumasından; ayrıntı Self Servis › Ticket'ta.

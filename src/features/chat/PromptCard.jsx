@@ -9,9 +9,9 @@ import { PromptText } from "./PromptText"
    kırılırsa silme geçerken yazı iki yerde görünür (`PromptTile`ın kuralı). */
 const FACE = "flex w-full items-start gap-2.5 @max-lg/chat:gap-2"
 const ICON_BOX = "mt-px grid size-6 shrink-0 place-items-center rounded-lg"
-const TITLE = "block truncate text-[0.78125rem] font-semibold leading-tight"
+const TITLE = "block truncate text-[0.8125rem] font-semibold leading-tight"
 // ⚠️ `block` YAZILMAZ: `line-clamp`in `-webkit-box`ını ezer, metin üçüncü satıra taşar.
-const BODY = "mt-0.5 line-clamp-2 text-[0.71875rem] leading-[1.35] [overflow-wrap:anywhere]"
+const BODY = "mt-0.5 line-clamp-2 text-[0.75rem] leading-[1.35] [overflow-wrap:anywhere]"
 
 /* Kalp ve tutamak silmenin ÜSTÜNDE: koyu kopyanın üstünde okunsunlar diye
    mürekkepleri döner. Gecikme, silme sağ kenara varana kadar beyaz bir kalbin

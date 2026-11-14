@@ -51,7 +51,7 @@ export function TeamTodayWidget({ className }) {
       pager={<Pager pager={pager} label={t("widgets.team.title")} />}
       action={
         people.length > 6 ? (
-          <span className="text-[0.71875rem] tabular-nums text-muted-foreground">
+          <span className="text-[0.75rem] tabular-nums text-muted-foreground">
             {t("widgets.team.total", { n: people.length })}
           </span>
         ) : null
@@ -82,7 +82,7 @@ export function TeamTodayWidget({ className }) {
                               name={p.name}
                               photo={photos.get(p.address)}
                               presence={p.away ? undefined : (p.presence ?? undefined)}
-                              className={cn("size-8 text-[0.625rem]", p.away && "opacity-60")}
+                              className={cn("size-8 text-[0.6875rem]", p.away && "opacity-60")}
                             />
                             <span className="min-w-0 flex-1">
                               <span className="block truncate text-[0.8125rem] font-medium">

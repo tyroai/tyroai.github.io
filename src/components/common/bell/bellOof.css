@@ -1,4 +1,4 @@
-/* Çanın bekleyen sorusu (`BellOof`): sekmelerin üstünde. Denetim Merkezi'nin şeridiyle aynı dil
+/* Çanın bekleyen sorusu (`BellOof`): listenin başında. Denetim Merkezi'nin şeridiyle aynı dil
    (`.cc-join`): palete hafif boyalı zemin, marka rampalı yuvarlak simge. Dar panelde düğmeler
    metnin altına iner (metin 10rem'den daralmaz), sona yaslı. */
 .bell-oof-slot {
@@ -9,10 +9,9 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.375rem 0.625rem;
-  margin: 0.5rem 0.5rem 0;
-  padding-block: 0.625rem;
-  padding-inline: 0.75rem 0.5rem;
-  border-radius: var(--radius-tile);
+  margin-block: 0.25rem 0.5rem;
+  padding: 0.625rem 0.5rem;
+  border-radius: 1rem;
   background: color-mix(in oklab, var(--brand-from) 12%, var(--popover));
 }
 .bell-oof-ic,

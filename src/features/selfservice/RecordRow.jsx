@@ -56,6 +56,7 @@ export function RecordRow({
       <button
         type="button"
         onClick={() => onOpen(record)}
+        data-picked={highlighted || undefined}
         className={cn(
           "group/row flex w-full min-w-0 items-center gap-3 text-start transition-colors",
           "rounded-2xl",
@@ -93,7 +94,7 @@ export function RecordRow({
               {title}
             </span>
             {isNew && (
-              <span className="shrink-0 rounded-full bg-brand/[0.12] px-1.5 py-px text-[0.625rem] font-bold uppercase tracking-[0.04em] text-brand-ink">
+              <span className="shrink-0 rounded-full bg-brand/[0.12] px-1.5 py-px text-[0.6875rem] font-bold uppercase tracking-[0.04em] text-brand-ink">
                 {t("selfService.newBadge")}
               </span>
             )}
@@ -114,6 +115,7 @@ export function RecordRow({
           </span>
         </span>
         <span
+          data-row-end=""
           className={cn(
             "flex shrink-0 flex-col items-end gap-1 transition-opacity duration-150",
             // Eylemler bu sütunun yerine gelir (yazılar üst üste binmesin; satır boyu değişmez).
@@ -152,6 +154,7 @@ export function RecordRow({
         <HugeiconsIcon
           icon={ArrowRight01Icon}
           aria-hidden="true"
+          data-row-go=""
           className={cn(
             "hidden size-4 shrink-0 text-muted-foreground/50 transition group-hover/row:translate-x-0.5 group-hover/row:text-muted-foreground rtl:rotate-180",
             !phone && "@[30rem]/ss:block",

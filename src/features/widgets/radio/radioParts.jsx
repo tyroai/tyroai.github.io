@@ -6,7 +6,7 @@ import "./radio.css"
 
 const ART = {
   xs: { box: "size-7 rounded-lg text-[0.5625rem]", min: 16 },
-  sm: { box: "size-9 rounded-lg text-[0.625rem]", min: 16 },
+  sm: { box: "size-9 rounded-lg text-[0.6875rem]", min: 16 },
   md: { box: "size-14 rounded-xl text-[0.875rem]", min: 24 },
   lg: { box: "size-24 rounded-2xl text-[1.375rem]", min: 40 },
 }
@@ -102,7 +102,7 @@ export function Equalizer({ playing, className, bar = "bg-(--r-eq)" }) {
 /** "CANLI" hapı: kırmızı nabız (yayın dili) — koyu kartta. */
 export function LiveBadge({ label }) {
   return (
-    <span className="inline-flex h-5 shrink-0 items-center gap-1.5 rounded-full bg-(--r-hover) px-2 text-[0.625rem] font-bold uppercase tracking-[0.1em] text-(--r-fg)">
+    <span className="inline-flex h-5 shrink-0 items-center gap-1.5 rounded-full bg-(--r-hover) px-2 text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-(--r-fg)">
       <span className="relative flex size-1.5">
         <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-400 motion-reduce:animate-none" />
         <span className="relative inline-flex size-1.5 rounded-full bg-red-500" />

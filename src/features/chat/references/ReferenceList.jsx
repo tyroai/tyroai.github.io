@@ -163,14 +163,14 @@ export const ReferenceList = forwardRef(function ReferenceList(
                 )}
               >
                 {row.initials ? (
-                  <span className="text-[0.625rem] font-semibold uppercase">{row.initials}</span>
+                  <span className="text-[0.6875rem] font-semibold uppercase">{row.initials}</span>
                 ) : (
                   <HugeiconsIcon icon={row.icon} className="size-3.5" strokeWidth={1.8} />
                 )}
               </span>
               <span className="min-w-0 flex-1">
                 <span className="flex min-w-0 items-center gap-1.5">
-                  <span className="truncate text-[0.78125rem] font-medium text-foreground">
+                  <span className="truncate text-[0.8125rem] font-medium text-foreground">
                     <Highlight text={row.title} query={query} />
                   </span>
                   {/* Rozet SAKİN: gider hesaplarında aynı kategori her satırda
@@ -195,7 +195,7 @@ export const ReferenceList = forwardRef(function ReferenceList(
                   ikincil bilgi her genişlikte gizli kalıyordu. Ölçüyü panelin
                   kendi genişliği veriyor. */}
               {row.meta && !compact && (
-                <span className="shrink-0 text-[0.65625rem] tabular-nums text-muted-foreground">
+                <span className="shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground">
                   {row.meta}
                 </span>
               )}
@@ -205,7 +205,7 @@ export const ReferenceList = forwardRef(function ReferenceList(
         {/* Kesilen satır sayısı SÖYLENİR: liste 50'de duruyor ve bunu
             yazmadığımızda kullanıcı aradığı kaydı "yok" sanıyordu. */}
         {total > rows.length && (
-          <li className="px-3 pb-1 pt-2 text-center text-[0.65625rem] text-muted-foreground/80">
+          <li className="px-3 pb-1 pt-2 text-center text-[0.6875rem] text-muted-foreground/80">
             {t("ref.more", { n: total - rows.length })}
           </li>
         )}
@@ -254,7 +254,7 @@ function Notice({ text, detail, actionLabel, onAction }) {
           // sessiz alım düşünce panel kendiliğinden popup açmaz, bu düğme açar.
           onMouseDown={(e) => e.preventDefault()}
           onClick={onAction}
-          className="mt-2.5 h-7 rounded-full px-3 text-[0.71875rem]"
+          className="mt-2.5 h-7 rounded-full px-3 text-[0.75rem]"
         >
           {actionLabel}
         </Button>

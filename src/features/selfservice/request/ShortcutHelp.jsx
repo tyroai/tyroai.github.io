@@ -90,7 +90,7 @@ export function ShortcutHelp({ kind, review = false, open, onOpenChange }) {
         sideOffset={8}
         collisionPadding={12}
         aria-label={title}
-        className="w-[min(22rem,calc(100vw-2rem))] gap-0 rounded-2xl p-4"
+        className="w-[min(22rem,calc(100vw-2rem))] gap-0 p-4"
       >
         <p className="text-[0.875rem] font-semibold">{title}</p>
         <div className="mt-3 space-y-3.5">

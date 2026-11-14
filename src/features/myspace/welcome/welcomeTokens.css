@@ -79,19 +79,12 @@
   --coin: color-mix(in oklch, var(--brand-orb-2) 52%, white);
 }
 
-/* TYRO'nun küresi satırın içinde, "Tyro"nın büyük harfi boyunda (ürün sahibi: "aynı yükseklik olsun
-   sırıtmasın" → "bir tık büyük"): kutu 0,66em, ortası büyük harfin (0,73em, Inter) ortasında (0,035em
-   yukarı), küre 18,5 px @ 28 px yazı. Satır başında
-   yazının sol hizasından taşmaz. Maskotun gövdesi çizimde biraz yukarıda: 0,04em aşağı. Küre sabit
-   pikselde çizilir, yazı küçülünce aynı oranda küçülür (`--welcome-scale`). */
+/* TYRO'nun küresi (öneri kartında; boyu welcomeRows.css'te). Küre sabit pikselde çizilir, yazı
+   küçülünce aynı oranda küçülür (`--welcome-scale`); maskotun gövdesi çizimde biraz yukarıda: 0,04em
+   aşağı. */
 .welcome-orbtok {
   position: relative;
-  top: -0.035em;
   display: inline-block;
-  width: 0.66em;
-  height: 0.66em;
-  margin-inline: 0 0.14em;
-  vertical-align: baseline;
 }
 .welcome-orbtok-in {
   position: absolute;

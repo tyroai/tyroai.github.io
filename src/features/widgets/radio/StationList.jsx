@@ -168,7 +168,7 @@ export function StationList({
             <span
               className={cn(
                 "min-w-0 flex-1 truncate font-medium",
-                dense ? "text-[0.78125rem]" : "text-[0.8125rem]",
+                dense ? "text-[0.8125rem]" : "text-[0.8125rem]",
                 on(radio, st) ? "font-semibold text-(--r-fg)" : "text-(--r-fg)",
               )}
             >

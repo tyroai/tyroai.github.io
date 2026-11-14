@@ -2,7 +2,7 @@ import { IconOrLogo } from "@/components/common/IconOrLogo"
 import { cn } from "@/lib/utils"
 
 const SIZES = {
-  sm: "size-6 rounded-md text-[0.625rem]",
+  sm: "size-6 rounded-md text-[0.6875rem]",
   md: "size-9 rounded-[0.625rem] text-xs",
   lg: "size-12 rounded-xl text-sm",
 }

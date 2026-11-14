@@ -22,5 +22,8 @@
 @import "./styles/myspace-surfaces.css";
 @import "./styles/myspace-weather.css";
 @import "./styles/toasts.css";
+@import "./styles/floating.css";
+@import "./styles/windows.css";
+@import "./styles/feel.css";
 @import "./styles/a11y-prefs.css";
 @import "./styles/private.css";

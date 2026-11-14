@@ -27,16 +27,7 @@ export const CATALOG_GROUPS = [
   { id: "markets", ids: ["market", "tyro-fx", "trader", "report-day", "region-weather"] },
   {
     id: "ambient",
-    ids: [
-      "weather",
-      "weather-plain",
-      "ask",
-      "help",
-      "intro",
-      "tyro-radio-stage",
-      "tyro-radio-disc",
-      "tyro-translate",
-    ],
+    ids: ["tyro-welcome", "ask", "help", "tyro-radio-stage", "tyro-radio-disc", "tyro-translate"],
   },
 ] as const
 

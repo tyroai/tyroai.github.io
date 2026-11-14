@@ -210,7 +210,7 @@ export function CalendarMonthGrid({
               <span
                 key={`h-${i}`}
                 className={cn(
-                  "grid h-6 place-items-center text-[0.625rem] font-semibold uppercase",
+                  "grid h-6 place-items-center text-[0.6875rem] font-semibold uppercase",
                   // Seçicide okunur kontrast (AA): hafta içi koyu, hafta sonu gri.
                   picker
                     ? weekendCols.has(i)
@@ -250,7 +250,7 @@ export function CalendarMonthGrid({
                   onFocus={picker ? () => setFocusKey(key) : undefined}
                   onClick={() => onSelectDay(startOfDay(d))}
                   className={cn(
-                    "relative mx-auto grid size-7 place-items-center rounded-full text-[0.71875rem] tabular-nums transition",
+                    "relative mx-auto grid size-7 place-items-center rounded-full text-[0.75rem] tabular-nums transition",
                     roomy && "pointer-coarse:size-11 pointer-coarse:text-[0.875rem]",
                     // Seçicide ay dışı günler de seçilebilir: soluk değil, gri (AA kontrast).
                     dim
@@ -283,7 +283,7 @@ export function CalendarMonthGrid({
                       aria-hidden="true"
                       className={cn(
                         "absolute bottom-0.5 size-1 rounded-full",
-                        isToday ? "bg-white/80" : "bg-brand",
+                        (picker ? isSelected : isToday) ? "bg-white/80" : "bg-brand",
                       )}
                     />
                   )}

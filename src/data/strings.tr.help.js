@@ -100,6 +100,7 @@ export const strings = {
   "help.group.faq": "Sık gelen sorular",
   "help.support.teams.aria": "{name} ile Teams'te yaz",
   "help.support.email.aria": "{name} için e-posta yaz",
+  "help.support.photoCredits": "Görsel kaynakları",
   "help.pages.selfservice.title": "Self Servis",
   "help.pages.selfservice.what":
     "İzin bakiyen, izin geçmişin, masrafların ve iş avansların ERP'ye gitmeden burada; yeni talep de buradan açılır.",
@@ -377,7 +378,7 @@ export const strings = {
     "Saatler İstanbul'u ve TYRO ofislerinin saatini şeritlerde gösterir; bir saate basınca her şehirdeki karşılığı işaretlenir. Şehir ya da saat dilimi ekle, Saatleri kopyala ve Toplantı oluştur (Teams'te o saatle) burada; seçimlerin bu tarayıcıda kalır.",
   "help.fn.header.special.title": "Bildirimler (çan)",
   "help.fn.header.special.body":
-    "Header'daki çan iki sekmeli bildirim panelidir: Özel günler (yaklaşan resmî tatiller; bugünün doğum günleri, iş yıl dönümleri, aramıza katılanlar) ve Keşfet (son ziyaretinden beri gelen iş bildirimleri). Rozet görmediklerinin sayısıdır: paneli açınca söner, yeni gün ya da yeni bildirimle yeniden yanar.",
+    "Header'daki çan bildirim panelini açar: tek listede Keşfet'in yeni iş bildirimleri, yaklaşan resmî tatiller ve bugünün doğum günleri, iş yıl dönümleri, aramıza katılanlar. Alttaki Özel günler takvimi yılın tatillerini ve günlere göre kutlamaları gösterir. Rozet görmediklerinin sayısıdır: paneli açınca söner, yeni gün ya da yeni bildirimle yeniden yanar.",
   "help.fn.header.search.title": "Arama ve komut paleti",
   "help.fn.header.search.body":
     "Header'daki Ara… ve Ctrl/⌘+K aynı pencereyi açar: kişiler, ofisler, sayfalar, Yardım cevapları, dosya adları ve hızlı eylemler (Yeni sohbet, tema, dil). Geniş ekranda seçili sonucun önizlemesi sağda; sondaki TYRO'ya sor satırı yazdığını sohbete sorar.",
@@ -395,7 +396,7 @@ export const strings = {
     "Header'da dosya düğmesi yok ama Ara… (Ctrl/⌘+K) dosyayı adıyla bulur. Bütün dosyaların yeri Keşfet › Bul: son dosyalar, OneDrive ve SharePoint, e-posta ekleri ve önizleme.",
   "help.faq.q52": "Üstteki çan ne gösteriyor?",
   "help.faq.a52":
-    "İki sekme: Özel günler (yaklaşan tatiller, bugünün kutlamaları) ve Keşfet (yeni iş bildirimleri). Rozet görmediklerinin sayısıdır: paneli açınca söner; yeni gün ya da yeni bildirim gelince döner.",
+    "Tek liste: yeni iş bildirimleri (Keşfet), yaklaşan tatiller ve bugünün kutlamaları; altta özel günler takvimi. Rozet görmediklerinin sayısıdır: paneli açınca söner; yeni gün ya da yeni bildirim gelince döner.",
   "help.faq.q53": "Bir iş arkadaşımın telefonunu ya da ofisini nasıl bulurum?",
   "help.faq.a53":
     "Keşfet › Bul › Kişiler'de adını, unvanını, departmanını ya da numarasının bir kısmını yaz; kişiye basınca kartı açılır: telefonlar, e-posta, yöneticisi, Teams'te sohbet ve arama.",
@@ -495,9 +496,9 @@ export const strings = {
   "help.faq.q46": "Talebi gönderdim ama listede görünmüyor.",
   "help.faq.a46":
     "TYRO'ya gönder talebi sohbette İK asistanına yollar; asistanın özetini orada onaylaman gerekir, kayıt ancak sonra ERP'ye işlenir ve yansıması dakikalar sürebilir. Sayfa kendiliğinden bakar (“Talebin TYRO'da. ERP'ye yansıyınca burada görünür”); hemen görmek için Kayıtları yenile'ye bas.",
-  "help.fn.home.brief.title": "Günün brifingi",
+  "help.fn.home.brief.title": "TYRO brifingi",
   "help.fn.home.brief.body":
-    "Günün brifingi öncelik sırasıyla en çok üç satır gösterir: yanıt bekleyen davetler (Yanıtla), bugün okunmamış posta (Aç), açık işler (To-Do) ve Keşfet'teki yeni bildirimler (Gör). Sıfır olan satır çizilmez; sayıya basınca ilk üç kayıt açılır.",
+    "TYRO brifingi öncelik sırasıyla en çok üç satır gösterir: yanıt bekleyen davetler (Yanıtla), bugün okunmamış posta (Aç), açık işler (To-Do) ve Keşfet'teki yeni bildirimler (Gör). Sıfır olan satır çizilmez; sayıya basınca ilk üç kayıt açılır.",
   "help.fn.home.meeting.title": "Toplantılar ve ritim",
   "help.fn.home.meeting.body":
     "Sıradaki toplantın kartı başlamasına kalan süreyi gösterir: çevrim içiyse Katıl, yüz yüzeyse Yol tarifi, yanında Özet (üstüne gelince TYRO ile Hazırlan) düğmesi var. Toplantı ritmin haftanın gün gün toplantı yükünü gösterir; geçmiş Teams toplantısında Sohbet ve Özet açılır.",

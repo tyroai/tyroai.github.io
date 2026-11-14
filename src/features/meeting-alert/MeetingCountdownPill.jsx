@@ -53,7 +53,7 @@ export function MeetingCountdownPill({ alert }) {
         <span className="min-w-0">
           <span
             className={cn(
-              "block text-[0.625rem] font-semibold uppercase tracking-[0.12em]",
+              "block text-[0.6875rem] font-semibold uppercase tracking-[0.12em]",
               final ? "text-orange-600 dark:text-orange-400" : "text-brand",
             )}
           >

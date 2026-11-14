@@ -15,7 +15,7 @@ import { requestOpenChat, setPendingAsk } from "@/lib/chatBus"
 const GROUP = 5
 const ICON = { birthday: BirthdayCakeIcon, anniversary: Award01Icon }
 const FOCUS = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
-const KICKER = "text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-brand"
+const KICKER = "text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-brand"
 
 /**
  * Yakın çevrenin kutlama günü yardım kartını DEVRALIR: başlık çekilir ve
@@ -125,7 +125,7 @@ function Single({ p, photoOf, label, card, heading, t }) {
                 <button
                   type="button"
                   title={t(`person.celebrate.${p.kind}`)}
-                  className={`inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-solid px-3.5 text-[0.75rem] font-semibold text-white shadow-sm transition hover:brightness-110 aria-expanded:brightness-110 ${FOCUS}`}
+                  className={`inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-solid px-3.5 text-[0.75rem] font-semibold text-white shadow-sm transition ${FOCUS}`}
                 >
                   <HugeiconsIcon
                     icon={PartyIcon}

@@ -34,7 +34,7 @@ export function PinnedCard({ item, photo, now, fresh, handoff, todoOpen, onOpen,
     <li className="min-w-0">
       <article
         data-fresh={fresh || undefined}
-        className="ms-surface group/pin relative flex h-full min-w-0 flex-col rounded-[1.5rem] p-4 transition hover:shadow-md motion-safe:hover:-translate-y-0.5"
+        className="ms-surface group/pin relative flex h-full min-w-0 flex-col rounded-[1.5rem] p-4 transition hover:bg-accent/30"
       >
         <header className="flex items-start gap-2.5">
           <PersonPopover person={{ name: item.author, address: item.address }}>
@@ -212,7 +212,7 @@ export function MailRow({ item, photo, now, fresh, handoff, todoOpen, onOpen, on
         {item.preview && (
           <span
             data-private=""
-            className="mt-0.5 block truncate text-[0.78125rem] text-muted-foreground"
+            className="mt-0.5 block truncate text-[0.8125rem] text-muted-foreground"
           >
             {item.preview}
           </span>

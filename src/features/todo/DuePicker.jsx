@@ -33,7 +33,7 @@ function QuickRow({ label, hint, onClick }) {
       className="flex w-full items-center justify-between gap-3 rounded-lg px-2.5 py-2 text-left text-[0.8125rem] outline-none transition hover:bg-accent focus-visible:bg-accent pointer-coarse:min-h-11"
     >
       <span>{label}</span>
-      {hint && <span className="text-[0.71875rem] text-muted-foreground">{hint}</span>}
+      {hint && <span className="text-[0.75rem] text-muted-foreground">{hint}</span>}
     </button>
   )
 }

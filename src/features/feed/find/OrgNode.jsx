@@ -100,7 +100,7 @@ export function OrgFocus({ person, photo, presence }) {
             </p>
           )}
           {where && (
-            <p lang="tr" className="truncate text-[0.71875rem] leading-snug text-foreground/70">
+            <p lang="tr" className="truncate text-[0.75rem] leading-snug text-foreground/70">
               {where}
             </p>
           )}

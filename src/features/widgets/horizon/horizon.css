@@ -48,7 +48,7 @@
   font-size: 1.625rem;
 }
 .hz-tile[data-size="lg"] :is(.hz-month, .hz-year) {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
 }
 /* Sakin karoda ay, takvim yaprağı gibi paletin mürekkebiyle. */
 .hz-tile[data-tone="base"] .hz-month {

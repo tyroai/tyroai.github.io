@@ -45,7 +45,7 @@ export function KindBadge({ kind }) {
     <span
       lang={locale}
       className={cn(
-        "inline-flex shrink-0 items-center gap-1 rounded-full py-0.5 pl-1.5 pr-2 text-[0.65625rem] font-semibold",
+        "inline-flex shrink-0 items-center gap-1 rounded-full py-0.5 pl-1.5 pr-2 text-[0.6875rem] font-semibold",
         spec.badge,
       )}
     >

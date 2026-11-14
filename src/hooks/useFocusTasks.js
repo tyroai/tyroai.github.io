@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+import { fetchFocusTasks } from "@/lib/todoScan"
 import { useMsal } from "@azure/msal-react"
 import { useLocale } from "@/hooks/useLocale"
 import { STATUS, requestGraphScopes } from "@/lib/graph"
@@ -17,13 +18,14 @@ import {
   TODO_SCOPES,
   clearFocusTaskDue,
   createFocusTask,
-  fetchFocusTasks,
   localDayKey,
   setFocusTaskDone,
 } from "@/lib/todo"
 import { adoptTask, keepKeys } from "@/lib/focusAdopt"
 import { notifyTodoChanged, onTodoChanged } from "@/lib/todoSync"
+import { useTodoChangeRefresh } from "@/hooks/useTodoChangeRefresh"
 import { worstFocus } from "@/dev/worstCase/home"
+import { focusSnapshot, keepStale, saveFocusSnapshot } from "@/lib/homeSnapshots"
 import { onSessionClear } from "@/lib/sessionCache"
 
 /**
@@ -66,6 +68,11 @@ const tellWatchers = () => {
 }
 function setCache(next) {
   cache = next
+  // Cihazdaki son görüntü (`lib/homeSnapshots`): hesap kimliği değere yazılmaz.
+  if (next) {
+    const { key: owner, day, tasks, defaultListId, skipped, detail } = next
+    saveFocusSnapshot(owner, { day, tasks, defaultListId, skipped, detail })
+  }
   tellWatchers()
 }
 
@@ -102,14 +109,22 @@ export function useFocusTasks() {
   const key = isMsalConfigured ? (accounts[0]?.homeAccountId ?? null) : null
   const local = useMySpaceTasks()
   const [nonce, setNonce] = useState(0)
+  const bump = useCallback(() => setNonce((n) => n + 1), [])
   // Durum HESAPLA BİRLİKTE tutulur; hesap değişince eski hesabın görevleri
   // yeni oturumda bir kare bile çizilmez (Keşfet kancalarının kuralı).
   const [state, setState] = useState(() => {
     const today = localDayKey()
+    // Bellek boşsa (sayfa yeni açıldı) cihazdaki bugünün görüntüsü; `at: 0` = bayat, yine okunur.
+    if (key && (!cache || cache.key !== key)) {
+      const snap = focusSnapshot(key, today)
+      if (snap) cache = { ...snap, key, at: 0 }
+    }
     return cache && cache.key === key && cache.day === today
       ? {
           key,
           status: "ready",
+          // Görüntüden geldi (`at: 0`): tazeleme hata verirse kart bununla kalır.
+          stale: cache.at === 0,
           tasks: cache.tasks,
           defaultListId: cache.defaultListId,
           skipped: cache.skipped,
@@ -126,13 +141,15 @@ export function useFocusTasks() {
     fetchFocusTasks(instance, account, today).then(async (res) => {
       if (cancelled) return
       if (res.status !== STATUS.ready) {
-        setState({
+        const failed = {
           key,
           status: res.status === STATUS.error ? "error" : "denied",
           tasks: [],
           defaultListId: null,
           detail: res.detail ?? "",
-        })
+        }
+        // Elde bugünün görüntüsü varsa kart onunla kalır (`keepStale`).
+        setState((s) => (s.key === key ? keepStale(s, failed, (p) => p.tasks.length > 0) : failed))
         return
       }
       const { tasks, defaultListId, skipped = 0, detail = "" } = res
@@ -141,6 +158,10 @@ export function useFocusTasks() {
       setCache(
         skipped ? null : { key, day: today, tasks, defaultListId, skipped, detail, at: Date.now() },
       )
+      // Kısmi sonuç bellekte tutulmaz ama bugün için cihazda daha iyi bir görüntü yoksa yazılır:
+      // To Do takılırken (listelerin bir kısmı okunamıyor) bir sonraki açılış iskelet beklemesin.
+      if (skipped && !focusSnapshot(key, today))
+        saveFocusSnapshot(key, { day: today, tasks, defaultListId, skipped, detail })
       // Satır anahtarları korunur (`keepKeys`): tazelenen liste satırları yeniden çizdirmesin.
       setState((s) => ({
         key,
@@ -155,6 +176,9 @@ export function useFocusTasks() {
       cancelled = true
     }
   }, [key, nonce, instance])
+
+  // Başka yüzey yazdıysa açık kart hemen yeniden okur (`useTodoChangeRefresh`).
+  useTodoChangeRefresh("focus", bump, 350)
 
   // Sekmeye dönüşte bayatsa tazele (Outlook'tan eklenen iş karta düşsün).
   useEffect(() => {

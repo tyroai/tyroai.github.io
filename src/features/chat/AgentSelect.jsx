@@ -72,7 +72,7 @@ export function AgentSelect({ value, onChange }) {
         className="w-[min(280px,calc(100vw-2rem))] sm:w-56"
       >
         <DropdownMenuGroup>
-          <DropdownMenuLabel className={`pb-1 text-[0.65625rem] ${BRAND_EYEBROW}`}>
+          <DropdownMenuLabel className={`pb-1 text-[0.6875rem] ${BRAND_EYEBROW}`}>
             {AGENT_BRAND}
           </DropdownMenuLabel>
           {agents.map((agent) => {

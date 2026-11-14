@@ -140,7 +140,7 @@ export function FeedStories({ celebrations, posts, now, onOpen, people, empty, i
                 {t("feed.all")}
               </span>
               {stories.length > 0 && (
-                <span className="-mt-1 text-[0.625rem] tabular-nums text-muted-foreground shortest:hidden">
+                <span className="-mt-1 text-[0.6875rem] tabular-nums text-muted-foreground shortest:hidden">
                   {stories.length}
                 </span>
               )}

@@ -1,0 +1,156 @@
+/* Kişinin dört eylemi (`PersonActions`) ve iletişim satırları (`PersonDetails`): kişi kartı ve
+   Ekibim'in kişi bölmesi paylaşır. Değişkenler (`--pc-*`) köklerde tanımlı (`personCard.css`). */
+
+/* ── Dört eylem: eşit karolar ────────────────────────────────────────────── */
+.pc-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.pc-actions.pc-pad {
+  padding: 0 1rem 0.5rem;
+}
+.pc-act {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.25rem;
+  border-radius: var(--radius-tile);
+  background: var(--pc-soft);
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  font-weight: 500;
+  outline: none;
+  transition:
+    background-color 0.15s ease,
+    transform 0.16s var(--pc-ease);
+}
+.pc-act svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--brand-text);
+}
+.pc-act > span {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ── İletişim satırları ve yönetici ──────────────────────────────────────── */
+.pc-block {
+  padding: 0.25rem 0.5rem;
+}
+.pc-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.pc-row {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-tile);
+  text-align: start;
+  outline: none;
+  transition: background-color 0.12s ease;
+}
+.pc-row[data-static] {
+  user-select: text;
+}
+.pc-row-ic {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-inline: 0.1875rem;
+  color: var(--pc-muted);
+}
+.pc-row-text {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+}
+.pc-label,
+.pc-mgr-title {
+  font-size: var(--text-footnote);
+  line-height: var(--text-footnote--line-height);
+  color: var(--pc-muted);
+}
+.pc-value {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.pc-eyebrow {
+  padding: 0.5rem 0.5rem 0.125rem;
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pc-muted);
+}
+.pc-mgr {
+  width: 100%;
+  min-height: 3.25rem;
+}
+.pc-mgr-avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.pc-mgr-avatar > span[aria-hidden]:first-of-type {
+  font-size: 0.75rem;
+}
+.pc-mgr-name {
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  font-weight: 500;
+}
+.pc-mgr-name,
+.pc-mgr-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.pc-chev {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: var(--pc-muted);
+}
+.pc-copy {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  color: var(--pc-muted);
+  outline: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.pc-copy svg {
+  width: 1rem;
+  height: 1rem;
+  animation: pc-tick 160ms var(--pc-ease);
+}
+.pc-copy[data-copied] {
+  color: var(--success-ink, #059669);
+}
+@keyframes pc-tick {
+  from {
+    opacity: 0;
+    scale: 0.8;
+  }
+}

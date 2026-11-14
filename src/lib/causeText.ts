@@ -60,7 +60,7 @@ const SERVICE_OF = Object.fromEntries(
 
 const POPUP = /user_cancelled|popup_window_error|empty_window_error|monitor_window_timeout/
 const REAUTH =
-  /interaction_required|login_required|invalid_grant|no_tokens_found|AADSTS(50\d{3}|70\d{3}|700\d{3})/
+  /interaction_required|login_required|invalid_grant|no_tokens_found|refresh_token_expired|AADSTS(50\d{3}|70\d{3}|700\d{3})/
 const NO_MAILBOX =
   /MailboxNotEnabledForRESTAPI|MailboxNotSupportedForRESTAPI|ErrorNonExistentMailbox|ErrorMailboxNotFound|ErrorInvalidUser/
 const BUSY = /throttl|TooManyRequests|activityLimitReached|ApplicationThrottled|ErrorServerBusy/i

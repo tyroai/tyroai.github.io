@@ -18,7 +18,7 @@ const fromYmd = (s) => {
  * Otomatik yanıtın ayrıntısı: durum, sıradaki onaylı izin (tarihler ondan gelir, değiştirilebilir),
  * kurum içi metin, "kurum dışına da gönder" ve iki dilli dış metin; *Planla* (izin günü açılır,
  * dönüş sabahı kapanır) · *Şimdi aç* · *Kapat*. Metinler tarih değişince yeniden yazılır, kişi
- * düzenlediyse onunki kalır. Metinler kişisel: Sunum modunda bulanık.
+ * düzenlediyse onunki kalır. Metinler kişisel: Sunum modunda rakamları gizli.
  */
 export function OofDetail() {
   const { t, locale } = useLocale()

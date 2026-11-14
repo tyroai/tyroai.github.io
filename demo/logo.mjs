@@ -1,30 +1,8 @@
 // Logo yazısını "tyra"dan "tyro"ya çevirir: yol verisinde üç alt yol var (t+y, a, r). Ortadaki 'a'
-// atılır, yerine aynı x-yüksekliğinde ve kalınlıkta, italik eğimli bir 'o' halkası konur.
+// atılır; yerine tyra logo üretecinin (masaüstündeki tyra-logo-generator.html) resmi "o" harfi gelir
+// (tyraOffice logosundan; r'den sonraki aralık üretecin bant kuralıyla, ölçek 1.234, taban 793).
 // Yol göreli `m` ile ilerlediği için 'r'nin başlangıcı mutlak koordinata çevrilir.
-const SLANT = 0.19 // italik eğim (~11°)
-
-/** Eğik elips (mutlak koordinatlı 4 kübik Bézier). */
-function oval(cx, cy, rx, ry) {
-  const k = 0.5523
-  const skew = ([x, y]) => [Math.round(x + (cy - y) * SLANT), Math.round(y)]
-  const pts = [
-    [cx + rx, cy],
-    [cx + rx, cy + k * ry],
-    [cx + k * rx, cy + ry],
-    [cx, cy + ry],
-    [cx - k * rx, cy + ry],
-    [cx - rx, cy + k * ry],
-    [cx - rx, cy],
-    [cx - rx, cy - k * ry],
-    [cx - k * rx, cy - ry],
-    [cx, cy - ry],
-    [cx + k * rx, cy - ry],
-    [cx + rx, cy - k * ry],
-    [cx + rx, cy],
-  ].map(skew)
-  const f = (p) => `${p[0]} ${p[1]}`
-  return `M${f(pts[0])}C${f(pts[1])} ${f(pts[2])} ${f(pts[3])}C${f(pts[4])} ${f(pts[5])} ${f(pts[6])}C${f(pts[7])} ${f(pts[8])} ${f(pts[9])}C${f(pts[10])} ${f(pts[11])} ${f(pts[12])}Z`
-}
+const O = "M2152 560c-1-155 116-293 263-333c130-36 279 7 327 144c11 30 15 62 15 94c0 158-125 297-275 332c-129 31-271-16-316-150c-10-28-14-57-14-87zM2642 463c0-19-2-38-8-56c-29-90-131-109-211-78c-93 36-156 133-156 233c0 18 3 37 9 54c29 88 127 107 206 78c94-35 160-132 160-231z"
 
 /** Her alt yolun MUTLAK başlangıç noktası (yalnız M/m, C/c, L/l, H/h, V/v, S/s, Q/q, Z/z). */
 function subpathStarts(d) {
@@ -89,6 +67,5 @@ export function tyroWord(d) {
   }
   // 'r' parçasının ilk komutu göreli `m dx dy`: mutlak `M x y`e çevir
   const r = pieces[2].replace(/^[Mm]\s*-?\d*\.?\d+[\s,]*-?\d*\.?\d+/, `M${starts[2][0]} ${starts[2][1]}`)
-  const ring = oval(2417, 509, 290, 298) + oval(2417, 509, 180, 210)
-  return pieces[0] + r + ring
+  return pieces[0] + r + O
 }

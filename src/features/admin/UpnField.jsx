@@ -157,7 +157,7 @@ export function UpnField({
               )}
             >
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[0.78125rem] font-medium leading-tight">
+                <span className="block truncate text-[0.8125rem] font-medium leading-tight">
                   {p.name}
                 </span>
                 <span className="block truncate text-[0.6875rem] leading-tight text-muted-foreground">
@@ -165,7 +165,7 @@ export function UpnField({
                 </span>
               </span>
               {taken?.has(p.login.toLowerCase()) && (
-                <span className="shrink-0 rounded-full bg-amber-500/12 px-1.5 py-0.5 text-[0.625rem] font-medium text-amber-700 dark:text-amber-400">
+                <span className="shrink-0 rounded-full bg-amber-500/12 px-1.5 py-0.5 text-[0.6875rem] font-medium text-amber-700 dark:text-amber-400">
                   {t("authz.new.hasRecord")}
                 </span>
               )}

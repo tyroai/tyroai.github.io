@@ -8,7 +8,7 @@ import { WidgetEmpty } from "./WidgetEmpty"
 
 // Boş durumun tek düğmesi — Copilot yapılacakları widget'ıyla aynı hap.
 const CTA =
-  "inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-fill-deep px-3.5 text-[0.75rem] font-semibold text-brand-on-brand transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:opacity-60 pointer-coarse:h-11 [&_svg]:size-3.5"
+  "inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-fill-deep px-3.5 text-[0.75rem] font-semibold text-brand-on-brand transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:opacity-60 pointer-coarse:h-11 [&_svg]:size-3.5"
 
 /**
  * Hava kartı — Anasayfa'nın gökyüzü kartı aynen, hücreyi doldurur; başında havanın tek

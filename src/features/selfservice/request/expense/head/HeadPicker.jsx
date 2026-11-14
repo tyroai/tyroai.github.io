@@ -162,7 +162,7 @@ export function HeadPicker({
           target?.focus({ preventScroll: true })
         }}
         className={cn(
-          "flex max-h-[min(26rem,var(--radix-popover-content-available-height))] min-w-(--radix-popover-trigger-width) flex-col gap-0 overflow-hidden rounded-2xl border bg-popover p-0 text-[0.875rem] text-foreground shadow-[0_18px_40px_-14px_rgb(0_0_0/0.28),0_2px_6px_rgb(0_0_0/0.05)] ring-0",
+          "flex max-h-[min(26rem,var(--radix-popover-content-available-height))] min-w-(--radix-popover-trigger-width) flex-col gap-0 overflow-hidden border bg-popover p-0 text-[0.875rem] text-foreground shadow-[0_18px_40px_-14px_rgb(0_0_0/0.28),0_2px_6px_rgb(0_0_0/0.05)] ring-0",
           "border-black/[0.08] dark:border-white/[0.12]",
           className,
         )}

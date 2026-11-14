@@ -108,7 +108,7 @@ export function DiscardConfirm({
               onClick={leave(onKeepDraft)}
               className={cn(
                 BUTTON,
-                "w-full bg-brand-fill-deep text-brand-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.45)] hover:brightness-110 active:scale-[0.98]",
+                "w-full bg-brand-fill-deep text-brand-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.45)] active:scale-[0.98]",
               )}
             >
               <HugeiconsIcon icon={FloppyDiskIcon} aria-hidden="true" strokeWidth={2} />

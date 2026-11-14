@@ -80,11 +80,7 @@ function SummaryContent({ event, t, locale }) {
         title={t("meetingSummary.consent")}
         hint={t("meetingSummary.consentHint")}
       >
-        <button
-          type="button"
-          onClick={res.grant}
-          className={`${BTN} bg-brand-solid text-white hover:brightness-110`}
-        >
+        <button type="button" onClick={res.grant} className={`${BTN} bg-brand-solid text-white`}>
           {t("meetingSummary.allow")}
         </button>
       </StateCard>
@@ -211,7 +207,7 @@ export function MeetingSummaryDialog({ event, onClose }) {
       <DialogContent
         showCloseButton={false}
         aria-describedby={undefined}
-        className="flex h-dvh max-h-dvh w-screen max-w-none flex-col gap-0 overflow-hidden rounded-none p-0 sm:h-auto sm:max-h-[min(46rem,calc(100dvh-3rem))] sm:w-full sm:max-w-[40rem] sm:rounded-2xl sm:p-0"
+        className="flex h-dvh max-h-dvh w-screen max-w-none flex-col gap-0 overflow-hidden max-sm:rounded-none p-0 sm:h-auto sm:max-h-[min(46rem,calc(100dvh-3rem))] sm:w-full sm:max-w-[40rem] sm:p-0"
       >
         {shown && <SummaryContent key={shown.id} event={shown} t={t} locale={locale} />}
       </DialogContent>

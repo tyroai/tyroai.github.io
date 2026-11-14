@@ -80,7 +80,7 @@ export function SenderRows({
                   <PersonAvatar
                     name={g.name}
                     photo={photoFor(g.address)}
-                    className="size-7 text-[0.625rem]"
+                    className="size-7 text-[0.6875rem]"
                   />
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col">

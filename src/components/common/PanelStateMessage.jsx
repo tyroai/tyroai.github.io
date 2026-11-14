@@ -12,7 +12,7 @@ export function PanelStateMessage({ icon, title, body, action, onAction }) {
           strokeWidth={1.5}
         />
       )}
-      <p className="text-[0.78125rem] font-medium text-foreground/80">{title}</p>
+      <p className="text-[0.8125rem] font-medium text-foreground/80">{title}</p>
       {body && (
         <p className="mt-1 text-[0.6875rem] leading-relaxed text-muted-foreground">{body}</p>
       )}
@@ -20,7 +20,7 @@ export function PanelStateMessage({ icon, title, body, action, onAction }) {
         <button
           type="button"
           onClick={onAction}
-          className="mt-3 rounded-md border border-border px-2.5 py-1 text-[0.6875rem] font-medium text-foreground/80 transition hover:bg-accent/60 hover:text-foreground"
+          className="bg-muted mt-3 rounded-full px-2.5 py-1 text-[0.6875rem] font-medium text-foreground/80 transition hover:bg-accent hover:text-foreground"
         >
           {action}
         </button>

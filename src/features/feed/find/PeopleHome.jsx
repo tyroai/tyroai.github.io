@@ -104,7 +104,7 @@ function Departments({ departments }) {
               onClick={() => setPeopleFilter({ kind: "dept", id: d.id, label: d.name })}
               className={cn(
                 "ms-surface flex h-full min-h-16 w-full flex-col items-start justify-between gap-1 rounded-2xl px-3.5 py-3 text-start transition",
-                "hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 motion-reduce:hover:translate-y-0",
+                " focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 hover:bg-accent/30",
               )}
             >
               <span
@@ -113,7 +113,7 @@ function Departments({ departments }) {
               >
                 {d.name}
               </span>
-              <span className="text-[0.71875rem] tabular-nums text-muted-foreground">
+              <span className="text-[0.75rem] tabular-nums text-muted-foreground">
                 {t(pluralKey("find.people.count", locale, d.count), { n: num.format(d.count) })}
               </span>
             </button>

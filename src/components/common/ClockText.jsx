@@ -12,7 +12,7 @@ export function ClockText({ now, locale, className }) {
     <span className={cn("hidden flex-col items-start leading-none md:flex", className)}>
       <time
         dateTime={now.toISOString()}
-        className="whitespace-nowrap text-[0.625rem] font-semibold tabular-nums text-foreground/85"
+        className="whitespace-nowrap text-[0.6875rem] font-semibold tabular-nums text-foreground/85"
       >
         {timeFormatter(locale)
           .formatToParts(now)
@@ -26,7 +26,7 @@ export function ClockText({ now, locale, className }) {
             ),
           )}
       </time>
-      <span className="mt-[0.1875rem] whitespace-nowrap text-[0.625rem] font-semibold text-muted-foreground [&::first-letter]:uppercase">
+      <span className="mt-[0.1875rem] whitespace-nowrap text-[0.6875rem] font-semibold text-muted-foreground [&::first-letter]:uppercase">
         {weekdayShort} {dateShort}
       </span>
     </span>

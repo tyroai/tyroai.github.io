@@ -18,7 +18,8 @@ import "./lookTone.css"
 export function lookTone(id, look) {
   const base = baseLook(look)
   if (base === "dark") return "dark"
-  if (base === "light") return "light"
+  // Hibrit (Karşılama): kart Açık gibi beyaz ada; renkli parçasını kendisi çizer.
+  if (base === "light" || base === "hybrid") return "light"
   if (base === "palette" && !CATALOG[id]?.ownPalette) return "dark"
   return null
 }

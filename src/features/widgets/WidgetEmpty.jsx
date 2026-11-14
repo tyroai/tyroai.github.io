@@ -24,7 +24,7 @@ export function WidgetEmpty({ icon, children, hint, action, className }) {
       </p>
       {hint && (
         // Sabit boylu satırda ipucu en çok üç satır: uzun ipucu kartın altından taşmasın.
-        <p className="line-clamp-3 max-w-[16rem] text-[0.71875rem] leading-snug text-muted-foreground">
+        <p className="line-clamp-3 max-w-[16rem] text-[0.75rem] leading-snug text-muted-foreground">
           {hint}
         </p>
       )}

@@ -20,11 +20,11 @@ function Leaf({ c, zoom, locale, rt, dim }) {
   if (zoom === "day") {
     return (
       <span className="flex flex-col items-center leading-tight">
-        <span className={cn("text-[0.625rem] uppercase", soft)}>
+        <span className={cn("text-[0.6875rem] uppercase", soft)}>
           {weekdayShort(c.from, locale)}
         </span>
         <span className="tabular-nums">{dayToDate(c.from).getDate()}</span>
-        {c.type === "Arife" && <span className="text-[0.625rem] text-warning-ink">½</span>}
+        {c.type === "Arife" && <span className="text-[0.6875rem] text-warning-ink">½</span>}
         {c.type === "Tatil" && <span className="sr-only">{rt("rm.matrix.holiday")}</span>}
       </span>
     )
@@ -33,7 +33,7 @@ function Leaf({ c, zoom, locale, rt, dim }) {
     return (
       <span className="flex flex-col items-center leading-tight">
         <span className="font-semibold">{rt("rm.matrix.week", { n: isoWeek(c.from) })}</span>
-        <span className={cn("text-[0.625rem] tabular-nums", soft)}>{day(c.from, locale)}</span>
+        <span className={cn("text-[0.6875rem] tabular-nums", soft)}>{day(c.from, locale)}</span>
       </span>
     )
   }

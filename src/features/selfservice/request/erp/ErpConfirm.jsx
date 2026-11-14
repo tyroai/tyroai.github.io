@@ -22,7 +22,7 @@ import { ERP_ICON } from "./erpIcon"
 const BUTTON =
   "inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 text-[0.9375rem] font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-70 pointer-coarse:h-12 [&_svg]:size-[1.125rem] [&_svg]:shrink-0"
 const PRIMARY =
-  "bg-brand-fill-deep text-brand-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.45)] hover:brightness-110 active:scale-[0.98]"
+  "bg-brand-fill-deep text-brand-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.45)] active:scale-[0.98]"
 const SECONDARY =
   "border border-border bg-background text-foreground/85 shadow-xs hover:bg-foreground/[0.04] hover:text-foreground"
 const RULE = "border-black/[0.06] dark:border-white/[0.08]"

@@ -181,7 +181,7 @@ export function TaskRow({
           </span>
           {/* Not satırda: metnin kendisi, iki satıra kadar; tamamı ayrıntı panelinde. */}
           {task.note && (
-            <span className="mt-1.5 flex items-start gap-1.5 text-[0.78125rem] leading-snug text-muted-foreground">
+            <span className="mt-1.5 flex items-start gap-1.5 text-[0.8125rem] leading-snug text-muted-foreground">
               <HugeiconsIcon
                 icon={Note01Icon}
                 className="mt-0.5 size-3 shrink-0 opacity-70"
@@ -203,7 +203,7 @@ export function TaskRow({
               onClick={flipSteps}
               aria-expanded={showSteps}
               aria-controls={stepsId}
-              className="inline-flex items-center gap-1.5 rounded-lg px-1 py-0.5 -mx-1 text-[0.71875rem] font-medium text-muted-foreground outline-none transition hover:bg-foreground/[0.05] hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand/30 [@media(pointer:coarse)]:min-h-9"
+              className="inline-flex items-center gap-1.5 rounded-lg px-1 py-0.5 -mx-1 text-[0.75rem] font-medium text-muted-foreground outline-none transition hover:bg-foreground/[0.05] hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand/30 [@media(pointer:coarse)]:min-h-9"
             >
               <HugeiconsIcon
                 icon={CheckListIcon}
@@ -214,7 +214,7 @@ export function TaskRow({
               {showSteps ? t("todo.steps.hide") : t("todo.steps.show")}
               <span
                 className={cn(
-                  "rounded-full px-1.5 text-[0.65625rem] font-semibold tabular-nums",
+                  "rounded-full px-1.5 text-[0.6875rem] font-semibold tabular-nums",
                   stepsDone === steps.length
                     ? "bg-emerald-500/12 text-emerald-700 dark:text-emerald-400"
                     : "bg-foreground/[0.06] text-foreground/70",

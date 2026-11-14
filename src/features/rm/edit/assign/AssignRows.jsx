@@ -33,7 +33,7 @@ function LoadChip({ load, onSuggest }) {
       <button
         type="button"
         onClick={onSuggest}
-        className="h-8 rounded-lg border border-border/80 px-2.5 text-xs font-medium hover:bg-foreground/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11"
+        className="bg-muted h-8 rounded-full px-2.5 text-xs font-medium hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 pointer-coarse:h-11"
       >
         {rt("rm.assign.suggest", { h: load.h })}
       </button>

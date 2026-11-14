@@ -159,7 +159,7 @@ function ReaderSheet({ mail, photo, onOpenChange }) {
                     {mail.fromAddress && mail.fromAddress !== mail.from?.toLowerCase() && (
                       <span
                         data-private=""
-                        className="min-w-0 truncate text-[0.78125rem] text-muted-foreground"
+                        className="min-w-0 truncate text-[0.8125rem] text-muted-foreground"
                       >
                         {"<"}
                         {mail.fromAddress}
@@ -214,7 +214,7 @@ function ReaderSheet({ mail, photo, onOpenChange }) {
               href={mail.webLink ?? "https://outlook.office.com/mail/"}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-brand-solid px-3 text-[0.75rem] font-semibold text-white transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 sm:ms-auto pointer-coarse:h-11"
+              className="inline-flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-brand-solid px-3 text-[0.75rem] font-semibold text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 sm:ms-auto pointer-coarse:h-11"
             >
               <HugeiconsIcon icon={Mail01Icon} className="size-3.5" strokeWidth={2} />
               {t("mail.openOutlook")}

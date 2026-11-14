@@ -35,11 +35,76 @@ export function presenceTone(availability: string | null | undefined): PresenceT
   }
 }
 
-/** Durum metninin anahtarı (dört dilde `control.presence.<ton>`; tercihler kendi adıyla). */
-export const presenceLabelKey = (availability: string | null | undefined): string => {
+/** Teams'in kendi koyduğu etkinlikler: adı durumdan çok şey söyler ("Toplantıda" > "Meşgul"). */
+const ACTIVITIES = new Set([
+  "InAMeeting",
+  "InACall",
+  "InAConferenceCall",
+  "Presenting",
+  "Focusing",
+  "OutOfOffice",
+  "OffWork",
+  "UrgentInterruptionsOnly",
+])
+
+/**
+ * Durum metninin anahtarı (dört dilde): Teams'in kendi etkinliği varsa onun adı
+ * (`control.presence.activity.<etkinlik>`), yoksa tercihler kendi adıyla, ötekiler tonla.
+ */
+export const presenceLabelKey = (
+  availability: string | null | undefined,
+  activity?: string | null,
+): string => {
+  if (activity && ACTIVITIES.has(activity)) return `control.presence.activity.${activity}`
   const a = availability ?? ""
   if ((PRESENCE_CHOICES as readonly string[]).includes(a)) return `control.presence.${a}`
   return `control.presence.tone.${presenceTone(a)}`
+}
+
+export type PresenceReason = "meeting" | "call" | "presenting" | "focusing" | "oof"
+const REASONS: Record<string, PresenceReason> = {
+  InAMeeting: "meeting",
+  InACall: "call",
+  InAConferenceCall: "call",
+  Presenting: "presenting",
+  Focusing: "focusing",
+  OutOfOffice: "oof",
+}
+// Yalnız elle konan durumlar: etkinlik aynı adı taşıyorsa biri seçmiştir. Teams "Meşgul"ü
+// toplantıyla, "Rahatsız etmeyin"i sunum ya da odakla koyar — o zaman etkinliğin adı başkadır.
+const BY_HAND = new Set(["Busy", "DoNotDisturb", "BeRightBack"])
+
+export type PresenceSource =
+  | { by: "focus"; until: number }
+  | { by: "you"; until: number | null }
+  | { by: "teams"; reason: PresenceReason | null }
+
+/**
+ * Durumu şu an kim koyuyor (ürün sahibi: "bu Meşgul'ü ben mi seçtim, Teams mi yapıyor?"):
+ * Odak modu (Teams bağı), TYRO'dan seçilen tercih (`mine`, bitişiyle), Teams'te elle seçilen
+ * ya da Teams'in kendisi (takvim, görüşme, sunum, otomatik yanıt). Graph tercihi ayrıca
+ * söylemiyor; TYRO'nun yazdığı iz ve etkinliğin adı yeter.
+ */
+export function presenceSource({
+  availability,
+  activity,
+  mine,
+  focus,
+  now,
+}: {
+  availability: string | null | undefined
+  activity: string | null | undefined
+  mine: { choice: string; until: number } | null
+  focus: { until: number } | null
+  now: number
+}): PresenceSource {
+  if (focus && focus.until > now && availability === "DoNotDisturb")
+    return { by: "focus", until: focus.until }
+  if (mine && mine.until > now && availability === mine.choice)
+    return { by: "you", until: mine.until }
+  if (activity && activity === availability && BY_HAND.has(activity))
+    return { by: "you", until: null }
+  return { by: "teams", reason: (activity && REASONS[activity]) || null }
 }
 
 /** Tercihin süresi: 1 saat · seçilen saate kadar (`time`) · gün sonuna kadar. */

@@ -11,12 +11,14 @@ import {
 import { extraValue } from "@/lib/selfServiceFields"
 
 /**
- * MASRAF FORMU — Self Servis kaydından. Sohbetteki masraf formundan (HR MCP `expense_form.py`)
- * ayrıştı: görünüm izin formuyla (`leaveFormSheet.js`) aynı dil — içi beyaz kutular, ince
- * çizgiler, renksiz rozet; A4 YATAY ve üstte TYRO'nun üç renkli çubuğu. İmza satırı yok.
+ * MASRAF FORMU — Self Servis kaydından. Sohbetteki masraf formunun (HR MCP
+ * `services/expense_form.py`) AYNISI; biri değişince öteki de değişir. Görünüm izin formuyla
+ * (`leaveFormSheet.js`) aynı dil — içi beyaz kutular, ince çizgiler, renksiz rozet; A4 YATAY ve
+ * üstte TYRO'nun üç renkli çubuğu. İmza satırı yok.
  *
- * Kişi bilgileri izin formuyla aynı kaynaktan (Self Servis profili, yönetici `profile.manager`);
- * değeri olmayan satır basılmaz (boş "—" satırı yok).
+ * Kişi bilgileri izin formuyla aynı kaynaktan (Self Servis profili, yönetici `profile.manager`).
+ * Kişi hücreleri `data-f` taşır (`emp-*` · `mgr-*`): sohbetteki form tyro'da aynı anahtarlarla
+ * Self Servis'in kaynağından tamamlanır (`lib/expenseFormFill.ts`).
  */
 
 const EXPENSE_CSS =
@@ -130,10 +132,14 @@ export function expenseFormData(record, person) {
 }
 
 // İki kutu aynı dört satırı aynı sırayla taşır (yan yana hizalı); bilinmeyen değer "—".
-// Kişi hiç yoksa (yöneticisi atanmamış) kutu basılmaz.
-function personBox(heading, rows) {
-  if (!rows.some(([, value]) => value)) return ""
-  const body = rows.map(([label, value]) => field(label, value ? esc(value) : "—")).join("")
+// Kişi hiç yoksa (yöneticisi atanmamış) kutu basılmaz. `prefix` → hücre anahtarı (`emp-name`…).
+function personBox(heading, prefix, rows) {
+  if (!rows.some(([, , value]) => value)) return ""
+  const body = rows
+    .map(([label, key, value]) =>
+      field(label, value ? esc(value) : "—", { key: `${prefix}-${key}` }),
+    )
+    .join("")
   return `<section class="box"><h2>${heading}</h2>${body}</section>`
 }
 
@@ -160,17 +166,17 @@ export function renderExpenseForm(d) {
   const e = d.employee ?? {}
   const m = d.manager ?? {}
   const people =
-    personBox("Harcamayı Yapan", [
-      ["Ad Soyad", e.name],
-      ["Sicil No", e.personnelNo],
-      ["Bölümü", e.department],
-      ["Pozisyon", e.position],
+    personBox("Harcamayı Yapan", "emp", [
+      ["Ad Soyad", "name", e.name],
+      ["Sicil No", "personnel", e.personnelNo],
+      ["Bölümü", "department", e.department],
+      ["Pozisyon", "position", e.position],
     ]) +
-    personBox("Bağlı Olduğu Kişi", [
-      ["Ad Soyad", m.name],
-      ["Sicil No", m.personnelNo],
-      ["Bölümü", m.department],
-      ["Pozisyon", m.position],
+    personBox("Bağlı Olduğu Kişi", "mgr", [
+      ["Ad Soyad", "name", m.name],
+      ["Sicil No", "personnel", m.personnelNo],
+      ["Bölümü", "department", m.department],
+      ["Pozisyon", "position", m.position],
     ])
   const body =
     `<section class="hero">${hero}</section>` +

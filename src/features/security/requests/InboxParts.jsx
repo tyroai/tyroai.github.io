@@ -135,7 +135,7 @@ export function InboxError({ ctx }) {
         type="button"
         onClick={ctx.reload}
         disabled={ctx.status === "loading"}
-        className={cn(BTN, BTN_QUIET, "border border-border")}
+        className={cn(BTN, BTN_QUIET, "bg-muted")}
       >
         {t("authz.inbox.retry")}
       </button>

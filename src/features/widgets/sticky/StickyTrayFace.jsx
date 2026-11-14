@@ -1,22 +1,27 @@
-import { useEffect, useMemo } from "react"
+import { useEffect } from "react"
 import { useMsal } from "@azure/msal-react"
-import { loadStickyNotes } from "./stickyStore"
+import { currentStickyPeek, setStickyPeek } from "@/lib/stickyCount"
+import { readSnapshot } from "@/lib/snapshot"
+import { PEEK_SNAPSHOT } from "./stickyStore"
+
+// Özet (sayı + renkler) bir hafta geçerli: not metni taşımaz, yalnız rozet ve deste için.
+const PEEK_MAX_AGE = 7 * 24 * 60 * 60 * 1000
 
 /**
- * Yapışkan notların header/çentik yüzünün canlı parçası (`LiveCapsule`): yalnız notları okur ki
- * tepsideki ve çentikteki kâğıt destesi (`headerWidgets/faces/StickyDeck`) gerçek renkleri ve
- * sayıyı göstersin. Görünür bir şey eklemez (çerçeve ve "+" kaldırıldı: deste düğmenin kendisi,
- * yeni not widget'ın penceresinden).
+ * Yapışkan notların header/çentik yüzünün canlı parçası (`LiveCapsule`). OneNote'a İSTEK ATMAZ:
+ * notlar yalnız çentik açılınca okunur (`StickyWidget`). Rozet ve kâğıt destesi
+ * (`headerWidgets/faces/StickyDeck`) cihazdaki son özetle çizilir (`lib/snapshot`); panel açılıp
+ * liste okununca özet tazelenir. Görünür bir şey eklemez.
  */
 export default function StickyTrayFace({ children }) {
-  const { instance, accounts } = useMsal()
-  const account = accounts[0] ?? null
-  const ctx = useMemo(() => ({ instance, account }), [instance, account])
+  const { accounts } = useMsal()
+  const who = accounts[0]?.homeAccountId ?? null
 
-  // Liste açılışta bir kez okunur (5 dk tazeyse yeniden istenmez; yoklama yok).
   useEffect(() => {
-    loadStickyNotes(ctx)
-  }, [ctx])
+    if (currentStickyPeek()) return
+    const saved = readSnapshot(PEEK_SNAPSHOT, who, { maxAgeMs: PEEK_MAX_AGE })
+    if (saved) setStickyPeek(saved.value)
+  }, [who])
 
   return children
 }

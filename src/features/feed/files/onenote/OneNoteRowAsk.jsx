@@ -51,12 +51,12 @@ export function OneNoteRowAsk({ page, title, busy, onAsk }) {
             <HugeiconsIcon icon={Robot01Icon} className="size-4" strokeWidth={1.9} />
           </span>
           <span className="min-w-0">
-            <span className="block text-[0.71875rem] font-semibold leading-tight">
+            <span className="block text-[0.75rem] font-semibold leading-tight">
               {t("files.assistHeader")}
             </span>
             <span
               dir="auto"
-              className="block truncate text-[0.625rem] leading-tight text-muted-foreground"
+              className="block truncate text-[0.6875rem] leading-tight text-muted-foreground"
             >
               {title}
             </span>

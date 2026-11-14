@@ -507,7 +507,7 @@ function ChatMessageInner({ message, onCardAction, onSuggestedAction, onRetry })
               ))}
             </div>
           )}
-          <span className="text-[0.625rem] tabular-nums text-muted-foreground/70">
+          <span className="text-[0.6875rem] tabular-nums text-muted-foreground/70">
             {formatTime(time, locale)}
           </span>
         </div>
@@ -636,9 +636,9 @@ function ChatMessageInner({ message, onCardAction, onSuggestedAction, onRetry })
         {/* Timestamp + copy action row. Copy button always visible on touch
             (no hover-reveal) — matches ChatGPT/Claude mobile pattern. */}
         <div className="mt-0.5 flex items-center gap-1 text-muted-foreground/70">
-          <span className="text-[0.625rem] tabular-nums">{formatTime(time, locale)}</span>
+          <span className="text-[0.6875rem] tabular-nums">{formatTime(time, locale)}</span>
           {message.incomplete && (
-            <span className="inline-flex items-center gap-1 text-[0.625rem] font-medium text-amber-600 dark:text-amber-400">
+            <span className="inline-flex items-center gap-1 text-[0.6875rem] font-medium text-amber-600 dark:text-amber-400">
               <HugeiconsIcon icon={Alert02Icon} className="size-3" strokeWidth={1.8} />
               {t("chat.message.incomplete")}
             </span>
@@ -658,7 +658,7 @@ function ChatMessageInner({ message, onCardAction, onSuggestedAction, onRetry })
               aria-pressed={showChart}
               title={t(showChart ? "chat.chart.hide" : "chat.chart.show")}
               className={cn(
-                "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.625rem] font-medium transition",
+                "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.6875rem] font-medium transition",
                 showChart
                   ? "bg-brand-soft/60 text-brand-deep"
                   : "text-muted-foreground/70 hover:bg-accent/60 hover:text-foreground",

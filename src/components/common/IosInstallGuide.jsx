@@ -33,7 +33,7 @@ export default function IosInstallGuide() {
         <button
           type="button"
           onClick={close}
-          className="h-11 w-full rounded-xl bg-brand-fill-deep text-[0.875rem] font-semibold text-brand-on-brand transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
+          className="h-11 w-full rounded-xl bg-brand-fill-deep text-[0.875rem] font-semibold text-brand-on-brand transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
         >
           {t("pwa.ios.done")}
         </button>
@@ -50,7 +50,7 @@ export default function IosInstallGuide() {
           <li key={step.title} className="flex items-center gap-3 rounded-2xl bg-muted/60 p-3">
             <span className="relative grid size-11 shrink-0 place-items-center rounded-xl bg-card text-foreground shadow-sm ring-1 ring-foreground/5">
               <HugeiconsIcon icon={step.icon} className="size-5" strokeWidth={1.8} />
-              <span className="absolute -start-1.5 -top-1.5 grid size-5 place-items-center rounded-full bg-brand-fill-deep text-[0.625rem] font-bold text-brand-on-brand">
+              <span className="absolute -start-1.5 -top-1.5 grid size-5 place-items-center rounded-full bg-brand-fill-deep text-[0.6875rem] font-bold text-brand-on-brand">
                 {i + 1}
               </span>
             </span>

@@ -22,7 +22,6 @@ import Radio02Icon from "@hugeicons/core-free-icons/Radio02Icon"
 import CdIcon from "@hugeicons/core-free-icons/CdIcon"
 import DiscAlbumIcon from "@hugeicons/core-free-icons/DiscAlbumIcon"
 import CheckmarkBadge03Icon from "@hugeicons/core-free-icons/CheckmarkBadge03Icon"
-import SparklesIcon from "@hugeicons/core-free-icons/SparklesIcon"
 import SunglassesIcon from "@hugeicons/core-free-icons/SunglassesIcon"
 import SunCloud02Icon from "@hugeicons/core-free-icons/SunCloud02Icon"
 import MilestoneIcon from "@hugeicons/core-free-icons/MilestoneIcon"
@@ -42,7 +41,6 @@ import UserGroupIcon from "@hugeicons/core-free-icons/UserGroupIcon"
 export const WIDGET_ICON = {
   weather: SunCloud02Icon,
   "weather-plain": SunCloud02Icon,
-  intro: SparklesIcon,
   ask: Message01Icon,
   help: Idea01Icon,
   brief: CheckmarkBadge03Icon,
@@ -59,6 +57,7 @@ export const WIDGET_ICON = {
   trader: Exchange01Icon,
   "tyro-fx": MoneyExchange02Icon,
   "tyro-translate": TranslationIcon,
+  "tyro-welcome": SunCloud02Icon,
   "region-weather": CloudLittleRainIcon,
   "saved-search": FileSearchIcon,
   onenote: NotebookTabsIcon,

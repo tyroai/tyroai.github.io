@@ -204,7 +204,7 @@ export default function WorldClockDialog({ open, onOpenChange, onCloseAutoFocus 
         showCloseButton={false}
         aria-describedby={undefined}
         onCloseAutoFocus={onCloseAutoFocus}
-        className="flex h-dvh max-h-dvh w-screen max-w-none flex-col gap-0 overflow-hidden rounded-none p-0 sm:h-auto sm:max-h-[min(52rem,calc(100dvh-3rem))] sm:w-full sm:max-w-[min(76rem,calc(100vw-2rem))] sm:rounded-2xl sm:p-0"
+        className="flex h-dvh max-h-dvh w-screen max-w-none flex-col gap-0 overflow-hidden max-sm:rounded-none p-0 sm:h-auto sm:max-h-[min(52rem,calc(100dvh-3rem))] sm:w-full sm:max-w-[min(76rem,calc(100vw-2rem))] sm:p-0"
       >
         <WorldClockBody t={t} locale={locale} />
       </DialogContent>

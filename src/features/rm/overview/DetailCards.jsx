@@ -45,7 +45,7 @@ export function MonthlyCapacityCard({ ov, onPick }) {
               <span
                 className={cn(
                   "tabular-nums",
-                  dense ? "text-[0.625rem]" : "text-[0.6875rem]",
+                  dense ? "text-[0.6875rem]" : "text-[0.6875rem]",
                   level(m.x) === "over" ? "font-semibold text-danger-ink" : "text-muted-foreground",
                 )}
               >

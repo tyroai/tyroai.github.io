@@ -3,6 +3,7 @@ import * as AC from "adaptivecards"
 import MarkdownIt from "markdown-it"
 import { useTheme } from "@/hooks/useTheme"
 import { normalizeBotMarkdown } from "@/features/chat/lib/markdown"
+import { safeExternalUrl } from "@/lib/utils"
 
 // Markdown processor — Copilot Studio TextBlocks frequently contain markdown
 // (**bold**, lists, links). The official renderer leaves text raw unless a
@@ -171,8 +172,9 @@ export function AdaptiveCardView({ card, onAction }) {
     adaptiveCard.hostConfig = buildHostConfig(document.documentElement)
     adaptiveCard.onExecuteAction = (action) => {
       if (action instanceof AC.OpenUrlAction) {
-        const href = action.getHref?.() || action.url
-        if (href) window.open(href, "_blank", "noopener,noreferrer")
+        // Bot'un adresi içerikten gelebilir: `javascript:` gibi şemalar açılmaz.
+        const href = safeExternalUrl(action.getHref?.() || action.url)
+        if (href !== "#") window.open(href, "_blank", "noopener,noreferrer")
         return
       }
       if (action instanceof AC.SubmitAction || action instanceof AC.ExecuteAction) {

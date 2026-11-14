@@ -1,13 +1,18 @@
-import { Component, lazy, Suspense } from "react"
+import { Component, lazy, Suspense, useContext } from "react"
 import { MotionConfig, motion } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import Alert02Icon from "@hugeicons/core-free-icons/Alert02Icon"
+import Cancel01Icon from "@hugeicons/core-free-icons/Cancel01Icon"
+import HelpCircleIcon from "@hugeicons/core-free-icons/HelpCircleIcon"
 import InformationCircleIcon from "@hugeicons/core-free-icons/InformationCircleIcon"
 import Tick02Icon from "@hugeicons/core-free-icons/Tick02Icon"
 import { cn } from "@/lib/utils"
+import { LocaleContext } from "@/providers/LocaleProvider"
 import { ArcSpinner } from "./ArcSpinner"
 import {
   TOAST_BUTTON_GHOST,
+  TOAST_BUTTON_PRIMARY,
+  TOAST_CLOSE,
   TOAST_GLYPH_BOX,
   TOAST_GLYPH_GLOW,
   TOAST_GLYPH_WRAP,
@@ -17,7 +22,8 @@ import {
 /**
  * Uygulamanın bildirim kartı: veri yenilemesi (`startRefreshToast`) ve tek atımlık sonuçlar
  * (`showResultToast`, `notify.*`) hep bunu çizer. Durumlar: loading · success · info ·
- * warning · error. Gerekçeler: docs/design-system.md › Bildirimler.
+ * warning · error · ask (soru: konunun simgesi, dolu onay + "Şimdi değil"). Gerekçeler: docs/design-system.md › Bildirimler.
+ * `onClose` verilirse sağ üstte kapatma çarpısı: sürükleyip atmayı bilmeyen de kapatabilsin.
  *
  * Koyu cam yüzey iki temada da aynı: açık sayfada bir bakışta seçilir, koyu sayfaya da uyar.
  * Kök `.dark` + `data-palette` taşır: içerideki token'lar (marka mürekkebi `--brand-text`,
@@ -35,7 +41,12 @@ const TONE = {
   warning: { glow: "bg-amber-400/25", ink: "text-amber-400" },
   error: { glow: "bg-destructive/30", ink: "text-destructive" },
 }
-const ICON = { info: InformationCircleIcon, warning: Alert02Icon, error: Alert02Icon }
+const ICON = {
+  info: InformationCircleIcon,
+  warning: Alert02Icon,
+  error: Alert02Icon,
+  ask: HelpCircleIcon,
+}
 
 // Rozet rem ile ölçülür ve fareli alçak pencerede kök yazı 12,8 px'e iner (theme.css);
 // orb ve maskot piksel alıyor, aynı oranda küçülmezlerse rozetin dışına taşıyorlar.
@@ -120,7 +131,7 @@ function Mascot({ paletteId, zoom }) {
   )
 }
 
-function Glyph({ state, label, paletteId }) {
+function Glyph({ state, label, paletteId, icon }) {
   const tone = TONE[state] ?? TONE.brand
   const zoom = rootScale()
   return (
@@ -132,7 +143,7 @@ function Glyph({ state, label, paletteId }) {
         ) : state === "success" ? (
           <Mascot paletteId={paletteId} zoom={zoom} />
         ) : (
-          <StateIcon key={state} icon={ICON[state] ?? InformationCircleIcon} />
+          <StateIcon key={state} icon={icon ?? ICON[state] ?? InformationCircleIcon} />
         )}
       </span>
     </div>
@@ -146,7 +157,13 @@ export function DataRefreshToast({
   current = 0,
   total = 0,
   action,
+  secondary,
+  icon,
+  onClose,
 }) {
+  const ask = state === "ask"
+  // Bağlam doğrudan okunur (kanca sarmalayıcısı yok): sağlayıcı bulunamazsa bildirim yine çizilir.
+  const closeLabel = useContext(LocaleContext)?.t?.("toast.close") ?? "Kapat"
   const pct = total > 0 ? Math.min(100, Math.round((current / total) * 100)) : 0
   const showBar = state === "loading" && total > 0
   // Palet sağlayıcı kancasıyla değil öznitelikten: kart sonner'ın ağacında çiziliyor ve
@@ -159,17 +176,18 @@ export function DataRefreshToast({
       {/* Kökte `role` yok: sonner her bildirimi zaten `aria-live` bir bölgede çiziyor;
           iç içe canlı bölge bazı ekran okuyucularda metni iki kez okutur. */}
       <div data-palette={paletteId} className={cn(TOAST_SURFACE, "dark")}>
-        <Glyph state={state} label={title} paletteId={paletteId} />
+        <Glyph state={state} label={title} paletteId={paletteId} icon={icon} />
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-baseline justify-between gap-3">
+          {/* Çarpı kartın köşesinde; başlık satırı onun altına girmesin diye sağdan pay bırakır. */}
+          <div className={cn("flex items-baseline justify-between gap-3", onClose && "pe-6")}>
             {/* Başlık da kırpılmaz: açıklamasız bildirimde mesajın tamamı başlıkta duruyor
                 (hata metinlerinin çoğu böyle) ve kesilen yer yönlendirmenin kendisiydi. */}
             <p className="min-w-0 text-[0.9375rem] leading-snug font-semibold tracking-tight text-white [overflow-wrap:anywhere]">
               {title}
             </p>
             {showBar && (
-              <span className="shrink-0 text-[0.78125rem] font-semibold tabular-nums text-white/70">
+              <span className="shrink-0 text-[0.8125rem] font-semibold tabular-nums text-white/70">
                 {current}
                 <span className="text-white/50">/{total}</span>
               </span>
@@ -182,7 +200,7 @@ export function DataRefreshToast({
           {detail && (
             <p
               className={cn(
-                "mt-1 text-[0.78125rem] leading-snug [overflow-wrap:anywhere]",
+                "mt-1 text-[0.8125rem] leading-snug [overflow-wrap:anywhere]",
                 state === "error" ? "select-text text-destructive" : "text-white/60",
               )}
             >
@@ -191,14 +209,22 @@ export function DataRefreshToast({
           )}
 
           {/* Eylem ("Tekrar dene", "Geri al"): kullanıcıyı bildirimle çaresiz bırakmamak için. */}
+          {/* Soru bildiriminde onay dolu, vazgeç çerçeveli: bilgi kartının tek gri düğmesinden ayrılsın. */}
           {action && state !== "loading" && (
-            <button
-              type="button"
-              onClick={action.onClick}
-              className={cn("mt-2.5", TOAST_BUTTON_GHOST)}
-            >
-              {action.label}
-            </button>
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={action.onClick}
+                className={ask ? TOAST_BUTTON_PRIMARY : TOAST_BUTTON_GHOST}
+              >
+                {action.label}
+              </button>
+              {secondary && (
+                <button type="button" onClick={secondary.onClick} className={TOAST_BUTTON_GHOST}>
+                  {secondary.label}
+                </button>
+              )}
+            </div>
           )}
 
           {showBar && (
@@ -223,6 +249,18 @@ export function DataRefreshToast({
             </div>
           )}
         </div>
+
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={closeLabel}
+            title={closeLabel}
+            className={TOAST_CLOSE}
+          >
+            <HugeiconsIcon icon={Cancel01Icon} className="size-4" strokeWidth={2} />
+          </button>
+        )}
       </div>
     </MotionConfig>
   )

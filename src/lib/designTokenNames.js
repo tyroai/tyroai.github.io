@@ -31,7 +31,9 @@ export const DESIGN_TOKEN_NAMES = {
   ],
   "radius": [
     "card",
-    "tile"
+    "tile",
+    "menu",
+    "panel"
   ],
   "container": [
     "page",

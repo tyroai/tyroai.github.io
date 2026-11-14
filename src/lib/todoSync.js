@@ -7,7 +7,8 @@
  * bugünün işi Akışım'a dönünce ORADA görünmeli (istek, 2026-09-30: *"akışımda
  * günün odağında girdiklerimizi orada görelim"*) — önbellek tazeyken Akışım onu
  * bir dakika boyunca göstermezdi. Yazan taraf `notifyTodoChanged(kaynak)` der,
- * öteki kendi önbelleğini bayat sayar ve bir sonraki açılışta yeniden okur.
+ * öteki kendi önbelleğini bayat sayar; ekranda açık duran kanca da hemen yeniden okur (Hızlı
+ * görevle eklenen iş Anasayfa'daki karta sayfa yenilenmeden düşsün).
  *
  * Yaprak modül: hiçbir şey import etmez — iki kanca birbirini import etseydi
  * döngü olurdu.

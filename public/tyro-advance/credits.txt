@@ -1,0 +1,77 @@
+TYRO — iş avansı, izin ve masraf akışlarındaki fotoğraflar
+Kaynak: Wikimedia Commons. Her fotoğraf kare kırpıldı ve 240 px'e küçültüldü.
+Photos from Wikimedia Commons; each was cropped to a square and resized to 240 px.
+Kırpılmış sürümler özgün fotoğrafla aynı lisansla paylaşılır. / The cropped versions are shared under the same licence as the originals.
+
+Taşköprü (adana.webp)
+  Dosya / File: Taşköprü (Adana) (3).jpg
+  Fotoğraf / Author: Radosław Botev
+  Lisans / License: CC BY 3.0 pl — https://creativecommons.org/licenses/by/3.0/pl/
+  https://commons.wikimedia.org/wiki/File:Ta%C5%9Fk%C3%B6pr%C3%BC_(Adana)_(3).jpg
+
+Anıtkabir (ankara.webp)
+  Dosya / File: Anıtkabir in November 2025.jpg
+  Fotoğraf / Author: Mehman
+  Lisans / License: CC BY-SA 4.0 — https://creativecommons.org/licenses/by-sa/4.0/
+  https://commons.wikimedia.org/wiki/File:An%C4%B1tkabir_in_November_2025.jpg
+
+Saat Kulesi (balikesir.webp)
+  Dosya / File: Balıkesir saat kulesi.JPG
+  Fotoğraf / Author: Ollios
+  Lisans / License: CC BY-SA 3.0 — https://creativecommons.org/licenses/by-sa/3.0/
+  https://commons.wikimedia.org/wiki/File:Bal%C4%B1kesir_saat_kulesi.JPG
+
+Selimiye Camii (edirne.webp)
+  Dosya / File: Selimiye Mosque in Edirne 01.jpg
+  Fotoğraf / Author: BuhaM
+  Lisans / License: CC BY-SA 4.0 — https://creativecommons.org/licenses/by-sa/4.0/
+  https://commons.wikimedia.org/wiki/File:Selimiye_Mosque_in_Edirne_01.jpg
+
+Gaziantep Kalesi (gaziantep.webp)
+  Dosya / File: AntepKale2 (cropped).jpg
+  Fotoğraf / Author: Klaus-Peter Simon
+  Lisans / License: CC BY-SA 3.0 — https://creativecommons.org/licenses/by-sa/3.0/
+  https://commons.wikimedia.org/wiki/File:AntepKale2_(cropped).jpg
+
+Galata Kulesi (istanbul.webp)
+  Dosya / File: Galata tower 01 23.jpg
+  Fotoğraf / Author: GrandEscogriffe
+  Lisans / License: CC BY-SA 4.0 — https://creativecommons.org/licenses/by-sa/4.0/
+  https://commons.wikimedia.org/wiki/File:Galata_tower_01_23.jpg
+
+Saat Kulesi (izmir.webp)
+  Dosya / File: İzmir Clock Tower, December 2018.jpg
+  Fotoğraf / Author: BSRF
+  Lisans / License: CC BY-SA 4.0 — https://creativecommons.org/licenses/by-sa/4.0/
+  https://commons.wikimedia.org/wiki/File:%C4%B0zmir_Clock_Tower,_December_2018.jpg
+
+Zinciriye Medresesi (mardin.webp)
+  Dosya / File: MardinSultanIsaDomes.jpg
+  Fotoğraf / Author: Doron
+  Lisans / License: CC BY-SA 3.0 — https://creativecommons.org/licenses/by-sa/3.0/
+  https://commons.wikimedia.org/wiki/File:MardinSultanIsaDomes.jpg
+
+Kızkalesi (mersin.webp)
+  Dosya / File: Korykos - Kızkalesi 01 (cropped).jpg
+  Fotoğraf / Author: Zeynel Cebeci
+  Lisans / License: CC BY-SA 4.0 — https://creativecommons.org/licenses/by-sa/4.0/
+  https://commons.wikimedia.org/wiki/File:Korykos_-_K%C4%B1zkalesi_01_(cropped).jpg
+
+Balıklıgöl (sanliurfa.webp)
+  Dosya / File: Balıklıgöl, Urfa 2015.jpg
+  Fotoğraf / Author: Hamdigumus
+  Lisans / License: CC0 — https://creativecommons.org/publicdomain/zero/1.0/
+  https://commons.wikimedia.org/wiki/File:Bal%C4%B1kl%C4%B1g%C3%B6l,_Urfa_2015.jpg
+
+Sümela Manastırı (trabzon.webp)
+  Dosya / File: Sumela From Across Valley.JPG
+  Fotoğraf / Author: Bjørn Christian Tørrissen
+  Lisans / License: CC BY-SA 3.0 — https://creativecommons.org/licenses/by-sa/3.0/
+  https://commons.wikimedia.org/wiki/File:Sumela_From_Across_Valley.JPG
+
+— İzin türleri ve masraf kategorileri / Leave kinds and expense categories —
+
+3B illüstrasyonlar (leave/*.webp, expense/*.webp): Microsoft Fluent Emoji
+  https://github.com/microsoft/fluentui-emoji
+  Lisans / License: MIT — Copyright (c) Microsoft Corporation.
+  240 px WebP'ye küçültüldü. / Resized to 240 px WebP.

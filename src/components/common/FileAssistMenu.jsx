@@ -40,8 +40,8 @@ function AssistMenuItem({ icon, title, desc, onSelect }) {
         <HugeiconsIcon icon={icon} className="size-4" strokeWidth={1.8} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[0.78125rem] font-semibold leading-tight">{title}</span>
-        <span className="mt-0.5 block text-[0.65625rem] leading-snug text-muted-foreground">
+        <span className="block text-[0.8125rem] font-semibold leading-tight">{title}</span>
+        <span className="mt-0.5 block text-[0.6875rem] leading-snug text-muted-foreground">
           {desc}
         </span>
       </span>
@@ -91,10 +91,10 @@ export function FileAssistMenu({ item, onAsk, onMail, triggerClassName, onEscape
             <HugeiconsIcon icon={Robot01Icon} className="size-4" strokeWidth={1.9} />
           </span>
           <span className="min-w-0">
-            <span className="block text-[0.71875rem] font-semibold leading-tight">
+            <span className="block text-[0.75rem] font-semibold leading-tight">
               {t("files.assistHeader")}
             </span>
-            <span className="block truncate text-[0.625rem] leading-tight text-muted-foreground">
+            <span className="block truncate text-[0.6875rem] leading-tight text-muted-foreground">
               {item.name}
             </span>
           </span>

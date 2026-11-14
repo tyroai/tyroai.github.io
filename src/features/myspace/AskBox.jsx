@@ -1,185 +1,43 @@
-import { useLayoutEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import ArrowUp02Icon from "@hugeicons/core-free-icons/ArrowUp02Icon"
-import Beach02Icon from "@hugeicons/core-free-icons/Beach02Icon"
 import BubbleChatIcon from "@hugeicons/core-free-icons/BubbleChatIcon"
-import Calendar03Icon from "@hugeicons/core-free-icons/Calendar03Icon"
-import CalendarAdd01Icon from "@hugeicons/core-free-icons/CalendarAdd01Icon"
 import Cancel01Icon from "@hugeicons/core-free-icons/Cancel01Icon"
-import Invoice03Icon from "@hugeicons/core-free-icons/Invoice03Icon"
-import MoneyReceive01Icon from "@hugeicons/core-free-icons/MoneyReceive01Icon"
 import PencilEdit02Icon from "@hugeicons/core-free-icons/PencilEdit02Icon"
-import Sun03Icon from "@hugeicons/core-free-icons/Sun03Icon"
-import SunriseIcon from "@hugeicons/core-free-icons/SunriseIcon"
-import SunsetIcon from "@hugeicons/core-free-icons/SunsetIcon"
-import { agentOpenByName, useAgentAccess } from "@/hooks/useAgentAccess"
-import { useConfig } from "@/hooks/useConfig"
 import { useLocale } from "@/hooks/useLocale"
-import { usePromptTemplate } from "@/hooks/usePromptTemplate"
-import { setPendingAsk, requestOpenChat } from "@/lib/chatBus"
 import { cn } from "@/lib/utils"
-import { isTemplate } from "@/lib/promptTemplates"
+import { OFFICE, useAskBox } from "./hooks/useAskBox"
 import { PromptTile } from "./PromptTile"
 import { TemplatePrompt } from "./TemplatePrompt"
 import { TranslateButton } from "./translate/TranslateButton"
 import { useStableTileRows } from "./useStableTileRows"
 
 /**
- * Hazır sorular. `agent` bir AD (GUID değil — Dataverse ortamları arasında
- * değişiyor); `ChatScreen` adı normalize edip çözüyor, bulamazsa 5 sn bekleyip
- * mevcut asistana düşüyor.
- *
- * ⚠️ **TOPLANTI ve POSTA ÖZETİ ÇİPİ YOK**: bugünün toplantılarını ve postalarını
- * balonun cümlesi zaten söylüyor — üstüne gelince ilk üçü de açılıyor.
- * ⚠️ **GÜNÜN ÖZETİ ile HAFTALIK ÖZET yan yana**: biri BUGÜNÜ, öteki HAFTAYI
- * anlatıyor. Haftalık özet gün özeti gibi ısıtılmıyor — haftada bir sorulan bir
- * soru için her açılışta bir tur harcamak, gün özetinin bile ölçülerek
- * daraltılan bedeli.
- * ⚠️ Bütün kutucuklar birincil asistan tyroOffice'e gider (İK soruları dahil: izin, masraf,
- * avans araçları onda). Eşleşme "Office" anahtarıyla (`lib/agentName.js`); "İzin bakiyem" Trader'a
- * düşerse cevapsız kalırdı.
+ * Anasayfa'nın soru kutusu KART görünümü (widget ve eski sabit düzen) ve altındaki hazır istem
+ * kutucukları. Mantık `hooks/useAskBox`ta; sayfanın altındaki yüzen çubuk (`shelf/DockAsk`) aynı
+ * kancayı kendi görünümüyle çizer.
  */
-const OFFICE = "tyroOffice"
-const CHIPS_LEAD = [{ k: "weekSummary", agent: OFFICE, icon: Calendar03Icon }]
-const CHIPS_HR = [
-  { k: "leaveBalance", agent: OFFICE, icon: Beach02Icon },
-  { k: "leaveRequest", agent: OFFICE, icon: CalendarAdd01Icon },
-  { k: "expense", agent: OFFICE, icon: Invoice03Icon },
-  { k: "advance", agent: OFFICE, icon: MoneyReceive01Icon },
-]
-
-/**
- * Kutucuk gösterilsin mi: asistanı katalogda var ve kişiye kilitliyse hayır (soru kilitli
- * asistana gidemez). Adı katalogda yoksa kutucuk kalır — soru açık asistana düşer ve cevaplanır.
- */
-function useChipAccess() {
-  const { agents } = useConfig()
-  const { openAgents, ready } = useAgentAccess()
-  return (name) => agentOpenByName(name, { agents, openAgents, ready })
-}
-
-/**
- * Anasayfa'nın soru kutusu ve altındaki hazır istem kutucukları.
- *
- * ⚠️ **SORU BURADA CEVAPLANMAZ, SOHBETE PARK EDİLİR.** `setPendingAsk` ile
- * sohbete bırakılıyor ve RIHTIM açılıyor: cevap gerçek asistandan geliyor,
- * sayfa da yerinde kalıyor (header panellerindeki "sor" yolunun aynısı).
- * Rıhtım zaten açıksa da teslim ediliyor — `ChatScreen` her açılma olayında
- * park edilmiş soruya yeniden bakıyor.
- */
-export function AskBox({ briefCta, onNewChat }) {
+export function AskBox({ briefCta, onNewChat, onCommand = null, placeholder = null }) {
   const { t } = useLocale()
-  const [prompt, setPrompt] = useState("")
-  // Çipin asistanı. Kutu boşalınca düşer — elle yazılan yeni bir soru çipin
-  // asistanına gitmesin.
-  const [chipAgent, setChipAgent] = useState(null)
-  const inputRef = useRef(null)
-  const formRef = useRef(null)
-  // DOLDURULAN HAZIR SORU (İzin talebi): metin kutusunun YERİNE alanlı cümle
-  // (`TemplatePrompt`). Durum sohbet bestecisiyle ORTAK kancada.
-  const draft = usePromptTemplate(formRef)
-  const { tpl, setTpl } = draft
-  const chipOpen = useChipAccess()
+  const {
+    prompt,
+    setPrompt,
+    setChipAgent,
+    inputRef,
+    formRef,
+    draft,
+    tpl,
+    chips,
+    choose,
+    chipOpen,
+    send,
+    park,
+    editTemplateAsText,
+    clearTemplate,
+  } = useAskBox({ briefCta, onNewChat, onCommand })
   // Kutucuklar kutu uzayınca küçülmez (aşağıda, ızgara).
   const groupRef = useRef(null)
   const rowStyle = useStableTileRows(groupRef, !tpl && !prompt)
-
-  // ⚠️ KUTU İÇERİĞE GÖRE BÜYÜR: boşken TEK satır, metin uzadıkça aşağı doğru en
-  // çok beş satıra. `field-sizing: content` Safari'de yok; yükseklik her
-  // değişimde `scrollHeight`ten kuruluyor.
-  useLayoutEffect(() => {
-    const el = inputRef.current
-    if (!el) return
-    const cs = getComputedStyle(el)
-    const line = parseFloat(cs.lineHeight) || 20
-    const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
-    const borderY = parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth)
-    // Boş kutu tek satır (`rows={1}`): `scrollHeight` okumak açılışta sayfayı zorla yerleştirirdi.
-    // Değer onunla aynı: `scrollHeight` tam sayıya yuvarlanmış satır + dolgu.
-    if (!prompt) {
-      el.style.height = `${Math.max(Math.round(line + padY) - padY, line) + padY + borderY}px`
-      el.style.overflowY = "hidden"
-      return
-    }
-    el.style.height = "auto"
-    const content = el.scrollHeight - padY
-    // `border-box` (Tailwind'in temeli): yükseklik dolguyu ve kenarlığı içerir.
-    el.style.height = `${Math.min(Math.max(content, line), line * 5) + padY + borderY}px`
-    el.style.overflowY = content > line * 5 ? "auto" : "hidden"
-  }, [prompt])
-
-  function send(e) {
-    e?.preventDefault()
-    if (tpl) {
-      // Eksik zorunlu alanla gönderilmez: kanca o alanı açar ya da odaklar.
-      const question = draft.submit()
-      if (!question) return
-      setPendingAsk(tpl.agent ? { question, agent: tpl.agent } : { question })
-      requestOpenChat({})
-      setTpl(null)
-      return
-    }
-    const question = prompt.trim()
-    if (!question) return
-    park(question, chipAgent)
-  }
-
-  /** Soruyu sohbete bırakır, rıhtımı açar ve kutuyu boşaltır. */
-  function park(question, agent) {
-    setPendingAsk(agent ? { question, agent } : { question })
-    requestOpenChat({})
-    setPrompt("")
-    setChipAgent(null)
-  }
-
-  /**
-   * ⚠️ **İMLEÇ SONA DEĞİL, İLK `[YER TUTUCUYA]`**: sona konan imleçte uzun bir
-   * şablonun başı görünmezdi. Şablon bir `[tutar]` taşıyorsa o parça SEÇİLİ
-   * gelir, yazmaya başlayan onun yerine yazar (sohbet bestecisinin
-   * `selectPlaceholder` davranışı).
-   */
-  function suggest(text, agent) {
-    setTpl(null)
-    setPrompt(text)
-    setChipAgent(agent ?? null)
-    requestAnimationFrame(() => {
-      const el = inputRef.current
-      if (!el) return
-      el.focus()
-      const slot = /\[[^\]]+\]/.exec(text)
-      if (slot) el.setSelectionRange(slot.index, slot.index + slot[0].length)
-      else el.setSelectionRange(text.length, text.length)
-      el.scrollTop = 0
-    })
-  }
-
-  /** Çip: şablonu olan soru alanlı cümle açar, olmayan metni kutuya koyar. */
-  function pick(k, agent) {
-    // Açık şablonun çipine tekrar basmak seçilen alanları sıfırlamaz.
-    if (tpl?.key === k) return
-    if (!isTemplate(k)) {
-      suggest(t(`myspace.prompt.${k}`), agent)
-      return
-    }
-    setPrompt("")
-    setChipAgent(null)
-    draft.start(k, { agent: agent ?? null })
-  }
-
-  /** Alanlı cümleyi serbest metne çevirir; seçilenler yerinde, boşlar `[etiket]`. */
-  function editTemplateAsText() {
-    if (!tpl) return
-    suggest(draft.asText(), tpl.agent)
-  }
-
-  /** Şablonu kapatır, kutuyu boşaltır ve odağı metin kutusuna verir — şablonun
-   *  cümlesi klavyeyle silinemiyor. */
-  function clearTemplate() {
-    setTpl(null)
-    setPrompt("")
-    setChipAgent(null)
-    requestAnimationFrame(() => inputRef.current?.focus())
-  }
 
   return (
     <>
@@ -265,7 +123,7 @@ export function AskBox({ briefCta, onNewChat }) {
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) send(e)
             }}
-            placeholder={t("myspace.ask.placeholder")}
+            placeholder={placeholder ?? t("myspace.ask.placeholder")}
             className="block min-w-0 flex-1 resize-none bg-transparent py-2 text-[0.875rem] leading-5 outline-none placeholder:text-muted-foreground/70"
           />
         )}
@@ -302,38 +160,15 @@ export function AskBox({ briefCta, onNewChat }) {
         style={rowStyle}
         className="-mx-0.5 -mb-0.5 mt-3.5 grid grid-cols-2 gap-2 p-0.5 @[34rem]/hero:grid-cols-3 @[60rem]/myspace:min-h-0 @[60rem]/myspace:flex-1 @[60rem]/myspace:auto-rows-[minmax(var(--tile-row,2.75rem),1fr)] @[60rem]/myspace:overflow-y-auto @[60rem]/myspace:overscroll-contain"
       >
-        {/* ⚠️ "GÜNÜN ÖZETİ" HER ZAMAN İLK KUTUCUK. Pencere AÇIKKEN (06–11 ·
-            16–24, yönetici) önceden hazırlanmış özet: marka tonu, sohbeti
-            doğrudan açar ve gönderdiği metin dashboard'un düğmesiyle AYNI
-            kancadan (`briefCta.ask`) — ısıtılmış cevabı devralmak için AYNI soru
-            olmak zorunda. KAPALIYKEN öteki şablonlar gibi istemi kutuya doldurur
-            ve tyroOffice'e gider; altı kutucuk iki sütuna yetimsiz oturur. */}
-        {!chipOpen(OFFICE) ? null : briefCta.brief ? (
+        {chips.map((c) => (
           <PromptTile
-            tone="brand"
-            icon={
-              String(briefCta.brief.windowId ?? "").endsWith("morning") ? SunriseIcon : SunsetIcon
-            }
-            label={t("myspace.chip.brief")}
-            onClick={() => onNewChat(briefCta.ask)}
+            key={c.k}
+            tone={c.tone}
+            icon={c.icon}
+            label={c.label}
+            onClick={() => choose(c)}
           />
-        ) : (
-          <PromptTile
-            icon={Sun03Icon}
-            label={t("myspace.chip.brief")}
-            onClick={() => pick("daySummary", OFFICE)}
-          />
-        )}
-        {[...CHIPS_LEAD, ...CHIPS_HR]
-          .filter((c) => chipOpen(c.agent))
-          .map(({ k, agent, icon }) => (
-            <PromptTile
-              key={k}
-              icon={icon}
-              label={t(`myspace.chip.${k}`)}
-              onClick={() => pick(k, agent)}
-            />
-          ))}
+        ))}
       </div>
     </>
   )

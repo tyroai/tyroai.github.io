@@ -48,11 +48,7 @@ export function TranslateButton({ text, onPark }) {
           <HugeiconsIcon icon={TranslateIcon} className="size-[1.125rem]" strokeWidth={1.8} />
         </button>
       </PopoverTrigger>
-      <PopoverContent
-        align="end"
-        sideOffset={8}
-        className="w-80 gap-2.5 rounded-2xl p-3 text-[0.8125rem]"
-      >
+      <PopoverContent align="end" sideOffset={8} className="w-80 gap-2.5 p-3 text-[0.8125rem]">
         <TranslateResult text={text.trim()} tr={tr} onPark={onPark} />
       </PopoverContent>
     </Popover>

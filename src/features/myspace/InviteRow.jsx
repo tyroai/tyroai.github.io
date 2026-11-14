@@ -30,15 +30,18 @@ export function InviteRow({ invite, fmt, pending, onAnswer, open, onOpenChange, 
 
   return (
     <EventSidePreview event={invite} open={open} onOpenChange={onOpenChange} mobile={mobile}>
-      {(wrap) => (
+      {(wrap, hover) => (
         // Kartın tamamı önizlemeyi açar (konu düğmesinin `::after`'ı kartı
         // kaplar); yanıt simgeleri onun üstünde, kendi başına basılır.
-        <li className="group/inv relative flex items-start gap-3 rounded-xl bg-white/[0.05] p-3 ring-1 ring-white/[0.08] transition-colors focus-within:bg-white/[0.08] hover:bg-white/[0.08] has-[[data-state=open]]:bg-white/[0.1] has-[[data-state=open]]:ring-white/25">
+        <li
+          {...hover}
+          className="group/inv relative flex items-start gap-3 rounded-xl bg-white/[0.05] p-3 ring-1 ring-white/[0.08] transition-colors focus-within:bg-white/[0.08] hover:bg-white/[0.08] has-[[data-state=open]]:bg-white/[0.1] has-[[data-state=open]]:ring-white/25"
+        >
           <span
             aria-hidden="true"
             className="flex w-11 shrink-0 flex-col items-center rounded-lg bg-white/10 py-1.5 leading-none"
           >
-            <span className="text-[0.625rem] font-semibold uppercase tracking-wide text-[color-mix(in_oklch,var(--brand-to)_62%,white)]">
+            <span className="text-[0.6875rem] font-semibold uppercase tracking-wide text-[color-mix(in_oklch,var(--brand-to)_62%,white)]">
               {fmt.month.format(invite.start)}
             </span>
             <span className="mt-1 text-[1.0625rem] font-semibold tabular-nums">

@@ -1,0 +1,335 @@
+/* İş avansı akışı (`AdvanceFlow`, deneysel): ölçüler onaylanan referanstan (uçuş arama ekranı) —
+   kubbe panelin ~%74'ü, cümle 24/46, kartlar 28 px köşe, gönder 60 px siyah kapsül. Renk sayfadan:
+   referansın mavisi yerine paletin tonu (kubbe, davet sözcükleri, iğne). */
+.af-window {
+  width: min(34rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  overflow: hidden auto;
+}
+.af {
+  /* Referansın küre mavisi: harita ve deniz gerçekçi dursun diye palet yerine sabit ton (ürün
+     sahibinin isteği: referansla aynı görünüm). Davet sözcükleri, iğne ve seçimler de bu tonda. */
+  --af-accent: #2b84c6;
+  --af-sea-top: #9cc2e9;
+  --af-sea-mid: #bfd8f1;
+  --af-haze: #ffffff;
+  --af-rim: #8db5e1;
+  --af-land: #5a8dca;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.75rem 1.75rem;
+  container: af / inline-size;
+}
+
+/* ---------- Üst sıra: amaç hapı + ödeme ---------- */
+.af-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.af-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  height: 2.5rem;
+  padding-inline: 1rem 0.75rem;
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--foreground) 10%, transparent),
+    0 1px 2px color-mix(in oklab, var(--foreground) 8%, transparent);
+  font-size: var(--text-body);
+  font-weight: 500;
+  white-space: nowrap;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+.af-pill svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-foreground);
+}
+/* Tür ya da kategori hapı: başında küçük illüstrasyon. */
+.af-pill--photo {
+  padding-inline-start: 0.4375rem;
+}
+.af-pill--photo img {
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
+}
+.af-top-gap {
+  flex: 1;
+}
+
+.af-top .af-seg {
+  margin-inline-start: auto;
+}
+.af-close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  outline: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.af-close svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.af-pill:focus-visible,
+.af-close:focus-visible,
+.af-token:focus-visible,
+.af-send:focus-visible,
+.af-round:focus-visible,
+.af-seg-item:focus-visible,
+.af-city-item:focus-visible,
+.af-day:focus-visible,
+.af-list-row:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 70%, transparent);
+}
+
+/* ---------- Bölmeli seçim ---------- */
+.af-seg {
+  display: inline-flex;
+  min-width: 0;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 5.5%, transparent);
+}
+.af-seg[data-fill] {
+  display: flex;
+  flex-wrap: wrap;
+}
+.af-seg-item {
+  flex: none;
+  min-height: 0;
+  height: 2.25rem;
+  padding-inline: 1rem;
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-body);
+  font-weight: 500;
+  white-space: nowrap;
+  outline: none;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+.af-seg[data-fill] .af-seg-item {
+  flex: 1 1 auto;
+}
+.af-seg-item[aria-checked="true"] {
+  background: var(--card);
+  color: var(--foreground);
+  font-weight: 600;
+  box-shadow:
+    0 1px 3px color-mix(in oklab, var(--foreground) 14%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 5%, transparent);
+}
+.dark .af-seg-item[aria-checked="true"] {
+  background: color-mix(in oklab, var(--foreground) 18%, transparent);
+  box-shadow: none;
+}
+
+/* ---------- Bilgi satırı, başlık, cümle ---------- */
+.af-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 1.125rem;
+  margin-top: 0.75rem;
+  color: color-mix(in oklab, var(--muted-foreground) 76%, var(--foreground));
+  font-size: var(--text-footnote);
+  font-variant-numeric: tabular-nums;
+}
+.af-info b {
+  margin-inline-start: 0.5rem;
+  color: var(--foreground);
+  font-weight: 500;
+}
+.af-info strong {
+  color: #1a7f43;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.dark .af-info strong {
+  color: #4cc47f;
+}
+.af-title {
+  margin-top: 1.5rem;
+  font-size: 1.625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.af-sentence {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 2.875rem;
+  letter-spacing: -0.015em;
+}
+.af-part {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+  max-width: 100%;
+}
+.af-lead {
+  flex: none;
+  color: color-mix(in oklab, var(--foreground) 46%, transparent);
+}
+.af-token {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 0.5rem;
+  color: var(--af-accent);
+  font-weight: 600;
+  line-height: 2.25rem;
+  outline: none;
+  transition: color 160ms ease;
+}
+.af-token svg {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  color: color-mix(in oklab, var(--foreground) 30%, transparent);
+}
+.af-token > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.af-token[data-filled] {
+  color: var(--foreground);
+}
+.af-token[data-filled] > span {
+  box-shadow: inset 0 -1.5px 0 color-mix(in oklab, var(--foreground) 24%, transparent);
+}
+.af-token[aria-expanded="true"] > span {
+  box-shadow: inset 0 -2px 0 var(--af-accent);
+}
+
+/* ---------- Gönder ---------- */
+.af-send {
+  width: 100%;
+  height: 3.75rem;
+  margin-top: 1.5rem;
+  border-radius: 999px;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  outline: none;
+  transition: background-color 160ms ease;
+}
+
+@media (hover: hover) {
+  .af-pill:hover,
+  .af-close:hover,
+  .af-city-item:hover,
+  .af-list-row:hover,
+  .af-day:not([aria-pressed="true"]):hover {
+    background: color-mix(in oklab, var(--foreground) 5%, transparent);
+  }
+  .af-close:hover {
+    color: var(--foreground);
+  }
+  .af-seg-item:not([aria-checked="true"]):hover {
+    color: var(--foreground);
+  }
+  .af-token:not([data-filled]):hover {
+    color: color-mix(in oklab, var(--af-accent) 78%, var(--foreground));
+  }
+  .af-send:hover {
+    background: color-mix(in oklab, var(--foreground) 86%, var(--background));
+  }
+}
+@media (pointer: coarse) {
+  /* Cümledeki sözcük satır boyunda kalır; dokunma alanı görünmez payla 44 px. */
+  .af-token {
+    position: relative;
+  }
+  .af-token::after {
+    position: absolute;
+    inset: -0.25rem 0;
+    content: "";
+  }
+  .af-pill,
+  .af-seg-item,
+  .af-close {
+    height: 2.75rem;
+  }
+  .af-close {
+    width: 2.75rem;
+  }
+}
+/* Dar panel (telefon): pay ve cümle küçülür, şehirler üç sütun. */
+@container af (max-width: 26rem) {
+  .af-sentence {
+    column-gap: 0.625rem;
+    font-size: 1.3125rem;
+    line-height: 2.75rem;
+  }
+  .af-title {
+    margin-top: 1.125rem;
+    font-size: 1.375rem;
+  }
+  .af-city-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .af-card,
+  .af-card:not([data-wide]) {
+    inset-inline: 0.75rem;
+  }
+}
+@media (max-width: 40rem) {
+  .af {
+    padding: 0.25rem 1rem 1rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .af-map {
+    transition: none;
+  }
+  .af-arc,
+  .af-arc-shadow,
+  .af-plane {
+    animation: none;
+  }
+  .af-pin,
+  .af-pin-ripple {
+    animation: none;
+  }
+  .af-pin-ripple {
+    opacity: 0;
+  }
+  .af-card {
+    animation: af-fade 160ms ease both;
+  }
+}
+@keyframes af-fade {
+  from {
+    opacity: 0;
+  }
+}
