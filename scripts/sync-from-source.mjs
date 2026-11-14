@@ -206,6 +206,9 @@ try {
   )
   pkg.engines = srcPkg.engines
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n")
+  // Kilit dosyasını yeni bağımlılıklarla eşle: eşlenmezse CI'daki `npm ci` "package.json ile package-lock.json eşleşmiyor"
+  // diye düşer ve yayın hiç çıkmaz (kaynak bağımlılık sürümlerini yükselttiğinde olur).
+  execSync("npm install --package-lock-only --no-audit --no-fund", { cwd: ROOT, stdio: "inherit" })
 
   // 9) Kayıtlar: kaynak sürümü ve gerçek kimlik kodu özetleri (düz kod değil)
   mkdirSync(join(ROOT, "demo"), { recursive: true })
