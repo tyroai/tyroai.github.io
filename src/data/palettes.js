@@ -105,7 +105,7 @@ export const palettes = [
   },
 ]
 
-export const DEFAULT_PALETTE = "fiesta"
+export const DEFAULT_PALETTE = "obsidian"
 
 export function getPalette(id) {
   return palettes.find((p) => p.id === id) ?? palettes[0]

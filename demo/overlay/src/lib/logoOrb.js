@@ -1,12 +1,12 @@
 import { useSyncExternalStore } from "react"
 
 /**
- * Logodaki kürenin görünümü (Profil › Görünüm): "renk" (sarı → pembe → mor) ya da "obsidyen"
- * (siyah cam). Uygulama paletinden bağımsız, kendi anahtarıyla saklanır. Sağlayıcı yok: logo
+ * Logodaki kürenin görünümü (Profil › Görünüm): "obsidyen" (siyah cam, varsayılan) ya da "renk"
+ * (uygulamanın Insta küresi). Uygulama paletinden bağımsız, kendi anahtarıyla saklanır. Sağlayıcı yok: logo
  * yönlendiricinin ve palet sağlayıcısının dışında da çiziliyor (hata sınırı, kurulum yüzeyleri).
  */
 export const LOGO_ORBS = ["renk", "obsidyen"]
-export const DEFAULT_LOGO_ORB = "renk"
+export const DEFAULT_LOGO_ORB = "obsidyen"
 
 const KEY = "tyro-logo-orb"
 const EVENT = "tyro-logo-orb-change"

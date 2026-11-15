@@ -97,6 +97,24 @@ export const NEW_LOGO_PATCHES = [
     replace:
       '  // Obsidyen (demo): logodaki obsidyen kürenin renkleri; siyah cam · grafit mor · leylak ışık.\n  {\n    id: "obsidian",\n    labelKey: "palette.obsidian",\n    swatch: ["#111114", "#3d3560", "#b79cff"],\n    group: "gradient",\n  },\n  {\n    id: "black",',
   },
+  // ── Varsayılan palet Obsidyen (kullanıcı kararı, 15 Kas 2026). Palet yalnız kullanıcı seçince
+  // yazıldığı için seçmemiş herkes yeni varsayılanı izler; giriş sayfası da varsayılanı giyer.
+  // Tarayıcı çubuğu rengi ve yükleme hatası düğmesi de obsidyene döner.
+  {
+    file: "src/data/palettes.js",
+    find: 'export const DEFAULT_PALETTE = "fiesta"',
+    replace: 'export const DEFAULT_PALETTE = "obsidian"',
+  },
+  {
+    file: "index.html",
+    find: '<meta name="theme-color" content="#dd2a7b" media="(prefers-color-scheme: light)" />',
+    replace: '<meta name="theme-color" content="#2a2636" media="(prefers-color-scheme: light)" />',
+  },
+  {
+    file: "index.html",
+    find: '"background:#dd2a7b;color:#fff;',
+    replace: '"background:#3d3560;color:#fff;',
+  },
   {
     file: "src/index.css",
     find: '@import "./styles/brand-solid.css";',
