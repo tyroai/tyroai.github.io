@@ -110,7 +110,7 @@ export function Header({ activeId = "myspace", onOpenSearch, onToggleDock, dockO
                 href="#"
                 className="font-medium text-foreground transition-opacity hover:opacity-80"
               >
-                tyro ai
+                tyro
               </a>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden lg:block [&>svg]:size-3.5 text-muted-foreground/60" />

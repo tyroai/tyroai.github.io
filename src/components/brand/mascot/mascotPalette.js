@@ -111,6 +111,8 @@ const SOLID_COLORS = {
   // ⚠️ `a` burada c3; c4 (`#000000`) gövdeyi düzleştiriyor — ölçüldü, 1,007.
   black: ["#262626", "#737373", "#ededed"],
   periwinkle: ["#1f223a", "#6d74b5", "#d8dbed"],
+  // Obsidyen (demo): gövde siyah cam, baskın grafit mor, açık uç buz leylağı.
+  obsidian: ["#17151f", "#6d5aa8", "#d9ccff"],
 }
 
 /** Maskot kaynağının kendi varsayılanı (`palettes[2]`) — bizim de varsayılanımız. */

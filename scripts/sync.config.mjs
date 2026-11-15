@@ -9,6 +9,7 @@ import { DICT_OVERRIDES } from "../demo/dict-overrides.mjs"
 import { GROUP_COMPANIES, GROUP_SHORT_NAMES, OFFICE_CITIES_JS } from "../demo/fictional.mjs"
 import { productWord } from "../demo/product-word.mjs"
 import { tyroWord } from "../demo/logo.mjs"
+import { NEW_LOGO_PATCHES } from "../demo/new-logo.mjs"
 
 const priv = await import("./sync.private.mjs").catch(() => null)
 if (!priv) {
@@ -398,6 +399,8 @@ export const POST_PATCHES = [
     find: /^ {2}\["(?:corum|bandirma|giresun|karacabey|mus|tekirdag|buffalo-mo|basra)",.*\n/gm,
     replace: "",
   },
+  // Yeni "tyro" yazı logosu: çağrı yerleri (bileşenler overlay'de; bkz. demo/new-logo.mjs).
+  ...NEW_LOGO_PATCHES,
 ]
 
 /** Tamamen üretilen dosyalar (dönüştürülmüş kaynağın üstüne yazılır). */

@@ -1,0 +1,8 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="tyro — yeni yanıt">
+  <!-- favicon.svg'nin okunmamış sürümü: aynı küre, sağ üstte nokta.
+       Bir yanıt beklerken src/features/chat/lib/notify/titleBadge.js takar. -->
+  <defs><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="42.6" y1="30.4" x2="213.4" y2="231.7"><stop offset="0" stop-color="#ffd65b"/><stop offset="0.5" stop-color="#f34c9b"/><stop offset="1" stop-color="#8534ba"/></linearGradient></defs>
+  <circle cx="128" cy="128" r="122" fill="url(#b)"/><rect x="83.56" y="119.44" width="31.04" height="47.09" rx="15.52" fill="#ffffff"/><rect x="141.4" y="119.44" width="31.04" height="47.09" rx="15.52" fill="#ffffff"/>
+  <circle cx="198" cy="58" r="51" fill="#ffffff"/>
+  <circle cx="198" cy="58" r="41" fill="#e11d48"/>
+</svg>

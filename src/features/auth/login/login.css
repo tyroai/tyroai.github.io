@@ -314,3 +314,24 @@
     padding-block: 0.25rem max(0.5rem, env(safe-area-inset-bottom));
   }
 }
+
+/* ── Yeni logo (demo/new-logo.mjs) ── Yazı küreyi taşır; işaret yalnız yazı gizlenince (≤360 px). */
+.login-logo {
+  display: none;
+}
+.login-wordmark {
+  height: 2rem;
+}
+@media (max-width: 640px) {
+  .login-wordmark {
+    height: 1.5rem;
+  }
+}
+@media (max-width: 360px) {
+  .login-wordmark {
+    display: none;
+  }
+  .login-logo {
+    display: block;
+  }
+}

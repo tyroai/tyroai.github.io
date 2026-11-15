@@ -12,6 +12,7 @@
 @import "./styles/palettes.css";
 @import "./styles/palette-tokens.css";
 @import "./styles/brand-solid.css";
+@import "./styles/palette-obsidian.css";
 @import "./styles/base.css";
 @import "./styles/composer.css";
 @import "./styles/scrollbars.css";

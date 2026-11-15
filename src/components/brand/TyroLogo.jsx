@@ -1,41 +1,27 @@
 import { useId } from "react"
-import { MARK, MARK_BOX, MARK_GRADIENT } from "./tyroLogoPaths"
+import { useLogoOrb } from "@/lib/logoOrb"
+import { OrbGlyph } from "./TyroOrbGlyph"
 
-/** Kurumsal "t" işareti. Renkler seçili paletin `--brand-logo-*` tonları; `themeColors` ezer. */
+/**
+ * Markanın tek başına işareti: yuvarlak gözlü küre (demo/overlay; kaynaktaki "t" işaretinin yerine
+ * geçer, imzası aynı). `themeColors` verilirse tek renk çizilir (`currentColor`, gözler delik):
+ * renkli bir zeminin üstüne konan kullanımlar için.
+ */
 export function TyroLogo({ size = 36, themeColors, className, ...props }) {
-  const uniqueId = useId()
-  const gradId = `tyro-grad-${uniqueId.replace(/:/g, "")}`
-
-  const colors = themeColors ?? {
-    gradStart: "var(--brand-logo-1)",
-    gradEnd: "var(--brand-logo-2)",
-    fillA: "var(--brand-logo-3)",
-    fillB: "var(--brand-logo-4)",
-    fillC: "var(--brand-logo-5)",
-  }
-
+  const uid = `tyro-orb-${useId().replace(/:/g, "")}`
+  const orbStyle = useLogoOrb()
   return (
     <svg
       width={size}
       height={size}
-      viewBox={MARK_BOX}
+      viewBox="0 0 256 256"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      fillRule="evenodd"
       role="img"
-      aria-label="TYRO"
+      aria-label="tyro"
       {...props}
     >
-      <defs>
-        <linearGradient id={gradId} gradientUnits="userSpaceOnUse" {...MARK_GRADIENT}>
-          <stop offset="0" stopColor={colors.gradStart} />
-          <stop offset="1" stopColor={colors.gradEnd} />
-        </linearGradient>
-      </defs>
-      <path d={MARK.left} fill={`url(#${gradId})`} />
-      <path d={MARK.stem} fill={colors.fillA} />
-      <path d={MARK.upper} fill={colors.fillB} />
-      <path d={MARK.curve} fill={colors.fillC} />
+      <OrbGlyph cx={128} cy={128} r={122} id={uid} mono={Boolean(themeColors)} variant={orbStyle} />
     </svg>
   )
 }

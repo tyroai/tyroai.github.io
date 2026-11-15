@@ -1,6 +1,6 @@
 export const strings = {
   // Brand
-  "brand.name": "tyro ai",
+  "brand.name": "tyro",
   "brand.tag": "داخلي",
   "brand.fullName": "TYRO AI · TYRO Tech",
 
@@ -457,6 +457,7 @@ export const strings = {
   "palette.midnight": "Midnight",
   "palette.black": "Black",
   "palette.periwinkle": "Periwinkle",
+  "palette.obsidian": "Obsidian",
   "palette.group.solid": "Solid",
   "palette.group.gradient": "Gradient",
   "palette.hue.red": "أحمر",

@@ -18,6 +18,7 @@ import { paletteFamilies } from "@/features/profile/lib/colorFamily"
 import { Swatches } from "./PaletteSwatches"
 import { swatchStyle } from "./swatchStyle"
 import { useRadioRoving } from "./useRadioRoving"
+import { LogoOrbPicker } from "./LogoOrbPicker"
 import { WordColorPicker } from "./WordColorPicker"
 
 /** Seçmeli bölüm (orb, çentik): kendi kartları var, gövde zemini istemez. */
@@ -143,6 +144,8 @@ export function AppearanceSection({ onOpenSection }) {
       </Group>
 
       <WordColorPicker />
+
+      <LogoOrbPicker />
 
       <PickerBlock
         label={t("profile.prefs.notchDesign")}

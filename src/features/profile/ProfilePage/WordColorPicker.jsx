@@ -1,5 +1,4 @@
 import { BrandText } from "@/components/brand/BrandText"
-import { TyroLogo } from "@/components/brand/TyroLogo"
 import { useLocale } from "@/hooks/useLocale"
 import { usePalette } from "@/hooks/usePalette"
 import { WORD_CORPORATE } from "@/lib/wordColor"
@@ -35,8 +34,7 @@ export function WordColorPicker() {
     <Group label={t("profile.prefs.wordColor")} footer={t("profile.prefs.wordColorHint")}>
       <div className="flex items-center gap-4 px-4 py-4">
         <span aria-hidden="true" className="flex shrink-0 items-center gap-1.5">
-          <TyroLogo size={28} className="size-7 shrink-0" />
-          <BrandText className="h-5" />
+          <BrandText className="h-7" />
         </span>
         <span aria-live="polite" className="min-w-0 flex-1 truncate text-end text-sm font-semibold">
           {t(current.labelKey, current.id)}

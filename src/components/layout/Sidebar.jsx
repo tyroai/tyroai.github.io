@@ -225,13 +225,13 @@ export function AppSidebar({
             else onSelectActiveId?.("myspace")
             if (isMobile) setOpenMobile(false)
           }}
-          className="flex items-center gap-1.5 py-2 pl-[0.1875rem] pr-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="flex items-center gap-1.5 py-2 pl-[0.1875rem] pr-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:px-0"
         >
           {/* Yazı işaretten bir tık küçük; adı yazı taşır. Kesme yalnız yatayda: "y"nin kuyruğu
               kutunun altına taşıyor. */}
-          <TyroLogo size={28} className="size-7 shrink-0" aria-hidden="true" />
+          <TyroLogo size={28} className="hidden size-7 shrink-0 group-data-[collapsible=icon]:block group-data-[collapsible=icon]:-translate-x-px" aria-hidden="true" />
           <span className="flex max-w-[12.5rem] overflow-x-clip opacity-100 transition-[opacity,max-width] duration-200 ease-linear group-data-[collapsible=icon]:max-w-0 group-data-[collapsible=icon]:opacity-0">
-            <BrandText suffix={inRm ? "RM" : undefined} className="h-5" />
+            <BrandText suffix={inRm ? "RM" : undefined} className="h-6" />
           </span>
         </a>
       </SidebarHeader>

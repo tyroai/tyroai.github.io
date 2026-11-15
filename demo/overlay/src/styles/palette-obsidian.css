@@ -1,0 +1,42 @@
+/* Obsidyen paleti (demo) — logodaki obsidyen kürenin renkleri: siyah cam, grafit ve leylak ışık.
+   Yeni palet eklemenin dört dosyaya dağılan satırları (palettes.css, palette-tokens.css,
+   brand-solid.css) burada tek blokta; `index.css` bu dosyayı onlardan SONRA içe aktarır. */
+
+/* Rampa koyu uçtan başlar: `from/via/to` ağırlıkla BEYAZ METİN altında dolgu
+   (#0E0E12 üstünde beyaz 19:1, #2A2636 üstünde 14:1). */
+:root[data-palette="obsidian"] {
+  --brand-from: #0e0e12;
+  --brand-via: #2a2636;
+  --brand-to: #6d5aa8;
+  --brand-soft: #ece8f7;
+  --brand-deep: #17151f;
+  /* Mürekkep: beyazda 10,6:1. */
+  --brand-text: #3d3560;
+  --brand-text-to: #6d5aa8;
+  --badge: #3d3560;
+  --badge-foreground: #ffffff;
+  --brand-orb-0: #ffffff;
+  --brand-orb-1: #e3dbff;
+  --brand-orb-2: #b79cff;
+  --brand-orb-3: #4b4b58;
+  --brand-orb-4: #0e0e12;
+  --brand-logo-1: #8f7fd0;
+  --brand-logo-2: #6d5aa8;
+  --brand-logo-3: #3d3560;
+  --brand-logo-4: #2a2636;
+  --brand-logo-5: #111114;
+  --chart-1: #8f7fd0;
+  --chart-2: #2a2636;
+  --voiceorb-c1: 75, 75, 88; /* dominant grafit  (#4B4B58) */
+  --voiceorb-c2: 183, 156, 255; /* dalga, leylak (#B79CFF) */
+  --voiceorb-c3: 14, 14, 18; /* cam derinliği    (#0E0E12) */
+  --voiceorb-c4: 201, 180, 255; /* kenar ışığı   (#C9B4FF) */
+  --voiceorb-c5: 236, 232, 247; /* parlama       (#ECE8F7) */
+}
+
+/* Koyu tema: mürekkep açık leylağa döner; dolgu beyaz yazıya 6,4:1 verir. */
+.dark[data-palette="obsidian"] {
+  --brand-text: #c9b4ff;
+  --brand-text-to: #e3dbff;
+  --brand-solid: #5b4a9c;
+}

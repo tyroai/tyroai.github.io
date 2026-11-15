@@ -83,6 +83,13 @@ export const palettes = [
     swatch: ["#210f04", "#690500", "#bb6b00"],
     group: "gradient",
   },
+  // Obsidyen (demo): logodaki obsidyen kürenin renkleri; siyah cam · grafit mor · leylak ışık.
+  {
+    id: "obsidian",
+    labelKey: "palette.obsidian",
+    swatch: ["#111114", "#3d3560", "#b79cff"],
+    group: "gradient",
+  },
   {
     id: "black",
     labelKey: "palette.black",
